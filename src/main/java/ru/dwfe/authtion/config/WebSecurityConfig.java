@@ -11,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.*;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -24,8 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure(AuthenticationManagerBuilder auth) throws Exception
     {
         auth
-                .userDetailsService(userDetailsService)         //проверка существования входящего user ID в базе
-                .passwordEncoder(new BCryptPasswordEncoder());  //проверка raw пароля пользователя
+                .userDetailsService(userDetailsService)   //проверка существования входящего user ID в базе
+                .passwordEncoder(bcrypt());               //проверка raw пароля пользователя
 
         //Любой алгоритм кодирования(хеширования) не предназначен для обеспечения безопасности.
         //Поэтому на стороне бэкенда пароли в базе в виде BCrypt хеша это всего лишь попытка
@@ -39,5 +44,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     protected AuthenticationManager authenticationManager() throws Exception
     {
         return super.authenticationManager();
+    }
+
+    private DelegatingPasswordEncoder bcrypt()
+    {
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
+        String idForEncode = "bcrypt";
+        encoders.put("bcrypt", new BCryptPasswordEncoder());
+
+        return new DelegatingPasswordEncoder(idForEncode, encoders);
     }
 }

@@ -10,8 +10,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class AppAuthtionTests
 {
 
-	@Test
-	public void contextLoads() {
-	}
+    @Test
+    public void contextLoads()
+    {
+    }
+
+
+    @Test
+    public void getUserToken(){
+
+    }
 
 }

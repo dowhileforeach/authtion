@@ -1,2 +1,2 @@
 ### Authentification / Authorization, RESTful
-Spring Boot 2, Java 9
+Java 9, Spring Boot 2, OAuth 2

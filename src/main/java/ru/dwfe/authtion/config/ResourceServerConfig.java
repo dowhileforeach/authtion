@@ -17,6 +17,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
     private TokenStore tokenStore;
 
     @Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception
+    {
+        resources
+                .tokenStore(tokenStore)
+        ;
+    }
+
+    @Override
     public void configure(HttpSecurity http) throws Exception
     {
         http
@@ -24,19 +32,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
                 .csrf().disable()
 
                 //you don't need sessions, because RESTful
-                //вообще говоря ссессия-то все равно создается: HttpServletRequest request, request.getSession()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                //but the session is still created: HttpServletRequest request, request.getSession()
 
                 //for prevent exception: Cannot apply ExpressionUrlAuthorizationConfigurer
                 .authorizeRequests().anyRequest().permitAll()
-        ;
-    }
-
-    @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception
-    {
-        resources
-                .tokenStore(tokenStore)
         ;
     }
 }
