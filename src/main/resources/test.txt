@@ -1,0 +1,8 @@
+curl ThirdParty:Computer@localhost:8080/oauth/token -d grant_type=password -d username=admin -d password=passAdmin
+curl Standard:Login@localhost:8080/oauth/token -d grant_type=password -d username=user -d password=passUser
+
+curl http://localhost:8080/cities -H "Authorization: Bearer "
+curl http://localhost:8080/users -H "Authorization: Bearer "
+curl http://localhost:8080/bcrypt
+curl http://localhost:8080/lo
+curl http://localhost:8080/lo -H "Authorization: Bearer "
