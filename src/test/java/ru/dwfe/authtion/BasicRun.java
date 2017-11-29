@@ -23,7 +23,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class AuthTest
+public class BasicRun
 {
     @Test
     public void user() throws Exception
@@ -37,11 +37,14 @@ public class AuthTest
         String access_token = login(req, 864000);
         BasicHeader authorization = new BasicHeader("Authorization", "Bearer " + access_token);
 
+        req = new URI("http://localhost:8080/public");
+        checkResource(req, List.of(authorization), 200); //success
+
         req = new URI("http://localhost:8080/cities");
-        checkResource(req, List.of(authorization), 200);
+        checkResource(req, List.of(authorization), 200); //success
 
         req = new URI("http://localhost:8080/users");
-        checkResource(req, List.of(authorization), 403);
+        checkResource(req, List.of(authorization), 403);  //access_denied
     }
 
     @Test
@@ -56,16 +59,32 @@ public class AuthTest
         String access_token = login(req, 180);
         BasicHeader authorization = new BasicHeader("Authorization", "Bearer " + access_token);
 
+        req = new URI("http://localhost:8080/public");
+        checkResource(req, List.of(authorization), 200); //success
+
         req = new URI("http://localhost:8080/cities");
-        checkResource(req, List.of(authorization), 200);
+        checkResource(req, List.of(authorization), 200); //success
 
         req = new URI("http://localhost:8080/users");
-        checkResource(req, List.of(authorization), 200);
+        checkResource(req, List.of(authorization), 200); //success
     }
 
-    private JsonParser jsonParser = JsonParserFactory.getJsonParser();
+    @Test
+    public void anonymous() throws Exception
+    {
+        URI req = new URI("http://localhost:8080/public");
+        checkResource(req, List.of(), 200); //success
 
-    private String login(URI req, Integer expires) throws Exception
+        req = new URI("http://localhost:8080/cities");
+        checkResource(req, List.of(), 401); //unauthorized
+
+        req = new URI("http://localhost:8080/users");
+        checkResource(req, List.of(), 401); //unauthorized
+    }
+
+    private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
+
+    private static String login(URI req, Integer expires) throws Exception
     {
         Map<String, Object> parsedBody = httpPOST(req);
 
@@ -78,13 +97,13 @@ public class AuthTest
         return access_token;
     }
 
-    private void checkResource(URI req, List<Header> authorization, int expectedStatus) throws Exception
+    private static void checkResource(URI req, List<Header> authorization, int expectedStatus) throws Exception
     {
         Map<String, Object> result = httpGET(req, authorization);
         assertEquals(expectedStatus, result.get("statusCode"));
     }
 
-    private Map<String, Object> httpPOST(URI req) throws Exception
+    private static Map<String, Object> httpPOST(URI req) throws Exception
     {
         HttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(req);
@@ -97,7 +116,7 @@ public class AuthTest
         return jsonParser.parseMap(respBody);
     }
 
-    private Map<String, Object> httpGET(URI req, List<Header> headers) throws Exception
+    private static Map<String, Object> httpGET(URI req, List<Header> headers) throws Exception
     {
         HttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(req);

@@ -9,8 +9,13 @@ Java 9, Spring Boot 2, OAuth 2
 
 
 # TESTs
+![Basic Run](./Authtion_BasicRun.png)
+
 #### Automated tests
-See `test\java\ru.dwfe.authtion` classes
+See `test\java\ru.dwfe.authtion` classes:
+1. BasicRun
+  * Login: `user`, `admin`
+  * Serfing `user`, `admin`, `not loged user` for: `/public`, `/cities`, `/users`
 #### For Manual tests
 Admin Login:
 ```
@@ -24,9 +29,7 @@ curl Standard:Login@localhost:8080/oauth/token -d grant_type=password -d usernam
 
 Templates for Controller tests:
 ```
-curl http://localhost:8080/cities -H "Authorization: Bearer "
-curl http://localhost:8080/users -H "Authorization: Bearer "
-curl http://localhost:8080/bcrypt
-curl http://localhost:8080/lo
-curl http://localhost:8080/lo -H "Authorization: Bearer "
+curl http://localhost:8080/public
+curl http://localhost:8080/cities -H "Authorization: Bearer access_token"
+curl http://localhost:8080/users -H "Authorization: Bearer access_token"
 ```

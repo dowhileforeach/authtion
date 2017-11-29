@@ -7,18 +7,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AppController
 {
+    @RequestMapping("/public")
+    public String publicRecource()
+    {
+        return "{\"public\": true}";
+    }
+
     @RequestMapping("/cities")
     @PreAuthorize("hasAuthority('USER')")
-    public String getUser()
+    public String cities()
     {
-        return "{\"successful\": true}";
+        return "{\"cities\": true}";
     }
 
     @RequestMapping("/users")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String getUsers()
+    public String users()
     {
-        return "{\"successful\": true}";
+        return "{\"users\": true}";
     }
 
 }
