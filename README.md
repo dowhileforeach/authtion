@@ -7,7 +7,7 @@ Java 9, Spring Boot 2, OAuth 2
 |----------------------|---------------|
 | In Memory            | master        |
 
-### TESTs
+## TESTs
 ---
 #### Automated tests
 See `test\java\ru.dwfe.authtion` classes
