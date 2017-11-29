@@ -15,6 +15,4 @@ public class TokenInMemoryConfig
     {
         return new InMemoryTokenStore();
     }
-
-
 }
