@@ -6,9 +6,8 @@ Java 9, Spring Boot 2, OAuth 2
 | Token Store Strategy | Branch        |
 |----------------------|---------------|
 | In Memory            | master        |
-
-## TESTs
----
+<br>
+# TESTs
 #### Automated tests
 See `test\java\ru.dwfe.authtion` classes
 #### For Manual tests
