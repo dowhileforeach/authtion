@@ -17,15 +17,15 @@ See `test\java\ru.dwfe.authtion` classes.
 
 ![Basic Run](./Authtion_BasicRun.png)
 
-### For Manual tests
-Admin Login:
-```
-curl ThirdParty:Computer@localhost:8080/oauth/token -d grant_type=password -d username=admin -d password=passAdmin
-```
-
+##### For Manual tests
 User Login:
 ```
 curl Standard:Login@localhost:8080/oauth/token -d grant_type=password -d username=user -d password=passUser
+```
+
+Admin Login:
+```
+curl ThirdParty:Computer@localhost:8080/oauth/token -d grant_type=password -d username=admin -d password=passAdmin
 ```
 
 Templates for resources access tests:
