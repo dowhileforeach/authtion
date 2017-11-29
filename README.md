@@ -11,12 +11,12 @@ Java 9, Spring Boot 2, OAuth 2
 # TESTs
 ![Basic Run](./Authtion_BasicRun.png)
 
-#### Automated tests
+### Automated tests
 See `test\java\ru.dwfe.authtion` classes:
 1. BasicRun
-  * Login: `user`, `admin`
-  * Serfing `user`, `admin`, `not loged user` for: `/public`, `/cities`, `/users`
-#### For Manual tests
+   * Login: `user`, `admin`
+   * Serfing `user`, `admin`, `not loged user` for: `/public`, `/cities`, `/users`
+### For Manual tests
 Admin Login:
 ```
 curl ThirdParty:Computer@localhost:8080/oauth/token -d grant_type=password -d username=admin -d password=passAdmin
