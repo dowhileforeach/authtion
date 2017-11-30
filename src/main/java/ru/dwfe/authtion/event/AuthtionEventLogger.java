@@ -22,6 +22,12 @@ import java.util.stream.Collectors;
 @Component
 public class AuthtionEventLogger
 {
+    /*
+        https://docs.spring.io/spring/docs/5.0.2.RELEASE/spring-framework-reference/core.html#context-functionality-events
+        http://www.baeldung.com/spring-boot-authentication-audit
+        http://blog.codeleak.pl/2017/03/spring-boot-and-security-events-with-actuator.html
+    */
+
     private void log(Map<String, String> map, String event, boolean success)
     {
         String result = map.entrySet().stream()
@@ -42,7 +48,7 @@ public class AuthtionEventLogger
     {
         LocalDateTime triggerTime =
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),
-                        TimeZone.getDefault().toZoneId());
+                        zoneId);
 
         return triggerTime.format(dateTimeFormatter);
     }
@@ -54,61 +60,61 @@ public class AuthtionEventLogger
     @EventListener
     public void badCredentials(AuthenticationFailureBadCredentialsEvent event)
     {
-        authenticationFailureEvent(event, "AuthenticationFailureBadCredentials", false);
+        authenticationFailureEvent(event, "AuthenticationFailureBadCredentials");
     }
 
     @EventListener
     public void failureCredentialsExpired(AuthenticationFailureCredentialsExpiredEvent event)
     {
-        authenticationFailureEvent(event, "AuthenticationFailureCredentialsExpired", false);
+        authenticationFailureEvent(event, "AuthenticationFailureCredentialsExpired");
     }
 
     @EventListener
     public void failureDisabled(AuthenticationFailureDisabledEvent event)
     {
-        authenticationFailureEvent(event, "AuthenticationFailureDisabled", false);
+        authenticationFailureEvent(event, "AuthenticationFailureDisabled");
     }
 
     @EventListener
     public void failureExpired(AuthenticationFailureExpiredEvent event)
     {
-        authenticationFailureEvent(event, "AuthenticationFailureExpired", false);
+        authenticationFailureEvent(event, "AuthenticationFailureExpired");
     }
 
     @EventListener
     public void failureLocked(AuthenticationFailureLockedEvent event)
     {
-        authenticationFailureEvent(event, "AuthenticationFailureLocked", false);
+        authenticationFailureEvent(event, "AuthenticationFailureLocked");
     }
 
     @EventListener
     public void failureProviderNotFound(AuthenticationFailureProviderNotFoundEvent event)
     {
-        authenticationFailureEvent(event, "AuthenticationFailureProviderNotFound", false);
+        authenticationFailureEvent(event, "AuthenticationFailureProviderNotFound");
     }
 
     @EventListener
     public void failureProxyUntrusted(AuthenticationFailureProxyUntrustedEvent event)
     {
-        authenticationFailureEvent(event, "AuthenticationFailureProxyUntrusted", false);
+        authenticationFailureEvent(event, "AuthenticationFailureProxyUntrusted");
     }
 
     @EventListener
     public void failureServiceException(AuthenticationFailureServiceExceptionEvent event)
     {
-        authenticationFailureEvent(event, "AuthenticationFailureServiceException", false);
+        authenticationFailureEvent(event, "AuthenticationFailureServiceException");
     }
 
     @EventListener
     public void authenticationSuccess(AuthenticationSuccessEvent event)
     {
-        authenticationSuccessEvent(event, "AuthenticationSuccess", true);
+        authenticationSuccessEvent(event, "AuthenticationSuccess");
     }
 
     @EventListener
     public void interactiveAuthenticationSuccess(InteractiveAuthenticationSuccessEvent event)
     {
-        authenticationSuccessEvent(event, "InteractiveAuthenticationSuccess", true);
+        authenticationSuccessEvent(event, "InteractiveAuthenticationSuccess");
     }
 
     private Map<String, String> parseSuccessAuthentication(AbstractAuthenticationEvent event)
@@ -156,16 +162,16 @@ public class AuthtionEventLogger
         return map;
     }
 
-    private void authenticationSuccessEvent(AbstractAuthenticationEvent event, String eventStr, boolean success)
+    private void authenticationSuccessEvent(AbstractAuthenticationEvent event, String eventStr)
     {
         Map<String, String> map = parseSuccessAuthentication(event);
-        log(map, eventStr, success);
+        log(map, eventStr, true);
     }
 
-    private void authenticationFailureEvent(AbstractAuthenticationFailureEvent event, String eventStr, boolean success)
+    private void authenticationFailureEvent(AbstractAuthenticationFailureEvent event, String eventStr)
     {
         Map<String, String> map = parseFailureAuthentication(event);
-        log(map, eventStr, success);
+        log(map, eventStr, false);
     }
 
 
@@ -196,8 +202,9 @@ public class AuthtionEventLogger
     public void authorizationFailure(AuthorizationFailureEvent event)
     {
         Map<String, String> map = new HashMap<>();
-
         map.put("timestamp", getDateTimeStr(event.getTimestamp()));
+        map.put("source", event.getSource().toString());
+        map.put("configAttributes", event.getConfigAttributes().toString());
 
         Authentication authentication = event.getAuthentication();
         if (authentication != null)
@@ -206,9 +213,6 @@ public class AuthtionEventLogger
             map.put("authorities", authentication.getAuthorities().toString());
             map.put("details", authentication.getDetails().toString());
         }
-        map.put("configAttributes", event.getConfigAttributes().toString());
-
-        map.put("source", event.getSource().toString());
 
         Exception exception = event.getAccessDeniedException();
         if (exception != null)
@@ -225,8 +229,9 @@ public class AuthtionEventLogger
     public void authorizedEvent(AuthorizedEvent event)
     {
         Map<String, String> map = new HashMap<>();
-
         map.put("timestamp", getDateTimeStr(event.getTimestamp()));
+        map.put("source", event.getSource().toString());
+        map.put("configAttributes", event.getConfigAttributes().toString());
 
         Authentication authentication = event.getAuthentication();
         if (authentication != null)
@@ -235,9 +240,6 @@ public class AuthtionEventLogger
             map.put("authorities", authentication.getAuthorities().toString());
             map.put("details", authentication.getDetails().toString());
         }
-        map.put("configAttributes", event.getConfigAttributes().toString());
-
-        map.put("source", event.getSource().toString());
 
         log(map, "Authorized", true);
     }
@@ -248,7 +250,6 @@ public class AuthtionEventLogger
         Map<String, String> map = new HashMap<>();
 
         map.put("timestamp", getDateTimeStr(event.getTimestamp()));
-
         map.put("source", event.getSource().toString());
 
         log(map, "PublicInvocation", true);
