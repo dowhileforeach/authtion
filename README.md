@@ -1,5 +1,4 @@
-### Authentification / Authorization, RESTful
----
+## Authentification / Authorization, RESTful
 Java 9, Spring Boot 2, OAuth 2
 <br>
 
@@ -13,11 +12,11 @@ Java 9, Spring Boot 2, OAuth 2
 See `test\java\ru.dwfe.authtion` classes.
 ### BasicRun
 1. Login: `user`, `admin`
-2. Serfing `user`, `admin`, `not loged user` for resources: `/public`, `/cities`, `/users`
+2. Surfing `user`, `admin`, `not loged user` for resources: `/public`, `/cities`, `/users`
 
 ![Basic Run](./Authtion_BasicRun.png)
 
-##### For Manual tests
+#### For Manual tests
 User Login:
 ```
 curl Standard:Login@localhost:8080/oauth/token -d grant_type=password -d username=user -d password=passUser

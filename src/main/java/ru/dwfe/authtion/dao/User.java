@@ -37,9 +37,9 @@ public class User implements UserDetails, CredentialsContainer
     @Column
     private boolean accountNonExpired;
     @Column
-    private boolean accountNonLocked;
-    @Column
     private boolean credentialsNonExpired;
+    @Column
+    private boolean accountNonLocked;
     @Column
     private boolean enabled;
 
@@ -73,15 +73,15 @@ public class User implements UserDetails, CredentialsContainer
     }
 
     @Override
-    public boolean isAccountNonLocked()
-    {
-        return accountNonLocked;
-    }
-
-    @Override
     public boolean isCredentialsNonExpired()
     {
         return credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked()
+    {
+        return accountNonLocked;
     }
 
     @Override
@@ -145,14 +145,14 @@ public class User implements UserDetails, CredentialsContainer
         this.accountNonExpired = accountNonExpired;
     }
 
-    public void setAccountNonLocked(boolean accountNonLocked)
-    {
-        this.accountNonLocked = accountNonLocked;
-    }
-
     public void setCredentialsNonExpired(boolean credentialsNonExpired)
     {
         this.credentialsNonExpired = credentialsNonExpired;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked)
+    {
+        this.accountNonLocked = accountNonLocked;
     }
 
     public void setEnabled(boolean enabled)
@@ -191,8 +191,8 @@ public class User implements UserDetails, CredentialsContainer
                 " \"firstName\": \"" + firstName + "\",\n" +
                 " \"lastName\": \"" + lastName + "\",\n" +
                 " \"accountNonExpired\": \"" + accountNonExpired + "\",\n" +
-                " \"accountNonLocked\": \"" + accountNonLocked + "\",\n" +
                 " \"credentialsNonExpired\": \"" + credentialsNonExpired + "\",\n" +
+                " \"accountNonLocked\": \"" + accountNonLocked + "\",\n" +
                 " \"enabled\": \"" + enabled + "\"\n" +
                 "}";
     }

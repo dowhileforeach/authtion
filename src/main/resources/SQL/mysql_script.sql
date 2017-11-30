@@ -13,8 +13,8 @@ CREATE TABLE `users` (
   `last_name`               VARCHAR(255)
                             COLLATE utf8mb4_unicode_ci          DEFAULT '',
   `account_non_expired`     TINYINT(1)                 NOT NULL DEFAULT '1',
-  `account_non_locked`      TINYINT(1)                 NOT NULL DEFAULT '1',
   `credentials_non_expired` TINYINT(1)                 NOT NULL DEFAULT '1',
+  `account_non_locked`      TINYINT(1)                 NOT NULL DEFAULT '1',
   `enabled`                 TINYINT(1)                 NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_name_uindex` (`id`)

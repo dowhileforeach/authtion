@@ -8,7 +8,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 
@@ -23,10 +25,11 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicRun
 {
     @Test
-    public void user() throws Exception
+    public void _01_user() throws Exception
     {
         URI req = new URI(
                 "http",
@@ -48,7 +51,7 @@ public class BasicRun
     }
 
     @Test
-    public void admin() throws Exception
+    public void _02_admin() throws Exception
     {
         URI req = new URI(
                 "http",
@@ -70,7 +73,7 @@ public class BasicRun
     }
 
     @Test
-    public void anonymous() throws Exception
+    public void _03_anonymous() throws Exception
     {
         URI req = new URI("http://localhost:8080/public");
         checkResource(req, List.of(), 200); //success
