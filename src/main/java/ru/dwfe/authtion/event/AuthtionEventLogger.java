@@ -9,8 +9,13 @@ import org.springframework.security.access.event.PublicInvocationEvent;
 import org.springframework.security.authentication.event.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -28,6 +33,13 @@ public class AuthtionEventLogger
         https://docs.spring.io/spring/docs/5.0.2.RELEASE/spring-framework-reference/core.html#context-functionality-events
         http://www.baeldung.com/spring-boot-authentication-audit
         http://blog.codeleak.pl/2017/03/spring-boot-and-security-events-with-actuator.html
+
+        Справедливо для всех положительных Authentication событий:
+            - для Client'а не работают
+            - возникают при каждом успешном авторизованном доступе к ресурсу
+                -- но при этом event не содержит имени ресурса.
+                   То есть успешный доступ есть, но к чему был успешно получен доступ - не известно
+        в связи с этим анализировать успешные Authentication события я сейчас не вижу смысла.
     */
 
     private void log(Map<String, String> map, String event, boolean success)
@@ -95,17 +107,17 @@ public class AuthtionEventLogger
         authenticationFailureEvent(event, "AuthenticationFailureServiceException");
     }
 
-    @EventListener
-    public void authenticationSuccess(AuthenticationSuccessEvent event) throws Exception
-    {
-        authenticationSuccessEvent(event, "AuthenticationSuccess");
-    }
-
-    @EventListener
-    public void interactiveAuthenticationSuccess(InteractiveAuthenticationSuccessEvent event) throws Exception
-    {
-        authenticationSuccessEvent(event, "InteractiveAuthenticationSuccess");
-    }
+//    @EventListener
+//    public void authenticationSuccess(AuthenticationSuccessEvent event) throws Exception
+//    {
+//        authenticationSuccessEvent(event, "AuthenticationSuccess");
+//    }
+//
+//    @EventListener
+//    public void interactiveAuthenticationSuccess(InteractiveAuthenticationSuccessEvent event) throws Exception
+//    {
+//        authenticationSuccessEvent(event, "InteractiveAuthenticationSuccess");
+//    }
 
     private Map<String, String> parseSuccessAuthentication(AbstractAuthenticationEvent event) throws Exception
     {
@@ -234,4 +246,6 @@ public class AuthtionEventLogger
         LocalDateTime triggerTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), zoneId);
         return triggerTime.format(dateTimeFormatter);
     }
+
+
 }

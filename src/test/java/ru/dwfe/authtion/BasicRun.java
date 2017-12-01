@@ -1,23 +1,13 @@
 package ru.dwfe.authtion;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.util.EntityUtils;
+import okhttp3.*;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 
-import java.net.URI;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
@@ -31,65 +21,45 @@ public class BasicRun
     @Test
     public void _01_user() throws Exception
     {
-        URI req = new URI(
-                "http",
-                "Standard:Login",
-                "localhost", 8080,
-                "/oauth/token",
-                "username=user&password=passUser&grant_type=password",
-                null);
+        System.out.printf("%n==============================");
+        System.out.printf("%n  user");
+        System.out.printf("%n------------------------------%n");
+
+        Request req = getAuthRequest("Standard", "Login", "user", "passUser");
         String access_token = login(req, 864000);
-        BasicHeader authorization = new BasicHeader("Authorization", "Bearer " + access_token);
 
-        req = new URI("http://localhost:8080/public");
-        checkResource(req, List.of(authorization), 200); //success
-
-        req = new URI("http://localhost:8080/cities");
-        checkResource(req, List.of(authorization), 200); //success
-
-        req = new URI("http://localhost:8080/users");
-        checkResource(req, List.of(authorization), 403);  //access_denied
+        checkAllResources(access_token, 200, 200, 403);
     }
 
     @Test
     public void _02_admin() throws Exception
     {
-        URI req = new URI(
-                "http",
-                "ThirdParty:Computer@localhost:8080",
-                "/oauth/token",
-                "username=admin&password=passAdmin&grant_type=password",
-                null);
+        System.out.printf("%n==============================");
+        System.out.printf("%n  admin");
+        System.out.printf("%n------------------------------%n");
+
+        Request req = getAuthRequest("ThirdParty", "Computer", "admin", "passAdmin");
         String access_token = login(req, 180);
-        BasicHeader authorization = new BasicHeader("Authorization", "Bearer " + access_token);
 
-        req = new URI("http://localhost:8080/public");
-        checkResource(req, List.of(authorization), 200); //success
-
-        req = new URI("http://localhost:8080/cities");
-        checkResource(req, List.of(authorization), 200); //success
-
-        req = new URI("http://localhost:8080/users");
-        checkResource(req, List.of(authorization), 200); //success
+        checkAllResources(access_token, 200, 200, 200);
     }
 
     @Test
     public void _03_anonymous() throws Exception
     {
-        URI req = new URI("http://localhost:8080/public");
-        checkResource(req, List.of(), 200); //success
+        System.out.printf("%n==============================");
+        System.out.printf("%n  anonymous");
+        System.out.printf("%n------------------------------%n%n");
 
-        req = new URI("http://localhost:8080/cities");
-        checkResource(req, List.of(), 401); //unauthorized
-
-        req = new URI("http://localhost:8080/users");
-        checkResource(req, List.of(), 401); //unauthorized
+        checkAllResources(null, 200, 401, 401);
     }
 
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 
-    private static String login(URI req, Integer expires) throws Exception
+    private static String login(Request req, Integer expires) throws Exception
     {
+        System.out.printf("%nlogin");
+
         Map<String, Object> parsedBody = httpPOST(req);
 
         String access_token = (String) parsedBody.get("access_token");
@@ -101,39 +71,73 @@ public class BasicRun
         return access_token;
     }
 
-    private static void checkResource(URI req, List<Header> authorization, int expectedStatus) throws Exception
+    private void checkAllResources(String access_token, int public_expectedStatus, int cities_expectedStatus, int users_expectedStatus) throws Exception
     {
-        Map<String, Object> result = httpGET(req, authorization);
+        checkResource(getSimpleRequest("http://localhost:8080/public", access_token)
+                , public_expectedStatus);
+
+        checkResource(getSimpleRequest("http://localhost:8080/cities", access_token)
+                , cities_expectedStatus);
+
+        checkResource(getSimpleRequest("http://localhost:8080/users", access_token)
+                , users_expectedStatus);
+    }
+
+    private static void checkResource(Request req, int expectedStatus) throws Exception
+    {
+        System.out.print(req.url().encodedPath());
+        Map<String, Object> result = httpGET(req);
         assertEquals(expectedStatus, result.get("statusCode"));
     }
 
-    private static Map<String, Object> httpPOST(URI req) throws Exception
+    private static Map<String, Object> httpPOST(Request req) throws Exception
     {
-        HttpClient httpClient = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(req);
+        OkHttpClient client = new OkHttpClient();
+        try (Response response = client.newCall(req).execute())
+        {
+            String respBody = response.body().string();
+            System.out.printf("%n%s%n%n", respBody);
+            assertEquals(200, response.code());
 
-        HttpResponse response = httpClient.execute(httpPost);
-        String respBody = EntityUtils.toString(response.getEntity(), "UTF-8");
-        System.out.printf("%n%s%n%n", respBody);
-        assertEquals(200, response.getStatusLine().getStatusCode());
-
-        return jsonParser.parseMap(respBody);
+            return jsonParser.parseMap(respBody);
+        }
     }
 
-    private static Map<String, Object> httpGET(URI req, List<Header> headers) throws Exception
+    private static Map<String, Object> httpGET(Request req) throws Exception
     {
-        HttpClient httpClient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet(req);
-        httpGet.setHeaders(headers.toArray(new Header[headers.size()]));
+        OkHttpClient client = new OkHttpClient();
+        try (Response response = client.newCall(req).execute())
+        {
+            String respBody = response.body().string();
+            System.out.printf("%n\t%s%n%n", respBody);
 
-        HttpResponse response = httpClient.execute(httpGet);
-        String respBody = EntityUtils.toString(response.getEntity(), "UTF-8");
-        System.out.printf("%n%s%n%n", respBody);
+            Map<String, Object> map = new HashMap<>();
+            map.put("statusCode", response.code());
+            map.put("parsedBody", jsonParser.parseMap(respBody));
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("statusCode", response.getStatusLine().getStatusCode());
-        map.put("parsedBody", jsonParser.parseMap(respBody));
+            return map;
+        }
+    }
 
-        return map;
+    private Request getSimpleRequest(String url, String access_token)
+    {
+        Request request;
+
+        if (access_token == null)
+            return new Request.Builder().url(url).build();
+        else
+            return new Request.Builder().url(url).addHeader("Authorization", "Bearer " + access_token).build();
+    }
+
+    private Request getAuthRequest(String clientname, String clientpass, String username, String userpass)
+    {
+        String url = String.format("http://localhost:8080/oauth/token?grant_type=password&username=%s&password=%s",
+                username, userpass);
+
+        return new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", Credentials.basic(clientname, clientpass))
+                .post(RequestBody.create(MediaType.parse("text/x-markdown; charset=utf-8"), ""))
+                .build();
     }
 }

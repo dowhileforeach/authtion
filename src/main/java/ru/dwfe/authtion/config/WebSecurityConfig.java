@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.*;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,15 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         //Поэтому на стороне бэкенда пароли в базе в виде BCrypt хеша это всего лишь попытка
         //защититься от дурака, который максимум может скопировать чужой пароль в открытом виде
         //либо его хеш и который не умеет/желает брутфорсить.
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
-        http
-                .authorizeRequests()
-                .anyRequest().permitAll();
-        ;
     }
 
     @Bean

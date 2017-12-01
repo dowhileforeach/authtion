@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AppController
 {
-    @Autowired
-    private AuditEventRepository auditEventRepository;
-
     @RequestMapping("/public")
     public String publicResource()
     {
