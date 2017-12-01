@@ -33,7 +33,8 @@ public class BasicRun
     {
         URI req = new URI(
                 "http",
-                "Standard:Login@localhost:8080",
+                "Standard:Login",
+                "localhost", 8080,
                 "/oauth/token",
                 "username=user&password=passUser&grant_type=password",
                 null);
