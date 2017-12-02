@@ -1,0 +1,10 @@
+
+<configuration scan="false">
+
+    <include resource="./logback/console.xml" />
+
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

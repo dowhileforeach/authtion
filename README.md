@@ -12,7 +12,7 @@ Java 9, Spring Boot 2, OAuth 2
 See `test\java\ru.dwfe.authtion` classes.
 ### BasicRun
 1. Login: `user`, `admin`
-2. Surfing `user`, `admin`, `not loged user` for resources: `/public`, `/cities`, `/users`
+2. Try to access with `user`, `admin`, `not loged user` for resources: `/public`, `/cities`, `/users`
 
 ![Basic Run](./Authtion_BasicRun.png)
 
