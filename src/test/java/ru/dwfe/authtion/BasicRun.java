@@ -1,5 +1,6 @@
 package ru.dwfe.authtion;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -8,8 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
+import org.springframework.web.client.RestTemplate;
+import ru.dwfe.authtion.dao.User;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
@@ -109,7 +113,19 @@ public class BasicRun
 
             Map<String, Object> map = new HashMap<>();
             map.put("statusCode", response.code());
-            map.put("parsedBody", jsonParser.parseMap(respBody));
+            if (req.url().pathSegments().get(0).equals("users"))
+            {
+                if (respBody.contains("denied") || respBody.contains("unauthorized"))
+                    map.put("parsedBody", jsonParser.parseMap(respBody));
+                else
+                {
+                    ObjectMapper mapper = new ObjectMapper();
+                    User[] users = mapper.readValue(respBody, User[].class);
+                    map.put("parsedBody", users);
+                }
+            }
+            else
+                map.put("parsedBody", jsonParser.parseMap(respBody));
 
             return map;
         }

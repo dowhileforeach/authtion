@@ -60,10 +60,18 @@ public class User implements UserDetails, CredentialsContainer
         return password;
     }
 
+    @JsonIgnore
     @Override
     public String getUsername()
     {
         return id;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getName()
+    {
+        return firstName;
     }
 
     @Override

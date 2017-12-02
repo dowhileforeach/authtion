@@ -8,16 +8,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import ru.dwfe.authtion.dao.User;
 import ru.dwfe.authtion.dao.repository.UserRepository;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-@Component
-@Primary
-public class UserDetailsServiceImpl implements UserDetailsService
+@Service
+public class UserService implements UserDetailsService
 {
-    private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -30,5 +30,10 @@ public class UserDetailsServiceImpl implements UserDetailsService
             log.error(str);
             return new UsernameNotFoundException(str);
         });
+    }
+
+    public List<User> findAll()
+    {
+        return (List<User>) userRepository.findAll();
     }
 }
