@@ -1,12 +1,9 @@
-## Authentification / Authorization, RESTful
-Java 9, Spring Boot 2, OAuth 2
-<br>
-
 | Token Store Strategy | Branch        |
 |----------------------|:-------------:|
 | JSON Web Tokens      | `JWT`         |
 | In Memory            | `master`      |
-
+Java 9, Spring Boot 2, OAuth 2, RESTful<br>
+<br>
 
 # TESTs
 ## Automated tests
