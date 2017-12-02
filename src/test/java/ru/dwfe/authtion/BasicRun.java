@@ -4,6 +4,8 @@ import okhttp3.*;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 
@@ -21,9 +23,7 @@ public class BasicRun
     @Test
     public void _01_user() throws Exception
     {
-        System.out.printf("%n==============================");
-        System.out.printf("%n  user");
-        System.out.printf("%n------------------------------%n");
+        logHead("user");
 
         Request req = getAuthRequest("Standard", "Login", "user", "passUser");
         String access_token = login(req, 864000);
@@ -34,9 +34,7 @@ public class BasicRun
     @Test
     public void _02_admin() throws Exception
     {
-        System.out.printf("%n==============================");
-        System.out.printf("%n  admin");
-        System.out.printf("%n------------------------------%n");
+        logHead("admin");
 
         Request req = getAuthRequest("ThirdParty", "Computer", "admin", "passAdmin");
         String access_token = login(req, 180);
@@ -47,9 +45,7 @@ public class BasicRun
     @Test
     public void _03_anonymous() throws Exception
     {
-        System.out.printf("%n==============================");
-        System.out.printf("%n  anonymous");
-        System.out.printf("%n------------------------------%n%n");
+        logHead("anonymous");
 
         checkAllResources(null, 200, 401, 401);
     }
@@ -58,7 +54,7 @@ public class BasicRun
 
     private static String login(Request req, Integer expires) throws Exception
     {
-        System.out.printf("%nlogin");
+        log.info("Login");
 
         Map<String, Object> parsedBody = httpPOST(req);
 
@@ -85,7 +81,7 @@ public class BasicRun
 
     private static void checkResource(Request req, int expectedStatus) throws Exception
     {
-        System.out.print(req.url().encodedPath());
+        log.info(req.url().encodedPath());
         Map<String, Object> result = httpGET(req);
         assertEquals(expectedStatus, result.get("statusCode"));
     }
@@ -96,7 +92,7 @@ public class BasicRun
         try (Response response = client.newCall(req).execute())
         {
             String respBody = response.body().string();
-            System.out.printf("%n%s%n%n", respBody);
+            log.info("token\n{}", respBody);
             assertEquals(200, response.code());
 
             return jsonParser.parseMap(respBody);
@@ -109,7 +105,7 @@ public class BasicRun
         try (Response response = client.newCall(req).execute())
         {
             String respBody = response.body().string();
-            System.out.printf("%n\t%s%n%n", respBody);
+            log.info(respBody);
 
             Map<String, Object> map = new HashMap<>();
             map.put("statusCode", response.code());
@@ -139,5 +135,15 @@ public class BasicRun
                 .addHeader("Authorization", Credentials.basic(clientname, clientpass))
                 .post(RequestBody.create(MediaType.parse("text/x-markdown; charset=utf-8"), ""))
                 .build();
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(BasicRun.class);
+
+    private void logHead(String who)
+    {
+        log.info("\n=============================="
+                + "\n  {}"
+                + "\n------------------------------", who);
+
     }
 }

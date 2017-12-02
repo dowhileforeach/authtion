@@ -1,8 +1,11 @@
 package ru.dwfe.authtion.event;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.stereotype.Component;
+import ru.dwfe.authtion.service.UserDetailsServiceImpl;
 
 import java.util.Date;
 import java.util.List;
@@ -10,10 +13,12 @@ import java.util.List;
 @Component
 public class DevNULL_AuditEventRepository implements AuditEventRepository
 {
+    private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+
     @Override
     public void add(AuditEvent event)
     {
-        System.out.println("!ATTENTION! Audit event ==>> " + event);
+        log.error("rised Audit event ==>> {}", event);
     }
 
     @Override

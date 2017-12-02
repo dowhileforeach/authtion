@@ -6,7 +6,7 @@
     <groupId>ru.dwfe</groupId>
     <artifactId>authtion</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>authtion</name>
     <description>Authentification / Authorization, RESTful</description>
@@ -25,6 +25,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -73,6 +74,13 @@
             <artifactId>okhttp</artifactId>
             <version>3.9.1</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
 
         <!-- Hello Java 9 -->
 

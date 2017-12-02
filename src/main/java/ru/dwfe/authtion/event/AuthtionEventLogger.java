@@ -1,5 +1,7 @@
 package ru.dwfe.authtion.event;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.access.event.AuthenticationCredentialsNotFoundEvent;
@@ -8,15 +10,8 @@ import org.springframework.security.access.event.AuthorizedEvent;
 import org.springframework.security.access.event.PublicInvocationEvent;
 import org.springframework.security.authentication.event.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -28,33 +23,21 @@ import java.util.stream.Collectors;
 
 @Component
 public class AuthtionEventLogger
-{
-    /*
+{   /*
         https://docs.spring.io/spring/docs/5.0.2.RELEASE/spring-framework-reference/core.html#context-functionality-events
         http://www.baeldung.com/spring-boot-authentication-audit
         http://blog.codeleak.pl/2017/03/spring-boot-and-security-events-with-actuator.html
 
         Справедливо для всех положительных Authentication событий:
             - для Client'а не работают
-                -- это значит если попытаться залогировать событие успешной аутентификации (получение токена),
+                -- это значит если пытаться логировать события успешной аутентификации (получение токена),
                    то ничего не получится - такие события не публикуются
             - возникают при каждом успешном авторизованном (с токеном) доступе к любому существующему ресурсу
-                -- но при этом event не содержит имени ресурса.
+                -- как минимум это уже не аутентификация, а авторизация, но все-равно возникает событие аутентификации
+                -- при этом event не содержит имени ресурса.
                    То есть факт успешного доступа есть, но к чему был успешно получен доступ не известно
-        в связи с этим анализировать успешные Authentication события я сейчас не вижу смысла.
+        в связи с этим какой-либо анализ успешных Authentication событий я сейчас считаю бессмысленным.
     */
-
-    private void log(Map<String, String> map, String event, boolean success)
-    {
-        String result = map.entrySet().stream()
-                .map(e -> e.getKey() + " = " + e.getValue())
-                .collect(Collectors.joining("\r\n"));
-
-        System.out.printf("%n======================================================");
-        System.out.printf("%n= %s, isSuccess -> %s %n", event, success);
-        System.out.println("------------------------------------------------------");
-        System.out.println(result);
-    }
 
 
     /*
@@ -185,6 +168,22 @@ public class AuthtionEventLogger
         UTILs
     */
 
+    private final static Logger log = LoggerFactory.getLogger(AuthtionEventLogger.class);
+
+    private void log(Map<String, String> map, String event, boolean success)
+    {
+        String result = map.entrySet().stream()
+                .map(e -> e.getKey() + " = " + e.getValue())
+                .collect(Collectors.joining("\r\n"));
+
+        String str = "{}\n{}\n";
+
+        if (success)
+            log.info(str, event, result);
+        else
+            log.error(str, event, result);
+    }
+
     private Map<String, String> commonParse(String[] arr, ApplicationEvent event) throws Exception
     {
         Map<String, String> map = new HashMap<>();
@@ -248,6 +247,4 @@ public class AuthtionEventLogger
         LocalDateTime triggerTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), zoneId);
         return triggerTime.format(dateTimeFormatter);
     }
-
-
 }
