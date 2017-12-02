@@ -1,4 +1,4 @@
-| Token Store Strategy | Branch        |
+| Token Store          | Branch        |
 |----------------------|:-------------:|
 | JSON Web Tokens      | `JWT`         |
 | In Memory            | `master`      |
