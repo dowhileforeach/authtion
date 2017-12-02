@@ -3,7 +3,7 @@
 | JSON Web Tokens      | `JWT`         |
 | In Memory            | `master`      |
 <br>
-Java 9, Spring Boot 2, OAuth 2, RESTful<br>
+Java 9, Spring Boot 2, OAuth 2, RESTful, MySQL<br>
 <br>
 
 # TESTs
