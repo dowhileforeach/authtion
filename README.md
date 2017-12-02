@@ -3,8 +3,9 @@ Java 9, Spring Boot 2, OAuth 2
 <br>
 
 | Token Store Strategy | Branch        |
-|----------------------|---------------|
-| In Memory            | master        |
+|----------------------|:-------------:|
+| JSON Web Tokens      | `JWT`         |
+| In Memory            | `master`      |
 
 
 # TESTs
