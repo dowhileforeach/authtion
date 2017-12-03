@@ -61,12 +61,15 @@ CREATE TABLE `user_authority` (
 LOCK TABLES `users` WRITE, `authorities` WRITE, `user_authority` WRITE;
 INSERT INTO `users` VALUES
   ('admin', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1),
-  ('user', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1);
+  ('user', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1),
+  ('shop', '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', '', '', 1, 1, 1, 1);
 INSERT INTO `authorities` VALUES
   ('ADMIN', 'Administrator'),
-  ('USER', 'Standard user');
+  ('USER', 'Standard user'),
+  ('FRONTEND', 'Site, forum, shop, etc.');
 INSERT INTO `user_authority` VALUES
   ('admin', 'ADMIN'),
   ('admin', 'USER'),
-  ('user', 'USER');
+  ('user', 'USER'),
+  ('shop', 'FRONTEND');
 UNLOCK TABLES;

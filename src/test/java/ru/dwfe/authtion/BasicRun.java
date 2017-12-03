@@ -28,10 +28,10 @@ public class BasicRun
     {
         logHead("user");
 
-        Request req = getAuthRequest(user_clientname, user_clientpass, user_username, user_userpass);
-        String access_token = login(req, user_maxTokenExpirationTime);
+        Request req = getAuthRequest(standard_clientname, standard_clientpass, user_username, user_userpass);
+        String access_token = login(req, standard_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 200, 403);
+        checkAllResources(access_token, 200, 403, 403, 403);
     }
 
     @Test
@@ -39,18 +39,30 @@ public class BasicRun
     {
         logHead("admin");
 
-        Request req = getAuthRequest(admin_clientname, admin_clientpass, admin_username, admin_userpass);
-        String access_token = login(req, admin_maxTokenExpirationTime);
+        Request req = getAuthRequest(thirdPartyComp_clientname, thirdPartyComp_clientpass, admin_username, admin_userpass);
+        String access_token = login(req, thirdPartyComp_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 200, 200);
+        checkAllResources(access_token, 200, 200, 403, 403);
     }
 
     @Test
-    public void _03_anonymous() throws Exception
+    public void _03_shop() throws Exception
+    {
+        logHead("shop");
+
+        Request req = getAuthRequest(standard_clientname, standard_clientpass, shop_username, shop_userpass);
+        String access_token = login(req, standard_maxTokenExpirationTime);
+
+        checkAllResources(access_token, 403, 403, 200, 200);
+    }
+
+
+    @Test
+    public void _04_anonymous() throws Exception
     {
         logHead("anonymous");
 
-        checkAllResources(null, 401, 401);
+        checkAllResources(null, 401, 401, 401, 401);
     }
 
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
@@ -72,7 +84,12 @@ public class BasicRun
         return access_token;
     }
 
-    private void checkAllResources(String access_token, int userLevelResource_expectedStatus, int adminLevelResource_expectedStatus) throws Exception
+    private void checkAllResources(String access_token,
+                                   int userLevelResource_expectedStatus,
+                                   int adminLevelResource_expectedStatus,
+                                   int frontendLevelResource_checkUserId_expectedStatus,
+                                   int frontendLevelResource_addUser_expectedStatus
+    ) throws Exception
     {
         checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + publicLevelResource, access_token)
                 , 200); // success for all levels
@@ -82,6 +99,12 @@ public class BasicRun
 
         checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + adminLevelResource, access_token)
                 , adminLevelResource_expectedStatus);
+
+        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_checkUserId, access_token)
+                , frontendLevelResource_checkUserId_expectedStatus);
+
+        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_addUser, access_token)
+                , frontendLevelResource_addUser_expectedStatus);
     }
 
     private static void checkResource(Request req, int expectedStatus) throws Exception
@@ -114,7 +137,10 @@ public class BasicRun
 
             Map<String, Object> map = new HashMap<>();
             map.put("statusCode", response.code());
-            if (req.url().pathSegments().get(1).equals("users"))
+
+            String resource = req.url().pathSegments().get(1);
+
+            if ("users".equals(resource))
             {
                 if (respBody.contains("denied") || respBody.contains("unauthorized"))
                     map.put("parsedBody", jsonParser.parseMap(respBody));

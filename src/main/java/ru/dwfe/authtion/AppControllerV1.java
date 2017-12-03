@@ -37,4 +37,18 @@ public class AppControllerV1
         return userService.findAll();
     }
 
+    @RequestMapping(API + "/check-user-id")
+    @PreAuthorize("hasAuthority('FRONTEND')")
+    public String checkUserId()
+    {
+        return "{\"success\": true}";
+    }
+
+    @RequestMapping(API + "/add-user")
+    @PreAuthorize("hasAuthority('FRONTEND')")
+    public String addUser()
+    {
+        return "{\"success\": true}";
+    }
+
 }
