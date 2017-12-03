@@ -21,7 +21,7 @@ import static org.junit.Assert.assertThat;
 import static ru.dwfe.authtion.GlobalVariables_FOR_TESTS.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class BasicRun
+public class AuthorityTest
 {
     @Test
     public void _01_user() throws Exception
@@ -191,7 +191,7 @@ public class BasicRun
                 .build();
     }
 
-    private static final Logger log = LoggerFactory.getLogger(BasicRun.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthorityTest.class);
 
     private void logHead(String who)
     {

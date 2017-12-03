@@ -3,11 +3,13 @@ package ru.dwfe.authtion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dwfe.authtion.dao.User;
 import ru.dwfe.authtion.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class AppControllerV1
@@ -39,16 +41,26 @@ public class AppControllerV1
 
     @RequestMapping(API + "/check-user-id")
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String checkUserId()
+    public String checkUserId(@RequestParam String id)
     {
-        return "{\"success\": true}";
+        return String.format("{" +
+                "\"isPresent\": %s" +
+                "}",
+                userService.findById(id).isPresent());
     }
 
     @RequestMapping(API + "/add-user")
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String addUser()
     {
-        return "{\"success\": true}";
+        boolean result = false;
+
+        return String.format("{" +
+                "\"success\": %s," +
+                "\"details\":" +
+                "{" +
+                "}" +
+                "}", result);
     }
 
 }

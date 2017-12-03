@@ -12,6 +12,7 @@ import ru.dwfe.authtion.dao.User;
 import ru.dwfe.authtion.dao.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Primary
@@ -30,6 +31,11 @@ public class UserService implements UserDetailsService
             log.error(str);
             return new UsernameNotFoundException(str);
         });
+    }
+
+    public Optional<User> findById(String id)
+    {
+        return userRepository.findById(id);
     }
 
     public List<User> findAll()

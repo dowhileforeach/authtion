@@ -14,8 +14,8 @@ Therefore, for all API versions is one version "/oauth/token".
 # Automated TESTs
 See `test\java\ru.dwfe.authtion` classes.
 
-## BasicRun
-See screenrecord: https://youtu.be/y1W9WLX88J4
+## AuthorityTest
+See screenrecord:
 1. Login: `user`, `admin`, `shop`
 2. Try to access with `user`, `admin`, `shop`, `not logged user` for resources:
    * `/public`
