@@ -11,8 +11,8 @@ Java 9, Spring Boot 2, OAuth 2, RESTful, MySQL<br>
 See `test\java\ru.dwfe.authtion` classes.
 ### AuthorityTest
 See screenrecord:
-1. Login: `user`, `admin`
-2. Try to access with `user`, `admin`, `not loged user` for resources: `/public`, `/cities`, `/users`
+1. Login as: `user`, `admin`
+2. Try to access as `user`, `admin`, `not loged user` for resources: `/public`, `/cities`, `/users`
 
 ![Basic Run](./Authtion_BasicRun.png)
 
