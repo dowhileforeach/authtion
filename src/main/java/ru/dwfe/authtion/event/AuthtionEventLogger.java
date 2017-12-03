@@ -16,9 +16,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -208,19 +206,28 @@ public class AuthtionEventLogger
             {
                 if (authentication == null) authentication = getAuthentication(event);
                 if (authentication != null)
-                    map.put("principal", authentication.getPrincipal().toString());
+                    map.put("principal", Optional.of(authentication)
+                            .map(Authentication::getPrincipal)
+                            .orElse("")
+                            .toString());
             }
             else if ("authorities".equals(next))
             {
                 if (authentication == null) authentication = getAuthentication(event);
                 if (authentication != null)
-                    map.put("authorities", authentication.getAuthorities().toString());
+                    map.put("authorities",Optional.of(authentication)
+                            .map(Authentication::getAuthorities)
+                            .orElse(List.of())
+                            .toString());
             }
             else if ("details".equals(next))
             {
                 if (authentication == null) authentication = getAuthentication(event);
                 if (authentication != null)
-                    map.put("details", authentication.getDetails().toString());
+                    map.put("details",Optional.of(authentication)
+                            .map(Authentication::getDetails)
+                            .orElse("")
+                            .toString());
             }
         return map;
     }
