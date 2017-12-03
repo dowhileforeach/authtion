@@ -53,7 +53,7 @@ public class AppControllerV1
                 "}", !result);
     }
 
-    @RequestMapping(API + "/add-user")
+    @RequestMapping(API + "/create-user")
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String addUser(@RequestBody String body)
     {

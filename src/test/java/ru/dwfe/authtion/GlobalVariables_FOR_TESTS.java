@@ -36,5 +36,5 @@ public class GlobalVariables_FOR_TESTS
     public static final String userLevelResource = "/cities";
     public static final String adminLevelResource = "/users";
     public static final String frontendLevelResource_checkUserId = "/check-user-id";
-    public static final String frontendLevelResource_addUser = "/add-user";
+    public static final String frontendLevelResource_addUser = "/create-user";
 }

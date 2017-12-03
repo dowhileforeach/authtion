@@ -22,7 +22,7 @@ See screenrecord:
    * `/cities`
    * `/users`
    * `/check-user-id`
-   * `/add-user`
+   * `/create-user`
 
 ![Basic Run](./img/Authtion_BasicRun.png)
 
@@ -48,5 +48,5 @@ curl http://localhost:8080/v1/public
 curl http://localhost:8080/v1/cities -H "Authorization: Bearer ACCESS_TOKEN"
 curl http://localhost:8080/v1/users -H "Authorization: Bearer ACCESS_TOKEN"
 curl http://localhost:8080/v1/check-user-id -H "Authorization: Bearer ACCESS_TOKEN"
-curl http://localhost:8080/v1/add-user -H "Authorization: Bearer ACCESS_TOKEN"
+curl http://localhost:8080/v1/create-user -H "Authorization: Bearer ACCESS_TOKEN"
 ```
