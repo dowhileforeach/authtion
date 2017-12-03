@@ -9,17 +9,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
-import org.springframework.web.client.RestTemplate;
 import ru.dwfe.authtion.dao.User;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static ru.dwfe.authtion.GlobalVariables_FOR_TESTS.ALL_BEFORE_RESOURCE;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicRun
@@ -73,13 +72,13 @@ public class BasicRun
 
     private void checkAllResources(String access_token, int public_expectedStatus, int cities_expectedStatus, int users_expectedStatus) throws Exception
     {
-        checkResource(getSimpleRequest("http://localhost:8080/public", access_token)
+        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + "/public", access_token)
                 , public_expectedStatus);
 
-        checkResource(getSimpleRequest("http://localhost:8080/cities", access_token)
+        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + "/cities", access_token)
                 , cities_expectedStatus);
 
-        checkResource(getSimpleRequest("http://localhost:8080/users", access_token)
+        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + "/users", access_token)
                 , users_expectedStatus);
     }
 
@@ -113,7 +112,7 @@ public class BasicRun
 
             Map<String, Object> map = new HashMap<>();
             map.put("statusCode", response.code());
-            if (req.url().pathSegments().get(0).equals("users"))
+            if (req.url().pathSegments().get(1).equals("users"))
             {
                 if (respBody.contains("denied") || respBody.contains("unauthorized"))
                     map.put("parsedBody", jsonParser.parseMap(respBody));
@@ -143,7 +142,8 @@ public class BasicRun
 
     private Request getAuthRequest(String clientname, String clientpass, String username, String userpass)
     {
-        String url = String.format("http://localhost:8080/oauth/token?grant_type=password&username=%s&password=%s",
+        String url = String.format(ALL_BEFORE_RESOURCE
+                        + "/oauth/token?grant_type=password&username=%s&password=%s",
                 username, userpass);
 
         return new Request.Builder()

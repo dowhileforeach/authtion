@@ -19,17 +19,17 @@ See screenrecord: https://youtu.be/y1W9WLX88J4
 #### For Manual tests
 User Login:
 ```
-curl Standard:Login@localhost:8080/oauth/token -d grant_type=password -d username=user -d password=passUser
+curl Standard:Login@localhost:8080/v1/oauth/token -d grant_type=password -d username=user -d password=passUser
 ```
 
 Admin Login:
 ```
-curl ThirdParty:Computer@localhost:8080/oauth/token -d grant_type=password -d username=admin -d password=passAdmin
+curl ThirdParty:Computer@localhost:8080/v1/oauth/token -d grant_type=password -d username=admin -d password=passAdmin
 ```
 
 Templates for resources access tests:
 ```
-curl http://localhost:8080/public
-curl http://localhost:8080/cities -H "Authorization: Bearer ACCESS_TOKEN"
-curl http://localhost:8080/users -H "Authorization: Bearer ACCESS_TOKEN"
+curl http://localhost:8080/v1/public
+curl http://localhost:8080/v1/cities -H "Authorization: Bearer ACCESS_TOKEN"
+curl http://localhost:8080/v1/users -H "Authorization: Bearer ACCESS_TOKEN"
 ```
