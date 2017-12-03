@@ -32,6 +32,8 @@ public class BasicRun
         String access_token = login(req, standard_maxTokenExpirationTime);
 
         checkAllResources(access_token, 200, 403, 403, 403);
+        //200 = OK
+        //403 = Forbidden, access_denied
     }
 
     @Test
@@ -43,6 +45,8 @@ public class BasicRun
         String access_token = login(req, thirdPartyComp_maxTokenExpirationTime);
 
         checkAllResources(access_token, 200, 200, 403, 403);
+        //200 = OK
+        //403 = Forbidden, access_denied
     }
 
     @Test
@@ -54,6 +58,8 @@ public class BasicRun
         String access_token = login(req, standard_maxTokenExpirationTime);
 
         checkAllResources(access_token, 403, 403, 200, 200);
+        //200 = OK
+        //403 = Forbidden, access_denied
     }
 
 
@@ -63,6 +69,7 @@ public class BasicRun
         logHead("anonymous");
 
         checkAllResources(null, 401, 401, 401, 401);
+        //401 = Unauthorized
     }
 
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();

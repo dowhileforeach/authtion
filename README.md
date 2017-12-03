@@ -16,10 +16,15 @@ See `test\java\ru.dwfe.authtion` classes.
 
 ## BasicRun
 See screenrecord: https://youtu.be/y1W9WLX88J4
-1. Login: `user`, `admin`
-2. Try to access with `user`, `admin`, `not loged user` for resources: `/public`, `/cities`, `/users`
+1. Login: `user`, `admin`, `shop`
+2. Try to access with `user`, `admin`, `shop`, `not logged user` for resources:
+   * `/public`
+   * `/cities`
+   * `/users`
+   * `/check-user-id`
+   * `/add-user`
 
-![Basic Run](./Authtion_BasicRun.png)
+![Basic Run](./img/Authtion_BasicRun.png)
 
 #### For Manual tests
 User Login:
@@ -32,9 +37,16 @@ Admin Login:
 curl ThirdParty:Computer@localhost:8080/oauth/token -d grant_type=password -d username=admin -d password=passAdmin
 ```
 
+Shop Login:
+```
+curl Standard:Login@localhost:8080/oauth/token -d grant_type=password -d username=shop -d password=passFrontend
+```
+
 Templates for resources access tests:
 ```
 curl http://localhost:8080/v1/public
 curl http://localhost:8080/v1/cities -H "Authorization: Bearer ACCESS_TOKEN"
 curl http://localhost:8080/v1/users -H "Authorization: Bearer ACCESS_TOKEN"
+curl http://localhost:8080/v1/check-user-id -H "Authorization: Bearer ACCESS_TOKEN"
+curl http://localhost:8080/v1/add-user -H "Authorization: Bearer ACCESS_TOKEN"
 ```
