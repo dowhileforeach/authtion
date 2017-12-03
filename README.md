@@ -11,6 +11,7 @@ the controller class is called "AppControllerV1", e.g. "AppControllerV2", "AppCo
 When developing a new API should create a new controller class.<br><br>
 Unfortunately for resource authentication "/oauth/token" spring-security-oauth2 does not provide for versioning.<br>
 Therefore, for all API versions is one version "/oauth/token".
+
 # TESTs
 ## Automated tests
 See `test\java\ru.dwfe.authtion` classes.
