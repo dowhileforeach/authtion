@@ -1,15 +1,17 @@
 package ru.dwfe.authtion;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dwfe.authtion.dao.User;
 import ru.dwfe.authtion.service.UserService;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @RestController
 public class AppControllerV1
@@ -39,28 +41,42 @@ public class AppControllerV1
         return userService.findAll();
     }
 
-    @RequestMapping(API + "/check-user-id")
+    @RequestMapping(value = API + "/check-user-id", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String checkUserId(@RequestParam String id)
+    public String checkUserId(@RequestBody String body)
     {
+        String id = (String) JsonParserFactory.getJsonParser().parseMap(body).get("id");
+        boolean result = userService.findById(id).isPresent();
+
         return String.format("{" +
-                "\"isPresent\": %s" +
-                "}",
-                userService.findById(id).isPresent());
+                "\"isFree\": %s" +
+                "}", !result);
     }
 
     @RequestMapping(API + "/add-user")
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String addUser()
+    public String addUser(@RequestBody String body)
     {
         boolean result = false;
+
+        //parsing
+        Map<String, Object> user = JsonParserFactory.getJsonParser().parseMap(body);
+
+        //fields validation
+        String id = (String) user.get("id");
+
+
+        //put user to the database
+
+        //вернуть результат операции
 
         return String.format("{" +
                 "\"success\": %s," +
                 "\"details\":" +
                 "{" +
+                "\"id\": \"%s\"" +
                 "}" +
-                "}", result);
+                "}", result, id);
     }
 
 }

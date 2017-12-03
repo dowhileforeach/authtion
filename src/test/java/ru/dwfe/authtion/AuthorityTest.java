@@ -28,10 +28,10 @@ public class AuthorityTest
     {
         logHead("user");
 
-        Request req = getAuthRequest(standard_clientname, standard_clientpass, user_username, user_userpass);
+        Request req = authPostRequest(standard_clientname, standard_clientpass, user_username, user_userpass);
         String access_token = login(req, standard_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 200, 403, 403, 403);
+        checkAllResources(access_token, 200, 403, 403, 403, null, null);
         //200 = OK
         //403 = Forbidden, access_denied
     }
@@ -41,10 +41,10 @@ public class AuthorityTest
     {
         logHead("admin");
 
-        Request req = getAuthRequest(thirdPartyComp_clientname, thirdPartyComp_clientpass, admin_username, admin_userpass);
+        Request req = authPostRequest(thirdPartyComp_clientname, thirdPartyComp_clientpass, admin_username, admin_userpass);
         String access_token = login(req, thirdPartyComp_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 200, 200, 403, 403);
+        checkAllResources(access_token, 200, 200, 403, 403, null, null);
         //200 = OK
         //403 = Forbidden, access_denied
     }
@@ -54,10 +54,19 @@ public class AuthorityTest
     {
         logHead("shop");
 
-        Request req = getAuthRequest(standard_clientname, standard_clientpass, shop_username, shop_userpass);
+        RequestBody body_for_checkUserId = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{\"id\": \"user\"}");
+
+        RequestBody body_for_addUser = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{" +
+                "\"id\": \"user\"," +
+                "\"firstName\": \"alex\"," +
+                "\"lastName\": \"\"" +
+                "}"
+        );
+
+        Request req = authPostRequest(standard_clientname, standard_clientpass, shop_username, shop_userpass);
         String access_token = login(req, standard_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 403, 403, 200, 200);
+        checkAllResources(access_token, 403, 403, 200, 200, body_for_checkUserId, body_for_addUser);
         //200 = OK
         //403 = Forbidden, access_denied
     }
@@ -68,7 +77,7 @@ public class AuthorityTest
     {
         logHead("anonymous");
 
-        checkAllResources(null, 401, 401, 401, 401);
+        checkAllResources(null, 401, 401, 401, 401, null, null);
         //401 = Unauthorized
     }
 
@@ -80,7 +89,7 @@ public class AuthorityTest
         log.info("-> Authorization: {}", req.header("Authorization"));
         log.info("-> " + req.url().toString());
 
-        Map<String, Object> parsedBody = httpPOST(req);
+        Map<String, Object> parsedBody = performAuthentification(req);
 
         String access_token = (String) parsedBody.get("access_token");
         assertThat(access_token.length(), greaterThan(0));
@@ -95,33 +104,35 @@ public class AuthorityTest
                                    int userLevelResource_expectedStatus,
                                    int adminLevelResource_expectedStatus,
                                    int frontendLevelResource_checkUserId_expectedStatus,
-                                   int frontendLevelResource_addUser_expectedStatus
+                                   int frontendLevelResource_addUser_expectedStatus,
+                                   RequestBody body_for_checkUserId,
+                                   RequestBody body_for_addUser
     ) throws Exception
     {
-        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + publicLevelResource, access_token)
+        checkResource(simpleGetRequest(ALL_BEFORE_RESOURCE + publicLevelResource, access_token)
                 , 200); // success for all levels
 
-        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + userLevelResource, access_token)
+        checkResource(simpleGetRequest(ALL_BEFORE_RESOURCE + userLevelResource, access_token)
                 , userLevelResource_expectedStatus);
 
-        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + adminLevelResource, access_token)
+        checkResource(simpleGetRequest(ALL_BEFORE_RESOURCE + adminLevelResource, access_token)
                 , adminLevelResource_expectedStatus);
 
-        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_checkUserId, access_token)
+        checkResource(simplePostRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_checkUserId, access_token, body_for_checkUserId)
                 , frontendLevelResource_checkUserId_expectedStatus);
 
-        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_addUser, access_token)
+        checkResource(simplePostRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_addUser, access_token, body_for_addUser)
                 , frontendLevelResource_addUser_expectedStatus);
     }
 
     private static void checkResource(Request req, int expectedStatus) throws Exception
     {
         log.info("-> " + req.url().encodedPath());
-        Map<String, Object> result = httpGET(req);
+        Map<String, Object> result = performResourceChecking(req);
         assertEquals(expectedStatus, result.get("statusCode"));
     }
 
-    private static Map<String, Object> httpPOST(Request req) throws Exception
+    private static Map<String, Object> performAuthentification(Request req) throws Exception
     {
         OkHttpClient client = new OkHttpClient();
         try (Response response = client.newCall(req).execute())
@@ -134,7 +145,7 @@ public class AuthorityTest
         }
     }
 
-    private static Map<String, Object> httpGET(Request req) throws Exception
+    private static Map<String, Object> performResourceChecking(Request req) throws Exception
     {
         OkHttpClient client = new OkHttpClient();
         try (Response response = client.newCall(req).execute())
@@ -165,7 +176,7 @@ public class AuthorityTest
         }
     }
 
-    private Request getSimpleRequest(String url, String access_token)
+    private Request simpleGetRequest(String url, String access_token)
     {
         Request request;
 
@@ -175,7 +186,23 @@ public class AuthorityTest
             return new Request.Builder().url(url).addHeader("Authorization", "Bearer " + access_token).build();
     }
 
-    private Request getAuthRequest(String clientname, String clientpass, String username, String userpass)
+    private Request simplePostRequest(String url, String access_token, RequestBody body)
+    {
+        Request.Builder req = new Request.Builder().url(url);
+
+        if (access_token != null)
+            req.addHeader("Authorization", "Bearer " + access_token);
+
+        if (body == null)
+            body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{}");
+
+        req.post(body);
+
+        return req.build();
+
+    }
+
+    private Request authPostRequest(String clientname, String clientpass, String username, String userpass)
     {
         String url = String.format(PROTOCOL_HOST_PORT
                         + "/oauth/token?grant_type=password&username=%s&password=%s",
