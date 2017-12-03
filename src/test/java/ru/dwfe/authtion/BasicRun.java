@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static ru.dwfe.authtion.GlobalVariables_FOR_TESTS.ALL_BEFORE_RESOURCE;
+import static ru.dwfe.authtion.GlobalVariables_FOR_TESTS.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicRun
@@ -28,10 +28,10 @@ public class BasicRun
     {
         logHead("user");
 
-        Request req = getAuthRequest("Standard", "Login", "user", "passUser");
-        String access_token = login(req, 864000);
+        Request req = getAuthRequest(user_clientname, user_clientpass, user_username, user_userpass);
+        String access_token = login(req, user_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 200, 200, 403);
+        checkAllResources(access_token, 200, 403);
     }
 
     @Test
@@ -39,10 +39,10 @@ public class BasicRun
     {
         logHead("admin");
 
-        Request req = getAuthRequest("ThirdParty", "Computer", "admin", "passAdmin");
-        String access_token = login(req, 180);
+        Request req = getAuthRequest(admin_clientname, admin_clientpass, admin_username, admin_userpass);
+        String access_token = login(req, admin_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 200, 200, 200);
+        checkAllResources(access_token, 200, 200);
     }
 
     @Test
@@ -50,14 +50,16 @@ public class BasicRun
     {
         logHead("anonymous");
 
-        checkAllResources(null, 200, 401, 401);
+        checkAllResources(null, 401, 401);
     }
 
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 
     private static String login(Request req, Integer expires) throws Exception
     {
-        log.info("Login");
+        log.info("get Token");
+        log.info("-> Authorization: {}", req.header("Authorization"));
+        log.info("-> " + req.url().toString());
 
         Map<String, Object> parsedBody = httpPOST(req);
 
@@ -70,21 +72,21 @@ public class BasicRun
         return access_token;
     }
 
-    private void checkAllResources(String access_token, int public_expectedStatus, int cities_expectedStatus, int users_expectedStatus) throws Exception
+    private void checkAllResources(String access_token, int userLevelResource_expectedStatus, int adminLevelResource_expectedStatus) throws Exception
     {
-        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + "/public", access_token)
-                , public_expectedStatus);
+        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + publicLevelResource, access_token)
+                , 200); // success for all levels
 
-        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + "/cities", access_token)
-                , cities_expectedStatus);
+        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + userLevelResource, access_token)
+                , userLevelResource_expectedStatus);
 
-        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + "/users", access_token)
-                , users_expectedStatus);
+        checkResource(getSimpleRequest(ALL_BEFORE_RESOURCE + adminLevelResource, access_token)
+                , adminLevelResource_expectedStatus);
     }
 
     private static void checkResource(Request req, int expectedStatus) throws Exception
     {
-        log.info(req.url().encodedPath());
+        log.info("-> " + req.url().encodedPath());
         Map<String, Object> result = httpGET(req);
         assertEquals(expectedStatus, result.get("statusCode"));
     }
@@ -95,7 +97,7 @@ public class BasicRun
         try (Response response = client.newCall(req).execute())
         {
             String respBody = response.body().string();
-            log.info("token\n{}", respBody);
+            log.info("<- token\n{}", respBody);
             assertEquals(200, response.code());
 
             return jsonParser.parseMap(respBody);
@@ -108,7 +110,7 @@ public class BasicRun
         try (Response response = client.newCall(req).execute())
         {
             String respBody = response.body().string();
-            log.info(respBody);
+            log.info("<- " + respBody);
 
             Map<String, Object> map = new HashMap<>();
             map.put("statusCode", response.code());
@@ -142,9 +144,12 @@ public class BasicRun
 
     private Request getAuthRequest(String clientname, String clientpass, String username, String userpass)
     {
-        String url = String.format(ALL_BEFORE_RESOURCE
+        String url = String.format(PROTOCOL_HOST_PORT
                         + "/oauth/token?grant_type=password&username=%s&password=%s",
                 username, userpass);
+
+        log.info("Client credentials - {}:{}", clientname, clientpass);
+        log.info("User credentials - {}:{}", username, userpass);
 
         return new Request.Builder()
                 .url(url)

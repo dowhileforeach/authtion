@@ -9,28 +9,28 @@ import ru.dwfe.authtion.service.UserService;
 
 import java.util.List;
 
-import static ru.dwfe.authtion.config.GlobalVariables.APIv1;
-
 @RestController
-public class AppController
+public class AppControllerV1
 {
+    private static final String API = "/v1";
+
     @Autowired
     UserService userService;
 
-    @RequestMapping(APIv1 + "/public")
+    @RequestMapping(API + "/public")
     public String publicResource()
     {
         return "{\"public\": true}";
     }
 
-    @RequestMapping(APIv1 + "/cities")
+    @RequestMapping(API + "/cities")
     @PreAuthorize("hasAuthority('USER')")
     public String cities()
     {
         return "{\"cities\": true}";
     }
 
-    @RequestMapping(APIv1 + "/users")
+    @RequestMapping(API + "/users")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> users()
     {
