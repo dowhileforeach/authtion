@@ -12,7 +12,7 @@ See `test\java\ru.dwfe.authtion` classes.
 ### AuthorityTest
 See screenrecord:
 1. Login as: `user`, `admin`
-2. Try to access as `user`, `admin`, `not loged user` for resources: `/public`, `/cities`, `/users`
+2. Try to access as `user`, `admin`, `not loged user` to resources: `/public`, `/cities`, `/users`
 
 ![Basic Run](./Authtion_BasicRun.png)
 
