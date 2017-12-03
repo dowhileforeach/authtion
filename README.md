@@ -11,10 +11,10 @@ When developing a new API should create a new controller class, e.g. "AppControl
 Unfortunately for resource authentication "/oauth/token" spring-security-oauth2 does not provide for versioning.<br>
 Therefore, for all API versions is one version "/oauth/token".
 
-# TESTs
-## Automated tests
+# Automated TESTs
 See `test\java\ru.dwfe.authtion` classes.
-### BasicRun
+
+## BasicRun
 See screenrecord: https://youtu.be/y1W9WLX88J4
 1. Login: `user`, `admin`
 2. Try to access with `user`, `admin`, `not loged user` for resources: `/public`, `/cities`, `/users`
