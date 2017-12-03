@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class BasicRun
+public class AuthorityTest
 {
     @Test
     public void _01_user() throws Exception
@@ -151,7 +151,7 @@ public class BasicRun
                 .build();
     }
 
-    private static final Logger log = LoggerFactory.getLogger(BasicRun.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthorityTest.class);
 
     private void logHead(String who)
     {

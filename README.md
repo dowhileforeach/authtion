@@ -9,8 +9,8 @@ Java 9, Spring Boot 2, OAuth 2, RESTful, MySQL<br>
 # TESTs
 ## Automated tests
 See `test\java\ru.dwfe.authtion` classes.
-### BasicRun
-See screenrecord: https://youtu.be/y1W9WLX88J4
+### AuthorityTest
+See screenrecord:
 1. Login: `user`, `admin`
 2. Try to access with `user`, `admin`, `not loged user` for resources: `/public`, `/cities`, `/users`
 
