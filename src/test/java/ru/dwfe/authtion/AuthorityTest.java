@@ -108,7 +108,7 @@ public class AuthorityTest
         return access_token;
     }
 
-    private void checkAllResources(String access_token,
+    private static void checkAllResources(String access_token,
                                    int userLevelResource_expectedStatus,
                                    int adminLevelResource_expectedStatus,
                                    int frontendLevelResource_expectedStatus
@@ -184,7 +184,7 @@ public class AuthorityTest
         }
     }
 
-    private Request GET_request(String url, String access_token, Map<String, String> queries)
+    private static Request GET_request(String url, String access_token, Map<String, String> queries)
     {
         Request request;
 
@@ -206,7 +206,7 @@ public class AuthorityTest
         return request;
     }
 
-    private Request POST_request(String url, String access_token, RequestBody body)
+    private static Request POST_request(String url, String access_token, RequestBody body)
     {
         Request.Builder req = new Request.Builder().url(url);
 
@@ -222,7 +222,7 @@ public class AuthorityTest
 
     }
 
-    private Request authPostRequest(String clientname, String clientpass, String username, String userpass)
+    private static Request authPostRequest(String clientname, String clientpass, String username, String userpass)
     {
         String url = String.format(PROTOCOL_HOST_PORT
                         + "/oauth/token?grant_type=password&username=%s&password=%s",
@@ -240,7 +240,7 @@ public class AuthorityTest
 
     private static final Logger log = LoggerFactory.getLogger(AuthorityTest.class);
 
-    private void logHead(String who)
+    private static void logHead(String who)
     {
         log.info("\n=============================="
                 + "\n  {}"
@@ -254,7 +254,7 @@ public class AuthorityTest
         UNTRUSTED
     }
 
-    private String getAccessToken(ClientType clientType, String username, String userpass) throws Exception
+    private static String getAccessToken(ClientType clientType, String username, String userpass) throws Exception
     {
         String clientname;
         String clientpass;
