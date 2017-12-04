@@ -1,7 +1,12 @@
 package ru.dwfe.authtion;
 
+import javafx.scene.media.Media;
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ser.impl.JsonSerializerMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.dwfe.authtion.dao.User;
 import ru.dwfe.authtion.service.UserService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -46,37 +52,43 @@ public class AppControllerV1
     public String checkUserId(@RequestBody String body)
     {
         String id = (String) JsonParserFactory.getJsonParser().parseMap(body).get("id");
-        boolean result = userService.findById(id).isPresent();
+        boolean result = userService.existsById(id);
 
         return String.format("{" +
                 "\"isFree\": %s" +
                 "}", !result);
     }
 
-    @RequestMapping(API + "/create-user")
+    @RequestMapping(value = API + "/create-user")
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String addUser(@RequestBody String body)
+    public String addUser(@RequestBody User user) throws IOException
     {
         boolean result = false;
 
-        //parsing
-        Map<String, Object> user = JsonParserFactory.getJsonParser().parseMap(body);
-
         //fields validation
-        String id = (String) user.get("id");
+        Map<String, String> check = User.check(user);
+        if (check.isEmpty())
 
+            //check user id
+            if (userService.existsById(user.getId()))
+                check.put("error", "user is present");
+            else
+            {
+                //prepare
+                User.prepareNewUser(user);
 
-        //put user to the database
+                //put user to the database
+
+                result = true;
+            }
+
 
         //вернуть результат операции
 
         return String.format("{" +
-                "\"success\": %s," +
-                "\"details\":" +
-                "{" +
-                "\"id\": \"%s\"" +
-                "}" +
-                "}", result, id);
+                "\"success\": %s, " +
+                "\"details\": %s" +
+                "}", result, new ObjectMapper().writeValueAsString(check));
     }
 
 }

@@ -38,6 +38,11 @@ public class UserService implements UserDetailsService
         return userRepository.findById(id);
     }
 
+    public boolean existsById(String id)
+    {
+        return userRepository.existsById(id);
+    }
+
     public List<User> findAll()
     {
         return (List<User>) userRepository.findAll();

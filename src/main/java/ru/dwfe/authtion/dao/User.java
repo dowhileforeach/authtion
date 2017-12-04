@@ -1,13 +1,19 @@
 package ru.dwfe.authtion.dao;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -20,7 +26,7 @@ public class User implements UserDetails, CredentialsContainer
     @Column
     private String id;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column
     private String password;
 
@@ -203,5 +209,41 @@ public class User implements UserDetails, CredentialsContainer
                 " \"accountNonLocked\": \"" + accountNonLocked + "\",\n" +
                 " \"enabled\": \"" + enabled + "\"\n" +
                 "}";
+    }
+
+    public static Map<String, String> check(User user)
+    {
+        Map<String, String> map = new HashMap<>();
+
+        checkStringValue("id", user.id, map);
+        checkStringValue("password", user.password, map);
+
+        return map;
+    }
+
+    public static void prepareNewUser(User user)
+    {
+        user.setAccountNonExpired(true);
+        user.setCredentialsNonExpired(true);
+        user.setAccountNonLocked(false); //is locked
+        user.setEnabled(true);
+
+        Authority authority = new Authority();
+        authority.setAuthority("USER");
+        user.setAuthorities(Set.of(authority));
+
+        if (user.getFirstName() == null) user.setFirstName("");
+        if (user.getLastName() == null) user.setLastName("");
+    }
+
+    private static void checkStringValue(String fieldName, String value, Map<String, String> map)
+    {
+        String result = null;
+
+        if (value == null) result = "required";
+        else if (value.length() == 0) result = "length can't be 0";
+
+        if (result != null)
+            map.put(fieldName, result);
     }
 }

@@ -56,17 +56,20 @@ public class AuthorityTest
 
         RequestBody body_for_checkUserId = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{\"id\": \"user\"}");
 
-        RequestBody body_for_addUser = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{" +
+        RequestBody body_for_createUser = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{" +
                 "\"id\": \"user\"," +
-                "\"firstName\": \"alex\"," +
+                "\"password\": \"somePass\"," +
+                "\"firstName\": \"olala\"," +
                 "\"lastName\": \"\"" +
                 "}"
         );
 
+//        RequestBody body_for_createUser = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{}");
+
         Request req = authPostRequest(standard_clientname, standard_clientpass, shop_username, shop_userpass);
         String access_token = login(req, standard_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 403, 403, 200, 200, body_for_checkUserId, body_for_addUser);
+        checkAllResources(access_token, 403, 403, 200, 200, body_for_checkUserId, body_for_createUser);
         //200 = OK
         //403 = Forbidden, access_denied
     }
@@ -106,7 +109,7 @@ public class AuthorityTest
                                    int frontendLevelResource_checkUserId_expectedStatus,
                                    int frontendLevelResource_addUser_expectedStatus,
                                    RequestBody body_for_checkUserId,
-                                   RequestBody body_for_addUser
+                                   RequestBody body_for_createUser
     ) throws Exception
     {
         checkResource(simpleGetRequest(ALL_BEFORE_RESOURCE + publicLevelResource, access_token)
@@ -121,7 +124,7 @@ public class AuthorityTest
         checkResource(simplePostRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_checkUserId, access_token, body_for_checkUserId)
                 , frontendLevelResource_checkUserId_expectedStatus);
 
-        checkResource(simplePostRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_addUser, access_token, body_for_addUser)
+        checkResource(simplePostRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_addUser, access_token, body_for_createUser)
                 , frontendLevelResource_addUser_expectedStatus);
     }
 
