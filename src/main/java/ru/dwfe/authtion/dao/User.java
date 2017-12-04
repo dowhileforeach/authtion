@@ -75,7 +75,12 @@ public class User implements UserDetails, CredentialsContainer
     @Override
     public String getName()
     {   //method was overriden special for @JsonIgnore annotation
-        return getUsername();
+        return getUsername(); // <- don't touch!
+        // The only way.
+        // It affects the uniqueness of tokens:
+        //   OAuth2Authentication
+        //   -> AbstractAuthenticationToken
+        //   -> getName()
     }
 
     @Override
