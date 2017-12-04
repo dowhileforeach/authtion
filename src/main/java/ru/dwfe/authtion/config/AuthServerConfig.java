@@ -45,15 +45,15 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
         configurer
                 .inMemory() // in Memory or in JDBC
 
-                .withClient("Standard")
-                .secret("Login")
+                .withClient("Trusted")
+                .secret("trPass")
                 .scopes("all")
                 .accessTokenValiditySeconds(60 * 60 * 24 * 10) // 10 days
 
                 .and()
 
-                .withClient("ThirdParty")
-                .secret("Computer")
+                .withClient("Untrusted")
+                .secret("untrPass")
                 .scopes("all")
                 .accessTokenValiditySeconds(60 * 3) // 3 minutes
         ;

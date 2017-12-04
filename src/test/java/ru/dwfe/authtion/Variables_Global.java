@@ -1,19 +1,19 @@
 package ru.dwfe.authtion;
 
-public class Global_Test_Variables
+public class Variables_Global
 {
     public static final String API_VERSION = "/v1";
     public static final String PROTOCOL_HOST_PORT = "http://localhost:8080";
     public static final String ALL_BEFORE_RESOURCE = PROTOCOL_HOST_PORT + API_VERSION;
 
     /*Clents*/
-    public static final String standard_clientname = "Standard";
-    public static final String standard_clientpass = "Login";
-    public static final int standard_maxTokenExpirationTime = 864000;
+    public static final String trusted_clientname = "Trusted";
+    public static final String trusted_clientpass = "trPass";
+    public static final int trusted_maxTokenExpirationTime = 864000;
 
-    public static final String thirdPartyComp_clientname = "ThirdParty";
-    public static final String thirdPartyComp_clientpass = "Computer";
-    public static final int thirdPartyComp_maxTokenExpirationTime = 180;
+    public static final String untrusted_clientname = "Untrusted";
+    public static final String untrusted_clientpass = "untrPass";
+    public static final int untrusted_maxTokenExpirationTime = 180;
 
 
     /* user */
@@ -33,8 +33,8 @@ public class Global_Test_Variables
 
     /* RESOURCES*/
     public static final String publicLevelResource_public = "/public";
-    public static final String userLevelResource = "/cities";
-    public static final String adminLevelResource = "/users";
+    public static final String userLevelResource_cities = "/cities";
+    public static final String adminLevelResource_users = "/users";
     public static final String frontendLevelResource_checkUserId = "/check-user-id";
     public static final String frontendLevelResource_createUser = "/create-user";
     public static final String publicLevelResource_confirmUser = "/confirm-user";

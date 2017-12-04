@@ -1,12 +1,8 @@
 package ru.dwfe.authtion;
 
-import javafx.scene.media.Media;
-import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ser.impl.JsonSerializerMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.dwfe.authtion.dao.User;
