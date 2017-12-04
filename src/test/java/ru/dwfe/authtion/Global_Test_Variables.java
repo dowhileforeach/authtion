@@ -1,6 +1,6 @@
 package ru.dwfe.authtion;
 
-public class GlobalVariables_FOR_TESTS
+public class Global_Test_Variables
 {
     public static final String API_VERSION = "/v1";
     public static final String PROTOCOL_HOST_PORT = "http://localhost:8080";
@@ -32,9 +32,10 @@ public class GlobalVariables_FOR_TESTS
 
 
     /* RESOURCES*/
-    public static final String publicLevelResource = "/public";
+    public static final String publicLevelResource_public = "/public";
     public static final String userLevelResource = "/cities";
     public static final String adminLevelResource = "/users";
     public static final String frontendLevelResource_checkUserId = "/check-user-id";
-    public static final String frontendLevelResource_addUser = "/create-user";
+    public static final String frontendLevelResource_createUser = "/create-user";
+    public static final String publicLevelResource_confirmUser = "/confirm-user";
 }

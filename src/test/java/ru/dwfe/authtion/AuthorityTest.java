@@ -18,7 +18,8 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static ru.dwfe.authtion.GlobalVariables_FOR_TESTS.*;
+import static ru.dwfe.authtion.AuthorityTest_Variables.*;
+import static ru.dwfe.authtion.Global_Test_Variables.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AuthorityTest
@@ -31,9 +32,12 @@ public class AuthorityTest
         Request req = authPostRequest(standard_clientname, standard_clientpass, user_username, user_userpass);
         String access_token = login(req, standard_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 200, 403, 403, 403, null, null);
-        //200 = OK
-        //403 = Forbidden, access_denied
+        checkAllResources(access_token,
+                user_userLevelResource_expectedStatus, //cities
+                user_adminLevelResource_expectedStatus, //users
+                user_frontendLevelResource_checkUserId_expectedStatus, //check-user-id
+                user_frontendLevelResource_createUser_expectedStatus //create-user
+        );
     }
 
     @Test
@@ -44,9 +48,12 @@ public class AuthorityTest
         Request req = authPostRequest(thirdPartyComp_clientname, thirdPartyComp_clientpass, admin_username, admin_userpass);
         String access_token = login(req, thirdPartyComp_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 200, 200, 403, 403, null, null);
-        //200 = OK
-        //403 = Forbidden, access_denied
+        checkAllResources(access_token,
+                admin_userLevelResource_expectedStatus, //cities
+                admin_adminLevelResource_expectedStatus, //users
+                admin_frontendLevelResource_checkUserId_expectedStatus, //check-user-id
+                admin_frontendLevelResource_createUser_expectedStatus //create-user
+        );
     }
 
     @Test
@@ -54,24 +61,15 @@ public class AuthorityTest
     {
         logHead("shop");
 
-        RequestBody body_for_checkUserId = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{\"id\": \"user\"}");
-
-        RequestBody body_for_createUser = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{" +
-                "\"id\": \"user\"," +
-                "\"password\": \"somePass\"," +
-                "\"firstName\": \"olala\"," +
-                "\"lastName\": \"\"" +
-                "}"
-        );
-
-//        RequestBody body_for_createUser = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{}");
-
         Request req = authPostRequest(standard_clientname, standard_clientpass, shop_username, shop_userpass);
         String access_token = login(req, standard_maxTokenExpirationTime);
 
-        checkAllResources(access_token, 403, 403, 200, 200, body_for_checkUserId, body_for_createUser);
-        //200 = OK
-        //403 = Forbidden, access_denied
+        checkAllResources(access_token,
+                shop_userLevelResource_expectedStatus, //cities
+                shop_adminLevelResource_expectedStatus, //users
+                shop_frontendLevelResource_checkUserId_expectedStatus, //check-user-id
+                shop_frontendLevelResource_createUser_expectedStatus //create-user
+        );
     }
 
 
@@ -80,8 +78,12 @@ public class AuthorityTest
     {
         logHead("anonymous");
 
-        checkAllResources(null, 401, 401, 401, 401, null, null);
-        //401 = Unauthorized
+        checkAllResources(null,
+                anonymous_userLevelResource_expectedStatus, //cities
+                anonymous_adminLevelResource_expectedStatus, //users
+                anonymous_frontendLevelResource_checkUserId_expectedStatus, //check-user-id
+                anonymous_frontendLevelResource_createUser_expectedStatus //create-user
+        );
     }
 
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
@@ -107,25 +109,26 @@ public class AuthorityTest
                                    int userLevelResource_expectedStatus,
                                    int adminLevelResource_expectedStatus,
                                    int frontendLevelResource_checkUserId_expectedStatus,
-                                   int frontendLevelResource_addUser_expectedStatus,
-                                   RequestBody body_for_checkUserId,
-                                   RequestBody body_for_createUser
+                                   int frontendLevelResource_createUser_expectedStatus
     ) throws Exception
     {
-        checkResource(simpleGetRequest(ALL_BEFORE_RESOURCE + publicLevelResource, access_token)
+        checkResource(GET_request(ALL_BEFORE_RESOURCE + publicLevelResource_public, access_token, null)
                 , 200); // success for all levels
 
-        checkResource(simpleGetRequest(ALL_BEFORE_RESOURCE + userLevelResource, access_token)
+        checkResource(GET_request(ALL_BEFORE_RESOURCE + userLevelResource, access_token, null)
                 , userLevelResource_expectedStatus);
 
-        checkResource(simpleGetRequest(ALL_BEFORE_RESOURCE + adminLevelResource, access_token)
+        checkResource(GET_request(ALL_BEFORE_RESOURCE + adminLevelResource, access_token, null)
                 , adminLevelResource_expectedStatus);
 
-        checkResource(simplePostRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_checkUserId, access_token, body_for_checkUserId)
+        checkResource(POST_request(ALL_BEFORE_RESOURCE + frontendLevelResource_checkUserId, access_token, body_for_frontendLevelResource_checkUserId)
                 , frontendLevelResource_checkUserId_expectedStatus);
 
-        checkResource(simplePostRequest(ALL_BEFORE_RESOURCE + frontendLevelResource_addUser, access_token, body_for_createUser)
-                , frontendLevelResource_addUser_expectedStatus);
+        checkResource(POST_request(ALL_BEFORE_RESOURCE + frontendLevelResource_createUser, access_token, body_for_frontendLevelResource_createUser)
+                , frontendLevelResource_createUser_expectedStatus);
+
+        checkResource(GET_request(ALL_BEFORE_RESOURCE + publicLevelResource_confirmUser, access_token, queries_for_publicLevelResource_confirmUser)
+                , 200); // success for all levels
     }
 
     private static void checkResource(Request req, int expectedStatus) throws Exception
@@ -179,17 +182,29 @@ public class AuthorityTest
         }
     }
 
-    private Request simpleGetRequest(String url, String access_token)
+    private Request GET_request(String url, String access_token, Map<String, String> queries)
     {
         Request request;
 
         if (access_token == null)
-            return new Request.Builder().url(url).build();
+            request = new Request.Builder().url(url).build();
         else
-            return new Request.Builder().url(url).addHeader("Authorization", "Bearer " + access_token).build();
+            request = new Request.Builder().url(url).addHeader("Authorization", "Bearer " + access_token).build();
+
+        if (queries != null)
+            for (Map.Entry<String, String> next : queries.entrySet())
+            {
+                HttpUrl newUrl = request.url().newBuilder()
+                        .addQueryParameter(next.getKey(), next.getValue())
+                        .build();
+                request = request.newBuilder()
+                        .url(newUrl)
+                        .build();
+            }
+        return request;
     }
 
-    private Request simplePostRequest(String url, String access_token, RequestBody body)
+    private Request POST_request(String url, String access_token, RequestBody body)
     {
         Request.Builder req = new Request.Builder().url(url);
 

@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.dwfe.authtion.dao.User;
 import ru.dwfe.authtion.service.UserService;
 
@@ -59,7 +56,7 @@ public class AppControllerV1
                 "}", !result);
     }
 
-    @RequestMapping(value = API + "/create-user")
+    @RequestMapping(value = API + "/create-user", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String addUser(@RequestBody User user) throws IOException
     {
@@ -89,6 +86,16 @@ public class AppControllerV1
                 "\"success\": %s, " +
                 "\"details\": %s" +
                 "}", result, new ObjectMapper().writeValueAsString(check));
+    }
+
+    @RequestMapping(API + "/confirm-user")
+    public String confirmUser(@RequestParam String confirmkey)
+    {
+        boolean result = false;
+
+        return String.format("{" +
+                "\"success\": %s" +
+                "}", result);
     }
 
 }
