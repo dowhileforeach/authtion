@@ -12,7 +12,10 @@ import org.springframework.boot.json.JsonParserFactory;
 import ru.dwfe.authtion.dao.User;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
@@ -24,6 +27,8 @@ import static ru.dwfe.authtion.Variables_for_AuthorityTest.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AuthorityTest
 {
+    private static Set<String> access_tokens = new HashSet<>();
+
     @Test
     public void _01_user() throws Exception
     {
@@ -75,6 +80,14 @@ public class AuthorityTest
         );
     }
 
+    @Test
+    public void _05_different_access_tokens()
+    {
+        logHead("list of Access Token");
+        log.info("\n\n{}",access_tokens.stream().collect(Collectors.joining("\n")));
+        assertEquals(3, access_tokens.size());
+    }
+
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 
     private static String login(Request req, int expires) throws Exception
@@ -86,6 +99,7 @@ public class AuthorityTest
         Map<String, Object> parsedBody = performAuthentification(req);
 
         String access_token = (String) parsedBody.get("access_token");
+        access_tokens.add(access_token);
         assertThat(access_token.length(), greaterThan(0));
 
         assertThat((int) parsedBody.get("expires_in"),

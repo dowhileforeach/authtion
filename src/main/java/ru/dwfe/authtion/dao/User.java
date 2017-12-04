@@ -8,6 +8,7 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.security.Principal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,8 +74,8 @@ public class User implements UserDetails, CredentialsContainer
     @JsonIgnore
     @Override
     public String getName()
-    {
-        return firstName;
+    {   //method was overriden special for @JsonIgnore annotation
+        return getUsername();
     }
 
     @Override
