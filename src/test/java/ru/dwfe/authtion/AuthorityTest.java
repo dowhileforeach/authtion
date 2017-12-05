@@ -146,7 +146,7 @@ public class AuthorityTest
         try (Response response = client.newCall(req).execute())
         {
             String respBody = response.body().string();
-            log.info("<- token\n{}", respBody);
+            log.info("<- token\n{}\n", respBody);
             assertEquals(200, response.code());
 
             return jsonParser.parseMap(respBody);
@@ -159,7 +159,7 @@ public class AuthorityTest
         try (Response response = client.newCall(req).execute())
         {
             String respBody = response.body().string();
-            log.info("<- " + respBody);
+            log.info("<- {}\n",respBody);
 
             Map<String, Object> map = new HashMap<>();
             map.put("statusCode", response.code());
@@ -268,9 +268,9 @@ public class AuthorityTest
         }
         else
         {
-            clientname = trusted_clientname;
-            clientpass = trusted_clientpass;
-            maxTokenExpirationTime = trusted_maxTokenExpirationTime;
+            clientname = untrusted_clientname;
+            clientpass = untrusted_clientpass;
+            maxTokenExpirationTime = untrusted_maxTokenExpirationTime;
         }
 
         Request req = authPostRequest(clientname, clientpass, username, userpass);
