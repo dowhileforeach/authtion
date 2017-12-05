@@ -1,4 +1,4 @@
-package ru.dwfe.authtion.event;
+package ru.dwfe.net.authtion.event;
 
 import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
 import org.springframework.security.authentication.event.AbstractAuthenticationEvent;

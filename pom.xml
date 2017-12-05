@@ -93,17 +93,17 @@
 
         <dependency>
             <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
+            <artifactId>jaxb-api</artifactId>  <!--for prevent: Caused by: java.lang.ClassNotFoundException: javax.xml.bind.JAXBException -->
             <version>2.3.0</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
+            <artifactId>jaxb-impl</artifactId>  <!--for prevent: Caused by: java.lang.ClassNotFoundException: com.sun.xml.internal.bind.v2.ContextFactory -->
             <version>2.3.0</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-core</artifactId>
+            <artifactId>jaxb-core</artifactId> <!--for prevent: Caused by: java.lang.ClassNotFoundException: com.sun.xml.bind.v2.model.annotation.AnnotationReader -->
             <version>2.3.0</version>
         </dependency>
         <dependency>

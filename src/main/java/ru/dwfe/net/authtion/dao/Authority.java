@@ -1,4 +1,4 @@
-package ru.dwfe.authtion.dao;
+package ru.dwfe.net.authtion.dao;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;

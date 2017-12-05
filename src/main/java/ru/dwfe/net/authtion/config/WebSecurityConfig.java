@@ -1,4 +1,4 @@
-package ru.dwfe.authtion.config;
+package ru.dwfe.net.authtion.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

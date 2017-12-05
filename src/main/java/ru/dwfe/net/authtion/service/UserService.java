@@ -1,4 +1,4 @@
-package ru.dwfe.authtion.service;
+package ru.dwfe.net.authtion.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.dwfe.authtion.dao.User;
-import ru.dwfe.authtion.dao.repository.UserRepository;
+import ru.dwfe.net.authtion.dao.User;
+import ru.dwfe.net.authtion.dao.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;

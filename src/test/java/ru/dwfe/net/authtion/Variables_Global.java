@@ -1,4 +1,4 @@
-package ru.dwfe.authtion;
+package ru.dwfe.net.authtion;
 
 public class Variables_Global
 {
@@ -39,10 +39,10 @@ public class Variables_Global
 
 
     /* RESOURCES*/
-    public static final String publicLevelResource_public = "/public";
-    public static final String userLevelResource_cities = "/cities";
-    public static final String adminLevelResource_users = "/users";
-    public static final String frontendLevelResource_checkUserId = "/check-user-id";
-    public static final String frontendLevelResource_createUser = "/create-user";
-    public static final String publicLevelResource_confirmUser = "/confirm-user";
+    public static final String PUBLICLevelResource_public = "/public";
+    public static final String USERLevelResource_cities = "/cities";
+    public static final String ADMINLevelResource_users = "/users";
+    public static final String FRONTENDLevelResource_checkUserId = "/check-user-id";
+    public static final String FRONTENDLevelResource_createUser = "/create-user";
+    public static final String PUBLICLevelResource_confirmUser = "/confirm-user";
 }

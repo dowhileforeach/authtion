@@ -1,12 +1,12 @@
-package ru.dwfe.authtion;
+package ru.dwfe.net.authtion;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.dwfe.authtion.dao.User;
-import ru.dwfe.authtion.service.UserService;
+import ru.dwfe.net.authtion.dao.User;
+import ru.dwfe.net.authtion.service.UserService;
 
 import java.io.IOException;
 import java.util.List;

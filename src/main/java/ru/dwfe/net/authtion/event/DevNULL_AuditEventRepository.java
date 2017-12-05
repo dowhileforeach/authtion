@@ -1,11 +1,11 @@
-package ru.dwfe.authtion.event;
+package ru.dwfe.net.authtion.event;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.stereotype.Component;
-import ru.dwfe.authtion.service.UserService;
+import ru.dwfe.net.authtion.service.UserService;
 
 import java.util.Date;
 import java.util.List;
