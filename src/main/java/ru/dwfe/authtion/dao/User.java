@@ -8,7 +8,9 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.security.Principal;
+import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +48,8 @@ public class User implements UserDetails, CredentialsContainer
     private boolean accountNonLocked;
     @Column
     private boolean enabled;
+    @Column
+    private String confirmationKey;
 
 
     /*
@@ -177,6 +181,16 @@ public class User implements UserDetails, CredentialsContainer
         this.enabled = enabled;
     }
 
+    public String getConfirmationKey()
+    {
+        return confirmationKey;
+    }
+
+    public void setConfirmationKey(String confirmationKey)
+    {
+        this.confirmationKey = confirmationKey;
+    }
+
     /*
         equals, hashCode, toString
     */
@@ -214,6 +228,11 @@ public class User implements UserDetails, CredentialsContainer
                 "}";
     }
 
+
+    /*
+        UTILs
+    */
+
     public static Map<String, String> check(User user)
     {
         Map<String, String> map = new HashMap<>();
@@ -237,6 +256,9 @@ public class User implements UserDetails, CredentialsContainer
 
         if (user.getFirstName() == null) user.setFirstName("");
         if (user.getLastName() == null) user.setLastName("");
+
+        int requiredStringLength = 100;
+        user.setConfirmationKey(new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36));
     }
 
     private static void checkStringValue(String fieldName, String value, Map<String, String> map)

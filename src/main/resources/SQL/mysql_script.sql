@@ -16,6 +16,8 @@ CREATE TABLE `users` (
   `credentials_non_expired` TINYINT(1)                 NOT NULL DEFAULT '1',
   `account_non_locked`      TINYINT(1)                 NOT NULL DEFAULT '1',
   `enabled`                 TINYINT(1)                 NOT NULL DEFAULT '1',
+  `confirmation_key`        VARCHAR(255)
+                            COLLATE utf8mb4_unicode_ci          DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_name_uindex` (`id`)
 )
@@ -60,9 +62,9 @@ CREATE TABLE `user_authority` (
 
 LOCK TABLES `users` WRITE, `authorities` WRITE, `user_authority` WRITE;
 INSERT INTO `users` VALUES
-  ('admin', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1),
-  ('user', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1),
-  ('shop', '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', '', '', 1, 1, 1, 1);
+  ('admin', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1,''),
+  ('user', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1,''),
+  ('shop', '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', '', '', 1, 1, 1, 1,'');
 INSERT INTO `authorities` VALUES
   ('ADMIN', 'Administrator'),
   ('USER', 'Standard user'),
