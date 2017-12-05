@@ -61,7 +61,7 @@ public class AuthorityTest
         logHead("shop");
 
         checkAllResources(
-                getAccessToken(ClientType.TRUSTED, shop_username, shop_userpass),
+                getAccessToken(ClientType.FRONTEND, shop_username, shop_userpass),
                 shop_userLevelResource_expectedStatus,
                 shop_adminLevelResource_expectedStatus,
                 shop_frontendLevelResource_expectedStatus
@@ -83,14 +83,14 @@ public class AuthorityTest
     @Test
     public void _05_different_access_tokens()
     {
-        logHead("list of Access Token");
-        log.info("\n\n{}",access_tokens.stream().collect(Collectors.joining("\n")));
-        assertEquals(3, access_tokens.size());
+        logHead("list of Access Tokens");
+        log.info("\n\n{}", access_tokens.stream().collect(Collectors.joining("\n")));
+        assertEquals(totalAccessTokenCount, access_tokens.size());
     }
 
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 
-    private static String login(Request req, int expires) throws Exception
+    private static String login(Request req, int maxExpirationTime, int minExpirationTime) throws Exception
     {
         log.info("get Token");
         log.info("-> Authorization: {}", req.header("Authorization"));
@@ -103,15 +103,15 @@ public class AuthorityTest
         assertThat(access_token.length(), greaterThan(0));
 
         assertThat((int) parsedBody.get("expires_in"),
-                is(both(greaterThan(0)).and(lessThanOrEqualTo(expires))));
+                is(both(greaterThan(minExpirationTime)).and(lessThanOrEqualTo(maxExpirationTime))));
 
         return access_token;
     }
 
     private static void checkAllResources(String access_token,
-                                   int userLevelResource_expectedStatus,
-                                   int adminLevelResource_expectedStatus,
-                                   int frontendLevelResource_expectedStatus
+                                          int userLevelResource_expectedStatus,
+                                          int adminLevelResource_expectedStatus,
+                                          int frontendLevelResource_expectedStatus
     ) throws Exception
     {
         checkResource(GET_request(ALL_BEFORE_RESOURCE + publicLevelResource_public, access_token, null)
@@ -159,7 +159,7 @@ public class AuthorityTest
         try (Response response = client.newCall(req).execute())
         {
             String respBody = response.body().string();
-            log.info("<- {}\n",respBody);
+            log.info("<- {}\n", respBody);
 
             Map<String, Object> map = new HashMap<>();
             map.put("statusCode", response.code());
@@ -251,30 +251,41 @@ public class AuthorityTest
     enum ClientType
     {
         TRUSTED,
-        UNTRUSTED
+        UNTRUSTED,
+        FRONTEND
     }
 
     private static String getAccessToken(ClientType clientType, String username, String userpass) throws Exception
     {
-        String clientname;
-        String clientpass;
-        int maxTokenExpirationTime;
+        String clientname = "";
+        String clientpass = "";
+        int maxTokenExpirationTime = 0;
+        int minTokenExpirationTime = -1;
 
         if (ClientType.TRUSTED == clientType)
         {
             clientname = trusted_clientname;
             clientpass = trusted_clientpass;
             maxTokenExpirationTime = trusted_maxTokenExpirationTime;
+            minTokenExpirationTime = trusted_minTokenExpirationTime;
         }
-        else
+        else if (ClientType.UNTRUSTED == clientType)
         {
             clientname = untrusted_clientname;
             clientpass = untrusted_clientpass;
             maxTokenExpirationTime = untrusted_maxTokenExpirationTime;
+            minTokenExpirationTime = untrusted_minTokenExpirationTime;
+        }
+        else if (ClientType.FRONTEND == clientType)
+        {
+            clientname = frontend_clientname;
+            clientpass = frontend_clientpass;
+            maxTokenExpirationTime = frontend_maxTokenExpirationTime;
+            minTokenExpirationTime = frontend_minTokenExpirationTime;
         }
 
         Request req = authPostRequest(clientname, clientpass, username, userpass);
-        String access_token = login(req, maxTokenExpirationTime);
+        String access_token = login(req, maxTokenExpirationTime, minTokenExpirationTime);
 
         return access_token;
     }

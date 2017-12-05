@@ -9,11 +9,18 @@ public class Variables_Global
     /*Clents*/
     public static final String trusted_clientname = "Trusted";
     public static final String trusted_clientpass = "trPass";
-    public static final int trusted_maxTokenExpirationTime = 864000;
+    public static final int trusted_maxTokenExpirationTime = 864_000;
+    public static final int trusted_minTokenExpirationTime = 180;
 
     public static final String untrusted_clientname = "Untrusted";
     public static final String untrusted_clientpass = "untrPass";
     public static final int untrusted_maxTokenExpirationTime = 180;
+    public static final int untrusted_minTokenExpirationTime = 0;
+
+    public static final String frontend_clientname = "Frontend";
+    public static final String frontend_clientpass = "frntndPass";
+    public static final int frontend_maxTokenExpirationTime = 1_728_000;
+    public static final int frontend_minTokenExpirationTime = 864_000;
 
 
     /* user */

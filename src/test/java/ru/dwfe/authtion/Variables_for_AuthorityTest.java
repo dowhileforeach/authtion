@@ -52,4 +52,9 @@ public class Variables_for_AuthorityTest
     public static final Map<String, String> queries_for_publicLevelResource_confirmUser =
             Map.of("confirmkey","AnyString");
 
+
+    /* OTHER */
+
+    public static final int totalAccessTokenCount = 3;
+
 }

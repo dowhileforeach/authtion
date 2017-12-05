@@ -56,6 +56,13 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
                 .secret("untrPass")
                 .scopes("all")
                 .accessTokenValiditySeconds(60 * 3) // 3 minutes
+
+                .and()
+
+                .withClient("Frontend")
+                .secret("frntndPass")
+                .scopes("all")
+                .accessTokenValiditySeconds(60 * 60 * 24 * 20) // 20 days
         ;
 
         //Здесь Клиентом является Фронтэнд.
