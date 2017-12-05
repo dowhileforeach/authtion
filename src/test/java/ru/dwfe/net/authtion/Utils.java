@@ -1,6 +1,5 @@
 package ru.dwfe.net.authtion;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import okio.Buffer;
 import org.slf4j.Logger;
@@ -59,27 +58,27 @@ public class Utils
         log.info("-> Authorization: {}", req.header("Authorization"));
         log.info("-> " + req.url().toString());
 
-        Map<String, Object> parsedBody = performAuthentification(req);
+        String body = performAuthentification(req);
 
-        String access_token = (String) parsedBody.get("access_token");
+        String access_token = (String) getValueFromResponse(body, "access_token");
         assertThat(access_token.length(), greaterThan(0));
 
-        assertThat((int) parsedBody.get("expires_in"),
+        assertThat((int) getValueFromResponse(body, "expires_in"),
                 is(both(greaterThan(minExpirationTime)).and(lessThanOrEqualTo(maxExpirationTime))));
 
         return access_token;
     }
 
-    private static Map<String, Object> performAuthentification(Request req) throws Exception
+    private static String performAuthentification(Request req) throws Exception
     {
         OkHttpClient client = new OkHttpClient();
         try (Response response = client.newCall(req).execute())
         {
-            String respBody = response.body().string();
-            log.info("<- token\n{}\n", respBody);
+            String body = response.body().string();
+            log.info("<- token\n{}\n", body);
             assertEquals(200, response.code());
 
-            return jsonParser.parseMap(respBody);
+            return body;
         }
     }
 
@@ -164,9 +163,8 @@ public class Utils
         return performRequest(req, 200);
     }
 
-    public static Object getValueFromResponse(String body, String key) throws Exception
+    public static Object getValueFromResponse(String body, String key)
     {
-        ObjectMapper mapper = new ObjectMapper();
         return jsonParser.parseMap(body).get(key);
     }
 
