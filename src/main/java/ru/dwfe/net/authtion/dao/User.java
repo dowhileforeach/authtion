@@ -12,9 +12,9 @@ import javax.persistence.*;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "users")
@@ -233,28 +233,45 @@ public class User implements UserDetails, CredentialsContainer
         UTILs
     */
 
-    public static boolean canUseID(String id, UserService userService)
+    public static boolean canUseID(String id, UserService userService, Map<String, String> map)
     {
         boolean result = false;
+        int maxLength = 30;
 
         if (!id.isEmpty())
         {
-            if (!userService.existsById(id))
+            if (id.length() < maxLength)
             {
-                result = true;
+                if (!Set.of("Admin", "admin", "Administrator", "administrator").contains(id))
+                {
+                    // http://emailregex.com/
+                    // RFC 5322: http://www.ietf.org/rfc/rfc5322.txt
+                    String regex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])";
+                    if (Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(id).matches())
+                    {
+                        if (!userService.existsById(id))
+                        {
+                            result = true;
+                        }
+                        else map.put("error", "user is present");
+                    }
+                    else map.put("error", "ID must be valid e-mail address");
+                }
+                else map.put("error", "this ID is not allowed");
             }
+            else map.put("error", "ID length must be less than " + maxLength + " characters");
         }
+        else map.put("error", "ID can't be empty");
+
         return result;
     }
 
-    public static Map<String, String> check(User user)
+    public static boolean areFieldsCorrect(User user, Map<String, String> map)
     {
-        Map<String, String> map = new HashMap<>();
-
         checkStringValue("id", user.id, map);
         checkStringValue("password", user.password, map);
 
-        return map;
+        return map.isEmpty();
     }
 
     public static void prepareNewUser(User user)

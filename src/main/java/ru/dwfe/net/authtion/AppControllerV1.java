@@ -1,5 +1,6 @@
 package ru.dwfe.net.authtion;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
@@ -9,6 +10,7 @@ import ru.dwfe.net.authtion.dao.User;
 import ru.dwfe.net.authtion.service.UserService;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,13 +44,17 @@ public class AppControllerV1
 
     @RequestMapping(value = API + "/check-user-id", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String checkUserId(@RequestBody String body)
+    public String checkUserId(@RequestBody String body) throws JsonProcessingException
     {
         String id = (String) JsonParserFactory.getJsonParser().parseMap(body).get("id");
 
+        Map<String, String> check = new HashMap<>();
+        boolean result = User.canUseID(id, userService, check);
+
         return String.format("{" +
-                "\"canUseID\": %s" +
-                "}", User.canUseID(id, userService));
+                "\"canUseID\": %s, " +
+                "\"details\": %s" +
+                "}", result, new ObjectMapper().writeValueAsString(check));
     }
 
     @RequestMapping(value = API + "/create-user", method = RequestMethod.POST)
@@ -58,13 +64,11 @@ public class AppControllerV1
         boolean result = false;
 
         //fields validation
-        Map<String, String> check = User.check(user);
-        if (check.isEmpty())
-
-            //check user id
-            if (!User.canUseID(user.getId(), userService))
-                check.put("error", "user is present");
-            else
+        Map<String, String> check = new HashMap<>();
+        if (User.areFieldsCorrect(user, check))
+        {
+            // check user id
+            if (User.canUseID(user.getId(), userService, check))
             {
                 //prepare
                 User.prepareNewUser(user);
@@ -73,7 +77,7 @@ public class AppControllerV1
 
                 result = true;
             }
-
+        }
 
         //вернуть результат операции
 

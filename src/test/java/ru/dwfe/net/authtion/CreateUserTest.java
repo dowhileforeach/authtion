@@ -1,5 +1,7 @@
 package ru.dwfe.net.authtion;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -12,8 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static ru.dwfe.net.authtion.Utils.ClientType.TRUSTED;
 import static ru.dwfe.net.authtion.Utils.*;
 import static ru.dwfe.net.authtion.Variables_Global.*;
-import static ru.dwfe.net.authtion.Variables_for_CreateUserTest.body_for_FRONTENDLevelResource_checkUserId_existedUser;
-import static ru.dwfe.net.authtion.Variables_for_CreateUserTest.body_for_FRONTENDLevelResource_checkUserId_notExistedUser;
+import static ru.dwfe.net.authtion.Variables_for_CreateUserTest.userIDlist_for_checkUserId;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -26,13 +27,27 @@ public class CreateUserTest
 
         String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
 
-        String body = getResponseAfterPOSTrequest(access_token, FRONTENDLevelResource_checkUserId,
-                body_for_FRONTENDLevelResource_checkUserId_existedUser);
-        assertEquals(false, getValueFromResponse(body, "canUseID"));
+        userIDlist_for_checkUserId.forEach((key, value) -> {
+            RequestBody requestBody = RequestBody.create(
+                    MediaType.parse("application/json; charset=utf-8"), "{\"id\": \"" + key + "\"}");
+            try
+            {
+                String body = getResponseAfterPOSTrequest(access_token, FRONTENDLevelResource_checkUserId, requestBody);
+                assertEquals(false, getValueFromResponse(body, "canUseID"));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        });
 
-        body = getResponseAfterPOSTrequest(access_token, FRONTENDLevelResource_checkUserId,
-                body_for_FRONTENDLevelResource_checkUserId_notExistedUser);
-        assertEquals(true, getValueFromResponse(body, "canUseID"));
+//        String body = getResponseAfterPOSTrequest(access_token, FRONTENDLevelResource_checkUserId,
+//                body_for_FRONTENDLevelResource_checkUserId_existedUser);
+//        assertEquals(false, getValueFromResponse(body, "canUseID"));
+//
+//        body = getResponseAfterPOSTrequest(access_token, FRONTENDLevelResource_checkUserId,
+//                body_for_FRONTENDLevelResource_checkUserId_notExistedUser);
+//        assertEquals(true, getValueFromResponse(body, "canUseID"));
     }
 
     @Test
