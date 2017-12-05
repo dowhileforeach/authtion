@@ -6,6 +6,7 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.dwfe.net.authtion.service.UserService;
 
 import javax.persistence.*;
 import java.math.BigInteger;
@@ -232,6 +233,20 @@ public class User implements UserDetails, CredentialsContainer
         UTILs
     */
 
+    public static boolean canUseID(String id, UserService userService)
+    {
+        boolean result = false;
+
+        if (!id.isEmpty())
+        {
+            if (!userService.existsById(id))
+            {
+                result = true;
+            }
+        }
+        return result;
+    }
+
     public static Map<String, String> check(User user)
     {
         Map<String, String> map = new HashMap<>();
@@ -246,8 +261,11 @@ public class User implements UserDetails, CredentialsContainer
     {
         user.setAccountNonExpired(true);
         user.setCredentialsNonExpired(true);
-        user.setAccountNonLocked(false); //is locked
+        user.setAccountNonLocked(false); //is locked, will be unlocked after confirmation
         user.setEnabled(true);
+
+        int requiredStringLength = 100;
+        user.setConfirmationKey(new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36));
 
         Authority authority = new Authority();
         authority.setAuthority("USER");
@@ -255,9 +273,6 @@ public class User implements UserDetails, CredentialsContainer
 
         if (user.getFirstName() == null) user.setFirstName("");
         if (user.getLastName() == null) user.setLastName("");
-
-        int requiredStringLength = 100;
-        user.setConfirmationKey(new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36));
     }
 
     private static void checkStringValue(String fieldName, String value, Map<String, String> map)

@@ -1,6 +1,8 @@
 package ru.dwfe.net.authtion;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
@@ -14,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static ru.dwfe.net.authtion.Variables_Global.*;
 
-public class HTTP_utils
+public class Utils
 {
     public static String getAccessToken(ClientType clientType, String username, String userpass) throws Exception
     {
@@ -135,6 +137,39 @@ public class HTTP_utils
                 .build();
     }
 
+    public static String performRequest(Request req, int expectedStatus) throws Exception
+    {
+        log.info("-> " + req.url().encodedPath());
+
+        OkHttpClient client = new OkHttpClient();
+        try (Response resp = client.newCall(req).execute())
+        {
+            String body = resp.body().string();
+            log.info("<- {}\n", body);
+
+            assertEquals(expectedStatus, resp.code());
+
+            return body;
+        }
+    }
+
+    public static String getResponseAfterPOSTrequest(String access_token, String resource, RequestBody body) throws Exception
+    {
+        Request req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, body);
+
+        Buffer buffer = new Buffer();
+        body.writeTo(buffer);
+        log.info("-> {}", buffer.readUtf8());
+
+        return performRequest(req, 200);
+    }
+
+    public static Object getValueFromResponse(String body, String key) throws Exception
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        return jsonParser.parseMap(body).get(key);
+    }
+
     enum ClientType
     {
         TRUSTED,
@@ -142,6 +177,6 @@ public class HTTP_utils
         FRONTEND
     }
 
-    private static final Logger log = LoggerFactory.getLogger(HTTP_utils.class);
+    private static final Logger log = LoggerFactory.getLogger(Utils.class);
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 }

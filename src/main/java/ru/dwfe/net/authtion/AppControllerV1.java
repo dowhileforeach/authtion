@@ -1,6 +1,6 @@
 package ru.dwfe.net.authtion;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,11 +45,10 @@ public class AppControllerV1
     public String checkUserId(@RequestBody String body)
     {
         String id = (String) JsonParserFactory.getJsonParser().parseMap(body).get("id");
-        boolean result = userService.existsById(id);
 
         return String.format("{" +
-                "\"isFree\": %s" +
-                "}", !result);
+                "\"canUseID\": %s" +
+                "}", User.canUseID(id, userService));
     }
 
     @RequestMapping(value = API + "/create-user", method = RequestMethod.POST)
@@ -63,7 +62,7 @@ public class AppControllerV1
         if (check.isEmpty())
 
             //check user id
-            if (userService.existsById(user.getId()))
+            if (!User.canUseID(user.getId(), userService))
                 check.put("error", "user is present");
             else
             {

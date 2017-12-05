@@ -1,16 +1,19 @@
 package ru.dwfe.net.authtion;
 
-import okhttp3.Request;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 
-import static ru.dwfe.net.authtion.HTTP_utils.*;
-import static ru.dwfe.net.authtion.HTTP_utils.ClientType.*;
+import static org.junit.Assert.assertEquals;
+import static ru.dwfe.net.authtion.Utils.ClientType.TRUSTED;
+import static ru.dwfe.net.authtion.Utils.*;
 import static ru.dwfe.net.authtion.Variables_Global.*;
-import static ru.dwfe.net.authtion.Variables_for_CreateUserTest.*;
+import static ru.dwfe.net.authtion.Variables_for_CreateUserTest.body_for_FRONTENDLevelResource_checkUserId_existedUser;
+import static ru.dwfe.net.authtion.Variables_for_CreateUserTest.body_for_FRONTENDLevelResource_checkUserId_notExistedUser;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -22,8 +25,14 @@ public class CreateUserTest
         logHead("Check User ID");
 
         String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
-        Request request = POST_request(ALL_BEFORE_RESOURCE + FRONTENDLevelResource_checkUserId, access_token, body_for_FRONTENDLevelResource_checkUserId_admin);
 
+        String body = getResponseAfterPOSTrequest(access_token, FRONTENDLevelResource_checkUserId,
+                body_for_FRONTENDLevelResource_checkUserId_existedUser);
+        assertEquals(false, getValueFromResponse(body, "canUseID"));
+
+        body = getResponseAfterPOSTrequest(access_token, FRONTENDLevelResource_checkUserId,
+                body_for_FRONTENDLevelResource_checkUserId_notExistedUser);
+        assertEquals(true, getValueFromResponse(body, "canUseID"));
     }
 
     @Test
@@ -46,5 +55,7 @@ public class CreateUserTest
 
     }
 
+
     private static final Logger log = LoggerFactory.getLogger(CreateUserTest.class);
+    private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 }

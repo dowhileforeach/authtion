@@ -7,11 +7,11 @@ public class Variables_for_CreateUserTest
 {
     /* BODIES */
 
-    public static final RequestBody body_for_FRONTENDLevelResource_checkUserId_admin =
+    public static final RequestBody body_for_FRONTENDLevelResource_checkUserId_existedUser =
             RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                     "{\"id\": \"admin\"}");
 
-    public static final RequestBody body_for_FRONTENDLevelResource_checkUserId_admin123 =
+    public static final RequestBody body_for_FRONTENDLevelResource_checkUserId_notExistedUser =
             RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                    "{\"id\": \"admin123\"}");
+                    "{\"id\": \"admin1234567\"}");
 }

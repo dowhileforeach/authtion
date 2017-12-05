@@ -50,7 +50,7 @@ public class Variables_for_AuthorityTest
     /* QUERIES */
 
     public static final Map<String, String> queries_for_PUBLICLevelResource_confirmUser =
-            Map.of("confirmkey","AnyString");
+            Map.of("confirmkey", "AnyString");
 
 
     /* OTHER */
