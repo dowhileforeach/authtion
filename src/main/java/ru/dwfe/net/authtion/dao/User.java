@@ -263,7 +263,7 @@ public class User implements UserDetails, CredentialsContainer
             }
             else details.put(fieldName, "can't be empty");
         }
-        else details.put(fieldName, "is required field");
+        else details.put(fieldName, "required field");
 
         return result;
     }
@@ -281,30 +281,22 @@ public class User implements UserDetails, CredentialsContainer
             {
                 if (!(password.length() >= minLenght && password.length() <= maxLenght))
                 {
-
+                    return true;
                 }
                 else details.put(fieldName, "length must be greater than " + minLenght + " and less than " + maxLenght);
             }
             else details.put(fieldName, "can't be empty");
         }
-        else details.put(fieldName, "is required field");
+        else details.put(fieldName, "required field");
 
         return result;
-    }
-
-    public static boolean areFieldsCorrect(User user, Map<String, Object> map)
-    {
-        checkStringValue("id", user.id, map);
-        checkStringValue("password", user.password, map);
-
-        return map.isEmpty();
     }
 
     public static void prepareNewUser(User user)
     {
         user.setAccountNonExpired(true);
         user.setCredentialsNonExpired(true);
-        user.setAccountNonLocked(false); //is locked, will be unlocked after confirmation
+        user.setAccountNonLocked(false); //New user is locked. Will be unlocked after confirmation
         user.setEnabled(true);
 
         int requiredStringLength = 100;

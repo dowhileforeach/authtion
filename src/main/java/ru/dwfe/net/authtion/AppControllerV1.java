@@ -62,10 +62,8 @@ public class AppControllerV1
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
 
-        //fields validation
-        if (User.areFieldsCorrect(user, details))
+        if (User.canUsePassword(user.getPassword(), details))
         {
-            // check user id
             if (User.canUseID(user.getId(), userService, details))
             {
                 //prepare

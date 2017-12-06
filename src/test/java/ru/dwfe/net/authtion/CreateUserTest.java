@@ -1,5 +1,6 @@
 package ru.dwfe.net.authtion;
 
+import okhttp3.RequestBody;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -16,6 +17,7 @@ import static ru.dwfe.net.authtion.util.Util.*;
 import static ru.dwfe.net.authtion.util.Variables_Global.*;
 import static ru.dwfe.net.authtion.util.Variables_for_CreateUserTest.checkers_for_checkUserId;
 import static ru.dwfe.net.authtion.util.Variables_for_CreateUserTest.getRequestBody_for_FRONTENDLevelResource_checkUserId;
+import static ru.dwfe.net.authtion.util.Variables_for_CreateUserTest.requestBody_empty;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -27,7 +29,8 @@ public class CreateUserTest
         logHead("Check User ID");
 
         String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
-        check("canUse", FRONTENDLevelResource_checkUserId, access_token, checkers_for_checkUserId);
+        checkList("canUse", FRONTENDLevelResource_checkUserId, access_token, checkers_for_checkUserId);
+        checkOne("canUse", FRONTENDLevelResource_checkUserId, access_token, requestBody_empty, Checker.of(false, "", "id", "required field"));
     }
 
     @Test
@@ -42,19 +45,29 @@ public class CreateUserTest
         logHead("Confirm User");
     }
 
-    private void check(String fieldName, String resource, String access_token,
-                       List<Checker> checkers) throws Exception
+    private void checkList(String responseFieldName, String resource, String access_token,
+                           List<Checker> checkers) throws Exception
     {
         for (Checker checker : checkers)
         {
-            String body = getResponseAfterPOSTrequest(access_token, resource, getRequestBody_for_FRONTENDLevelResource_checkUserId(checker.sendValue));
+            String body = getResponseAfterPOSTrequest(access_token, resource,
+                    getRequestBody_for_FRONTENDLevelResource_checkUserId(checker.sendValue));
 
             Map<String, Object> map = parse(body);
-            assertEquals(checker.expectedResult, getValueFromResponse(map, fieldName));
+            assertEquals(checker.expectedResult, getValueFromResponse(map, responseFieldName));
 
             if (!checker.expectedResult) //if error is expected
-                assertEquals(checker.expectedError, getValueFromValueFromResponse(map, "details", "error"));
+                assertEquals(checker.expectedError, getValueFromValueFromResponse(map, "details", checker.expectedErrorField));
         }
+    }
+
+    private void checkOne(String responseFieldName, String resource, String access_token,
+                          RequestBody requestBody, Checker checker) throws Exception
+    {
+        String body = getResponseAfterPOSTrequest(access_token, resource, requestBody);
+
+        Map<String, Object> map = parse(body);
+        assertEquals(checker.expectedResult, getValueFromResponse(map, responseFieldName));
     }
 
     private static void logHead(String who)
