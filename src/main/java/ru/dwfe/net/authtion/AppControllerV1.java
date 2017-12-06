@@ -46,15 +46,13 @@ public class AppControllerV1
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String checkUserId(@RequestBody String body) throws JsonProcessingException
     {
+        boolean result = false;
+        Map<String, Object> details = new HashMap<>();
+
         String id = (String) JsonParserFactory.getJsonParser().parseMap(body).get("id");
+        result = User.canUseID(id, userService, details);
 
-        Map<String, String> check = new HashMap<>();
-        boolean result = User.canUseID(id, userService, check);
-
-        return String.format("{" +
-                "\"canUse\": %s, " +
-                "\"details\": %s" +
-                "}", result, new ObjectMapper().writeValueAsString(check));
+        return getResponse("canUse", result, details);
     }
 
     @RequestMapping(value = API + "/create-user", method = RequestMethod.POST)
@@ -62,13 +60,13 @@ public class AppControllerV1
     public String addUser(@RequestBody User user) throws IOException
     {
         boolean result = false;
+        Map<String, Object> details = new HashMap<>();
 
         //fields validation
-        Map<String, String> check = new HashMap<>();
-        if (User.areFieldsCorrect(user, check))
+        if (User.areFieldsCorrect(user, details))
         {
             // check user id
-            if (User.canUseID(user.getId(), userService, check))
+            if (User.canUseID(user.getId(), userService, details))
             {
                 //prepare
                 User.prepareNewUser(user);
@@ -81,20 +79,38 @@ public class AppControllerV1
 
         //вернуть результат операции
 
-        return String.format("{" +
-                "\"success\": %s, " +
-                "\"details\": %s" +
-                "}", result, new ObjectMapper().writeValueAsString(check));
+        return getResponse("success", result, details);
     }
 
     @RequestMapping(API + "/confirm-user")
-    public String confirmUser(@RequestParam String confirmkey)
+    public String confirmUser(@RequestParam String confirmkey) throws JsonProcessingException
     {
         boolean result = false;
+        Map<String, Object> details = new HashMap<>();
 
-        return String.format("{" +
-                "\"success\": %s" +
-                "}", result);
+        return getResponse("success", result, details);
     }
 
+
+    /*
+        UTILs
+    */
+
+    private static String getResponse(String resultFieldName, boolean responseResult, Map<String, Object> details) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+
+        if (details.size() == 0)
+
+            return String.format("{" +
+                    "\"%s\": %s" +
+                    "}", resultFieldName, responseResult);
+
+        else
+
+            return String.format("{" +
+                    "\"%s\": %s, " +
+                    "\"details\": %s" +
+                    "}", resultFieldName, responseResult, mapper.writeValueAsString(details));
+    }
 }

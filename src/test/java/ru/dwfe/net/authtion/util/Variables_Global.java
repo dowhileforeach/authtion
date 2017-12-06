@@ -24,17 +24,17 @@ public class Variables_Global
 
 
     /* user */
-    public static final String user_username = "user";
+    public static final String user_username = "user@ya.ru";
     public static final String user_userpass = "passUser";
 
 
     /* admin */
-    public static final String admin_username = "admin";
+    public static final String admin_username = "admin@ya.ru";
     public static final String admin_userpass = "passAdmin";
 
 
     /* shop */
-    public static final String shop_username = "shop";
+    public static final String shop_username = "shop@ya.ru";
     public static final String shop_userpass = "passFrontend";
 
 

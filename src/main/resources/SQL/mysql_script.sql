@@ -62,16 +62,16 @@ CREATE TABLE `user_authority` (
 
 LOCK TABLES `users` WRITE, `authorities` WRITE, `user_authority` WRITE;
 INSERT INTO `users` VALUES
-  ('admin', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1,''),
-  ('user', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1,''),
-  ('shop', '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', '', '', 1, 1, 1, 1,'');
+  ('admin@ya.ru', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1, ''),
+  ('user@ya.ru', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1, ''),
+  ('shop@ya.ru', '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', '', '', 1, 1, 1, 1, '');
 INSERT INTO `authorities` VALUES
   ('ADMIN', 'Administrator'),
   ('USER', 'Standard user'),
-  ('FRONTEND', 'Site, forum, shop, etc.');
+  ('FRONTEND', 'Site, forum, etc.');
 INSERT INTO `user_authority` VALUES
-  ('admin', 'ADMIN'),
-  ('admin', 'USER'),
-  ('user', 'USER'),
-  ('shop', 'FRONTEND');
+  ('admin@ya.ru', 'ADMIN'),
+  ('admin@ya.ru', 'USER'),
+  ('user@ya.ru', 'USER'),
+  ('shop@ya.ru', 'FRONTEND');
 UNLOCK TABLES;

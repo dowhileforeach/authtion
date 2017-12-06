@@ -13,7 +13,9 @@ public class Variables_for_CreateUserTest
             Checker.of(false, "", "ID can't be empty"),
             Checker.of(false, "123456789012345678901234567890", "ID length must be less than 30 characters"),
             Checker.of(false, "Administrator", "this ID is not allowed"),
-            Checker.of(false, "user", "ID must be valid e-mail address")
+            Checker.of(false, "user", "ID must be valid e-mail address"),
+            Checker.of(false, "user@ya.ru", "user is present"),
+            Checker.of(true, "notExistedUser@ya.ru", "")
     );
 
     public static RequestBody getRequestBody_for_FRONTENDLevelResource_checkUserId(String value)

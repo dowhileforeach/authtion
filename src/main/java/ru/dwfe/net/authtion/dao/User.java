@@ -233,7 +233,7 @@ public class User implements UserDetails, CredentialsContainer
         UTILs
     */
 
-    public static boolean canUseID(String id, UserService userService, Map<String, String> map)
+    public static boolean canUseID(String id, UserService userService, Map<String, Object> map)
     {
         boolean result = false;
         int maxLength = 30;
@@ -263,7 +263,7 @@ public class User implements UserDetails, CredentialsContainer
         return result;
     }
 
-    public static boolean areFieldsCorrect(User user, Map<String, String> map)
+    public static boolean areFieldsCorrect(User user, Map<String, Object> map)
     {
         checkStringValue("id", user.id, map);
         checkStringValue("password", user.password, map);
@@ -289,7 +289,7 @@ public class User implements UserDetails, CredentialsContainer
         if (user.getLastName() == null) user.setLastName("");
     }
 
-    private static void checkStringValue(String fieldName, String value, Map<String, String> map)
+    private static void checkStringValue(String fieldName, String value, Map<String, Object> map)
     {
         String result = null;
 
