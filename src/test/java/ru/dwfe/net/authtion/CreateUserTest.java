@@ -15,10 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static ru.dwfe.net.authtion.util.ClientType.TRUSTED;
 import static ru.dwfe.net.authtion.util.Util.*;
 import static ru.dwfe.net.authtion.util.Variables_Global.*;
-import static ru.dwfe.net.authtion.util.Variables_for_CreateUserTest.checkers_for_checkUserId;
-import static ru.dwfe.net.authtion.util.Variables_for_CreateUserTest.getRequestBody_for_FRONTENDLevelResource_checkUserId;
-import static ru.dwfe.net.authtion.util.Variables_for_CreateUserTest.requestBody_empty;
-
+import static ru.dwfe.net.authtion.util.Variables_for_CreateUserTest.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CreateUserTest
@@ -77,7 +74,6 @@ public class CreateUserTest
                 + "\n------------------------------", who);
 
     }
-
 
     private static final Logger log = LoggerFactory.getLogger(CreateUserTest.class);
 }

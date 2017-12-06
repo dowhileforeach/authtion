@@ -14,6 +14,7 @@ public class Variables_for_CreateUserTest
             Checker.of(false, "123456789012345678901234567890", "id", "length must be less than 30 characters"),
             Checker.of(false, "Administrator", "id", "not allowed"),
             Checker.of(false, "user", "id", "must be valid e-mail address"),
+            Checker.of(false, ".uuqu@mail.ru", "id", "must be valid e-mail address"),
             Checker.of(false, "user@ya.ru", "id", "user is present"),
             Checker.of(true, "notExistedUser@ya.ru", "id", "")
     );
