@@ -16,8 +16,8 @@ See `test\java\ru.dwfe.authtion` classes.
 
 ## AuthorityTest
 See screenrecord:
-1. Login as: `user`, `admin`, `shop`
-2. Try to access as `user`, `admin`, `shop`, `not logged user` to resources:
+1. Login as: `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru`
+2. Try to access as `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru`, `not logged user` to resources:
    * `/public`
    * `/cities`
    * `/users`
