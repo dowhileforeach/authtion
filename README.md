@@ -30,22 +30,22 @@ See screenrecord:
 ![AuthorityTest_RespReq](./img/AuthorityTest_RespReq.png)
 
 #### For Manual tests
-User Login:
+`user@ya.ru` login:
 ```
-curl Trusted:trPass@localhost:8080/oauth/token -d grant_type=password -d username=user -d password=passUser
-```
-
-Admin Login:
-```
-curl Untrusted:untrPass@localhost:8080/oauth/token -d grant_type=password -d username=admin -d password=passAdmin
+curl Trusted:trPass@localhost:8080/oauth/token -d grant_type=password -d username=user@ya.ru -d password=passUser
 ```
 
-Shop Login:
+`admin@ya.ru` login:
 ```
-curl Trusted:trPass@localhost:8080/oauth/token -d grant_type=password -d username=shop -d password=passFrontend
+curl Untrusted:untrPass@localhost:8080/oauth/token -d grant_type=password -d username=admin@ya.ru -d password=passAdmin
 ```
 
-Templates for resources access tests:
+`shop@ya.ru` login:
+```
+curl Trusted:trPass@localhost:8080/oauth/token -d grant_type=password -d username=shop@ya.ru -d password=passFrontend
+```
+
+Templates for resources access:
 ```
 curl http://localhost:8080/v1/public
 curl http://localhost:8080/v1/cities -H "Authorization: Bearer ACCESS_TOKEN"
