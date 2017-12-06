@@ -281,7 +281,7 @@ public class User implements UserDetails, CredentialsContainer
             {
                 if (!(password.length() >= minLenght && password.length() <= maxLenght))
                 {
-                    return true;
+                    result = true;
                 }
                 else details.put(fieldName, "length must be greater than " + minLenght + " and less than " + maxLenght);
             }
@@ -289,6 +289,20 @@ public class User implements UserDetails, CredentialsContainer
         }
         else details.put(fieldName, "required field");
 
+        return result;
+    }
+
+    public static boolean isFieldsCorrect(User user, UserService userService, Map<String, Object> details)
+    {
+        boolean result = false;
+
+        if (User.canUsePassword(user.getPassword(), details))
+        {
+            if (User.canUseID(user.getId(), userService, details))
+            {
+                result = true;
+            }
+        }
         return result;
     }
 

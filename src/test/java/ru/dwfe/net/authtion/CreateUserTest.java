@@ -31,13 +31,19 @@ public class CreateUserTest
     }
 
     @Test
-    public void _02_createUser() throws Exception
+    public void _02_checkUserPass() throws Exception
+    {
+        logHead("Check User Pass");
+    }
+
+    @Test
+    public void _03_createUser() throws Exception
     {
         logHead("Create User");
     }
 
     @Test
-    public void _03_confirmUser() throws Exception
+    public void _04_confirmUser() throws Exception
     {
         logHead("Confirm User");
     }

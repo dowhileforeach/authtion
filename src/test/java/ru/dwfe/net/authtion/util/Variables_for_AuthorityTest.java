@@ -39,6 +39,10 @@ public class Variables_for_AuthorityTest
             RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                     "{\"id\": \"user\"}");
 
+    public static final RequestBody body_for_FRONTENDLevelResource_checkUserPass =
+            RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                    "{\"password\": \"some password\"}");
+
     public static final RequestBody body_for_FRONTENDLevelResource_createUser =
             RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                     "{" +

@@ -108,6 +108,9 @@ public class AuthorityTest
         performRequest(POST_request(ALL_BEFORE_RESOURCE + FRONTENDLevelResource_checkUserId, access_token, body_for_FRONTENDLevelResource_checkUserId)
                 , FRONTENDLevelResource_expectedStatus);
 
+        performRequest(POST_request(ALL_BEFORE_RESOURCE + FRONTENDLevelResource_checkUserPass, access_token, body_for_FRONTENDLevelResource_checkUserPass)
+                , FRONTENDLevelResource_expectedStatus);
+
         performRequest(POST_request(ALL_BEFORE_RESOURCE + FRONTENDLevelResource_createUser, access_token, body_for_FRONTENDLevelResource_createUser)
                 , FRONTENDLevelResource_expectedStatus);
 

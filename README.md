@@ -22,6 +22,7 @@ See screenrecord:
    * `/cities`
    * `/users`
    * `/check-user-id`
+   * `/check-user-pass`
    * `/create-user`
    * `/confirm-user`
 

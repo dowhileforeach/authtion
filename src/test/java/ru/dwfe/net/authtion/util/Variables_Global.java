@@ -43,6 +43,7 @@ public class Variables_Global
     public static final String USERLevelResource_cities = "/cities";
     public static final String ADMINLevelResource_users = "/users";
     public static final String FRONTENDLevelResource_checkUserId = "/check-user-id";
+    public static final String FRONTENDLevelResource_checkUserPass = "/check-user-pass";
     public static final String FRONTENDLevelResource_createUser = "/create-user";
     public static final String PUBLICLevelResource_confirmUser = "/confirm-user";
 }

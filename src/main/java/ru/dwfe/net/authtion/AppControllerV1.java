@@ -46,11 +46,24 @@ public class AppControllerV1
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String checkUserId(@RequestBody String body) throws JsonProcessingException
     {
-        boolean result = false;
+        boolean result;
         Map<String, Object> details = new HashMap<>();
 
-        String id = (String) JsonParserFactory.getJsonParser().parseMap(body).get("id");
+        String id = (String) getValueFromJSON(body, "id");
         result = User.canUseID(id, userService, details);
+
+        return getResponse("canUse", result, details);
+    }
+
+    @RequestMapping(value = API + "/check-user-pass", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('FRONTEND')")
+    public String checkUserPass(@RequestBody String body) throws JsonProcessingException
+    {
+        boolean result;
+        Map<String, Object> details = new HashMap<>();
+
+        String password = (String) getValueFromJSON(body, "password");
+        result = User.canUsePassword(password, details);
 
         return getResponse("canUse", result, details);
     }
@@ -62,22 +75,20 @@ public class AppControllerV1
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
 
-        if (User.canUsePassword(user.getPassword(), details))
+        if (User.isFieldsCorrect(user, userService, details))
         {
-            if (User.canUseID(user.getId(), userService, details))
-            {
-                //prepare
-                User.prepareNewUser(user);
+            //prepare
+            User.prepareNewUser(user);
 
-                //put user to the database
+            //put user to the database
 
-                result = true;
-            }
+            result = true;
         }
 
         //вернуть результат операции
 
         return getResponse("success", result, details);
+
     }
 
     @RequestMapping(API + "/confirm-user")
@@ -93,6 +104,11 @@ public class AppControllerV1
     /*
         UTILs
     */
+
+    private Object getValueFromJSON(String body, String fieldName)
+    {
+        return JsonParserFactory.getJsonParser().parseMap(body).get(fieldName);
+    }
 
     private static String getResponse(String resultFieldName, boolean responseResult, Map<String, Object> details) throws JsonProcessingException
     {
