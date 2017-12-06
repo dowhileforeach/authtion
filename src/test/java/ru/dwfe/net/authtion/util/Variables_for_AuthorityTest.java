@@ -1,4 +1,4 @@
-package ru.dwfe.net.authtion;
+package ru.dwfe.net.authtion.util;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;

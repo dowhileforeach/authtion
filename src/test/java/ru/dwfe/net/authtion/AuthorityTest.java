@@ -11,10 +11,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static ru.dwfe.net.authtion.Utils.ClientType.*;
-import static ru.dwfe.net.authtion.Utils.*;
-import static ru.dwfe.net.authtion.Variables_Global.*;
-import static ru.dwfe.net.authtion.Variables_for_AuthorityTest.*;
+import static ru.dwfe.net.authtion.util.ClientType.*;
+import static ru.dwfe.net.authtion.util.Util.*;
+import static ru.dwfe.net.authtion.util.Variables_Global.*;
+import static ru.dwfe.net.authtion.util.Variables_for_AuthorityTest.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AuthorityTest

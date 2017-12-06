@@ -1,20 +1,21 @@
 package ru.dwfe.net.authtion;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.boot.json.JsonParserFactory;
+import ru.dwfe.net.authtion.util.Checker;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static ru.dwfe.net.authtion.Utils.ClientType.TRUSTED;
-import static ru.dwfe.net.authtion.Utils.*;
-import static ru.dwfe.net.authtion.Variables_Global.*;
-import static ru.dwfe.net.authtion.Variables_for_CreateUserTest.userIDlist_for_checkUserId;
+import static ru.dwfe.net.authtion.util.ClientType.TRUSTED;
+import static ru.dwfe.net.authtion.util.Util.*;
+import static ru.dwfe.net.authtion.util.Variables_Global.*;
+import static ru.dwfe.net.authtion.util.Variables_for_CreateUserTest.checkers_for_checkUserId;
+import static ru.dwfe.net.authtion.util.Variables_for_CreateUserTest.getRequestBody_for_FRONTENDLevelResource_checkUserId;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -26,28 +27,7 @@ public class CreateUserTest
         logHead("Check User ID");
 
         String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
-
-        userIDlist_for_checkUserId.forEach((key, value) -> {
-            RequestBody requestBody = RequestBody.create(
-                    MediaType.parse("application/json; charset=utf-8"), "{\"id\": \"" + key + "\"}");
-            try
-            {
-                String body = getResponseAfterPOSTrequest(access_token, FRONTENDLevelResource_checkUserId, requestBody);
-                assertEquals(false, getValueFromResponse(body, "canUseID"));
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        });
-
-//        String body = getResponseAfterPOSTrequest(access_token, FRONTENDLevelResource_checkUserId,
-//                body_for_FRONTENDLevelResource_checkUserId_existedUser);
-//        assertEquals(false, getValueFromResponse(body, "canUseID"));
-//
-//        body = getResponseAfterPOSTrequest(access_token, FRONTENDLevelResource_checkUserId,
-//                body_for_FRONTENDLevelResource_checkUserId_notExistedUser);
-//        assertEquals(true, getValueFromResponse(body, "canUseID"));
+        check("canUse", FRONTENDLevelResource_checkUserId, access_token, checkers_for_checkUserId);
     }
 
     @Test
@@ -62,6 +42,21 @@ public class CreateUserTest
         logHead("Confirm User");
     }
 
+    private void check(String fieldName, String resource, String access_token,
+                       List<Checker> checkers) throws Exception
+    {
+        for (Checker checker : checkers)
+        {
+            String body = getResponseAfterPOSTrequest(access_token, resource, getRequestBody_for_FRONTENDLevelResource_checkUserId(checker.sendValue));
+
+            Map<String, Object> map = parse(body);
+            assertEquals(checker.expectedResult, getValueFromResponse(map, fieldName));
+
+            if (!checker.expectedResult) //if error is expected
+                assertEquals(checker.expectedError, getValueFromValueFromResponse(map, "details", "error"));
+        }
+    }
+
     private static void logHead(String who)
     {
         log.info("\n=============================="
@@ -72,5 +67,4 @@ public class CreateUserTest
 
 
     private static final Logger log = LoggerFactory.getLogger(CreateUserTest.class);
-    private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 }

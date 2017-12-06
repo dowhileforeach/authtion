@@ -1,4 +1,4 @@
-package ru.dwfe.net.authtion;
+package ru.dwfe.net.authtion.util;
 
 import okhttp3.*;
 import okio.Buffer;
@@ -13,9 +13,9 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static ru.dwfe.net.authtion.Variables_Global.*;
+import static ru.dwfe.net.authtion.util.Variables_Global.*;
 
-public class Utils
+public class Util
 {
     public static String getAccessToken(ClientType clientType, String username, String userpass) throws Exception
     {
@@ -59,11 +59,12 @@ public class Utils
         log.info("-> " + req.url().toString());
 
         String body = performAuthentification(req);
+        Map<String, Object> map = parse(body);
 
-        String access_token = (String) getValueFromResponse(body, "access_token");
+        String access_token = (String) getValueFromResponse(map, "access_token");
         assertThat(access_token.length(), greaterThan(0));
 
-        assertThat((int) getValueFromResponse(body, "expires_in"),
+        assertThat((int) getValueFromResponse(map, "expires_in"),
                 is(both(greaterThan(minExpirationTime)).and(lessThanOrEqualTo(maxExpirationTime))));
 
         return access_token;
@@ -163,18 +164,27 @@ public class Utils
         return performRequest(req, 200);
     }
 
+    public static Map<String, Object> parse(String body)
+    {
+        return jsonParser.parseMap(body);
+    }
+
     public static Object getValueFromResponse(String body, String key)
     {
-        return jsonParser.parseMap(body).get(key);
+        return parse(body).get(key);
     }
 
-    enum ClientType
+    public static Object getValueFromResponse(Map<String, Object> map, String key)
     {
-        TRUSTED,
-        UNTRUSTED,
-        FRONTEND
+        return map.get(key);
     }
 
-    private static final Logger log = LoggerFactory.getLogger(Utils.class);
+    public static Object getValueFromValueFromResponse(Map<String, Object> map, String fromKey, String key)
+    {
+        Map<String, Object> next = (Map<String, Object>) getValueFromResponse(map, fromKey);
+        return next.get(key);
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(Util.class);
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 }

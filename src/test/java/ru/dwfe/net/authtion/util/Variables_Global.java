@@ -1,4 +1,4 @@
-package ru.dwfe.net.authtion;
+package ru.dwfe.net.authtion.util;
 
 public class Variables_Global
 {

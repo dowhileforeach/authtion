@@ -52,7 +52,7 @@ public class AppControllerV1
         boolean result = User.canUseID(id, userService, check);
 
         return String.format("{" +
-                "\"canUseID\": %s, " +
+                "\"canUse\": %s, " +
                 "\"details\": %s" +
                 "}", result, new ObjectMapper().writeValueAsString(check));
     }
