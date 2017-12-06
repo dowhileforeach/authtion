@@ -81,6 +81,7 @@ public class AppControllerV1
             User.prepareNewUser(user);
 
             //put user to the database
+            userService.save(user);
 
             result = true;
         }

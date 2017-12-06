@@ -27,7 +27,6 @@ public class CreateUserTest
 
         String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
         checkList("canUse", FRONTENDLevelResource_checkUserId, access_token, checkers_for_checkUserId);
-        checkOne("canUse", FRONTENDLevelResource_checkUserId, access_token, requestBody_empty, Checker.of(false, "", "id", "required field"));
     }
 
     @Test
@@ -37,7 +36,6 @@ public class CreateUserTest
 
         String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
         checkList("canUse", FRONTENDLevelResource_checkUserPass, access_token, checkers_for_checkUserPass);
-        checkOne("canUse", FRONTENDLevelResource_checkUserPass, access_token, requestBody_empty, Checker.of(false, "", "password", "required field"));
     }
 
     @Test
@@ -58,13 +56,13 @@ public class CreateUserTest
         for (Checker checker : checkers)
         {
             String body = getResponseAfterPOSTrequest(access_token, resource,
-                    getRequestBody_for_FRONTENDLevelResource_checkUser(checker.fieldName, checker.sendValue));
+                    getRequestBody_for_FRONTENDLevelResource_checkUser(checker.req));
 
             Map<String, Object> map = parse(body);
             assertEquals(checker.expectedResult, getValueFromResponse(map, responseFieldName));
 
             if (!checker.expectedResult) //if error is expected
-                assertEquals(checker.expectedError, getValueFromValueFromResponse(map, "details", checker.fieldName));
+                assertEquals(checker.expectedError, getValueFromValueFromResponse(map, "details", checker.expectedErrorFieldName));
         }
     }
 
