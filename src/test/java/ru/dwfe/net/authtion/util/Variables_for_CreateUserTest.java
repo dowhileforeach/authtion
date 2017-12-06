@@ -16,16 +16,22 @@ public class Variables_for_CreateUserTest
             Checker.of(false, "user", "id", "must be valid e-mail address"),
             Checker.of(false, ".uuqu@mail.ru", "id", "must be valid e-mail address"),
             Checker.of(false, "user@ya.ru", "id", "user is present"),
-            Checker.of(true, "notExistedUser@ya.ru", "id", "")
+            Checker.of(true, "notExistedUser@ya.ru", "id", null)
+    );
+
+    public static final List<Checker> checkers_for_checkUserPass = List.of(
+            Checker.of(false, "", "password", "can't be empty"),
+            Checker.of(false, "12345", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
+            Checker.of(true, "123456", "password", null)
     );
 
     public static final RequestBody requestBody_empty =
             RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{}");
 
-    public static RequestBody getRequestBody_for_FRONTENDLevelResource_checkUserId(String value)
+    public static RequestBody getRequestBody_for_FRONTENDLevelResource_checkUser(String fieldName, String value)
     {
         return RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                "{\"id\": \"" + value + "\"}");
+                String.format("{\"%s\": \"%s\"}", fieldName, value));
     }
 }
 

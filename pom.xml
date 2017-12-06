@@ -88,22 +88,22 @@
             <scope>runtime</scope>
         </dependency>
 
-        
+
         <!-- Hello Java 9 -->
 
         <dependency>
             <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>  <!--for prevent: Caused by: java.lang.ClassNotFoundException: javax.xml.bind.JAXBException -->
+            <artifactId>jaxb-api</artifactId>
             <version>2.3.0</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>  <!--for prevent: Caused by: java.lang.ClassNotFoundException: com.sun.xml.internal.bind.v2.ContextFactory -->
+            <artifactId>jaxb-impl</artifactId>
             <version>2.3.0</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-core</artifactId> <!--for prevent: Caused by: java.lang.ClassNotFoundException: com.sun.xml.bind.v2.model.annotation.AnnotationReader -->
+            <artifactId>jaxb-core</artifactId>
             <version>2.3.0</version>
         </dependency>
         <dependency>

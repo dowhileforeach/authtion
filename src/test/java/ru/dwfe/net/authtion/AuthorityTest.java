@@ -117,7 +117,7 @@ public class AuthorityTest
         performRequest(GET_request(ALL_BEFORE_RESOURCE + PUBLICLevelResource_confirmUser, access_token, queries_for_PUBLICLevelResource_confirmUser)
                 , 200); // success for all levels
     }
-    
+
     private static void logHead(String who)
     {
         log.info("\n=============================="

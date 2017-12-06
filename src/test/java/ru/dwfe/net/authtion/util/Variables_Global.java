@@ -6,7 +6,7 @@ public class Variables_Global
     public static final String PROTOCOL_HOST_PORT = "http://localhost:8080";
     public static final String ALL_BEFORE_RESOURCE = PROTOCOL_HOST_PORT + API_VERSION;
 
-    /*Clents*/
+    /* Clents */
     public static final String trusted_clientname = "Trusted";
     public static final String trusted_clientpass = "trPass";
     public static final int trusted_maxTokenExpirationTime = 864_000;
@@ -38,7 +38,7 @@ public class Variables_Global
     public static final String shop_userpass = "passFrontend";
 
 
-    /* RESOURCES*/
+    /* RESOURCES */
     public static final String PUBLICLevelResource_public = "/public";
     public static final String USERLevelResource_cities = "/cities";
     public static final String ADMINLevelResource_users = "/users";

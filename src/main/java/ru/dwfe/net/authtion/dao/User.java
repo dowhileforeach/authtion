@@ -279,11 +279,11 @@ public class User implements UserDetails, CredentialsContainer
         {
             if (!password.isEmpty())
             {
-                if (!(password.length() >= minLenght && password.length() <= maxLenght))
+                if (password.length() >= minLenght && password.length() <= maxLenght)
                 {
                     result = true;
                 }
-                else details.put(fieldName, "length must be greater than " + minLenght + " and less than " + maxLenght);
+                else details.put(fieldName, "length must be greater than or equal to " + minLenght + " and less than or equal to " + maxLenght);
             }
             else details.put(fieldName, "can't be empty");
         }

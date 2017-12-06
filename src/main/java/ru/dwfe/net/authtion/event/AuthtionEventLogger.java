@@ -215,7 +215,7 @@ public class AuthtionEventLogger
             {
                 if (authentication == null) authentication = getAuthentication(event);
                 if (authentication != null)
-                    map.put("authorities",Optional.of(authentication)
+                    map.put("authorities", Optional.of(authentication)
                             .map(Authentication::getAuthorities)
                             .orElse(List.of())
                             .toString());
@@ -224,7 +224,7 @@ public class AuthtionEventLogger
             {
                 if (authentication == null) authentication = getAuthentication(event);
                 if (authentication != null)
-                    map.put("details",Optional.of(authentication)
+                    map.put("details", Optional.of(authentication)
                             .map(Authentication::getDetails)
                             .orElse("")
                             .toString());

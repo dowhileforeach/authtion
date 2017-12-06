@@ -3,8 +3,8 @@
 -->
 <configuration scan="true" scanPeriod="30 seconds">
 
-    <include resource="./logback/console.xml" />
-    <include resource="./logback/file.xml" />
+    <include resource="./logback/console.xml"/>
+    <include resource="./logback/file.xml"/>
 
 
     <root level="INFO">
