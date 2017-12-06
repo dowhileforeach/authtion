@@ -21,12 +21,12 @@ public class UserService implements UserDetailsService
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException
     {
-        return userRepository.findById(id).orElseThrow(() -> {
+        return repository.findById(id).orElseThrow(() -> {
             String str = String.format("The user doesn't exist: %s", id);
             log.error(str);
             return new UsernameNotFoundException(str);
@@ -35,21 +35,21 @@ public class UserService implements UserDetailsService
 
     public Optional<User> findById(String id)
     {
-        return userRepository.findById(id);
+        return repository.findById(id);
     }
 
     public boolean existsById(String id)
     {
-        return userRepository.existsById(id);
+        return repository.existsById(id);
     }
 
     public List<User> findAll()
     {
-        return (List<User>) userRepository.findAll();
+        return (List<User>) repository.findAll();
     }
 
     public User save(User user)
     {
-        return userRepository.save(user);
+        return repository.save(user);
     }
 }

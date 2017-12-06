@@ -6,6 +6,7 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.dwfe.net.authtion.service.UserService;
 
 import javax.persistence.*;
@@ -48,8 +49,11 @@ public class User implements UserDetails, CredentialsContainer
     private boolean accountNonLocked;
     @Column
     private boolean enabled;
-    @Column
-    private String confirmationKey;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "user")
+    @JsonIgnore
+    private ConfirmationKey confirmationKey;
 
 
     /*
@@ -181,12 +185,12 @@ public class User implements UserDetails, CredentialsContainer
         this.enabled = enabled;
     }
 
-    public String getConfirmationKey()
+    public ConfirmationKey getConfirmationKey()
     {
         return confirmationKey;
     }
 
-    public void setConfirmationKey(String confirmationKey)
+    public void setConfirmationKey(ConfirmationKey confirmationKey)
     {
         this.confirmationKey = confirmationKey;
     }
@@ -283,7 +287,8 @@ public class User implements UserDetails, CredentialsContainer
                 {
                     result = true;
                 }
-                else details.put(fieldName, "length must be greater than or equal to " + minLenght + " and less than or equal to " + maxLenght);
+                else
+                    details.put(fieldName, "length must be greater than or equal to " + minLenght + " and less than or equal to " + maxLenght);
             }
             else details.put(fieldName, "can't be empty");
         }
@@ -296,9 +301,9 @@ public class User implements UserDetails, CredentialsContainer
     {
         boolean result = false;
 
-        if (User.canUsePassword(user.getPassword(), details))
+        if (User.canUseID(user.getId(), userService, details))
         {
-            if (User.canUseID(user.getId(), userService, details))
+            if (User.canUsePassword(user.getPassword(), details))
             {
                 result = true;
             }
@@ -308,13 +313,19 @@ public class User implements UserDetails, CredentialsContainer
 
     public static void prepareNewUser(User user)
     {
+        user.setPassword("{bcrypt}" + new BCryptPasswordEncoder().encode(user.getPassword()));
+
         user.setAccountNonExpired(true);
         user.setCredentialsNonExpired(true);
         user.setAccountNonLocked(false); //New user is locked. Will be unlocked after confirmation
         user.setEnabled(true);
 
         int requiredStringLength = 100;
-        user.setConfirmationKey(new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36));
+        ConfirmationKey confirmationKey = new ConfirmationKey();
+        confirmationKey.setUser(user.getId());
+        confirmationKey.setKey(new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36));
+        user.setConfirmationKey(confirmationKey);
+//        user.setConfirmationKey(new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36));
 
         Authority authority = new Authority();
         authority.setAuthority("USER");

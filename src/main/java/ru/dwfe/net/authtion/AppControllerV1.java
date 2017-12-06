@@ -6,13 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.dwfe.net.authtion.dao.ConfirmationKey;
 import ru.dwfe.net.authtion.dao.User;
+import ru.dwfe.net.authtion.service.ConfirmationKeyService;
 import ru.dwfe.net.authtion.service.UserService;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class AppControllerV1
@@ -21,6 +24,8 @@ public class AppControllerV1
 
     @Autowired
     UserService userService;
+    @Autowired
+    ConfirmationKeyService confirmationKeyService;
 
     @RequestMapping(API + "/public")
     public String publicResource()
@@ -70,7 +75,7 @@ public class AppControllerV1
 
     @RequestMapping(value = API + "/create-user", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String addUser(@RequestBody User user) throws IOException
+    public String createUser(@RequestBody User user) throws IOException
     {
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
@@ -93,10 +98,28 @@ public class AppControllerV1
     }
 
     @RequestMapping(API + "/confirm-user")
-    public String confirmUser(@RequestParam String confirmkey) throws JsonProcessingException
+    public String confirmUser(@RequestParam String key) throws JsonProcessingException
     {
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
+
+        ConfirmationKey confirmationKey = confirmationKeyService.findByKey(key);
+        if (confirmationKey != null)
+        {
+            Optional<User> byId = userService.findById(confirmationKey.getUser());
+            if (byId.isPresent())
+            {
+                User user = byId.get();
+                user.setAccountNonLocked(true);
+                userService.save(user);
+
+                //удалить key from database
+
+                result = true;
+            }
+            else details.put("error", "user does not exist");
+        }
+        else details.put("error", "key does not exist");
 
         return getResponse("success", result, details);
     }

@@ -1,5 +1,8 @@
 package ru.dwfe.net.authtion;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -42,6 +45,8 @@ public class CreateUserTest
     public void _03_createUser() throws Exception
     {
         logHead("Create User");
+        String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
+        checkList("success", FRONTENDLevelResource_createUser, access_token, checkers_for_createUser());
     }
 
     @Test
@@ -55,10 +60,9 @@ public class CreateUserTest
     {
         for (Checker checker : checkers)
         {
-            String body = getResponseAfterPOSTrequest(access_token, resource,
-                    getRequestBody_for_FRONTENDLevelResource_checkUser(checker.req));
-
+            String body = getResponseAfterPOSTrequest(access_token, resource, getRequestBody(checker.req));
             Map<String, Object> map = parse(body);
+
             assertEquals(checker.expectedResult, getValueFromResponse(map, responseFieldName));
 
             if (!checker.expectedResult) //if error is expected
@@ -66,13 +70,10 @@ public class CreateUserTest
         }
     }
 
-    private void checkOne(String responseFieldName, String resource, String access_token,
-                          RequestBody requestBody, Checker checker) throws Exception
+    private static RequestBody getRequestBody(Map<String, Object> map) throws JsonProcessingException
     {
-        String body = getResponseAfterPOSTrequest(access_token, resource, requestBody);
-
-        Map<String, Object> map = parse(body);
-        assertEquals(checker.expectedResult, getValueFromResponse(map, responseFieldName));
+        return RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                new ObjectMapper().writeValueAsString(map));
     }
 
     private static void logHead(String who)

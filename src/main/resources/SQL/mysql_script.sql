@@ -16,8 +16,6 @@ CREATE TABLE `users` (
   `credentials_non_expired` TINYINT(1)                 NOT NULL DEFAULT '1',
   `account_non_locked`      TINYINT(1)                 NOT NULL DEFAULT '1',
   `enabled`                 TINYINT(1)                 NOT NULL DEFAULT '1',
-  `confirmation_key`        VARCHAR(255)
-                            COLLATE utf8mb4_unicode_ci          DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_name_uindex` (`id`)
 )
@@ -60,11 +58,25 @@ CREATE TABLE `user_authority` (
   COLLATE = utf8mb4_unicode_ci;
 
 
+DROP TABLE IF EXISTS `confirmation_key`;
+CREATE TABLE `confirmation_key` (
+  `user`        VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `confirm_key` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`user`),
+  UNIQUE KEY `confirmation_key_users_id_fk` (`user`),
+  CONSTRAINT `confirmation_key_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+    ON DELETE CASCADE
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+
 LOCK TABLES `users` WRITE, `authorities` WRITE, `user_authority` WRITE;
 INSERT INTO `users` VALUES
-  ('admin@ya.ru', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1, ''),
-  ('user@ya.ru', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1, ''),
-  ('shop@ya.ru', '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', '', '', 1, 1, 1, 1, '');
+  ('admin@ya.ru', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1),
+  ('user@ya.ru', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1),
+  ('shop@ya.ru', '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', '', '', 1, 1, 1, 1);
 INSERT INTO `authorities` VALUES
   ('ADMIN', 'Administrator'),
   ('USER', 'Standard user'),
