@@ -233,32 +233,61 @@ public class User implements UserDetails, CredentialsContainer
         UTILs
     */
 
-    public static boolean canUseID(String id, UserService userService, Map<String, Object> map)
+    public static boolean canUseID(String id, UserService userService, Map<String, Object> details)
     {
         boolean result = false;
+        String fieldName = "id";
         int maxLength = 30;
 
-        if (!id.isEmpty())
+        if (id != null)
         {
-            if (id.length() < maxLength)
+            if (!id.isEmpty())
             {
-                if (!DISABLED_NAMES.contains(id))
+                if (id.length() < maxLength)
                 {
-                    if (emailRegexPattern.matcher(id).matches())
+                    if (!DISABLED_NAMES.contains(id))
                     {
-                        if (!userService.existsById(id))
+                        if (emailRegexPattern.matcher(id).matches())
                         {
-                            result = true;
+                            if (!userService.existsById(id))
+                            {
+                                result = true;
+                            }
+                            else details.put(fieldName, "user is present");
                         }
-                        else map.put("error", "user is present");
+                        else details.put(fieldName, "must be valid e-mail address");
                     }
-                    else map.put("error", "ID must be valid e-mail address");
+                    else details.put(fieldName, "not allowed");
                 }
-                else map.put("error", "this ID is not allowed");
+                else details.put(fieldName, "length must be less than " + maxLength + " characters");
             }
-            else map.put("error", "ID length must be less than " + maxLength + " characters");
+            else details.put(fieldName, "can't be empty");
         }
-        else map.put("error", "ID can't be empty");
+        else details.put(fieldName, "is required field");
+
+        return result;
+    }
+
+    public static boolean canUsePassword(String password, Map<String, Object> details)
+    {
+        boolean result = false;
+        String fieldName = "password";
+        int minLenght = 6;
+        int maxLenght = 55;
+
+        if (password != null)
+        {
+            if (!password.isEmpty())
+            {
+                if (!(password.length() >= minLenght && password.length() <= maxLenght))
+                {
+
+                }
+                else details.put(fieldName, "length must be greater than " + minLenght + " and less than " + maxLenght);
+            }
+            else details.put(fieldName, "can't be empty");
+        }
+        else details.put(fieldName, "is required field");
 
         return result;
     }
