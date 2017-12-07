@@ -23,12 +23,12 @@ import static ru.dwfe.net.authtion.util.Variables_for_CreateUserTest.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CreateUserTest
 {
+    private static String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
+
     @Test
     public void _01_checkUserId() throws Exception
     {
         logHead("Check User ID");
-
-        String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
         checkList("canUse", FRONTENDLevelResource_checkUserId, access_token, checkers_for_checkUserId);
     }
 
@@ -36,8 +36,6 @@ public class CreateUserTest
     public void _02_checkUserPass() throws Exception
     {
         logHead("Check User Pass");
-
-        String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
         checkList("canUse", FRONTENDLevelResource_checkUserPass, access_token, checkers_for_checkUserPass);
     }
 
@@ -45,7 +43,6 @@ public class CreateUserTest
     public void _03_createUser() throws Exception
     {
         logHead("Create User");
-        String access_token = getAccessToken(TRUSTED, shop_username, shop_userpass);
         checkList("success", FRONTENDLevelResource_createUser, access_token, checkers_for_createUser());
     }
 

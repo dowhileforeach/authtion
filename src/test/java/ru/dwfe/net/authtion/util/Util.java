@@ -17,7 +17,7 @@ import static ru.dwfe.net.authtion.util.Variables_Global.*;
 
 public class Util
 {
-    public static String getAccessToken(ClientType clientType, String username, String userpass) throws Exception
+    public static String getAccessToken(ClientType clientType, String username, String userpass)
     {
         String clientname = "";
         String clientpass = "";
@@ -47,7 +47,15 @@ public class Util
         }
 
         Request req = auth_POST_Request(clientname, clientpass, username, userpass);
-        String access_token = login(req, maxTokenExpirationTime, minTokenExpirationTime);
+        String access_token = null;
+        try
+        {
+            access_token = login(req, maxTokenExpirationTime, minTokenExpirationTime);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         return access_token;
     }
