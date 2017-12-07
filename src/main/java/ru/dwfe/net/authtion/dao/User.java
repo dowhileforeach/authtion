@@ -306,7 +306,7 @@ public class User implements UserDetails, CredentialsContainer
         user.setAccountNonLocked(false); //New user is locked. Will be unlocked after confirmation
         user.setEnabled(true);
 
-        int requiredStringLength = 100;
+        int requiredStringLength = 50;
         String key = new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36);
         ConfirmationKey confirmationKey = new ConfirmationKey();
         confirmationKey.setUser(user.getId());
