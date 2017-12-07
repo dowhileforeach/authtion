@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 
+import java.io.IOException;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
@@ -91,7 +93,7 @@ public class Util
         }
     }
 
-    public static Request GET_request(String url, String access_token, Map<String, String> queries)
+    public static Request GET_request(String url, String access_token, Map<String, Object> queries)
     {
         Request request;
 
@@ -101,10 +103,10 @@ public class Util
             request = new Request.Builder().url(url).addHeader("Authorization", "Bearer " + access_token).build();
 
         if (queries != null)
-            for (Map.Entry<String, String> next : queries.entrySet())
+            for (Map.Entry<String, Object> next : queries.entrySet())
             {
                 HttpUrl newUrl = request.url().newBuilder()
-                        .addQueryParameter(next.getKey(), next.getValue())
+                        .addQueryParameter(next.getKey(), (String) next.getValue())
                         .build();
                 request = request.newBuilder()
                         .url(newUrl)
@@ -145,31 +147,56 @@ public class Util
                 .build();
     }
 
-    public static String performRequest(Request req, int expectedStatus) throws Exception
+    public static String performRequest(Request req, int expectedStatus)
     {
         log.info("-> " + req.url().encodedPath());
 
+        String body = null;
+        int actualStatusCode = -1;
         OkHttpClient client = new OkHttpClient();
         try (Response resp = client.newCall(req).execute())
         {
-            String body = resp.body().string();
+            body = resp.body().string();
+            actualStatusCode = resp.code();
             log.info("<- {}\n", body);
-
-            assertEquals(expectedStatus, resp.code());
-
-            return body;
         }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        assertEquals(expectedStatus, actualStatusCode);
+        return body;
     }
 
-    public static String getResponseAfterPOSTrequest(String access_token, String resource, RequestBody body) throws Exception
+    public static String getResponseAfterPOSTrequest(String access_token, String resource, RequestBody body, int expectedStatus)
     {
         Request req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, body);
 
         Buffer buffer = new Buffer();
-        body.writeTo(buffer);
-        log.info("-> {}", buffer.readUtf8());
+        try
+        {
+            body.writeTo(buffer);
+            log.info("-> {}", buffer.readUtf8());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
-        return performRequest(req, 200);
+        return performRequest(req, expectedStatus);
+    }
+
+    public static String getResponseAfterGETrequest(String access_token, String resource, Map<String, Object> queries, int expectedStatus)
+    {
+        Request req = GET_request(ALL_BEFORE_RESOURCE + resource, access_token, queries);
+
+        String query = queries.entrySet().stream()
+                .map(e -> e.getKey() + "=" + e.getValue())
+                .collect(Collectors.joining("&"));
+
+        log.info("-> {}", query);
+
+        return performRequest(req, expectedStatus);
     }
 
     public static Map<String, Object> parse(String body)

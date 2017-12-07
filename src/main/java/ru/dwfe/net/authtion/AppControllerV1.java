@@ -99,26 +99,31 @@ public class AppControllerV1
     public String confirmUser(@RequestParam String key) throws JsonProcessingException
     {
         boolean result = false;
+        String fieldName = "error";
         Map<String, Object> details = new HashMap<>();
 
-        ConfirmationKey confirmationKey = confirmationKeyService.findByKey(key);
-        if (confirmationKey != null)
+        if (key != null && !key.isEmpty())
         {
-            Optional<User> userById = userService.findById(confirmationKey.getUser());
-            if (userById.isPresent())
+            ConfirmationKey confirmationKey = confirmationKeyService.findByKey(key);
+            if (confirmationKey != null)
             {
-                User user = userById.get();
-                user.setAccountNonLocked(true); //The user is now unlocked
-                userService.save(user);
+                Optional<User> userById = userService.findById(confirmationKey.getUser());
+                if (userById.isPresent())
+                {
+                    User user = userById.get();
+                    user.setAccountNonLocked(true); //The user is now unlocked
+                    userService.save(user);
 
-                result = true;
+                    result = true;
+                }
+                else details.put(fieldName, "user does not exist");
+
+                //Anyway delete this confirmation key from database
+                confirmationKeyService.delete(confirmationKey);
             }
-            else details.put("error", "user does not exist");
-
-            //Anyway delete this confirmation key from database
-            confirmationKeyService.delete(confirmationKey);
+            else details.put(fieldName, "key does not exist");
         }
-        else details.put("error", "key does not exist");
+        else details.put(fieldName, "bad key");
 
         return getResponse("success", result, details);
     }
