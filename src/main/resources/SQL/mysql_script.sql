@@ -4,13 +4,13 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `users`;
 SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE `users` (
-  `id`                      VARCHAR(255)
+  `id`                      VARCHAR(100)
                             COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password`                VARCHAR(255)
+  `password`                VARCHAR(100)
                             COLLATE utf8mb4_unicode_ci NOT NULL,
-  `first_name`              VARCHAR(255)
+  `first_name`              VARCHAR(20)
                             COLLATE utf8mb4_unicode_ci          DEFAULT '',
-  `last_name`               VARCHAR(255)
+  `last_name`               VARCHAR(20)
                             COLLATE utf8mb4_unicode_ci          DEFAULT '',
   `account_non_expired`     TINYINT(1)                 NOT NULL DEFAULT '1',
   `credentials_non_expired` TINYINT(1)                 NOT NULL DEFAULT '1',
@@ -28,9 +28,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `authorities`;
 SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE `authorities` (
-  `authority`   VARCHAR(255)
+  `authority`   VARCHAR(20)
                 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` VARCHAR(255)
+  `description` VARCHAR(100)
                 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`authority`),
   UNIQUE KEY `authorities_authority_uindex` (`authority`)
@@ -42,9 +42,9 @@ CREATE TABLE `authorities` (
 
 DROP TABLE IF EXISTS `user_authority`;
 CREATE TABLE `user_authority` (
-  `user`      VARCHAR(255)
+  `user`      VARCHAR(100)
               COLLATE utf8mb4_unicode_ci NOT NULL,
-  `authority` VARCHAR(255)
+  `authority` VARCHAR(20)
               COLLATE utf8mb4_unicode_ci NOT NULL,
   KEY `user_authority_users_name_fk` (`user`),
   KEY `user_authority_authorities_name_fk` (`authority`),
@@ -60,12 +60,10 @@ CREATE TABLE `user_authority` (
 
 DROP TABLE IF EXISTS `confirmation_key`;
 CREATE TABLE `confirmation_key` (
-  `user`        VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user`        VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `confirm_key` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`user`),
-  UNIQUE KEY `confirmation_key_users_id_fk` (`user`),
-  CONSTRAINT `confirmation_key_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
-    ON DELETE CASCADE
+  UNIQUE KEY `confirmation_key_uindex` (`user`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

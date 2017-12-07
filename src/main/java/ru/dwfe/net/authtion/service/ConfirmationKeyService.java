@@ -15,4 +15,14 @@ public class ConfirmationKeyService
     {
         return repository.findByKey(key);
     }
+
+    public ConfirmationKey save(ConfirmationKey confirmationKey)
+    {
+        return repository.save(confirmationKey);
+    }
+
+    public void delete(ConfirmationKey confirmationKey)
+    {
+        repository.delete(confirmationKey);
+    }
 }

@@ -83,15 +83,13 @@ public class AppControllerV1
         if (User.isFieldsCorrect(user, userService, details))
         {
             //prepare
-            User.prepareNewUser(user);
+            User.prepareNewUser(user, confirmationKeyService);
 
             //put user to the database
             userService.save(user);
 
             result = true;
         }
-
-        //вернуть результат операции
 
         return getResponse("success", result, details);
 
@@ -106,18 +104,19 @@ public class AppControllerV1
         ConfirmationKey confirmationKey = confirmationKeyService.findByKey(key);
         if (confirmationKey != null)
         {
-            Optional<User> byId = userService.findById(confirmationKey.getUser());
-            if (byId.isPresent())
+            Optional<User> userById = userService.findById(confirmationKey.getUser());
+            if (userById.isPresent())
             {
-                User user = byId.get();
-                user.setAccountNonLocked(true);
+                User user = userById.get();
+                user.setAccountNonLocked(true); //The user is now unlocked
                 userService.save(user);
-
-                //удалить key from database
 
                 result = true;
             }
             else details.put("error", "user does not exist");
+
+            //Anyway delete this confirmation key from database
+            confirmationKeyService.delete(confirmationKey);
         }
         else details.put("error", "key does not exist");
 

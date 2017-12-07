@@ -44,12 +44,12 @@ public class ConfirmationKey
 
         ConfirmationKey that = (ConfirmationKey) o;
 
-        return key.equals(that.key);
+        return user.equals(that.user);
     }
 
     @Override
     public int hashCode()
     {
-        return key.hashCode();
+        return user.hashCode();
     }
 }

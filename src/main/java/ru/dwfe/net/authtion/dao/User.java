@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ru.dwfe.net.authtion.service.ConfirmationKeyService;
 import ru.dwfe.net.authtion.service.UserService;
 
 import javax.persistence.*;
@@ -49,11 +50,6 @@ public class User implements UserDetails, CredentialsContainer
     private boolean accountNonLocked;
     @Column
     private boolean enabled;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "user")
-    @JsonIgnore
-    private ConfirmationKey confirmationKey;
 
 
     /*
@@ -185,16 +181,6 @@ public class User implements UserDetails, CredentialsContainer
         this.enabled = enabled;
     }
 
-    public ConfirmationKey getConfirmationKey()
-    {
-        return confirmationKey;
-    }
-
-    public void setConfirmationKey(ConfirmationKey confirmationKey)
-    {
-        this.confirmationKey = confirmationKey;
-    }
-
     /*
         equals, hashCode, toString
     */
@@ -311,7 +297,7 @@ public class User implements UserDetails, CredentialsContainer
         return result;
     }
 
-    public static void prepareNewUser(User user)
+    public static void prepareNewUser(User user, ConfirmationKeyService confirmationKeyService)
     {
         user.setPassword("{bcrypt}" + new BCryptPasswordEncoder().encode(user.getPassword()));
 
@@ -321,11 +307,11 @@ public class User implements UserDetails, CredentialsContainer
         user.setEnabled(true);
 
         int requiredStringLength = 100;
+        String key = new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36);
         ConfirmationKey confirmationKey = new ConfirmationKey();
         confirmationKey.setUser(user.getId());
-        confirmationKey.setKey(new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36));
-        user.setConfirmationKey(confirmationKey);
-//        user.setConfirmationKey(new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36));
+        confirmationKey.setKey(key);
+        confirmationKeyService.save(confirmationKey);
 
         Authority authority = new Authority();
         authority.setAuthority("USER");
