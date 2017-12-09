@@ -1,64 +1,61 @@
 package ru.dwfe.net.authtion.util;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Map;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static ru.dwfe.net.authtion.util.AuthorityType.*;
+import static ru.dwfe.net.authtion.util.Variables_Global.*;
+
 public class Variables_for_AuthorityTest
 {
-    /* Expected statuses
+    /*
+        RESOURCES
+    */
+    public static final Map<String, Map<AuthorityType, Map<RequestMethod, Map<String, Object>>>> RESOURCE_AUTHORITY_reqDATA = Map.of(
+            resource_public, Map.of(ANY, Map.of(GET, Map.of())),
+            resource_cities, Map.of(USER, Map.of(GET, Map.of())),
+            resource_users, Map.of(ADMIN, Map.of(GET, Map.of())),
+            resource_checkUserId, Map.of(FRONTEND, Map.of(POST, Map.of("id", "user"))),
+            resource_checkUserPass, Map.of(FRONTEND, Map.of(POST, Map.of("password", "some password"))),
+            resource_createUser, Map.of(FRONTEND, Map.of(POST, Map.of("id", "user", "password", "some password", "firstName", "some first name", "lastName", ""))),
+            resource_confirmUser, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString")))
+    );
+
+
+    /* Expected statuses:
         200 = OK
         401 = Unauthorized
         403 = Forbidden, access_denied
     */
-
-    //user
-    public static final int user_USERLevelResource_expectedStatus = 200;
-    public static final int user_ADMINLevelResource_expectedStatus = 403;
-    public static final int user_FRONTENDLevelResource_expectedStatus = 403;
-
-    //admin
-    public static final int admin_USERLevelResource_expectedStatus = 200;
-    public static final int admin_ADMINLevelResource_expectedStatus = 200;
-    public static final int admin_FRONTENDLevelResource_expectedStatus = 403;
-
-    //shop
-    public static final int shop_USERLevelResource_expectedStatus = 403;
-    public static final int shop_ADMINLevelResource_expectedStatus = 403;
-    public static final int shop_FRONTENDLevelResource_expectedStatus = 200;
-
-    //anonymous
-    public static final int anonymous_USERLevelResource_expectedStatus = 401;
-    public static final int anonymous_ADMINLevelResource_expectedStatus = 401;
-    public static final int anonymous_FRONTENDLevelResource_expectedStatus = 401;
-
-
-    /* BODIES */
-    public static final RequestBody body_for_FRONTENDLevelResource_checkUserId =
-            RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                    "{\"id\": \"user\"}");
-
-    public static final RequestBody body_for_FRONTENDLevelResource_checkUserPass =
-            RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                    "{\"password\": \"some password\"}");
-
-    public static final RequestBody body_for_FRONTENDLevelResource_createUser =
-            RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                    "{" +
-                            "\"id\": \"user\"," +
-                            "\"password\": \"some password\"," +
-                            "\"firstName\": \"some first name\"," +
-                            "\"lastName\": \"\"" +
-                            "}");
-    /* QUERIES */
-
-    public static final Map<String, Object> queries_for_PUBLICLevelResource_confirmUser =
-            Map.of("key", "AnyString");
+    public static final Map<AuthorityType, Map<AuthorityType, Integer>> AUTHORITY_to_AUTHORITY_STATUS = Map.of(
+            ANY, Map.of(
+                    ANY, 200,
+                    USER, 401,
+                    ADMIN, 401,
+                    FRONTEND, 401),
+            USER, Map.of(
+                    ANY, 200,
+                    USER, 200,
+                    ADMIN, 403,
+                    FRONTEND, 403),
+            ADMIN, Map.of(
+                    ANY, 200,
+                    USER, 200,
+                    ADMIN, 200,
+                    FRONTEND, 403),
+            FRONTEND, Map.of(
+                    ANY, 200,
+                    USER, 403,
+                    ADMIN, 403,
+                    FRONTEND, 200)
+    );
 
 
     /* OTHER */
 
-    public static final int totalAccessTokenCount = 3;
+    public static final int TOTAL_ACCESS_TOKEN_COUNT = 3;
 
 }

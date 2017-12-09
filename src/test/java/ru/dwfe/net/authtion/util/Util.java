@@ -3,7 +3,6 @@ package ru.dwfe.net.authtion.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
-import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
@@ -19,52 +18,27 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.util.Variables_Global.*;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static ru.dwfe.net.authtion.util.Variables_Global.ALL_BEFORE_RESOURCE;
+import static ru.dwfe.net.authtion.util.Variables_Global.PROTOCOL_HOST_PORT;
+import static ru.dwfe.net.authtion.util.Variables_for_AuthorityTest.AUTHORITY_to_AUTHORITY_STATUS;
+import static ru.dwfe.net.authtion.util.Variables_for_AuthorityTest.RESOURCE_AUTHORITY_reqDATA;
 
 public class Util
 {
-    public static String getAccessToken(ClientType clientType, String username, String userpass)
+    public static void setAccessToken(User user)
     {
-        String clientname = "";
-        String clientpass = "";
-        int maxTokenExpirationTime = -1;
-        int minTokenExpirationTime = 0;
+        Client client = user.client;
 
-        if (ClientType.TRUSTED == clientType)
-        {
-            clientname = trusted_clientname;
-            clientpass = trusted_clientpass;
-            maxTokenExpirationTime = trusted_maxTokenExpirationTime;
-            minTokenExpirationTime = trusted_minTokenExpirationTime;
-        }
-        else if (ClientType.UNTRUSTED == clientType)
-        {
-            clientname = untrusted_clientname;
-            clientpass = untrusted_clientpass;
-            maxTokenExpirationTime = untrusted_maxTokenExpirationTime;
-            minTokenExpirationTime = untrusted_minTokenExpirationTime;
-        }
-        else if (ClientType.FRONTEND == clientType)
-        {
-            clientname = frontend_clientname;
-            clientpass = frontend_clientpass;
-            maxTokenExpirationTime = frontend_maxTokenExpirationTime;
-            minTokenExpirationTime = frontend_minTokenExpirationTime;
-        }
-
-        Request req = auth_POST_Request(clientname, clientpass, username, userpass);
-        String access_token = null;
+        Request req = auth_POST_Request(client.clientname, client.clientpass, user.username, user.password);
         try
         {
-            access_token = login(req, maxTokenExpirationTime, minTokenExpirationTime);
+            user.access_token = login(req, client.maxTokenExpirationTime, client.minTokenExpirationTime);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-
-        return access_token;
     }
 
     private static Request auth_POST_Request(String clientname, String clientpass, String username, String userpass)
@@ -123,7 +97,7 @@ public class Util
         else
             request = new Request.Builder().url(url).addHeader("Authorization", "Bearer " + access_token).build();
 
-        if (queries != null)
+        if (queries.size() > 0)
             for (Map.Entry<String, Object> next : queries.entrySet())
             {
                 HttpUrl newUrl = request.url().newBuilder()
@@ -136,8 +110,10 @@ public class Util
         return request;
     }
 
-    public static Request POST_request(String url, String access_token, RequestBody body)
+    public static Request POST_request(String url, String access_token, Map<String, Object> prorepty_value)
     {
+        RequestBody body = getRequestBody(prorepty_value);
+
         Request.Builder req = new Request.Builder().url(url);
 
         if (access_token != null)
@@ -172,20 +148,11 @@ public class Util
         return body;
     }
 
-    public static String getResponseAfterPOSTrequest(String access_token, String resource, RequestBody body, int expectedStatus)
+    public static String getResponseAfterPOSTrequest(String access_token, String resource, Map<String, Object> prorepty_value, int expectedStatus)
     {
-        Request req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, body);
+        Request req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, prorepty_value);
 
-        Buffer buffer = new Buffer();
-        try
-        {
-            body.writeTo(buffer);
-            log.info("-> {}", buffer.readUtf8());
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        log.info("-> {}", prorepty_value.toString());
 
         return performRequest(req, expectedStatus);
     }
@@ -202,15 +169,40 @@ public class Util
         return performRequest(req, expectedStatus);
     }
 
+    public static void checkAllResources(User user) throws Exception
+    {
+        String access_token = user.access_token;
+
+        RESOURCE_AUTHORITY_reqDATA.forEach((resource, next) -> {
+
+            Map.Entry<AuthorityType, Map<RequestMethod, Map<String, Object>>> next1 = next.entrySet().iterator().next();
+            Map.Entry<RequestMethod, Map<String, Object>> next2 = next1.getValue().entrySet().iterator().next();
+
+            AuthorityType level = next1.getKey();
+            RequestMethod method = next2.getKey();
+            Map<String, Object> reqData = next2.getValue();
+
+            Request req;
+            if (GET == method)
+                req = GET_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
+            else
+                req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
+
+            Map<AuthorityType, Integer> statusList = AUTHORITY_to_AUTHORITY_STATUS.get(user.level);
+
+            performRequest(req, statusList.get(level));
+        });
+    }
+
     public static void check_send_data(RequestMethod method, String resource, String access_token, List<Checker> checkers)
     {
         String body;
         for (Checker checker : checkers)
         {
-            if (method == POST)
-                body = getResponseAfterPOSTrequest(access_token, resource, getRequestBody(checker.req), checker.expectedStatus);
-            else
+            if (GET == method)
                 body = getResponseAfterGETrequest(access_token, resource, checker.req, checker.expectedStatus);
+            else
+                body = getResponseAfterPOSTrequest(access_token, resource, checker.req, checker.expectedStatus);
 
             Map<String, Object> map = parse(body);
 

@@ -36,6 +36,15 @@ public class ConfirmationKey
         this.user = user;
     }
 
+    public static ConfirmationKey of(String user, String key)
+    {
+        ConfirmationKey confirmationKey = new ConfirmationKey();
+        confirmationKey.setUser(user);
+        confirmationKey.setKey(key);
+
+        return confirmationKey;
+    }
+
     @Override
     public boolean equals(Object o)
     {
