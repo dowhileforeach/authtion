@@ -79,6 +79,8 @@ public class CreateUserTest
 
         Optional<ConfirmationKey> confirmationKey = getConfirmationKey(ID_notExistedUser);
         assertEquals(true, confirmationKey.isPresent());
+        assertEquals(true, confirmationKey.get().isCreateNewUser());
+        assertEquals(false, confirmationKey.get().isRestoreUserPass());
 
         //confirmation process
         check_send_data(GET, resource_confirmUser, null, checkers_for_confirmUser(confirmationKey.get().getKey()));

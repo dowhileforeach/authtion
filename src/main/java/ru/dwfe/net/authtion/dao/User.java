@@ -308,7 +308,7 @@ public class User implements UserDetails, CredentialsContainer
 
         int requiredStringLength = 30;
         String key = new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36);
-        confirmationKeyService.save(ConfirmationKey.of(user.getId(), key));
+        confirmationKeyService.save(ConfirmationKey.createNewUser(user.getId(), key));
 
         Authority authority = new Authority();
         authority.setAuthority("USER");

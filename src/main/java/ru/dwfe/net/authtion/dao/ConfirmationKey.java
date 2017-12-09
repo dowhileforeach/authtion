@@ -9,12 +9,18 @@ import javax.persistence.Table;
 @Table(name = "confirmation_key")
 public class ConfirmationKey
 {
-    @Column(name = "confirm_key")
-    private String key;
-
     @Id
     @Column
     private String user;
+
+    @Column(name = "confirm_key")
+    private String key;
+
+    @Column
+    private boolean createNewUser;
+
+    @Column
+    private boolean restoreUserPass;
 
     public String getKey()
     {
@@ -36,13 +42,43 @@ public class ConfirmationKey
         this.user = user;
     }
 
-    public static ConfirmationKey of(String user, String key)
+    public boolean isCreateNewUser()
+    {
+        return createNewUser;
+    }
+
+    public void setCreateNewUser(boolean createNewUser)
+    {
+        this.createNewUser = createNewUser;
+    }
+
+    public boolean isRestoreUserPass()
+    {
+        return restoreUserPass;
+    }
+
+    public void setRestoreUserPass(boolean restoreUserPass)
+    {
+        this.restoreUserPass = restoreUserPass;
+    }
+
+    public static ConfirmationKey of(String user, String key, boolean createNewUser, boolean restoreUserPass)
     {
         ConfirmationKey confirmationKey = new ConfirmationKey();
         confirmationKey.setUser(user);
         confirmationKey.setKey(key);
 
+        if (createNewUser)
+            confirmationKey.setCreateNewUser(true);
+        else if (restoreUserPass)
+            confirmationKey.setRestoreUserPass(true);
+
         return confirmationKey;
+    }
+
+    public static ConfirmationKey createNewUser(String user, String key)
+    {
+        return of(user, key, true, false);
     }
 
     @Override

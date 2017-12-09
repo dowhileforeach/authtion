@@ -62,9 +62,11 @@ CREATE TABLE `user_authority` (
 
 DROP TABLE IF EXISTS `confirmation_key`;
 CREATE TABLE `confirmation_key` (
-  `user`        VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created`     DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
+  `user`              VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `confirm_key`       VARCHAR(50) COLLATE utf8mb4_unicode_ci  NOT NULL,
+  `created`           DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
+  `create_new_user`   TINYINT(1)                              NOT NULL,
+  `restore_user_pass` TINYINT(1)                              NOT NULL,
   PRIMARY KEY (`user`),
   UNIQUE KEY `confirmation_key_user_uindex` (`user`)
 )

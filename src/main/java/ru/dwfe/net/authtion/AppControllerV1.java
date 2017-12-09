@@ -90,9 +90,7 @@ public class AppControllerV1
 
             result = true;
         }
-
         return getResponse("success", result, details);
-
     }
 
     @RequestMapping(API + "/confirm-user")
@@ -107,19 +105,34 @@ public class AppControllerV1
             ConfirmationKey confirmationKey = confirmationKeyService.findByKey(key);
             if (confirmationKey != null)
             {
-                Optional<User> userById = userService.findById(confirmationKey.getUser());
-                if (userById.isPresent())
+                if (confirmationKey.isCreateNewUser()) //key is special for create new user
                 {
-                    User user = userById.get();
-                    user.setAccountNonLocked(true); //The user is now unlocked
-                    userService.save(user);
+                    Optional<User> userById = userService.findById(confirmationKey.getUser());
+                    if (userById.isPresent())
+                    {
+                        if (!userById.get().isAccountNonLocked()) //must be locked
+                        {
+                            User user = userById.get();
+                            user.setAccountNonLocked(true); //The user is now unlocked
+                            userService.save(user);
 
-                    result = true;
+                            //delete this confirmation key from database
+                            confirmationKeyService.delete(confirmationKey);
+
+                            result = true;
+                        }
+                        else details.put(fieldName, "This account is non locked. Something went wrong...");
+                    }
+                    else
+                    {
+                        details.put(fieldName, "user does not exist");
+
+                        //delete this confirmation key from database
+                        confirmationKeyService.delete(confirmationKey);
+                    }
+
                 }
-                else details.put(fieldName, "user does not exist");
-
-                //Anyway delete this confirmation key from database
-                confirmationKeyService.delete(confirmationKey);
+                else details.put(fieldName, "key is not valid for confirmation after a new user is created");
             }
             else details.put(fieldName, "key does not exist");
         }
