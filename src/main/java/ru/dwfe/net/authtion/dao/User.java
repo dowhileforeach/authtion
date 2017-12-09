@@ -299,7 +299,7 @@ public class User implements UserDetails, CredentialsContainer
 
     public static void prepareNewUser(User user, ConfirmationKeyService confirmationKeyService)
     {
-        user.setPassword("{bcrypt}" + new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setPassword(preparePassword(user.getPassword()));
 
         user.setAccountNonExpired(true);
         user.setCredentialsNonExpired(true);
@@ -327,6 +327,11 @@ public class User implements UserDetails, CredentialsContainer
 
         if (result != null)
             map.put(fieldName, result);
+    }
+
+    public static String preparePassword(String rawPassword)
+    {
+        return "{bcrypt}" + new BCryptPasswordEncoder().encode(rawPassword);
     }
 
     private static final Set<String> DISABLED_NAMES = Set.of("Admin", "admin", "Administrator", "administrator");

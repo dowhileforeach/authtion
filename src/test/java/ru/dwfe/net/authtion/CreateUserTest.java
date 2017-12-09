@@ -109,6 +109,24 @@ public class CreateUserTest
         assertEquals(false, getUserById(ID_notExistedUser).isPresent());
     }
 
+    @Test
+    public void _05_changeUserPass()
+    {
+        logHead("Change User Pass");
+
+
+    }
+
+    @Test
+    public void _06_restoreUserPass()
+    {
+        logHead("Restore User Pass");
+
+
+    }
+
+
+
 
     /*
         UTILs

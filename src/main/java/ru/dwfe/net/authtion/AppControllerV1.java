@@ -2,9 +2,11 @@ package ru.dwfe.net.authtion;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.dwfe.net.authtion.dao.ConfirmationKey;
 import ru.dwfe.net.authtion.dao.User;
@@ -130,7 +132,6 @@ public class AppControllerV1
                         //delete this confirmation key from database
                         confirmationKeyService.delete(confirmationKey);
                     }
-
                 }
                 else details.put(fieldName, "key is not valid for confirmation after a new user is created");
             }
@@ -141,14 +142,62 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
+    @RequestMapping(value = API + "/change-user-pass", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('USER')")
+    public String createUser(@RequestBody String body, OAuth2Authentication authentication) throws JsonProcessingException
+    {
+        boolean result = false;
+        String fieldName = "oldpass";
+        Map<String, Object> details = new HashMap<>();
+        Map<String, Object> map = parse(body);
+
+        String oldpass = (String) getValue(map, "oldpass");
+        String newpass = (String) getValue(map, "newpass");
+
+        if (oldpass != null)
+        {
+            if (!oldpass.isEmpty())
+            {
+                String id = ((User) authentication.getPrincipal()).getId();
+                User user = userService.findById(id).get();
+                if (User.preparePassword(oldpass).equals(user.getPassword()))
+                {
+                    if (User.canUsePassword(newpass, details))
+                    {
+                        user.setPassword(User.preparePassword(newpass));
+                        userService.save(user);
+
+                        result = true;
+                    }
+                }
+                else details.put(fieldName, "incorrect");
+            }
+            else details.put(fieldName, "can't be empty");
+        }
+        else details.put(fieldName, "required field");
+
+        return getResponse("success", result, details);
+    }
+
 
     /*
         UTILs
     */
 
+
+    private Map<String, Object> parse(String body)
+    {
+        return JsonParserFactory.getJsonParser().parseMap(body);
+    }
+
     private Object getValueFromJSON(String body, String fieldName)
     {
         return JsonParserFactory.getJsonParser().parseMap(body).get(fieldName);
+    }
+
+    private static Object getValue(Map<String, Object> map, String key)
+    {
+        return map.get(key);
     }
 
     private static String getResponse(String resultFieldName, boolean responseResult, Map<String, Object> details) throws JsonProcessingException

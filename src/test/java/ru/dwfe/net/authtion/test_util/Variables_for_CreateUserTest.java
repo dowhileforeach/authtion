@@ -67,4 +67,9 @@ public class Variables_for_CreateUserTest
                 Checker.of("success", true,  Map.of("key", existedKey),                     200, null,      null,      null)
         );
     }
+
+    public static final List<Checker> checkers_for_changeUserPass = List.of(
+
+
+    );
 }

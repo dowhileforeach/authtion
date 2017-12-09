@@ -26,14 +26,14 @@ import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.RESOURC
 
 public class Util
 {
-    public static void setAccessToken(UserTest userTest, int expectedStatus)
+    public static void setAccessToken(UserTest userTest, int loginExpectedStatus)
     {
         Client client = userTest.client;
 
         Request req = auth_POST_Request(client.clientname, client.clientpass, userTest.username, userTest.password);
         try
         {
-            userTest.access_token = login(req, expectedStatus, client.maxTokenExpirationTime, client.minTokenExpirationTime);
+            userTest.access_token = login(req, loginExpectedStatus, client.maxTokenExpirationTime, client.minTokenExpirationTime);
         }
         catch (Exception e)
         {
@@ -57,16 +57,16 @@ public class Util
                 .build();
     }
 
-    private static String login(Request req, int expectedStatus, int maxExpirationTime, int minExpirationTime) throws Exception
+    private static String login(Request req, int loginExpectedStatus, int maxExpirationTime, int minExpirationTime) throws Exception
     {
         log.info("get Token");
         log.info("-> Authorization: {}", req.header("Authorization"));
         log.info("-> " + req.url().toString());
 
-        String body = performAuthentification(req, expectedStatus);
+        String body = performAuthentification(req, loginExpectedStatus);
 
         String access_token = "";
-        if (expectedStatus == 200)
+        if (loginExpectedStatus == 200)
         {
             Map<String, Object> map = parse(body);
             access_token = (String) getValueFromResponse(map, "access_token");

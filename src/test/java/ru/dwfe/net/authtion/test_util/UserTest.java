@@ -13,7 +13,7 @@ public class UserTest
     public String access_token;
 
 
-    public static UserTest of(AuthorityType level, String username, String password, Client client, int expectedStatus)
+    public static UserTest of(AuthorityType level, String username, String password, Client client, int loginExpectedStatus)
     {
         UserTest userTest = new UserTest();
         userTest.level = level;
@@ -21,7 +21,7 @@ public class UserTest
         userTest.password = password;
         userTest.client = client;
 
-        Util.setAccessToken(userTest, expectedStatus);
+        Util.setAccessToken(userTest, loginExpectedStatus);
 
         return userTest;
     }
