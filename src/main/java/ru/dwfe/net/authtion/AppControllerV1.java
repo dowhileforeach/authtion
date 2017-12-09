@@ -1,10 +1,7 @@
 package ru.dwfe.net.authtion;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static ru.dwfe.net.authtion.Util.*;
 
 @RestController
 public class AppControllerV1
@@ -154,67 +153,22 @@ public class AppControllerV1
         String oldpass = (String) getValue(map, "oldpass");
         String newpass = (String) getValue(map, "newpass");
 
-        if (oldpass != null)
+        if (isDefaultValueCheckOK(oldpass, "oldpass", details))
         {
-            if (!oldpass.isEmpty())
+            String id = ((User) authentication.getPrincipal()).getId();
+            User user = userService.findById(id).get();
+            if (User.preparePassword(oldpass).equals(user.getPassword()))
             {
-                String id = ((User) authentication.getPrincipal()).getId();
-                User user = userService.findById(id).get();
-                if (User.preparePassword(oldpass).equals(user.getPassword()))
+                if (User.canUsePassword(newpass, details))
                 {
-                    if (User.canUsePassword(newpass, details))
-                    {
-                        user.setPassword(User.preparePassword(newpass));
-                        userService.save(user);
+                    user.setPassword(User.preparePassword(newpass));
+                    userService.save(user);
 
-                        result = true;
-                    }
+                    result = true;
                 }
-                else details.put(fieldName, "incorrect");
             }
-            else details.put(fieldName, "can't be empty");
+            else details.put(fieldName, "incorrect");
         }
-        else details.put(fieldName, "required field");
-
         return getResponse("success", result, details);
-    }
-
-
-    /*
-        UTILs
-    */
-
-
-    private Map<String, Object> parse(String body)
-    {
-        return JsonParserFactory.getJsonParser().parseMap(body);
-    }
-
-    private Object getValueFromJSON(String body, String fieldName)
-    {
-        return JsonParserFactory.getJsonParser().parseMap(body).get(fieldName);
-    }
-
-    private static Object getValue(Map<String, Object> map, String key)
-    {
-        return map.get(key);
-    }
-
-    private static String getResponse(String resultFieldName, boolean responseResult, Map<String, Object> details) throws JsonProcessingException
-    {
-        ObjectMapper mapper = new ObjectMapper();
-
-        if (details.size() == 0)
-
-            return String.format("{" +
-                    "\"%s\": %s" +
-                    "}", resultFieldName, responseResult);
-
-        else
-
-            return String.format("{" +
-                    "\"%s\": %s, " +
-                    "\"details\": %s" +
-                    "}", resultFieldName, responseResult, mapper.writeValueAsString(details));
     }
 }

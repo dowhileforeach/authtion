@@ -21,7 +21,7 @@ public class UserTest
         userTest.password = password;
         userTest.client = client;
 
-        Util.setAccessToken(userTest, loginExpectedStatus);
+        UtilTest.setAccessToken(userTest, loginExpectedStatus);
 
         return userTest;
     }

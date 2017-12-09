@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import static ru.dwfe.net.authtion.Util.isDefaultValueCheckOK;
+
 @Entity
 @Table(name = "users")
 public class User implements UserDetails, CredentialsContainer
@@ -229,32 +231,26 @@ public class User implements UserDetails, CredentialsContainer
         String fieldName = "id";
         int maxLength = 30;
 
-        if (id != null)
+        if (isDefaultValueCheckOK(id, fieldName, details))
         {
-            if (!id.isEmpty())
+            if (id.length() < maxLength)
             {
-                if (id.length() < maxLength)
+                if (!DISABLED_NAMES.contains(id))
                 {
-                    if (!DISABLED_NAMES.contains(id))
+                    if (emailRegexPattern.matcher(id).matches())
                     {
-                        if (emailRegexPattern.matcher(id).matches())
+                        if (!userService.existsById(id))
                         {
-                            if (!userService.existsById(id))
-                            {
-                                result = true;
-                            }
-                            else details.put(fieldName, "user is present");
+                            result = true;
                         }
-                        else details.put(fieldName, "must be valid e-mail address");
+                        else details.put(fieldName, "user is present");
                     }
-                    else details.put(fieldName, "not allowed");
+                    else details.put(fieldName, "must be valid e-mail address");
                 }
-                else details.put(fieldName, "length must be less than " + maxLength + " characters");
+                else details.put(fieldName, "not allowed");
             }
-            else details.put(fieldName, "can't be empty");
+            else details.put(fieldName, "length must be less than " + maxLength + " characters");
         }
-        else details.put(fieldName, "required field");
-
         return result;
     }
 
@@ -265,21 +261,15 @@ public class User implements UserDetails, CredentialsContainer
         int minLenght = 6;
         int maxLenght = 55;
 
-        if (password != null)
+        if (isDefaultValueCheckOK(password, fieldName, details))
         {
-            if (!password.isEmpty())
+            if (password.length() >= minLenght && password.length() <= maxLenght)
             {
-                if (password.length() >= minLenght && password.length() <= maxLenght)
-                {
-                    result = true;
-                }
-                else
-                    details.put(fieldName, "length must be greater than or equal to " + minLenght + " and less than or equal to " + maxLenght);
+                result = true;
             }
-            else details.put(fieldName, "can't be empty");
+            else
+                details.put(fieldName, "length must be greater than or equal to " + minLenght + " and less than or equal to " + maxLenght);
         }
-        else details.put(fieldName, "required field");
-
         return result;
     }
 
@@ -316,17 +306,6 @@ public class User implements UserDetails, CredentialsContainer
 
         if (user.getFirstName() == null) user.setFirstName("");
         if (user.getLastName() == null) user.setLastName("");
-    }
-
-    private static void checkStringValue(String fieldName, String value, Map<String, Object> map)
-    {
-        String result = null;
-
-        if (value == null) result = "required";
-        else if (value.length() == 0) result = "length can't be 0";
-
-        if (result != null)
-            map.put(fieldName, result);
     }
 
     public static String preparePassword(String rawPassword)

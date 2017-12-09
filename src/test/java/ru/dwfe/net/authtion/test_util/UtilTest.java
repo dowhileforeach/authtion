@@ -24,7 +24,7 @@ import static ru.dwfe.net.authtion.test_util.Variables_Global.PROTOCOL_HOST_PORT
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.AUTHORITY_to_AUTHORITY_STATUS;
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.RESOURCE_AUTHORITY_reqDATA;
 
-public class Util
+public class UtilTest
 {
     public static void setAccessToken(UserTest userTest, int loginExpectedStatus)
     {
@@ -258,6 +258,6 @@ public class Util
         return next.get(key);
     }
 
-    private static final Logger log = LoggerFactory.getLogger(Util.class);
+    private static final Logger log = LoggerFactory.getLogger(UtilTest.class);
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 }

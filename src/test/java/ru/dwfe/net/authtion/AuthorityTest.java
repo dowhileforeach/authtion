@@ -12,9 +12,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static ru.dwfe.net.authtion.test_util.Util.checkAllResources;
+import static ru.dwfe.net.authtion.test_util.UtilTest.checkAllResources;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
-import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.*;
+import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.TOTAL_ACCESS_TOKEN_COUNT;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AuthorityTest

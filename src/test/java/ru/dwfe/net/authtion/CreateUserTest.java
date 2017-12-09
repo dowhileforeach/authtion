@@ -18,10 +18,11 @@ import ru.dwfe.net.authtion.test_util.UserTest;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
-import static ru.dwfe.net.authtion.test_util.AuthorityType.*;
-import static ru.dwfe.net.authtion.test_util.Util.checkAllResources;
-import static ru.dwfe.net.authtion.test_util.Util.check_send_data;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static ru.dwfe.net.authtion.test_util.AuthorityType.USER;
+import static ru.dwfe.net.authtion.test_util.UtilTest.checkAllResources;
+import static ru.dwfe.net.authtion.test_util.UtilTest.check_send_data;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 import static ru.dwfe.net.authtion.test_util.Variables_for_CreateUserTest.*;
 
