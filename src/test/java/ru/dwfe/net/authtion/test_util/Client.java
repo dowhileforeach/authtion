@@ -1,4 +1,4 @@
-package ru.dwfe.net.authtion.util;
+package ru.dwfe.net.authtion.test_util;
 
 public class Client
 {

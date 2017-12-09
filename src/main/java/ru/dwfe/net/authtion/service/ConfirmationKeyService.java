@@ -5,11 +5,18 @@ import org.springframework.stereotype.Service;
 import ru.dwfe.net.authtion.dao.ConfirmationKey;
 import ru.dwfe.net.authtion.dao.repository.ConfirmationKeyRepository;
 
+import java.util.Optional;
+
 @Service
 public class ConfirmationKeyService
 {
     @Autowired
     private ConfirmationKeyRepository repository;
+
+    public Optional<ConfirmationKey> findById(String id)
+    {
+        return repository.findById(id);
+    }
 
     public ConfirmationKey findByKey(String key)
     {
@@ -25,4 +32,6 @@ public class ConfirmationKeyService
     {
         repository.delete(confirmationKey);
     }
+
+
 }

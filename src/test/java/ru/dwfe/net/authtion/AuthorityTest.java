@@ -5,16 +5,16 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.dwfe.net.authtion.util.User;
+import ru.dwfe.net.authtion.test_util.UserTest;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static ru.dwfe.net.authtion.util.Util.checkAllResources;
-import static ru.dwfe.net.authtion.util.Variables_Global.*;
-import static ru.dwfe.net.authtion.util.Variables_for_AuthorityTest.TOTAL_ACCESS_TOKEN_COUNT;
+import static ru.dwfe.net.authtion.test_util.Util.checkAllResources;
+import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
+import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AuthorityTest
@@ -22,45 +22,45 @@ public class AuthorityTest
     private static Set<String> access_tokens = new HashSet<>();
 
     @Test
-    public void _01_user() throws Exception
+    public void _01_USER() throws Exception
     {
-        logHead("user");
+        logHead("USER");
 
-        User user = user_USER;
-        access_tokens.add(user.access_token);
+        UserTest userTest = USERtest_USER;
+        access_tokens.add(userTest.access_token);
 
-        checkAllResources(user);
+        checkAllResources(userTest);
     }
 
     @Test
-    public void _02_admin() throws Exception
+    public void _02_ADMIN() throws Exception
     {
-        logHead("admin");
+        logHead("ADMIN");
 
-        User user = user_ADMIN;
-        access_tokens.add(user.access_token);
+        UserTest userTest = USERtest_ADMIN;
+        access_tokens.add(userTest.access_token);
 
-        checkAllResources(user);
+        checkAllResources(userTest);
     }
 
     @Test
-    public void _03_shop() throws Exception
+    public void _03_FRONTEND() throws Exception
     {
-        logHead("shop");
+        logHead("FRONTEND");
 
-        User user = user_FRONTEND;
-        access_tokens.add(user.access_token);
+        UserTest userTest = USERtest_FRONTEND;
+        access_tokens.add(userTest.access_token);
 
-        checkAllResources(user);
+        checkAllResources(userTest);
 
     }
 
     @Test
-    public void _04_anonymous() throws Exception
+    public void _04_ANONYMOUS() throws Exception
     {
-        logHead("anonymous");
+        logHead("ANONYMOUS");
 
-        checkAllResources(user_ANONYMOUS);
+        checkAllResources(USERtest_ANONYMOUS);
     }
 
     @Test

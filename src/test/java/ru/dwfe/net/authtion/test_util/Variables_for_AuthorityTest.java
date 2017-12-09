@@ -1,4 +1,4 @@
-package ru.dwfe.net.authtion.util;
+package ru.dwfe.net.authtion.test_util;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -6,8 +6,8 @@ import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.util.AuthorityType.*;
-import static ru.dwfe.net.authtion.util.Variables_Global.*;
+import static ru.dwfe.net.authtion.test_util.AuthorityType.*;
+import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 
 public class Variables_for_AuthorityTest
 {

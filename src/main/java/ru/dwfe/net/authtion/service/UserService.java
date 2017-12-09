@@ -52,4 +52,9 @@ public class UserService implements UserDetailsService
     {
         return repository.save(user);
     }
+
+    public void delete(User user)
+    {
+        repository.delete(user);
+    }
 }

@@ -1,6 +1,6 @@
-package ru.dwfe.net.authtion.util;
+package ru.dwfe.net.authtion.test_util;
 
-import static ru.dwfe.net.authtion.util.AuthorityType.*;
+import static ru.dwfe.net.authtion.test_util.AuthorityType.*;
 
 public class Variables_Global
 {
@@ -18,10 +18,10 @@ public class Variables_Global
     /*
         Users from backend database
     */
-    public static final User user_USER = User.of(USER, "user@ya.ru", "passUser", client_TRUSTED);
-    public static final User user_ADMIN = User.of(ADMIN, "admin@ya.ru", "passAdmin", client_UNTRUSTED);
-    public static final User user_FRONTEND = User.of(FRONTEND, "shop@ya.ru", "passFrontend", client_FRONTEND);
-    public static final User user_ANONYMOUS = User.getAnonymous();
+    public static final UserTest USERtest_USER = UserTest.of(USER, "user@ya.ru", "passUser", client_TRUSTED, 200);
+    public static final UserTest USERtest_ADMIN = UserTest.of(ADMIN, "admin@ya.ru", "passAdmin", client_UNTRUSTED, 200);
+    public static final UserTest USERtest_FRONTEND = UserTest.of(FRONTEND, "shop@ya.ru", "passFrontend", client_FRONTEND, 200);
+    public static final UserTest USERtest_ANONYMOUS = UserTest.getAnonymous();
 
     /*
         RESOURCES

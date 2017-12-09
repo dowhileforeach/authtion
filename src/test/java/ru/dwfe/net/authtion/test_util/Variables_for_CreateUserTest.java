@@ -1,4 +1,4 @@
-package ru.dwfe.net.authtion.util;
+package ru.dwfe.net.authtion.test_util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,10 @@ import java.util.Map;
 
 public class Variables_for_CreateUserTest
 {
+    public static final String ID_notExistedUser = "notExistedUser@ya.ru";
+    public static final String PASS_notExistedUser = "123456";
+
+
     /* BODIES */
 
     public static final List<Checker> checkers_for_checkUserId = List.of(
@@ -16,7 +20,7 @@ public class Variables_for_CreateUserTest
             Checker.of("canUse", false, Map.of("id", "user"),                           200, "details", "id", "must be valid e-mail address"),
             Checker.of("canUse", false, Map.of("id", ".uuqu@mail.ru"),                  200, "details", "id", "must be valid e-mail address"),
             Checker.of("canUse", false, Map.of("id", "user@ya.ru"),                     200, "details", "id", "user is present"),
-            Checker.of("canUse", true,  Map.of("id", "notExistedUser@ya.ru"),           200, null,      null, null)
+            Checker.of("canUse", true,  Map.of("id", ID_notExistedUser),                200, null,      null, null)
     );
 
     public static final List<Checker> checkers_for_checkUserPass = List.of(
@@ -38,17 +42,20 @@ public class Variables_for_CreateUserTest
                 Checker.of("success", false, Map.of("id", "user@ya.ru"),                     200, "details", "id", "user is present")
         ));
         list.addAll(List.of(
-                Checker.of("success", false, Map.of("id", "notExistedUser@ya.ru"),                       200, "details", "password", "required field"),
-                Checker.of("success", false, Map.of("id", "notExistedUser@ya.ru", "password", ""),       200, "details", "password", "can't be empty"),
-                Checker.of("success", false, Map.of("id", "notExistedUser@ya.ru", "password", "12345"),  200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
-                Checker.of("success", true,  Map.of("id", "notExistedUser@ya.ru", "password", "123456"), 200, null,      null,       null)
+                Checker.of("success", false, Map.of("id", ID_notExistedUser),                       200, "details", "password", "required field"),
+                Checker.of("success", false, Map.of("id", ID_notExistedUser, "password", ""),       200, "details", "password", "can't be empty"),
+                Checker.of("success", false, Map.of("id", ID_notExistedUser, "password", "12345"),  200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
+                Checker.of("success", true,  Map.of("id", ID_notExistedUser, "password", PASS_notExistedUser), 200, null,      null,       null)
         ));
         return list;
     }
 
-    public static final List<Checker> checkers_for_confirmUser = List.of(
-            Checker.of(null,      null,  Map.of(),             400, null,      "message", "Required String parameter 'key' is not present"),
-            Checker.of("success", false, Map.of("key", ""),    200, "details", "error",   "bad key"),
-            Checker.of("success", false, Map.of("key", "123"), 200, "details", "error",   "key does not exist")
-    );
+    public static List<Checker> checkers_for_confirmUser(String existedKey){
+        return List.of(
+                Checker.of(null,      null,  Map.of(),                  400, null,      "message", "Required String parameter 'key' is not present"),
+                Checker.of("success", false, Map.of("key", ""),         200, "details", "error",   "bad key"),
+                Checker.of("success", false, Map.of("key", "123"),      200, "details", "error",   "key does not exist"),
+                Checker.of("success", true,  Map.of("key", existedKey), 200, null,      null,      null)
+        );
+    }
 }

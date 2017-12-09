@@ -1,4 +1,4 @@
-package ru.dwfe.net.authtion.util;
+package ru.dwfe.net.authtion.test_util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,21 +19,21 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static ru.dwfe.net.authtion.util.Variables_Global.ALL_BEFORE_RESOURCE;
-import static ru.dwfe.net.authtion.util.Variables_Global.PROTOCOL_HOST_PORT;
-import static ru.dwfe.net.authtion.util.Variables_for_AuthorityTest.AUTHORITY_to_AUTHORITY_STATUS;
-import static ru.dwfe.net.authtion.util.Variables_for_AuthorityTest.RESOURCE_AUTHORITY_reqDATA;
+import static ru.dwfe.net.authtion.test_util.Variables_Global.ALL_BEFORE_RESOURCE;
+import static ru.dwfe.net.authtion.test_util.Variables_Global.PROTOCOL_HOST_PORT;
+import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.AUTHORITY_to_AUTHORITY_STATUS;
+import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.RESOURCE_AUTHORITY_reqDATA;
 
 public class Util
 {
-    public static void setAccessToken(User user)
+    public static void setAccessToken(UserTest userTest, int expectedStatus)
     {
-        Client client = user.client;
+        Client client = userTest.client;
 
-        Request req = auth_POST_Request(client.clientname, client.clientpass, user.username, user.password);
+        Request req = auth_POST_Request(client.clientname, client.clientpass, userTest.username, userTest.password);
         try
         {
-            user.access_token = login(req, client.maxTokenExpirationTime, client.minTokenExpirationTime);
+            userTest.access_token = login(req, expectedStatus, client.maxTokenExpirationTime, client.minTokenExpirationTime);
         }
         catch (Exception e)
         {
@@ -47,8 +47,8 @@ public class Util
                         + "/oauth/token?grant_type=password&username=%s&password=%s",
                 username, userpass);
 
-        log.info("Client credentials - {}:{}", clientname, clientpass);
-        log.info("User credentials - {}:{}", username, userpass);
+        log.info("Client's credentials - {}:{}", clientname, clientpass);
+        log.info("User's credentials - {}:{}", username, userpass);
 
         return new Request.Builder()
                 .url(url)
@@ -57,32 +57,35 @@ public class Util
                 .build();
     }
 
-    private static String login(Request req, int maxExpirationTime, int minExpirationTime) throws Exception
+    private static String login(Request req, int expectedStatus, int maxExpirationTime, int minExpirationTime) throws Exception
     {
         log.info("get Token");
         log.info("-> Authorization: {}", req.header("Authorization"));
         log.info("-> " + req.url().toString());
 
-        String body = performAuthentification(req);
-        Map<String, Object> map = parse(body);
+        String body = performAuthentification(req, expectedStatus);
 
-        String access_token = (String) getValueFromResponse(map, "access_token");
-        assertThat(access_token.length(), greaterThan(0));
+        String access_token = "";
+        if (expectedStatus == 200)
+        {
+            Map<String, Object> map = parse(body);
+            access_token = (String) getValueFromResponse(map, "access_token");
+            assertThat(access_token.length(), greaterThan(0));
 
-        assertThat((int) getValueFromResponse(map, "expires_in"),
-                is(both(greaterThan(minExpirationTime)).and(lessThanOrEqualTo(maxExpirationTime))));
-
+            assertThat((int) getValueFromResponse(map, "expires_in"),
+                    is(both(greaterThan(minExpirationTime)).and(lessThanOrEqualTo(maxExpirationTime))));
+        }
         return access_token;
     }
 
-    private static String performAuthentification(Request req) throws Exception
+    private static String performAuthentification(Request req, int expectedStatus) throws Exception
     {
         OkHttpClient client = new OkHttpClient();
         try (Response response = client.newCall(req).execute())
         {
             String body = response.body().string();
             log.info("<- token\n{}\n", body);
-            assertEquals(200, response.code());
+            assertEquals(expectedStatus, response.code());
 
             return body;
         }
@@ -169,9 +172,9 @@ public class Util
         return performRequest(req, expectedStatus);
     }
 
-    public static void checkAllResources(User user) throws Exception
+    public static void checkAllResources(UserTest userTest) throws Exception
     {
-        String access_token = user.access_token;
+        String access_token = userTest.access_token;
 
         RESOURCE_AUTHORITY_reqDATA.forEach((resource, next) -> {
 
@@ -188,7 +191,7 @@ public class Util
             else
                 req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
 
-            Map<AuthorityType, Integer> statusList = AUTHORITY_to_AUTHORITY_STATUS.get(user.level);
+            Map<AuthorityType, Integer> statusList = AUTHORITY_to_AUTHORITY_STATUS.get(userTest.level);
 
             performRequest(req, statusList.get(level));
         });
