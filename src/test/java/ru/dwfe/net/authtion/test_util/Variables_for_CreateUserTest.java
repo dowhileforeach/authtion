@@ -9,6 +9,13 @@ public class Variables_for_CreateUserTest
     public static final String ID_notExistedUser = "notExistedUser@ya.ru";
     public static final String PASS_notExistedUser = "123456";
 
+    public static final String confirm_NONisCreateNewUser_user = "NONisCreateNewUser@ya.ru";
+    public static final String confirm_NONisCreateNewUser_key = "NONisCreateNewUser";
+    public static final String confirm_SomethingWentWrong_user = "admin@ya.ru";
+    public static final String confirm_SomethingWentWrong_key = "SomethingWentWrong";
+
+
+
 
     /* BODIES */
 
@@ -52,10 +59,12 @@ public class Variables_for_CreateUserTest
 
     public static List<Checker> checkers_for_confirmUser(String existedKey){
         return List.of(
-                Checker.of(null,      null,  Map.of(),                  400, null,      "message", "Required String parameter 'key' is not present"),
-                Checker.of("success", false, Map.of("key", ""),         200, "details", "error",   "bad key"),
-                Checker.of("success", false, Map.of("key", "123"),      200, "details", "error",   "key does not exist"),
-                Checker.of("success", true,  Map.of("key", existedKey), 200, null,      null,      null)
+                Checker.of(null,      null,  Map.of(),                                      400, null,      "message", "Required String parameter 'key' is not present"),
+                Checker.of("success", false, Map.of("key", ""),                             200, "details", "error",   "bad key"),
+                Checker.of("success", false, Map.of("key", "123"),                          200, "details", "error",   "key does not exist"),
+                Checker.of("success", false, Map.of("key", confirm_NONisCreateNewUser_key), 200, "details", "error",   "key is not valid for confirmation after a new user is created"),
+                Checker.of("success", false, Map.of("key", confirm_SomethingWentWrong_key), 200, "details", "error",   "user is non locked. Something went wrong..."),
+                Checker.of("success", true,  Map.of("key", existedKey),                     200, null,      null,      null)
         );
     }
 }

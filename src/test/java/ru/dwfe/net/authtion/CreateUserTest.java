@@ -82,6 +82,11 @@ public class CreateUserTest
         assertEquals(true, confirmationKey.get().isCreateNewUser());
         assertEquals(false, confirmationKey.get().isRestoreUserPass());
 
+        ConfirmationKey key_NONisCreateNewUser = ConfirmationKey.of(confirm_NONisCreateNewUser_user, confirm_NONisCreateNewUser_key, false, true);
+        ConfirmationKey key_SomethingWentWrong = ConfirmationKey.of(confirm_SomethingWentWrong_user, confirm_SomethingWentWrong_key, true, false);
+        confirmationKeyService.save(key_NONisCreateNewUser);
+        confirmationKeyService.save(key_SomethingWentWrong);
+
         //confirmation process
         check_send_data(GET, resource_confirmUser, null, checkers_for_confirmUser(confirmationKey.get().getKey()));
 
@@ -96,6 +101,9 @@ public class CreateUserTest
         //Test for new User access to all resources
         UserTest userTest = UserTest.of(USER, user.get().getUsername(), PASS_notExistedUser, client_TRUSTED, 200);
         checkAllResources(userTest);
+
+        confirmationKeyService.delete(key_NONisCreateNewUser);
+        confirmationKeyService.delete(key_SomethingWentWrong);
 
         userService.delete(user.get());
         assertEquals(false, getUserById(ID_notExistedUser).isPresent());

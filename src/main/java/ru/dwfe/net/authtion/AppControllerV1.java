@@ -121,7 +121,7 @@ public class AppControllerV1
 
                             result = true;
                         }
-                        else details.put(fieldName, "This account is non locked. Something went wrong...");
+                        else details.put(fieldName, "user is non locked. Something went wrong...");
                     }
                     else
                     {
