@@ -40,28 +40,26 @@ public class CreateUserTest
     @Autowired
     ConfirmationKeyService confirmationKeyService;
 
-    private static String access_token = USERtest_FRONTEND.access_token;
-
     @Test
-    public void _01_checkUserId() throws Exception
+    public void _01_checkUserId()
     {
         logHead("Check User ID");
-        check_send_data(POST, resource_checkUserId, access_token, checkers_for_checkUserId);
+        check_send_data(POST, resource_checkUserId, USERtest_FRONTEND.access_token, checkers_for_checkUserId);
     }
 
     @Test
-    public void _02_checkUserPass() throws Exception
+    public void _02_checkUserPass()
     {
         logHead("Check User Pass");
-        check_send_data(POST, resource_checkUserPass, access_token, checkers_for_checkUserPass);
+        check_send_data(POST, resource_checkUserPass, USERtest_FRONTEND.access_token, checkers_for_checkUserPass);
 
     }
 
     @Test
-    public void _03_createUser() throws Exception
+    public void _03_createUser()
     {
         logHead("Create User");
-        check_send_data(POST, resource_createUser, access_token, checkers_for_createUser());
+        check_send_data(POST, resource_createUser, USERtest_FRONTEND.access_token, checkers_for_createUser());
 
         Optional<User> user = getUserById(ID_notExistedUser);
         assertEquals(true, user.isPresent());
@@ -74,7 +72,7 @@ public class CreateUserTest
     }
 
     @Test
-    public void _04_confirmUser() throws Exception
+    public void _04_confirmUser()
     {
         logHead("Confirm User");
 
@@ -105,9 +103,6 @@ public class CreateUserTest
 
         confirmationKeyService.delete(key_NONisCreateNewUser);
         confirmationKeyService.delete(key_SomethingWentWrong);
-
-        userService.delete(user.get());
-        assertEquals(false, getUserById(ID_notExistedUser).isPresent());
     }
 
     @Test
@@ -115,7 +110,20 @@ public class CreateUserTest
     {
         logHead("Change User Pass");
 
+        //oldpass
+        UserTest userTest = UserTest.of(USER, ID_notExistedUser, PASS_notExistedUser, client_TRUSTED, 200);
+        //change oldpass
+        check_send_data(POST, resource_changeUserPass, userTest.access_token, checkers_for_changeUserPass);
 
+        //oldpass
+        UserTest.of(USER, ID_notExistedUser, PASS_notExistedUser, client_TRUSTED, 400);
+        //newpass
+        userTest = UserTest.of(USER, ID_notExistedUser, NEWPASS_notExistedUser, client_TRUSTED, 200);
+        checkAllResources(userTest);
+
+        Optional<User> user = getUserById(ID_notExistedUser);
+        userService.delete(user.get());
+        assertEquals(false, getUserById(ID_notExistedUser).isPresent());
     }
 
     @Test

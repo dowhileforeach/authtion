@@ -69,7 +69,7 @@ public class AppControllerV1
         Map<String, Object> details = new HashMap<>();
 
         String password = (String) getValueFromJSON(body, "password");
-        result = User.canUsePassword(password, details);
+        result = User.canUsePassword(password, "password", details);
 
         return getResponse("canUse", result, details);
     }
@@ -143,7 +143,7 @@ public class AppControllerV1
 
     @RequestMapping(value = API + "/change-user-pass", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('USER')")
-    public String createUser(@RequestBody String body, OAuth2Authentication authentication) throws JsonProcessingException
+    public String changeUserPass(@RequestBody String body, OAuth2Authentication authentication) throws JsonProcessingException
     {
         boolean result = false;
         String fieldName = "oldpass";
@@ -157,9 +157,9 @@ public class AppControllerV1
         {
             String id = ((User) authentication.getPrincipal()).getId();
             User user = userService.findById(id).get();
-            if (User.preparePassword(oldpass).equals(user.getPassword()))
+            if (User.matchPassword("{bcrypt}", oldpass, user.getPassword()))
             {
-                if (User.canUsePassword(newpass, details))
+                if (User.canUsePassword(newpass, "newpass", details))
                 {
                     user.setPassword(User.preparePassword(newpass));
                     userService.save(user);

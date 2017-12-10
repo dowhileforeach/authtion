@@ -22,7 +22,7 @@ public class AuthorityTest
     private static Set<String> access_tokens = new HashSet<>();
 
     @Test
-    public void _01_USER() throws Exception
+    public void _01_USER()
     {
         logHead("USER");
 
@@ -33,7 +33,7 @@ public class AuthorityTest
     }
 
     @Test
-    public void _02_ADMIN() throws Exception
+    public void _02_ADMIN()
     {
         logHead("ADMIN");
 
@@ -44,7 +44,7 @@ public class AuthorityTest
     }
 
     @Test
-    public void _03_FRONTEND() throws Exception
+    public void _03_FRONTEND()
     {
         logHead("FRONTEND");
 
@@ -56,7 +56,7 @@ public class AuthorityTest
     }
 
     @Test
-    public void _04_ANONYMOUS() throws Exception
+    public void _04_ANONYMOUS()
     {
         logHead("ANONYMOUS");
 

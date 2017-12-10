@@ -8,6 +8,7 @@ public class Variables_for_CreateUserTest
 {
     public static final String ID_notExistedUser = "notExistedUser@ya.ru";
     public static final String PASS_notExistedUser = "123456";
+    public static final String NEWPASS_notExistedUser = "1234567";
 
     public static final String confirm_NONisCreateNewUser_user = "NONisCreateNewUser@ya.ru";
     public static final String confirm_NONisCreateNewUser_key = "NONisCreateNewUser";
@@ -69,7 +70,12 @@ public class Variables_for_CreateUserTest
     }
 
     public static final List<Checker> checkers_for_changeUserPass = List.of(
-
-
+            Checker.of("success", false, Map.of(),                                                                  200, "details", "oldpass", "required field"),
+            Checker.of("success", false, Map.of("oldpass", ""),                                                     200, "details", "oldpass", "can't be empty"),
+            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser),                                    200, "details", "newpass", "required field"),
+            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser, "newpass", ""),                     200, "details", "newpass", "can't be empty"),
+            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser, "newpass", "12345"),                200, "details", "newpass", "length must be greater than or equal to 6 and less than or equal to 55"),
+            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser + "1", "newpass", "1234567"),        200, "details", "oldpass", "incorrect"),
+            Checker.of("success", true,  Map.of("oldpass", PASS_notExistedUser, "newpass", NEWPASS_notExistedUser), 200, null, null, null)
     );
 }

@@ -57,13 +57,22 @@ public class UtilTest
                 .build();
     }
 
-    private static String login(Request req, int loginExpectedStatus, int maxExpirationTime, int minExpirationTime) throws Exception
+    private static String login(Request req, int loginExpectedStatus, int maxExpirationTime, int minExpirationTime)
     {
         log.info("get Token");
         log.info("-> Authorization: {}", req.header("Authorization"));
         log.info("-> " + req.url().toString());
 
-        String body = performAuthentification(req, loginExpectedStatus);
+        String body = "";
+        try
+        {
+            body = performAuthentification(req, loginExpectedStatus);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        assertEquals(false, body.isEmpty());
 
         String access_token = "";
         if (loginExpectedStatus == 200)
@@ -172,7 +181,7 @@ public class UtilTest
         return performRequest(req, expectedStatus);
     }
 
-    public static void checkAllResources(UserTest userTest) throws Exception
+    public static void checkAllResources(UserTest userTest)
     {
         String access_token = userTest.access_token;
 

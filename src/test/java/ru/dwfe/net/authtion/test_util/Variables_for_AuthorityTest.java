@@ -21,7 +21,8 @@ public class Variables_for_AuthorityTest
             resource_checkUserId, Map.of(FRONTEND, Map.of(POST, Map.of("id", "user"))),
             resource_checkUserPass, Map.of(FRONTEND, Map.of(POST, Map.of("password", "some password"))),
             resource_createUser, Map.of(FRONTEND, Map.of(POST, Map.of("id", "user", "password", "some password", "firstName", "some first name", "lastName", ""))),
-            resource_confirmUser, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString")))
+            resource_confirmUser, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))),
+            resource_changeUserPass, Map.of(USER, Map.of(POST, Map.of()))
     );
 
 

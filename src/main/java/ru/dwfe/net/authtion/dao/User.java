@@ -254,10 +254,9 @@ public class User implements UserDetails, CredentialsContainer
         return result;
     }
 
-    public static boolean canUsePassword(String password, Map<String, Object> details)
+    public static boolean canUsePassword(String password, String fieldName, Map<String, Object> details)
     {
         boolean result = false;
-        String fieldName = "password";
         int minLenght = 6;
         int maxLenght = 55;
 
@@ -279,7 +278,7 @@ public class User implements UserDetails, CredentialsContainer
 
         if (User.canUseID(user.getId(), userService, details))
         {
-            if (User.canUsePassword(user.getPassword(), details))
+            if (User.canUsePassword(user.getPassword(), "password", details))
             {
                 result = true;
             }
@@ -311,6 +310,12 @@ public class User implements UserDetails, CredentialsContainer
     public static String preparePassword(String rawPassword)
     {
         return "{bcrypt}" + new BCryptPasswordEncoder().encode(rawPassword);
+    }
+
+    public static boolean matchPassword(String type, String rawPassword, String rawEncodedPassword)
+    {
+        String encodedPassword = rawEncodedPassword.replace(type, "");
+        return new BCryptPasswordEncoder().matches(rawPassword, encodedPassword);
     }
 
     private static final Set<String> DISABLED_NAMES = Set.of("Admin", "admin", "Administrator", "administrator");
