@@ -93,6 +93,22 @@ CREATE TABLE `mailing_confirm_email` (
   COLLATE = utf8mb4_unicode_ci;
 
 
+DROP TABLE IF EXISTS `mailing_restore_password`;
+CREATE TABLE `mailing_restore_password` (
+  `user`        VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci  NOT NULL,
+  `created`     DATETIME                                NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`     DATETIME                                         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user`),
+  UNIQUE KEY `mailing_restore_password_user_uindex` (`user`),
+  CONSTRAINT `mailing_restore_password_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+    ON DELETE CASCADE
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+
 LOCK TABLES `users` WRITE, `authorities` WRITE, `user_authority` WRITE;
 INSERT INTO `users` VALUES
   ('admin@ya.ru', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07'),

@@ -289,6 +289,7 @@ public class User implements UserDetails, CredentialsContainer
         user.setCredentialsNonExpired(true);
         user.setAccountNonLocked(true);
         user.setEnabled(true);
+        user.setEmailConfirmed(false);
 
         Authority authority = new Authority();
         authority.setAuthority("USER");

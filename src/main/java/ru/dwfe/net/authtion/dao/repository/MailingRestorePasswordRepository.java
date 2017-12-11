@@ -3,9 +3,10 @@ package ru.dwfe.net.authtion.dao.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
+import ru.dwfe.net.authtion.dao.MailingRestorePassword;
 
 @Repository
-public interface MailingConfirmEmailRepository extends CrudRepository<MailingConfirmEmail, String>
+public interface MailingRestorePasswordRepository extends CrudRepository<MailingRestorePassword, String>
 {
-    MailingConfirmEmail findByConfirmKey(String confirmKey);
+    MailingRestorePassword findByConfirmKey(String confirmKey);
 }

@@ -51,7 +51,7 @@ public class Util
     {
         ObjectMapper mapper = new ObjectMapper();
 
-        if (details.size() == 0)
+        if (details == null || details.size() == 0)
 
             return String.format("{" +
                     "\"%s\": %s" +

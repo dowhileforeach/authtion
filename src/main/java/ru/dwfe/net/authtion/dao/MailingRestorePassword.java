@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mailing_confirm_email")
-public class MailingConfirmEmail
+@Table(name = "mailing_restore_password")
+public class MailingRestorePassword
 {
     @Id
     @Column
@@ -19,9 +19,9 @@ public class MailingConfirmEmail
     private String confirmKey;
 
 
-    public static MailingConfirmEmail of(String user)
+    public static MailingRestorePassword of(String user)
     {
-        MailingConfirmEmail confirm = new MailingConfirmEmail();
+        MailingRestorePassword confirm = new MailingRestorePassword();
         confirm.setUser(user);
         confirm.setConfirmKey(Util.getUniqStr(30));
         return confirm;
@@ -54,7 +54,7 @@ public class MailingConfirmEmail
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MailingConfirmEmail that = (MailingConfirmEmail) o;
+        MailingRestorePassword that = (MailingRestorePassword) o;
 
         return user.equals(that.user);
     }

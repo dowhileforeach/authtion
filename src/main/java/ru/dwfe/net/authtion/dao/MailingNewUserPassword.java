@@ -62,4 +62,13 @@ public class MailingNewUserPassword
     {
         return user.hashCode();
     }
+
+    @Override
+    public String toString()
+    {
+        return "{\n" +
+                " \"user\": " + user + ",\n" +
+                " \"password\": \"****\"\n" +
+                "}";
+    }
 }

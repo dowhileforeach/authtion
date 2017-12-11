@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.dwfe.net.authtion.dao.ConfirmationKey;
+import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
+import ru.dwfe.net.authtion.dao.MailingRestorePassword;
 import ru.dwfe.net.authtion.dao.MailingNewUserPassword;
 import ru.dwfe.net.authtion.dao.User;
+import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
+import ru.dwfe.net.authtion.dao.repository.MailingRestorePasswordRepository;
 import ru.dwfe.net.authtion.dao.repository.MailingNewUserPasswordRepository;
-import ru.dwfe.net.authtion.service.ConfirmationKeyService;
 import ru.dwfe.net.authtion.service.UserService;
 
 import java.io.IOException;
@@ -30,6 +32,10 @@ public class AppControllerV1
 
     @Autowired
     MailingNewUserPasswordRepository mailingNewUserPasswordRepository;
+    @Autowired
+    MailingConfirmEmailRepository mailingConfirmEmailRepository;
+    @Autowired
+    MailingRestorePasswordRepository mailingRestorePasswordRepository;
 
     @RequestMapping(API + "/public")
     public String publicResource()
@@ -106,46 +112,50 @@ public class AppControllerV1
             if (!isDefaultCheckOK(receivedPassword))
             { //If the password was not passed, then it is necessary to send an automatically generated password to the user
                 mailingNewUserPasswordRepository.save(MailingNewUserPassword.of(user.getId(), user.getPassword()));
+
+                //TODO send e-mail
             }
             result = true;
         }
         return getResponse("success", result, details);
     }
 
+    @RequestMapping(value = API + "/req-confirm-email")
+    @PreAuthorize("hasAuthority('USER')")
+    public String requestConfirmEmail(OAuth2Authentication authentication) throws JsonProcessingException
+    {
+        String id = ((User) authentication.getPrincipal()).getId();
+        mailingConfirmEmailRepository.save(MailingConfirmEmail.of(id));
+
+        //TODO send e-mail
+
+        return getResponse("success", true, null);
+    }
+
     @RequestMapping(API + "/confirm-email")
-    public String confirmUser(@RequestParam String key) throws JsonProcessingException
+    public String confirmEmail(@RequestParam String key) throws JsonProcessingException
     {
         boolean result = false;
         String fieldName = "error";
         Map<String, Object> details = new HashMap<>();
 
-        if (key != null && !key.isEmpty())
+        if (isDefaultCheckOK(key, fieldName, details))
         {
-            ConfirmationKey confirmationKey = confirmationKeyService.findByKey(key);
-            if (confirmationKey != null)
+            MailingConfirmEmail confirm = mailingConfirmEmailRepository.findByConfirmKey(key);
+            if (confirm != null)
             {
-                if (confirmationKey.isCreateNewUser()) //key is special for create new user
-                {
-                    //The User is guaranteed to exist because: FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE
-                    User user = userService.findById(confirmationKey.getUser()).get();
-                    if (!user.isAccountNonLocked()) //must be locked
-                    {
-                        user.setAccountNonLocked(true); //The user is now unlocked
-                        userService.save(user);
+                //The User is guaranteed to exist because: FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE
+                User user = userService.findById(confirm.getUser()).get();
+                user.setEmailConfirmed(true); //Now email is confirmed
+                userService.save(user);
 
-                        //delete this confirmation key from database
-                        confirmationKeyService.delete(confirmationKey);
+                //delete this confirmation key from database
+                mailingConfirmEmailRepository.delete(confirm);
 
-                        result = true;
-                    }
-                    else details.put(fieldName, "user is non locked. Something went wrong...");
-                }
-                else details.put(fieldName, "key is not valid for confirmation after a new user is created");
+                result = true;
             }
             else details.put(fieldName, "key does not exist");
         }
-        else details.put(fieldName, "bad key");
-
         return getResponse("success", result, details);
     }
 
@@ -192,26 +202,35 @@ public class AppControllerV1
 
         if (isDefaultCheckOK(id, "id", details))
         {
-            Optional<ConfirmationKey> keyById = confirmationKeyService.findById(id);
-            if (!keyById.isPresent() || keyById.get().isRestoreUserPass())
+            Optional<User> userById = userService.findById(id);
+            if (userById.isPresent())
             {
-                confirmationKeyService.save(ConfirmationKey.restoreUserPass(id));
+                MailingRestorePassword confirm = MailingRestorePassword.of(id);
+                mailingRestorePasswordRepository.save(confirm);
 
                 //TODO send e-mail
+            }
+            else details.put(fieldName, "user doesn't exist");
+        }
+        return getResponse("success", result, details);
+    }
 
+    @RequestMapping(API + "/confirm-restore-user-pass")
+    public String confirmRestoreUserPass(@RequestParam String key) throws JsonProcessingException
+    {
+        boolean result = false;
+        String fieldName = "error";
+        Map<String, Object> details = new HashMap<>();
+
+        if (isDefaultCheckOK(key, fieldName, details))
+        {
+            MailingRestorePassword confirm = mailingRestorePasswordRepository.findByConfirmKey(key);
+            if (confirm != null)
+            {
+                details.put("id", confirm.getUser());
                 result = true;
             }
-            else
-            { //confimation key already exists in database AND it isn't for restore user password
-                if (keyById.get().isCreateNewUser())
-                {
-                    details.put(fieldName, "your account has not yet been confirmed");
-
-                    //TODO send e-mail
-                }
-                else
-                    details.put(fieldName, "please contact support");
-            }
+            else details.put(fieldName, "key does not exist");
         }
         return getResponse("success", result, details);
     }
