@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
 
 @Repository
-public interface MailingConfirmEmailRepository extends CrudRepository<MailingConfirmEmail, Long>
+public interface MailingConfirmEmailRepository extends CrudRepository<MailingConfirmEmail, String>
 {
     MailingConfirmEmail findByConfirmKey(String confirmKey);
 }

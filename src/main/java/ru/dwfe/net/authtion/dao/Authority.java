@@ -21,6 +21,13 @@ public class Authority implements GrantedAuthority
     @Column
     private String description;
 
+    public static Authority of(String authorityName)
+    {
+        Authority authority = new Authority();
+        authority.setAuthority(authorityName);
+        return authority;
+    }
+
     @Override
     public String getAuthority()
     {

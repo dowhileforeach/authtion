@@ -13,13 +13,13 @@ public class MailingRestorePassword
 {
     @Id
     @Column
-    private Long user;
+    private String user;
 
     @Column
     private String confirmKey;
 
 
-    public static MailingRestorePassword of(Long user)
+    public static MailingRestorePassword of(String user)
     {
         MailingRestorePassword confirm = new MailingRestorePassword();
         confirm.setUser(user);
@@ -27,12 +27,12 @@ public class MailingRestorePassword
         return confirm;
     }
 
-    public Long getUser()
+    public String getUser()
     {
         return user;
     }
 
-    public void setUser(Long user)
+    public void setUser(String user)
     {
         this.user = user;
     }

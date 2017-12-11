@@ -26,7 +26,7 @@ public class AuthorityTest
     {
         logHead("USER");
 
-        UserTest userTest = USERtest_USER;
+        UserTest userTest = USER_user;
         access_tokens.add(userTest.access_token);
 
         checkAllResources(userTest);
@@ -37,7 +37,7 @@ public class AuthorityTest
     {
         logHead("ADMIN");
 
-        UserTest userTest = USERtest_ADMIN;
+        UserTest userTest = ADMIN_user;
         access_tokens.add(userTest.access_token);
 
         checkAllResources(userTest);
@@ -48,7 +48,7 @@ public class AuthorityTest
     {
         logHead("FRONTEND");
 
-        UserTest userTest = USERtest_FRONTEND;
+        UserTest userTest = FRONTEND_user;
         access_tokens.add(userTest.access_token);
 
         checkAllResources(userTest);
@@ -60,7 +60,7 @@ public class AuthorityTest
     {
         logHead("ANONYMOUS");
 
-        checkAllResources(USERtest_ANONYMOUS);
+        checkAllResources(ANONYMOUS_user);
     }
 
     @Test

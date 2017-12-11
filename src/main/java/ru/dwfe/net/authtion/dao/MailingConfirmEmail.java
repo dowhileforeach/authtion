@@ -13,13 +13,13 @@ public class MailingConfirmEmail
 {
     @Id
     @Column
-    private Long user;
+    private String user;
 
     @Column
     private String confirmKey;
 
 
-    public static MailingConfirmEmail of(Long user)
+    public static MailingConfirmEmail of(String user)
     {
         MailingConfirmEmail confirm = new MailingConfirmEmail();
         confirm.setUser(user);
@@ -27,12 +27,12 @@ public class MailingConfirmEmail
         return confirm;
     }
 
-    public Long getUser()
+    public String getUser()
     {
         return user;
     }
 
-    public void setUser(Long user)
+    public void setUser(String user)
     {
         this.user = user;
     }

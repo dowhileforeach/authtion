@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS `users`;
 SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE `users` (
   `id`                      BIGINT(20)                              NOT NULL AUTO_INCREMENT,
-  `email`                   VARCHAR(100)
+  `email`                   VARCHAR(50)
                             COLLATE utf8mb4_unicode_ci              NOT NULL,
   `password`                VARCHAR(100)
                             COLLATE utf8mb4_unicode_ci              NOT NULL,
@@ -67,13 +67,14 @@ CREATE TABLE `user_authority` (
 
 DROP TABLE IF EXISTS `mailing_new_user_password`;
 CREATE TABLE `mailing_new_user_password` (
-  `user`     BIGINT(20)                             NOT NULL,
+  `user`     VARCHAR(50)
+             COLLATE utf8mb4_unicode_ci             NOT NULL,
   `password` VARCHAR(60) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created`  DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated`  DATETIME                                        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user`),
   UNIQUE KEY `mailing_new_user_password_user_uindex` (`user`),
-  CONSTRAINT `mailing_new_user_password_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+  CONSTRAINT `mailing_new_user_password_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`email`)
     ON DELETE CASCADE
 )
   ENGINE = InnoDB
@@ -83,13 +84,14 @@ CREATE TABLE `mailing_new_user_password` (
 
 DROP TABLE IF EXISTS `mailing_confirm_email`;
 CREATE TABLE `mailing_confirm_email` (
-  `user`        BIGINT(20)                             NOT NULL,
+  `user`        VARCHAR(50)
+                COLLATE utf8mb4_unicode_ci             NOT NULL,
   `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated`     DATETIME                                        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user`),
   UNIQUE KEY `mailing_confirm_email_user_uindex` (`user`),
-  CONSTRAINT `mailing_confirm_email_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+  CONSTRAINT `mailing_confirm_email_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`email`)
     ON DELETE CASCADE
 )
   ENGINE = InnoDB
@@ -99,13 +101,14 @@ CREATE TABLE `mailing_confirm_email` (
 
 DROP TABLE IF EXISTS `mailing_restore_password`;
 CREATE TABLE `mailing_restore_password` (
-  `user`        BIGINT(20)                             NOT NULL,
+  `user`        VARCHAR(50)
+                COLLATE utf8mb4_unicode_ci             NOT NULL,
   `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated`     DATETIME                                        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user`),
   UNIQUE KEY `mailing_restore_password_user_uindex` (`user`),
-  CONSTRAINT `mailing_restore_password_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+  CONSTRAINT `mailing_restore_password_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`email`)
     ON DELETE CASCADE
 )
   ENGINE = InnoDB

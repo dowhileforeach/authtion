@@ -2,24 +2,12 @@ package ru.dwfe.net.authtion;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import ru.dwfe.net.authtion.dao.User;
-import ru.dwfe.net.authtion.service.UserService;
-import ru.dwfe.net.authtion.test_util.UserTest;
-
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.test_util.AuthorityType.USER;
-import static ru.dwfe.net.authtion.test_util.UtilTest.checkAllResources;
 import static ru.dwfe.net.authtion.test_util.UtilTest.check_send_data;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 import static ru.dwfe.net.authtion.test_util.Variables_for_CreateUserTest.*;
@@ -28,8 +16,8 @@ import static ru.dwfe.net.authtion.test_util.Variables_for_CreateUserTest.*;
     https://spring.io/guides/gs/testing-web/
 */
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CreateUserTest
 {
@@ -37,29 +25,29 @@ public class CreateUserTest
 //    UserService userService;
 //    @Autowired
 //    ConfirmationKeyService confirmationKeyService;
-//
-//    @Test
-//    public void _01_checkUserId()
-//    {
-//        logHead("Check User ID");
-//        check_send_data(POST, resource_checkUserId, USERtest_FRONTEND.access_token, checkers_for_checkUserId);
-//    }
-//
-//    @Test
-//    public void _02_checkUserPass()
-//    {
-//        logHead("Check User Pass");
-//        check_send_data(POST, resource_checkUserPass, USERtest_FRONTEND.access_token, checkers_for_checkUserPass);
-//
-//    }
-//
+
+    @Test
+    public void _01_checkUserEmail()
+    {
+        logHead("Check User E-mail");
+        check_send_data(POST, resource_checkUserEmail, FRONTEND_user.access_token, checkers_for_checkUserEmail);
+    }
+
+    @Test
+    public void _02_checkUserPass()
+    {
+        logHead("Check User Pass");
+        check_send_data(POST, resource_checkUserPass, FRONTEND_user.access_token, checkers_for_checkUserPass);
+
+    }
+
 //    @Test
 //    public void _03_createUser()
 //    {
 //        logHead("Create User");
-//        check_send_data(POST, resource_createUser, USERtest_FRONTEND.access_token, checkers_for_createUser());
+//        check_send_data(POST, resource_createUser, FRONTEND_user.access_token, checkers_for_createUser());
 //
-//        Optional<User> user = getUserById(ID_notExistedUser);
+//        Optional<User> user = getUserById(EMAIL_notExistedUser);
 //        assertEquals(true, user.isPresent());
 //
 //        //New user is locked. Will be unlocked after confirmation
@@ -74,7 +62,7 @@ public class CreateUserTest
 //    {
 //        logHead("Confirm User");
 //
-//        Optional<ConfirmationKey> confirmationKey = getConfirmationKey(ID_notExistedUser);
+//        Optional<ConfirmationKey> confirmationKey = getConfirmationKey(EMAIL_notExistedUser);
 //        assertEquals(true, confirmationKey.isPresent());
 //        assertEquals(true, confirmationKey.get().isCreateNewUser());
 //        assertEquals(false, confirmationKey.get().isRestoreUserPass());
@@ -88,9 +76,9 @@ public class CreateUserTest
 //        check_send_data(GET, resource_confirmUser, null, checkers_for_confirmUser(confirmationKey.get().getKey()));
 //
 //        //Confirmation key must be removed after confirmation
-//        assertEquals(false, getConfirmationKey(ID_notExistedUser).isPresent());
+//        assertEquals(false, getConfirmationKey(EMAIL_notExistedUser).isPresent());
 //
-//        Optional<User> user = getUserById(ID_notExistedUser);
+//        Optional<User> user = getUserById(EMAIL_notExistedUser);
 //
 //        //The new User must be unlocked after confirmation
 //        assertEquals(true, user.get().isAccountNonLocked());
@@ -109,19 +97,19 @@ public class CreateUserTest
 //        logHead("Change User Pass");
 //
 //        //oldpass
-//        UserTest userTest = UserTest.of(USER, ID_notExistedUser, PASS_notExistedUser, client_TRUSTED, 200);
+//        UserTest userTest = UserTest.of(USER, EMAIL_notExistedUser, PASS_notExistedUser, client_TRUSTED, 200);
 //        //change oldpass
 //        check_send_data(POST, resource_changeUserPass, userTest.access_token, checkers_for_changeUserPass);
 //
 //        //oldpass
-//        UserTest.of(USER, ID_notExistedUser, PASS_notExistedUser, client_TRUSTED, 400);
+//        UserTest.of(USER, EMAIL_notExistedUser, PASS_notExistedUser, client_TRUSTED, 400);
 //        //newpass
-//        userTest = UserTest.of(USER, ID_notExistedUser, NEWPASS_notExistedUser, client_TRUSTED, 200);
+//        userTest = UserTest.of(USER, EMAIL_notExistedUser, NEWPASS_notExistedUser, client_TRUSTED, 200);
 //        checkAllResources(userTest);
 //
-//        Optional<User> user = getUserById(ID_notExistedUser);
+//        Optional<User> user = getUserById(EMAIL_notExistedUser);
 //        userService.delete(user.get());
-//        assertEquals(false, getUserById(ID_notExistedUser).isPresent());
+//        assertEquals(false, getUserById(EMAIL_notExistedUser).isPresent());
 //    }
 //
 //    @Test
@@ -149,12 +137,12 @@ public class CreateUserTest
 //        return userService.findById(id);
 //    }
 //
-//    private static void logHead(String who)
-//    {
-//        log.info("\n=============================="
-//                + "\n {} "
-//                + "\n------------------------------", who);
-//    }
-//
-//    private static final Logger log = LoggerFactory.getLogger(CreateUserTest.class);
+    private static void logHead(String who)
+    {
+        log.info("\n=============================="
+                + "\n {} "
+                + "\n------------------------------", who);
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(CreateUserTest.class);
 }

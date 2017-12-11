@@ -3,10 +3,7 @@ package ru.dwfe.net.authtion;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
-import ru.dwfe.net.authtion.dao.MailingRestorePassword;
 import ru.dwfe.net.authtion.dao.MailingNewUserPassword;
 import ru.dwfe.net.authtion.dao.User;
 import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
@@ -14,12 +11,11 @@ import ru.dwfe.net.authtion.dao.repository.MailingRestorePasswordRepository;
 import ru.dwfe.net.authtion.dao.repository.MailingNewUserPasswordRepository;
 import ru.dwfe.net.authtion.service.UserService;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.Util.*;
 import static ru.dwfe.net.authtion.dao.User.*;
 
@@ -58,69 +54,73 @@ public class AppControllerV1
         return userService.findAll();
     }
 
-//    @RequestMapping(value = API + "/check-user-id", method = RequestMethod.POST)
-//    @PreAuthorize("hasAuthority('FRONTEND')")
-//    public String checkUserId(@RequestBody String body) throws JsonProcessingException
-//    {
-//        boolean result;
-//        Map<String, Object> details = new HashMap<>();
-//
-//        String id = (String) getValueFromJSON(body, "id");
-//        result = canUseID(id, userService, details);
-//
-//        return getResponse("canUse", result, details);
-//    }
-//
-//    @RequestMapping(value = API + "/check-user-pass", method = RequestMethod.POST)
-//    @PreAuthorize("hasAuthority('FRONTEND')")
-//    public String checkUserPass(@RequestBody String body) throws JsonProcessingException
-//    {
-//        boolean result;
-//        Map<String, Object> details = new HashMap<>();
-//
-//        String password = (String) getValueFromJSON(body, "password");
-//        result = canUsePassword(password, "password", details);
-//
-//        return getResponse("canUse", result, details);
-//    }
-//
-//    @RequestMapping(value = API + "/create-user", method = RequestMethod.POST)
-//    @PreAuthorize("hasAuthority('FRONTEND')")
-//    public String createUser(@RequestBody User user) throws IOException
-//    {
-//        boolean result = false;
-//        Map<String, Object> details = new HashMap<>();
-//        String receivedPassword = user.getPassword();
-//
-//        if (canUseID(user.getId(), userService, details))
-//        {
-//            if (isDefaultCheckOK(receivedPassword))
-//            {   //the password was passed
-//                if (canUsePassword(receivedPassword, "password", details))
-//                    result = true;
-//            }
-//            else user.setPassword(getUniqStr(7));
-//        }
-//
-//        if (details.size() == 0)
-//        {
-//            //prepare
-//            prepareNewUser(user);
-//
-//            //put user to the database
-//            userService.save(user);
-//
-//            if (!isDefaultCheckOK(receivedPassword))
-//            { //If the password was not passed, then it is necessary to send an automatically generated password to the user
-//                mailingNewUserPasswordRepository.save(MailingNewUserPassword.of(user.getId(), user.getPassword()));
-//
-//                //TODO send e-mail
-//            }
-//            result = true;
-//        }
-//        return getResponse("success", result, details);
-//    }
-//
+    @RequestMapping(value = API + "/check-user-email", method = POST)
+    @PreAuthorize("hasAuthority('FRONTEND')")
+    public String checkUserId(@RequestBody String body)
+    {
+        boolean result;
+        Map<String, Object> details = new HashMap<>();
+
+        String email = (String) getValueFromJSON(body, "email");
+        result = canUseEmail(email, userService, details);
+
+        return getResponse("canUse", result, details);
+    }
+
+    @RequestMapping(value = API + "/check-user-pass", method = POST)
+    @PreAuthorize("hasAuthority('FRONTEND')")
+    public String checkUserPass(@RequestBody String body)
+    {
+        boolean result;
+        Map<String, Object> details = new HashMap<>();
+
+        String password = (String) getValueFromJSON(body, "password");
+        result = canUsePassword(password, "password", details);
+
+        return getResponse("canUse", result, details);
+    }
+
+    @RequestMapping(value = API + "/create-user", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('FRONTEND')")
+    public String createUser(@RequestBody User user)
+    {
+        boolean result = false;
+        Map<String, Object> details = new HashMap<>();
+        String automaticallyGeneratedPassword = "";
+
+        if (canUseEmail(user.getEmail(), userService, details))
+        {
+            String receivedPassword = user.getPassword();
+            if (isDefaultCheckOK(receivedPassword))
+            {   //if password was passed
+                canUsePassword(receivedPassword, "password", details);
+            }
+            else
+            {  //if password wasn't passed
+                automaticallyGeneratedPassword = getUniqStr(7);
+                user.setPassword(automaticallyGeneratedPassword);
+            }
+        }
+        if (details.size() == 0)
+        {
+            //prepare
+            prepareNewUser(user);
+
+            //put user to the database
+            userService.save(user);
+
+            if (!automaticallyGeneratedPassword.isEmpty())
+            { //If the password was not passed, then it is necessary to send an automatically generated password to the user
+                mailingNewUserPasswordRepository
+                        .save(MailingNewUserPassword.of(user.getEmail(), automaticallyGeneratedPassword));
+
+                //TODO send e-mail
+            }
+            result = true;
+        }
+        return getResponse("success", result, details);
+    }
+
 //    @RequestMapping(value = API + "/req-confirm-email")
 //    @PreAuthorize("hasAuthority('USER')")
 //    public String requestConfirmEmail(OAuth2Authentication authentication) throws JsonProcessingException

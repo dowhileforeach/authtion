@@ -18,10 +18,10 @@ public class Variables_Global
     /*
         Users from backend database
     */
-    public static final UserTest USERtest_USER = UserTest.of(USER, "user@ya.ru", "passUser", client_TRUSTED, 200);
-    public static final UserTest USERtest_ADMIN = UserTest.of(ADMIN, "admin@ya.ru", "passAdmin", client_UNTRUSTED, 200);
-    public static final UserTest USERtest_FRONTEND = UserTest.of(FRONTEND, "shop@ya.ru", "passFrontend", client_FRONTEND, 200);
-    public static final UserTest USERtest_ANONYMOUS = UserTest.getAnonymous();
+    public static final UserTest USER_user = UserTest.of(USER, "user@ya.ru", "passUser", client_TRUSTED, 200);
+    public static final UserTest ADMIN_user = UserTest.of(ADMIN, "admin@ya.ru", "passAdmin", client_UNTRUSTED, 200);
+    public static final UserTest FRONTEND_user = UserTest.of(FRONTEND, "shop@ya.ru", "passFrontend", client_FRONTEND, 200);
+    public static final UserTest ANONYMOUS_user = UserTest.getAnonymous();
 
     /*
         RESOURCES
@@ -29,9 +29,9 @@ public class Variables_Global
     public static final String resource_public = "/public";
     public static final String resource_cities = "/cities";
     public static final String resource_users = "/users";
-//    public static final String resource_checkUserId = "/check-user-id";
-//    public static final String resource_checkUserPass = "/check-user-pass";
-//    public static final String resource_createUser = "/create-user";
+    public static final String resource_checkUserEmail = "/check-user-email";
+    public static final String resource_checkUserPass = "/check-user-pass";
+    public static final String resource_createUser = "/create-user";
 //    public static final String resource_confirmUser = "/confirm-user";
 //    public static final String resource_changeUserPass = "/change-user-pass";
 }

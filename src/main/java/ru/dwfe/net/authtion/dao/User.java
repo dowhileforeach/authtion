@@ -262,29 +262,25 @@ public class User implements UserDetails, CredentialsContainer
         UTILs
     */
 
-    public static boolean canUseID(String id, UserService userService, Map<String, Object> details)
+    public static boolean canUseEmail(String email, UserService userService, Map<String, Object> details)
     {
         boolean result = false;
-        String fieldName = "id";
-        int maxLength = 30;
+        String fieldName = "email";
+        int maxLength = 50;
 
-        if (isDefaultCheckOK(id, fieldName, details))
+        if (isDefaultCheckOK(email, fieldName, details))
         {
-            if (id.length() < maxLength)
+            if (email.length() < maxLength)
             {
-                if (!DISABLED_NAMES.contains(id))
+                if (emailRegexPattern.matcher(email).matches())
                 {
-                    if (emailRegexPattern.matcher(id).matches())
+                    if (!userService.existsByEmail(email))
                     {
-                        if (!userService.existsByEmail(id))
-                        {
-                            result = true;
-                        }
-                        else details.put(fieldName, "user is present");
+                        result = true;
                     }
-                    else details.put(fieldName, "must be valid e-mail address");
+                    else details.put(fieldName, "user is present");
                 }
-                else details.put(fieldName, "not allowed");
+                else details.put(fieldName, "must be valid e-mail address");
             }
             else details.put(fieldName, "length must be less than " + maxLength + " characters");
         }
@@ -303,8 +299,8 @@ public class User implements UserDetails, CredentialsContainer
             {
                 result = true;
             }
-            else
-                details.put(fieldName, "length must be greater than or equal to " + minLenght + " and less than or equal to " + maxLenght);
+            else details.put(fieldName, "length must be greater than or equal to "
+                    + minLenght + " and less than or equal to " + maxLenght);
         }
         return result;
     }
@@ -319,9 +315,7 @@ public class User implements UserDetails, CredentialsContainer
         user.setEnabled(true);
         user.setEmailConfirmed(false);
 
-        Authority authority = new Authority();
-        authority.setAuthority("USER");
-        user.setAuthorities(Set.of(authority));
+        user.setAuthorities(Set.of(Authority.of("USER")));
 
         if (user.getFirstName() == null) user.setFirstName("");
         if (user.getLastName() == null) user.setLastName("");
@@ -338,8 +332,6 @@ public class User implements UserDetails, CredentialsContainer
         String encodedPassword = rawEncodedPassword.replace(type, "");
         return new BCryptPasswordEncoder().matches(rawPassword, encodedPassword);
     }
-
-    private static final Set<String> DISABLED_NAMES = Set.of("Admin", "admin", "Administrator", "administrator");
 
     // http://emailregex.com/
     // RFC 5322: http://www.ietf.org/rfc/rfc5322.txt

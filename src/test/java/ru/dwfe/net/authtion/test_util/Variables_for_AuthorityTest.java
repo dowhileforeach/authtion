@@ -4,8 +4,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Map;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static ru.dwfe.net.authtion.test_util.AuthorityType.*;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 
@@ -17,10 +16,10 @@ public class Variables_for_AuthorityTest
     public static final Map<String, Map<AuthorityType, Map<RequestMethod, Map<String, Object>>>> RESOURCE_AUTHORITY_reqDATA = Map.of(
             resource_public, Map.of(ANY, Map.of(GET, Map.of())),
             resource_cities, Map.of(USER, Map.of(GET, Map.of())),
-            resource_users, Map.of(ADMIN, Map.of(GET, Map.of()))
-//            resource_checkUserId, Map.of(FRONTEND, Map.of(POST, Map.of("id", "user"))),
-//            resource_checkUserPass, Map.of(FRONTEND, Map.of(POST, Map.of("password", "some password"))),
-//            resource_createUser, Map.of(FRONTEND, Map.of(POST, Map.of("id", "user", "password", "some password", "firstName", "some first name", "lastName", ""))),
+            resource_users, Map.of(ADMIN, Map.of(GET, Map.of())),
+            resource_checkUserEmail, Map.of(FRONTEND, Map.of(POST, Map.of("email", "user"))),
+            resource_checkUserPass, Map.of(FRONTEND, Map.of(POST, Map.of("password", "some password"))),
+            resource_createUser, Map.of(FRONTEND, Map.of(POST, Map.of("email", "user", "password", "some password", "firstName", "some first name", "lastName", "")))
 //            resource_confirmUser, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))),
 //            resource_changeUserPass, Map.of(USER, Map.of(POST, Map.of()))
     );
