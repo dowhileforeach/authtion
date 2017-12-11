@@ -7,7 +7,7 @@ import java.util.Map;
 public class Variables_for_CreateUserTest
 {
     public static final String EMAIL_notExistedUser = "notExistedUser@ya.ru";
-    public static final String EMAIL_2_notExistedUser = "notExistedUser_02@ya.ru";
+    public static final String EMAIL_2_notExistedUser = "not_02_ExistedUser@ya.ru";
     public static final String PASS_notExistedUser = "123456";
 
 //    public static final String NEWPASS_notExistedUser = "1234567";
