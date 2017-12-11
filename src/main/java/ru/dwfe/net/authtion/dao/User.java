@@ -7,18 +7,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.dwfe.net.authtion.service.ConfirmationKeyService;
 import ru.dwfe.net.authtion.service.UserService;
 
 import javax.persistence.*;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static ru.dwfe.net.authtion.Util.isDefaultValueCheckOK;
+import static ru.dwfe.net.authtion.Util.isDefaultCheckOK;
 
 @Entity
 @Table(name = "users")
@@ -52,6 +49,8 @@ public class User implements UserDetails, CredentialsContainer
     private boolean accountNonLocked;
     @Column
     private boolean enabled;
+    @Column
+    private boolean emailConfirmed;
 
 
     /*
@@ -183,6 +182,16 @@ public class User implements UserDetails, CredentialsContainer
         this.enabled = enabled;
     }
 
+    public boolean isEmailConfirmed()
+    {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(boolean emailConfirmed)
+    {
+        this.emailConfirmed = emailConfirmed;
+    }
+
     /*
         equals, hashCode, toString
     */
@@ -231,7 +240,7 @@ public class User implements UserDetails, CredentialsContainer
         String fieldName = "id";
         int maxLength = 30;
 
-        if (isDefaultValueCheckOK(id, fieldName, details))
+        if (isDefaultCheckOK(id, fieldName, details))
         {
             if (id.length() < maxLength)
             {
@@ -260,7 +269,7 @@ public class User implements UserDetails, CredentialsContainer
         int minLenght = 6;
         int maxLenght = 55;
 
-        if (isDefaultValueCheckOK(password, fieldName, details))
+        if (isDefaultCheckOK(password, fieldName, details))
         {
             if (password.length() >= minLenght && password.length() <= maxLenght)
             {
@@ -272,32 +281,14 @@ public class User implements UserDetails, CredentialsContainer
         return result;
     }
 
-    public static boolean isFieldsCorrect(User user, UserService userService, Map<String, Object> details)
+    public static void prepareNewUser(User user)
     {
-        boolean result = false;
-
-        if (User.canUseID(user.getId(), userService, details))
-        {
-            if (User.canUsePassword(user.getPassword(), "password", details))
-            {
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public static void prepareNewUser(User user, ConfirmationKeyService confirmationKeyService)
-    {
-        user.setPassword(preparePassword(user.getPassword()));
+        user.setPassword(getBCryptEncodedPassword(user.getPassword()));
 
         user.setAccountNonExpired(true);
         user.setCredentialsNonExpired(true);
-        user.setAccountNonLocked(false); //New user is locked. Will be unlocked after confirmation
+        user.setAccountNonLocked(true);
         user.setEnabled(true);
-
-        int requiredStringLength = 30;
-        String key = new BigInteger(requiredStringLength * 5, new SecureRandom()).toString(36);
-        confirmationKeyService.save(ConfirmationKey.createNewUser(user.getId(), key));
 
         Authority authority = new Authority();
         authority.setAuthority("USER");
@@ -307,7 +298,7 @@ public class User implements UserDetails, CredentialsContainer
         if (user.getLastName() == null) user.setLastName("");
     }
 
-    public static String preparePassword(String rawPassword)
+    public static String getBCryptEncodedPassword(String rawPassword)
     {
         return "{bcrypt}" + new BCryptPasswordEncoder().encode(rawPassword);
     }

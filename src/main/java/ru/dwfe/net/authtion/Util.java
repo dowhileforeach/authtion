@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.json.JsonParserFactory;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Map;
 
 public class Util
@@ -23,7 +25,7 @@ public class Util
         return map.get(key);
     }
 
-    public static boolean isDefaultValueCheckOK(String value, String fieldName, Map<String, Object> details)
+    public static boolean isDefaultCheckOK(String value, String fieldName, Map<String, Object> details)
     {
         boolean result = false;
 
@@ -38,6 +40,11 @@ public class Util
         else details.put(fieldName, "required field");
 
         return result;
+    }
+
+    public static boolean isDefaultCheckOK(String value)
+    {
+        return value != null && !value.isEmpty();
     }
 
     public static String getResponse(String resultFieldName, boolean responseResult, Map<String, Object> details) throws JsonProcessingException
@@ -56,5 +63,10 @@ public class Util
                     "\"%s\": %s, " +
                     "\"details\": %s" +
                     "}", resultFieldName, responseResult, mapper.writeValueAsString(details));
+    }
+
+    public static String getUniqStr(int requiredLength)
+    {
+        return new BigInteger(requiredLength * 5, new SecureRandom()).toString(36);
     }
 }

@@ -16,6 +16,7 @@ CREATE TABLE `users` (
   `credentials_non_expired` TINYINT(1)                              NOT NULL DEFAULT '1',
   `account_non_locked`      TINYINT(1)                              NOT NULL DEFAULT '1',
   `enabled`                 TINYINT(1)                              NOT NULL DEFAULT '1',
+  `email_confirmed`         TINYINT(1)                              NOT NULL DEFAULT '0',
   `created`                 DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
   `updated`                 DATETIME                                         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -60,15 +61,32 @@ CREATE TABLE `user_authority` (
   COLLATE = utf8mb4_unicode_ci;
 
 
-DROP TABLE IF EXISTS `confirmation_key`;
-CREATE TABLE `confirmation_key` (
-  `user`              VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `confirm_key`       VARCHAR(50) COLLATE utf8mb4_unicode_ci  NOT NULL,
-  `created`           DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
-  `create_new_user`   TINYINT(1)                              NOT NULL,
-  `restore_user_pass` TINYINT(1)                              NOT NULL,
+DROP TABLE IF EXISTS `mailing_new_user_password`;
+CREATE TABLE `mailing_new_user_password` (
+  `user`     VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` VARCHAR(60) COLLATE utf8mb4_unicode_ci  NOT NULL,
+  `created`  DATETIME                                NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`  DATETIME                                         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user`),
-  UNIQUE KEY `confirmation_key_user_uindex` (`user`)
+  UNIQUE KEY `mailing_new_user_password_user_uindex` (`user`),
+  CONSTRAINT `mailing_new_user_password_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+    ON DELETE CASCADE
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+
+DROP TABLE IF EXISTS `mailing_confirm_email`;
+CREATE TABLE `mailing_confirm_email` (
+  `user`        VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci  NOT NULL,
+  `created`     DATETIME                                NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`     DATETIME                                         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user`),
+  UNIQUE KEY `mailing_confirm_email_user_uindex` (`user`),
+  CONSTRAINT `mailing_confirm_email_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+    ON DELETE CASCADE
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -77,9 +95,9 @@ CREATE TABLE `confirmation_key` (
 
 LOCK TABLES `users` WRITE, `authorities` WRITE, `user_authority` WRITE;
 INSERT INTO `users` VALUES
-  ('admin@ya.ru', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07'),
-  ('user@ya.ru', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07'),
-  ('shop@ya.ru', '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', '', '', 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07');
+  ('admin@ya.ru', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07'),
+  ('user@ya.ru', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07'),
+  ('shop@ya.ru', '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', '', '', 1, 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07');
 INSERT INTO `authorities` VALUES
   ('ADMIN', 'Administrator'),
   ('USER', 'Standard user'),

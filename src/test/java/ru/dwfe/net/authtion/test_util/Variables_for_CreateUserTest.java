@@ -10,7 +10,7 @@ public class Variables_for_CreateUserTest
     public static final String PASS_notExistedUser = "123456";
     public static final String NEWPASS_notExistedUser = "1234567";
 
-    public static final String confirm_NONisCreateNewUser_user = "NONisCreateNewUser@ya.ru";
+    public static final String confirm_NONisCreateNewUser_user = "shop@ya.ru";
     public static final String confirm_NONisCreateNewUser_key = "NONisCreateNewUser";
     public static final String confirm_SomethingWentWrong_user = "admin@ya.ru";
     public static final String confirm_SomethingWentWrong_key = "SomethingWentWrong";
