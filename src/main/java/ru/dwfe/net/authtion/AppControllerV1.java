@@ -91,14 +91,14 @@ public class AppControllerV1
         if (canUseEmail(user.getEmail(), userService, details))
         {
             String receivedPassword = user.getPassword();
-            if (isDefaultCheckOK(receivedPassword))
-            {   //if password was passed
-                canUsePassword(receivedPassword, "password", details);
+            if (receivedPassword == null)
+            {   //if password wasn't passed
+                automaticallyGeneratedPassword = getUniqStr(10);
+                user.setPassword(automaticallyGeneratedPassword);
             }
             else
-            {  //if password wasn't passed
-                automaticallyGeneratedPassword = getUniqStr(7);
-                user.setPassword(automaticallyGeneratedPassword);
+            {  //if password was passed
+                canUsePassword(receivedPassword, "password", details);
             }
         }
         if (details.size() == 0)

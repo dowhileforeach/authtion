@@ -5,6 +5,10 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.dwfe.net.authtion.dao.User;
+import ru.dwfe.net.authtion.test_util.UserTest;
+
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -41,22 +45,22 @@ public class CreateUserTest
 
     }
 
-//    @Test
-//    public void _03_createUser()
-//    {
-//        logHead("Create User");
-//        check_send_data(POST, resource_createUser, FRONTEND_user.access_token, checkers_for_createUser());
-//
-//        Optional<User> user = getUserById(EMAIL_notExistedUser);
+    @Test
+    public void _03_createUser()
+    {
+        logHead("Create User");
+        check_send_data(POST, resource_createUser, FRONTEND_user.access_token, checkers_for_createUser());
+
+//        Optional<User> user = getUserByE(EMAIL_notExistedUser);
 //        assertEquals(true, user.isPresent());
-//
+
 //        //New user is locked. Will be unlocked after confirmation
 //        assertEquals(false, user.get().isAccountNonLocked());
-//
+
 //        //Test for new User access to all resources
 //        UserTest userTest = UserTest.of(USER, user.get().getUsername(), PASS_notExistedUser, client_TRUSTED, 400);
-//    }
-//
+    }
+
 //    @Test
 //    public void _04_confirmUser()
 //    {
