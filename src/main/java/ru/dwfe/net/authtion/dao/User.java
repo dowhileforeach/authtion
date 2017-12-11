@@ -25,7 +25,10 @@ public class User implements UserDetails, CredentialsContainer
 
     @Id
     @Column
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column
+    private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column
@@ -37,6 +40,8 @@ public class User implements UserDetails, CredentialsContainer
             inverseJoinColumns = @JoinColumn(name = "authority", referencedColumnName = "authority"))
     private Set<Authority> authorities;
 
+    @Column
+    private String publicName;
     @Column
     private String firstName;
     @Column
@@ -73,7 +78,7 @@ public class User implements UserDetails, CredentialsContainer
     @Override
     public String getUsername()
     {
-        return id;
+        return email;
     }
 
     @JsonIgnore
@@ -122,14 +127,24 @@ public class User implements UserDetails, CredentialsContainer
         GETTERs and SETTERs
     */
 
-    public String getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 
     public void setPassword(String password)
@@ -140,6 +155,16 @@ public class User implements UserDetails, CredentialsContainer
     public void setAuthorities(Set<Authority> authorities)
     {
         this.authorities = authorities;
+    }
+
+    public String getPublicName()
+    {
+        return publicName;
+    }
+
+    public void setPublicName(String publicName)
+    {
+        this.publicName = publicName;
     }
 
     public String getFirstName()
@@ -217,15 +242,18 @@ public class User implements UserDetails, CredentialsContainer
     public String toString()
     {
         return "{\n" +
-                " \"id\":\" " + id + "\",\n" +
+                " \"id\": " + id + ",\n" +
+                " \"email\": \"" + email + "\",\n" +
                 " \"password\": \"****\",\n" +
                 " \"authorities\": " + authorities + ",\n" +
+                " \"publicName\": \"" + publicName + "\",\n" +
                 " \"firstName\": \"" + firstName + "\",\n" +
                 " \"lastName\": \"" + lastName + "\",\n" +
-                " \"accountNonExpired\": \"" + accountNonExpired + "\",\n" +
-                " \"credentialsNonExpired\": \"" + credentialsNonExpired + "\",\n" +
-                " \"accountNonLocked\": \"" + accountNonLocked + "\",\n" +
-                " \"enabled\": \"" + enabled + "\"\n" +
+                " \"accountNonExpired\": " + accountNonExpired + ",\n" +
+                " \"credentialsNonExpired\": " + credentialsNonExpired + ",\n" +
+                " \"accountNonLocked\": " + accountNonLocked + ",\n" +
+                " \"enabled\": " + enabled + "\n" +
+                " \"emailConfirmed\": " + emailConfirmed + "\n" +
                 "}";
     }
 
@@ -248,7 +276,7 @@ public class User implements UserDetails, CredentialsContainer
                 {
                     if (emailRegexPattern.matcher(id).matches())
                     {
-                        if (!userService.existsById(id))
+                        if (!userService.existsByEmail(id))
                         {
                             result = true;
                         }
@@ -297,6 +325,7 @@ public class User implements UserDetails, CredentialsContainer
 
         if (user.getFirstName() == null) user.setFirstName("");
         if (user.getLastName() == null) user.setLastName("");
+        if (user.getPublicName() == null) user.setPublicName(user.getFirstName());
     }
 
     public static String getBCryptEncodedPassword(String rawPassword)

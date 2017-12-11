@@ -13,13 +13,13 @@ public class MailingRestorePassword
 {
     @Id
     @Column
-    private String user;
+    private Long user;
 
     @Column
     private String confirmKey;
 
 
-    public static MailingRestorePassword of(String user)
+    public static MailingRestorePassword of(Long user)
     {
         MailingRestorePassword confirm = new MailingRestorePassword();
         confirm.setUser(user);
@@ -27,13 +27,12 @@ public class MailingRestorePassword
         return confirm;
     }
 
-
-    public String getUser()
+    public Long getUser()
     {
         return user;
     }
 
-    public void setUser(String user)
+    public void setUser(Long user)
     {
         this.user = user;
     }
@@ -68,9 +67,6 @@ public class MailingRestorePassword
     @Override
     public String toString()
     {
-        return "{\n" +
-                " \"user\": " + user + ",\n" +
-                " \"confirmKey\": " + confirmKey + "\n" +
-                "}";
+        return Util.getJSONfromObject(this);
     }
 }

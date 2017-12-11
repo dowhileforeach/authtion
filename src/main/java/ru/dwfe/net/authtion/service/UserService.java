@@ -24,23 +24,28 @@ public class UserService implements UserDetailsService
     private UserRepository repository;
 
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException
     {
-        return repository.findById(id).orElseThrow(() -> {
-            String str = String.format("The user doesn't exist: %s", id);
+        return repository.findByEmail(email).orElseThrow(() -> {
+            String str = String.format("The user doesn't exist: %s", email);
             log.error(str);
             return new UsernameNotFoundException(str);
         });
     }
 
-    public Optional<User> findById(String id)
+    public Optional<User> findById(Long id)
     {
         return repository.findById(id);
     }
 
-    public boolean existsById(String id)
+    public Optional<User> findByEmail(String email)
     {
-        return repository.existsById(id);
+        return repository.findByEmail(email);
+    }
+
+    public boolean existsByEmail(String email)
+    {
+        return findByEmail(email).isPresent();
     }
 
     public List<User> findAll()

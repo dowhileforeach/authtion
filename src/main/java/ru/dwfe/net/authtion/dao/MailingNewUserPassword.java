@@ -11,13 +11,13 @@ public class MailingNewUserPassword
 {
     @Id
     @Column
-    private String user;
+    private Long user;
 
     @Column
     private String password;
 
 
-    public static MailingNewUserPassword of(String user, String password)
+    public static MailingNewUserPassword of(Long user, String password)
     {
         MailingNewUserPassword mailingNewUserPassword = new MailingNewUserPassword();
         mailingNewUserPassword.setUser(user);
@@ -25,13 +25,12 @@ public class MailingNewUserPassword
         return mailingNewUserPassword;
     }
 
-
-    public String getUser()
+    public Long getUser()
     {
         return user;
     }
 
-    public void setUser(String user)
+    public void setUser(Long user)
     {
         this.user = user;
     }

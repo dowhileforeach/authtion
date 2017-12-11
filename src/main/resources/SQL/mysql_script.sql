@@ -4,10 +4,13 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `users`;
 SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE `users` (
-  `id`                      VARCHAR(100)
+  `id`                      BIGINT(20)                              NOT NULL AUTO_INCREMENT,
+  `email`                   VARCHAR(100)
                             COLLATE utf8mb4_unicode_ci              NOT NULL,
   `password`                VARCHAR(100)
                             COLLATE utf8mb4_unicode_ci              NOT NULL,
+  `public_name`             VARCHAR(20)
+                            COLLATE utf8mb4_unicode_ci                       DEFAULT '',
   `first_name`              VARCHAR(20)
                             COLLATE utf8mb4_unicode_ci                       DEFAULT '',
   `last_name`               VARCHAR(20)
@@ -18,11 +21,13 @@ CREATE TABLE `users` (
   `enabled`                 TINYINT(1)                              NOT NULL DEFAULT '1',
   `email_confirmed`         TINYINT(1)                              NOT NULL DEFAULT '0',
   `created`                 DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
-  `updated`                 DATETIME                                         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated`                 DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `users_id_uindex` (`id`)
+  UNIQUE KEY `users_id_uindex` (`id`),
+  UNIQUE KEY `users_email_uindex` (`email`)
 )
   ENGINE = InnoDB
+  AUTO_INCREMENT=1000
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
@@ -45,8 +50,7 @@ CREATE TABLE `authorities` (
 
 DROP TABLE IF EXISTS `user_authority`;
 CREATE TABLE `user_authority` (
-  `user`      VARCHAR(100)
-              COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user`      BIGINT(20)                 NOT NULL,
   `authority` VARCHAR(20)
               COLLATE utf8mb4_unicode_ci NOT NULL,
   KEY `user_authority_users_id_fk` (`user`),
@@ -63,10 +67,10 @@ CREATE TABLE `user_authority` (
 
 DROP TABLE IF EXISTS `mailing_new_user_password`;
 CREATE TABLE `mailing_new_user_password` (
-  `user`     VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` VARCHAR(60) COLLATE utf8mb4_unicode_ci  NOT NULL,
-  `created`  DATETIME                                NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`  DATETIME                                         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user`     BIGINT(20)                             NOT NULL,
+  `password` VARCHAR(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created`  DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user`),
   UNIQUE KEY `mailing_new_user_password_user_uindex` (`user`),
   CONSTRAINT `mailing_new_user_password_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
@@ -79,10 +83,10 @@ CREATE TABLE `mailing_new_user_password` (
 
 DROP TABLE IF EXISTS `mailing_confirm_email`;
 CREATE TABLE `mailing_confirm_email` (
-  `user`        VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci  NOT NULL,
-  `created`     DATETIME                                NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`     DATETIME                                         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user`        BIGINT(20)                             NOT NULL,
+  `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user`),
   UNIQUE KEY `mailing_confirm_email_user_uindex` (`user`),
   CONSTRAINT `mailing_confirm_email_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
@@ -95,10 +99,10 @@ CREATE TABLE `mailing_confirm_email` (
 
 DROP TABLE IF EXISTS `mailing_restore_password`;
 CREATE TABLE `mailing_restore_password` (
-  `user`        VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci  NOT NULL,
-  `created`     DATETIME                                NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`     DATETIME                                         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user`        BIGINT(20)                             NOT NULL,
+  `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user`),
   UNIQUE KEY `mailing_restore_password_user_uindex` (`user`),
   CONSTRAINT `mailing_restore_password_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
@@ -111,16 +115,16 @@ CREATE TABLE `mailing_restore_password` (
 
 LOCK TABLES `users` WRITE, `authorities` WRITE, `user_authority` WRITE;
 INSERT INTO `users` VALUES
-  ('admin@ya.ru', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', '', '', 1, 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07'),
-  ('user@ya.ru', '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', '', '', 1, 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07'),
-  ('shop@ya.ru', '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', '', '', 1, 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07');
+  (1,   'admin@ya.ru', '{bcrypt}$2a$10$7FmXphF7JFK45uXwwmwTUeEVG6r9UedcJIoKAEYYKkjB5ZyQcFXeC', 'admin', '', '', 1, 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07'),
+  (555, 'user@ya.ru',  '{bcrypt}$2a$10$dVVaFsrQoUhskctl604rjOG3A2Rj5AMWYqNR3nF87DKgo3yTD3hDu', 'user', '', '', 1, 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07'),
+  (888, 'shop@ya.ru',  '{bcrypt}$2a$10$zs9PnYWzL9GIlrIti.HrgOXZF329AviwNODwgTRIWQbasXZzEC49m', 'shop', '', '', 1, 1, 1, 1, 1, '2017-07-07 07:07:07', '2017-07-07 07:07:07');
 INSERT INTO `authorities` VALUES
   ('ADMIN', 'Administrator'),
   ('USER', 'Standard user'),
   ('FRONTEND', 'Site, forum, etc.');
 INSERT INTO `user_authority` VALUES
-  ('admin@ya.ru', 'ADMIN'),
-  ('admin@ya.ru', 'USER'),
-  ('user@ya.ru', 'USER'),
-  ('shop@ya.ru', 'FRONTEND');
+  (1, 'ADMIN'),
+  (1, 'USER'),
+  (555, 'USER'),
+  (888, 'FRONTEND');
 UNLOCK TABLES;

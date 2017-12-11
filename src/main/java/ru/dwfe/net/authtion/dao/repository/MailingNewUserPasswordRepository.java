@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.dwfe.net.authtion.dao.MailingNewUserPassword;
 
 @Repository
-public interface MailingNewUserPasswordRepository extends CrudRepository<MailingNewUserPassword, String>
+public interface MailingNewUserPasswordRepository extends CrudRepository<MailingNewUserPassword, Long>
 {
 }

@@ -29,9 +29,9 @@ public class Variables_Global
     public static final String resource_public = "/public";
     public static final String resource_cities = "/cities";
     public static final String resource_users = "/users";
-    public static final String resource_checkUserId = "/check-user-id";
-    public static final String resource_checkUserPass = "/check-user-pass";
-    public static final String resource_createUser = "/create-user";
-    public static final String resource_confirmUser = "/confirm-user";
-    public static final String resource_changeUserPass = "/change-user-pass";
+//    public static final String resource_checkUserId = "/check-user-id";
+//    public static final String resource_checkUserPass = "/check-user-pass";
+//    public static final String resource_createUser = "/create-user";
+//    public static final String resource_confirmUser = "/confirm-user";
+//    public static final String resource_changeUserPass = "/change-user-pass";
 }

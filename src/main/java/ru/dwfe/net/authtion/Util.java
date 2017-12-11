@@ -47,10 +47,8 @@ public class Util
         return value != null && !value.isEmpty();
     }
 
-    public static String getResponse(String resultFieldName, boolean responseResult, Map<String, Object> details) throws JsonProcessingException
+    public static String getResponse(String resultFieldName, boolean responseResult, Map<String, Object> details)
     {
-        ObjectMapper mapper = new ObjectMapper();
-
         if (details == null || details.size() == 0)
 
             return String.format("{" +
@@ -62,7 +60,22 @@ public class Util
             return String.format("{" +
                     "\"%s\": %s, " +
                     "\"details\": %s" +
-                    "}", resultFieldName, responseResult, mapper.writeValueAsString(details));
+                    "}", resultFieldName, responseResult, getJSONfromObject(details));
+    }
+
+    public static String getJSONfromObject(Object value)
+    {
+        String result = "{}";
+        ObjectMapper mapper = new ObjectMapper();
+        try
+        {
+            result = mapper.writeValueAsString(value);
+        }
+        catch (JsonProcessingException e)
+        {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public static String getUniqStr(int requiredLength)
