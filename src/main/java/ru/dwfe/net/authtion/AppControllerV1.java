@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static ru.dwfe.net.authtion.Util.*;
+import static ru.dwfe.net.authtion.dao.User.*;
 
 @RestController
 public class AppControllerV1
@@ -65,7 +66,7 @@ public class AppControllerV1
         Map<String, Object> details = new HashMap<>();
 
         String id = (String) getValueFromJSON(body, "id");
-        result = User.canUseID(id, userService, details);
+        result = canUseID(id, userService, details);
 
         return getResponse("canUse", result, details);
     }
@@ -78,7 +79,7 @@ public class AppControllerV1
         Map<String, Object> details = new HashMap<>();
 
         String password = (String) getValueFromJSON(body, "password");
-        result = User.canUsePassword(password, "password", details);
+        result = canUsePassword(password, "password", details);
 
         return getResponse("canUse", result, details);
     }
@@ -91,11 +92,11 @@ public class AppControllerV1
         Map<String, Object> details = new HashMap<>();
         String receivedPassword = user.getPassword();
 
-        if (User.canUseID(user.getId(), userService, details))
+        if (canUseID(user.getId(), userService, details))
         {
             if (isDefaultCheckOK(receivedPassword))
             {   //the password was passed
-                if (User.canUsePassword(receivedPassword, "password", details))
+                if (canUsePassword(receivedPassword, "password", details))
                     result = true;
             }
             else user.setPassword(getUniqStr(7));
@@ -104,7 +105,7 @@ public class AppControllerV1
         if (details.size() == 0)
         {
             //prepare
-            User.prepareNewUser(user);
+            prepareNewUser(user);
 
             //put user to the database
             userService.save(user);
@@ -171,19 +172,17 @@ public class AppControllerV1
         String oldpass = (String) getValue(map, "oldpass");
         String newpass = (String) getValue(map, "newpass");
 
-        if (isDefaultCheckOK(oldpass, "oldpass", details))
+        if (canUsePassword(newpass, "newpass", details)
+                && isDefaultCheckOK(oldpass, "oldpass", details))
         {
             String id = ((User) authentication.getPrincipal()).getId();
             User user = userService.findById(id).get();
-            if (User.matchPassword("{bcrypt}", oldpass, user.getPassword()))
+            if (matchPassword("{bcrypt}", oldpass, user.getPassword()))
             {
-                if (User.canUsePassword(newpass, "newpass", details))
-                {
-                    user.setPassword(User.getBCryptEncodedPassword(newpass));
-                    userService.save(user);
+                user.setPassword(getBCryptEncodedPassword(newpass));
+                userService.save(user);
 
-                    result = true;
-                }
+                result = true;
             }
             else details.put(fieldName, "incorrect");
         }
@@ -228,6 +227,40 @@ public class AppControllerV1
             if (confirm != null)
             {
                 details.put("id", confirm.getUser());
+                result = true;
+            }
+            else details.put(fieldName, "key does not exist");
+        }
+        return getResponse("success", result, details);
+    }
+
+    @RequestMapping(value = API + "/restore-user-pass", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('FRONTEND')")
+    public String restoreUserPass(@RequestBody String body) throws JsonProcessingException
+    {
+        boolean result = false;
+        String fieldName = "error";
+        Map<String, Object> details = new HashMap<>();
+        Map<String, Object> map = parse(body);
+
+        String id = (String) getValue(map, "id");
+        String key = (String) getValue(map, "key");
+        String newpass = (String) getValue(map, "newpass");
+
+        if (isDefaultCheckOK(id, "id", details)
+                && isDefaultCheckOK(key, "key", details)
+                && canUsePassword(newpass, "newpass", details))
+        {
+            MailingRestorePassword confirm = mailingRestorePasswordRepository.findByConfirmKey(key);
+            if (confirm != null)
+            {
+                //The User is guaranteed to exist because: FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE
+                User user = userService.findById(id).get();
+                user.setPassword(getBCryptEncodedPassword(newpass));
+                userService.save(user);
+
+                mailingRestorePasswordRepository.delete(confirm);
+
                 result = true;
             }
             else details.put(fieldName, "key does not exist");
