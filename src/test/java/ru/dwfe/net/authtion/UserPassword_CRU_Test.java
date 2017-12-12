@@ -37,7 +37,7 @@ import static ru.dwfe.net.authtion.test_util.Variables_for_CreateUserTest.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CreateUserTest
+public class UserPassword_CRU_Test
 {
     @Autowired
     UserService userService;
@@ -262,5 +262,5 @@ public class CreateUserTest
                 + "\n------------------------------", who);
     }
 
-    private static final Logger log = LoggerFactory.getLogger(CreateUserTest.class);
+    private static final Logger log = LoggerFactory.getLogger(UserPassword_CRU_Test.class);
 }

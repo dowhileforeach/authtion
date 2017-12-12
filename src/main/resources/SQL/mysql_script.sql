@@ -4,22 +4,22 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `users`;
 SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE `users` (
-  `id`                      BIGINT(20)                              NOT NULL AUTO_INCREMENT,
+  `id`                      BIGINT(20)                              NOT NULL   AUTO_INCREMENT,
   `email`                   VARCHAR(50)
                             COLLATE utf8mb4_unicode_ci              NOT NULL,
   `password`                VARCHAR(100)
                             COLLATE utf8mb4_unicode_ci              NOT NULL,
   `public_name`             VARCHAR(20)
-                            COLLATE utf8mb4_unicode_ci                       DEFAULT '',
+                            COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',
   `first_name`              VARCHAR(20)
-                            COLLATE utf8mb4_unicode_ci                       DEFAULT '',
+                            COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',
   `last_name`               VARCHAR(20)
-                            COLLATE utf8mb4_unicode_ci                       DEFAULT '',
-  `account_non_expired`     TINYINT(1)                              NOT NULL DEFAULT '1',
-  `credentials_non_expired` TINYINT(1)                              NOT NULL DEFAULT '1',
-  `account_non_locked`      TINYINT(1)                              NOT NULL DEFAULT '1',
-  `enabled`                 TINYINT(1)                              NOT NULL DEFAULT '1',
-  `email_confirmed`         TINYINT(1)                              NOT NULL DEFAULT '0',
+                            COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',
+  `account_non_expired`     TINYINT(1)                              NOT NULL   DEFAULT '1',
+  `credentials_non_expired` TINYINT(1)                              NOT NULL   DEFAULT '1',
+  `account_non_locked`      TINYINT(1)                              NOT NULL   DEFAULT '1',
+  `enabled`                 TINYINT(1)                              NOT NULL   DEFAULT '1',
+  `email_confirmed`         TINYINT(1)                              NOT NULL   DEFAULT '0',
   `created`                 DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
   `updated`                 DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),

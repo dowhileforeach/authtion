@@ -32,6 +32,7 @@ public class Variables_Global
     public static final String resource_checkUserEmail = "/check-user-email";
     public static final String resource_checkUserPass = "/check-user-pass";
     public static final String resource_createUser = "/create-user";
+    public static final String resource_userUpdate = "/user-update";
     public static final String resource_userData = "/user-data";
     public static final String resource_publicUser1 = "/public/user/1";
     public static final String resource_publicUser9 = "/public/user/9";

@@ -13,14 +13,6 @@ public class Variables_for_CreateUserTest
     public static final String PASS_NEW_User = "123456";
     public static final String NEWPASS_NEW_User = "1234567890";
 
-//
-//    public static final String confirm_NONisCreateNewUser_user = "shop@ya.ru";
-//    public static final String confirm_NONisCreateNewUser_key = "NONisCreateNewUser";
-//    public static final String confirm_SomethingWentWrong_user = "admin@ya.ru";
-//    public static final String confirm_SomethingWentWrong_key = "SomethingWentWrong";
-
-
-
 
     /* BODIES */
 

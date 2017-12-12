@@ -124,6 +124,54 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
+    @RequestMapping(value = API + "/user-update")
+    @PreAuthorize("hasAuthority('USER')")
+    public String userUpdate(@RequestBody String body, OAuth2Authentication authentication)
+    {
+        boolean result = false;
+        Map<String, Object> details = new HashMap<>();
+        Map<String, Object> map = parse(body);
+
+        if (map.size() > 0)
+        {
+            User userAuth = (User) authentication.getPrincipal();
+
+            String publicName = (String) getValue(map, "publicName");
+            String firstName = (String) getValue(map, "firstName");
+            String lastName = (String) getValue(map, "lastName");
+
+            boolean isPublicName = publicName != null && !publicName.equals(userAuth.getPublicName());
+            boolean isFirstName = firstName != null && !firstName.equals(userAuth.getFirstName());
+            boolean isLastName = lastName != null && !lastName.equals(userAuth.getLastName());
+
+            if (isPublicName || isFirstName || isLastName)
+            {
+                User user = userService.findByEmail(userAuth.getEmail()).get();
+
+                if (isPublicName)
+                {
+                    user.setPublicName(publicName);
+                    details.put("publicName", "change saved");
+                }
+                if (isFirstName)
+                {
+                    user.setFirstName(firstName);
+                    details.put("firstName", "change saved");
+                }
+                if (isLastName)
+                {
+                    user.setLastName(lastName);
+                    details.put("lastName", "change saved");
+                }
+                userService.save(user);
+
+                result = true;
+            }
+            else details.put("warning", "no changes found");
+        }
+        return getResponse("success", result, details);
+    }
+
     @RequestMapping(value = API + "/user-data")
     @PreAuthorize("hasAuthority('USER')")
     public String userData(OAuth2Authentication authentication)
