@@ -19,11 +19,9 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static ru.dwfe.net.authtion.test_util.Variables_Global.ALL_BEFORE_RESOURCE;
-import static ru.dwfe.net.authtion.test_util.Variables_Global.PROTOCOL_HOST_PORT;
-import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.AUTHORITY_to_AUTHORITY_STATUS;
-import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.RESOURCE_AUTHORITY_reqDATA;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
+import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.*;
 
 public class UtilTest
 {
@@ -186,7 +184,7 @@ public class UtilTest
     {
         String access_token = userTest.access_token;
 
-        RESOURCE_AUTHORITY_reqDATA.forEach((resource, next) -> {
+        RESOURCE_AUTHORITY_reqDATA().forEach((resource, next) -> {
 
             Map.Entry<AuthorityType, Map<RequestMethod, Map<String, Object>>> next1 = next.entrySet().iterator().next();
             Map.Entry<RequestMethod, Map<String, Object>> next2 = next1.getValue().entrySet().iterator().next();

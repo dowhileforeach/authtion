@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static ru.dwfe.net.authtion.dao.User.*;
 import static ru.dwfe.net.authtion.util.Util.*;
 
@@ -82,7 +82,7 @@ public class AppControllerV1
         return getResponse("canUse", result, details);
     }
 
-    @RequestMapping(value = API + "/create-user", method = RequestMethod.POST)
+    @RequestMapping(value = API + "/create-user", method = POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String createUser(@RequestBody User user)
     {
@@ -190,36 +190,35 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-//    @RequestMapping(value = API + "/change-user-pass", method = RequestMethod.POST)
-//    @PreAuthorize("hasAuthority('USER')")
-//    public String changeUserPass(@RequestBody String body, OAuth2Authentication authentication) throws JsonProcessingException
-//    {
-//        boolean result = false;
-//        String fieldName = "oldpass";
-//        Map<String, Object> details = new HashMap<>();
-//        Map<String, Object> map = parse(body);
-//
-//        String oldpass = (String) getValue(map, "oldpass");
-//        String newpass = (String) getValue(map, "newpass");
-//
-//        if (canUsePassword(newpass, "newpass", details)
-//                && isDefaultCheckOK(oldpass, "oldpass", details))
-//        {
-//            String id = ((User) authentication.getPrincipal()).getId();
-//            User user = userService.findById(id).get();
-//            if (matchPassword("{bcrypt}", oldpass, user.getPassword()))
-//            {
-//                user.setPassword(getBCryptEncodedPassword(newpass));
-//                userService.save(user);
-//
-//                result = true;
-//            }
-//            else details.put(fieldName, "incorrect");
-//        }
-//        return getResponse("success", result, details);
-//    }
-//
-//    @RequestMapping(value = API + "/req-restore-user-pass", method = RequestMethod.POST)
+    @RequestMapping(value = API + "/change-user-pass", method = POST)
+    @PreAuthorize("hasAuthority('USER')")
+    public String changeUserPass(@RequestBody String body, OAuth2Authentication authentication)
+    {
+        boolean result = false;
+        Map<String, Object> details = new HashMap<>();
+        Map<String, Object> map = parse(body);
+
+        String oldpass = (String) getValue(map, "oldpass");
+        String newpass = (String) getValue(map, "newpass");
+
+        if (isDefaultCheckOK(oldpass, "oldpass", details)
+                && canUsePassword(newpass, "newpass", details))
+        {
+            Long id = ((User) authentication.getPrincipal()).getId();
+            User user = userService.findById(id).get();
+            if (matchPassword("{bcrypt}", oldpass, user.getPassword()))
+            {
+                user.setPassword(getBCryptEncodedPassword(newpass));
+                userService.save(user);
+
+                result = true;
+            }
+            else details.put("oldpass", "wrong");
+        }
+        return getResponse("success", result, details);
+    }
+
+//    @RequestMapping(value = API + "/req-restore-user-pass", method = POST)
 //    @PreAuthorize("hasAuthority('FRONTEND')")
 //    public String requestRestoreUserPass(@RequestBody String body) throws JsonProcessingException
 //    {
@@ -264,7 +263,7 @@ public class AppControllerV1
 //        return getResponse("success", result, details);
 //    }
 //
-//    @RequestMapping(value = API + "/restore-user-pass", method = RequestMethod.POST)
+//    @RequestMapping(value = API + "/restore-user-pass", method = POST)
 //    @PreAuthorize("hasAuthority('FRONTEND')")
 //    public String restoreUserPass(@RequestBody String body) throws JsonProcessingException
 //    {

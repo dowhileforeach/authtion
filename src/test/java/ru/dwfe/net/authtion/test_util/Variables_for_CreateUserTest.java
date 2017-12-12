@@ -11,8 +11,8 @@ public class Variables_for_CreateUserTest
     public static final String EMAIL_notExistedUser = "notExistedUser@ya.ru";
     public static final String EMAIL_2_notExistedUser = "not_02_ExistedUser@ya.ru";
     public static final String PASS_notExistedUser = "123456";
+    public static final String NEWPASS_notExistedUser = "1234567890";
 
-//    public static final String NEWPASS_notExistedUser = "1234567";
 //
 //    public static final String confirm_NONisCreateNewUser_user = "shop@ya.ru";
 //    public static final String confirm_NONisCreateNewUser_key = "NONisCreateNewUser";
@@ -101,24 +101,13 @@ public class Variables_for_CreateUserTest
         );
     }
 
-//    public static List<Checker> checkers_for_confirmUser(String existedKey){
-//        return List.of(
-//                Checker.of(null,      null,  Map.of(),                                      400, null,      "message", "Required String parameter 'key' is not present"),
-//                Checker.of("success", false, Map.of("key", ""),                             200, "details", "error",   "bad key"),
-//                Checker.of("success", false, Map.of("key", "123"),                          200, "details", "error",   "key does not exist"),
-//                Checker.of("success", false, Map.of("key", confirm_NONisCreateNewUser_key), 200, "details", "error",   "key is not valid for confirmation after a new user is created"),
-//                Checker.of("success", false, Map.of("key", confirm_SomethingWentWrong_key), 200, "details", "error",   "user is non locked. Something went wrong..."),
-//                Checker.of("success", true,  Map.of("key", existedKey),                     200, null,      null,      null)
-//        );
-//    }
-//
-//    public static final List<Checker> checkers_for_changeUserPass = List.of(
-//            Checker.of("success", false, Map.of(),                                                                  200, "details", "oldpass", "required field"),
-//            Checker.of("success", false, Map.of("oldpass", ""),                                                     200, "details", "oldpass", "can't be empty"),
-//            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser),                                    200, "details", "newpass", "required field"),
-//            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser, "newpass", ""),                     200, "details", "newpass", "can't be empty"),
-//            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser, "newpass", "12345"),                200, "details", "newpass", "length must be greater than or equal to 6 and less than or equal to 55"),
-//            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser + "1", "newpass", "1234567"),        200, "details", "oldpass", "incorrect"),
-//            Checker.of("success", true,  Map.of("oldpass", PASS_notExistedUser, "newpass", NEWPASS_notExistedUser), 200, null, null, null)
-//    );
+    public static final List<Checker> checkers_for_changeUserPass = List.of(
+            Checker.of("success", false, Map.of(),                                                                  200, "details", "oldpass", "required field"),
+            Checker.of("success", false, Map.of("oldpass", ""),                                                     200, "details", "oldpass", "can't be empty"),
+            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser),                                    200, "details", "newpass", "required field"),
+            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser, "newpass", ""),                     200, "details", "newpass", "can't be empty"),
+            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser, "newpass", "12345"),                200, "details", "newpass", "length must be greater than or equal to 6 and less than or equal to 55"),
+            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser + "1", "newpass", "1234567"),        200, "details", "oldpass", "wrong"),
+            Checker.of("success", true,  Map.of("oldpass", PASS_notExistedUser, "newpass", NEWPASS_notExistedUser), 200)
+    );
 }

@@ -149,88 +149,43 @@ public class CreateUserTest
         assertEquals(true, confirmById.isPresent());
         String confirmKey = confirmById.get().getConfirmKey();
 
-        assertEquals(false, userService.findByEmail(EMAIL_notExistedUser).get().isEmailConfirmed());
+        assertEquals(false, getUserByEmail(EMAIL_notExistedUser).get().isEmailConfirmed());
 
         check_send_data(GET, resource_confirmEmail, null, checkers_for_confirmEmail(confirmKey));
 
         assertEquals(false, mailingConfirmEmailRepository.findById(EMAIL_notExistedUser).isPresent());
-        assertEquals(true, userService.findByEmail(EMAIL_notExistedUser).get().isEmailConfirmed());
+        assertEquals(true, getUserByEmail(EMAIL_notExistedUser).get().isEmailConfirmed());
     }
 
-//    @Test
-//    public void _04_confirmUser()
-//    {
-//        logHead("Confirm User");
-//
-//        Optional<ConfirmationKey> confirmationKey = getConfirmationKey(EMAIL_notExistedUser);
-//        assertEquals(true, confirmationKey.isPresent());
-//        assertEquals(true, confirmationKey.get().isCreateNewUser());
-//        assertEquals(false, confirmationKey.get().isRestoreUserPass());
-//
-//        ConfirmationKey key_NONisCreateNewUser = ConfirmationKey.of(confirm_NONisCreateNewUser_user, confirm_NONisCreateNewUser_key, false, true);
-//        ConfirmationKey key_SomethingWentWrong = ConfirmationKey.of(confirm_SomethingWentWrong_user, confirm_SomethingWentWrong_key, true, false);
-//        confirmationKeyService.save(key_NONisCreateNewUser);
-//        confirmationKeyService.save(key_SomethingWentWrong);
-//
-//        //confirmation process
-//        check_send_data(GET, resource_confirmUser, null, checkers_for_confirmUser(confirmationKey.get().getKey()));
-//
-//        //Confirmation key must be removed after confirmation
-//        assertEquals(false, getConfirmationKey(EMAIL_notExistedUser).isPresent());
-//
-//        Optional<User> user = getUserById(EMAIL_notExistedUser);
-//
-//        //The new User must be unlocked after confirmation
-//        assertEquals(true, user.get().isAccountNonLocked());
-//
-//        //Test for new User access to all resources
-//        UserTest userTest = UserTest.of(USER, user.get().getUsername(), PASS_notExistedUser, client_TRUSTED, 200);
-//        checkAllResources(userTest);
-//
-//        confirmationKeyService.delete(key_NONisCreateNewUser);
-//        confirmationKeyService.delete(key_SomethingWentWrong);
-//    }
-//
-//    @Test
-//    public void _05_changeUserPass()
-//    {
-//        logHead("Change User Pass");
-//
-//        //oldpass
-//        UserTest userTest = UserTest.of(USER, EMAIL_notExistedUser, PASS_notExistedUser, client_TRUSTED, 200);
-//        //change oldpass
-//        check_send_data(POST, resource_changeUserPass, userTest.access_token, checkers_for_changeUserPass);
-//
-//        //oldpass
-//        UserTest.of(USER, EMAIL_notExistedUser, PASS_notExistedUser, client_TRUSTED, 400);
-//        //newpass
-//        userTest = UserTest.of(USER, EMAIL_notExistedUser, NEWPASS_notExistedUser, client_TRUSTED, 200);
-//        checkAllResources(userTest);
-//
-//        Optional<User> user = getUserById(EMAIL_notExistedUser);
-//        userService.delete(user.get());
-//        assertEquals(false, getUserById(EMAIL_notExistedUser).isPresent());
-//    }
-//
-//    @Test
-//    public void _06_restoreUserPass()
-//    {
-//        logHead("Restore User Pass");
-//
-//
-//    }
-//
-//
-//
-//
-//    /*
-//        UTILs
-//    */
-//
-//    private Optional<ConfirmationKey> getConfirmationKey(String id)
-//    {
-//        return confirmationKeyService.findById(id);
-//    }
+    @Test
+    public void _08_changeUserPass()
+    {
+        logHead("Change User Pass");
+
+        //newpass
+        UserTest.of(USER, EMAIL_notExistedUser, NEWPASS_notExistedUser, client_TRUSTED,
+                400);
+        //oldpass
+        UserTest userTest = UserTest.of(USER, EMAIL_notExistedUser, PASS_notExistedUser, client_TRUSTED,
+                200);
+        //change oldpass
+        check_send_data(POST, resource_changeUserPass, userTest.access_token, checkers_for_changeUserPass);
+
+        //oldpass
+        UserTest.of(USER, EMAIL_notExistedUser, PASS_notExistedUser, client_TRUSTED,
+                400);
+        //newpass
+        userTest = UserTest.of(USER, EMAIL_notExistedUser, NEWPASS_notExistedUser, client_TRUSTED,
+                200);
+        checkAllResources(userTest);
+        mailingConfirmEmailRepository.delete(mailingConfirmEmailRepository.findById(userTest.username).get());
+
+        userService.delete(getUserByEmail(EMAIL_notExistedUser).get());
+        userService.delete(getUserByEmail(EMAIL_2_notExistedUser).get());
+        assertEquals(false, getUserByEmail(EMAIL_notExistedUser).isPresent());
+        assertEquals(false, getUserByEmail(EMAIL_2_notExistedUser).isPresent());
+    }
+
 
     private Optional<User> getUserByEmail(String email)
     {
