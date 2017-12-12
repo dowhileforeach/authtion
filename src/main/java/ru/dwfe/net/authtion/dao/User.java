@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static ru.dwfe.net.authtion.Util.isDefaultCheckOK;
+import static ru.dwfe.net.authtion.util.Util.isDefaultCheckOK;
 
 @Entity
 @Table(name = "users")
@@ -252,7 +252,7 @@ public class User implements UserDetails, CredentialsContainer
                 " \"accountNonExpired\": " + accountNonExpired + ",\n" +
                 " \"credentialsNonExpired\": " + credentialsNonExpired + ",\n" +
                 " \"accountNonLocked\": " + accountNonLocked + ",\n" +
-                " \"enabled\": " + enabled + "\n" +
+                " \"enabled\": " + enabled + ",\n" +
                 " \"emailConfirmed\": " + emailConfirmed + "\n" +
                 "}";
     }

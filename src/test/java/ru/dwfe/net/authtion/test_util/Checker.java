@@ -2,6 +2,8 @@ package ru.dwfe.net.authtion.test_util;
 
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+
 public class Checker
 {
     public String resultFieldName;
@@ -11,20 +13,62 @@ public class Checker
     public String expectedErrorContainer;
     public String expectedErrorFieldName;
     public String expectedError;
+    public Map<String, Object> expectedResponseMap;
 
-    public static Checker of(String resultFieldName, Boolean expectedResult, Map<String, Object> req, int expectedStatus, String expectedErrorContainer, String expectedErrorFieldName, String expectedError)
+    public void responseHandler(Map<String, Object> map)
     {
-        return new Checker(resultFieldName, expectedResult, req, expectedStatus, expectedErrorContainer, expectedErrorFieldName, expectedError);
+        Object details = UtilTest.getValueFromResponse(map, "details");
+        assertEquals(true, details.equals(expectedResponseMap));
     }
 
-    private Checker(String resultFieldName, Boolean expectedResult, Map<String, Object> req, int expectedStatus, String expectedErrorContainer, String expectedErrorFieldName, String expectedError)
+    public static Checker of(String resultFieldName,
+                             Boolean expectedResult,
+                             Map<String, Object> req,
+                             int expectedStatus,
+                             String expectedErrorContainer,
+                             String expectedErrorFieldName,
+                             String expectedError)
     {
-        this.resultFieldName = resultFieldName;
-        this.expectedResult = expectedResult;
-        this.req = req;
-        this.expectedStatus = expectedStatus;
-        this.expectedErrorContainer = expectedErrorContainer;
-        this.expectedErrorFieldName = expectedErrorFieldName;
-        this.expectedError = expectedError;
+        Checker checker = new Checker();
+        checker.resultFieldName = resultFieldName;
+        checker.expectedResult = expectedResult;
+        checker.req = req;
+        checker.expectedStatus = expectedStatus;
+        checker.expectedErrorContainer = expectedErrorContainer;
+        checker.expectedErrorFieldName = expectedErrorFieldName;
+        checker.expectedError = expectedError;
+
+        return checker;
     }
+
+    public static Checker of(String resultFieldName,
+                             Boolean expectedResult,
+                             Map<String, Object> req,
+                             int expectedStatus)
+    {
+        Checker checker = new Checker();
+        checker.resultFieldName = resultFieldName;
+        checker.expectedResult = expectedResult;
+        checker.req = req;
+        checker.expectedStatus = expectedStatus;
+
+        return checker;
+    }
+
+    public static Checker of(String resultFieldName,
+                             Boolean expectedResult,
+                             Map<String, Object> req,
+                             int expectedStatus,
+                             Map<String, Object> expectedResponseMap)
+    {
+        Checker checker = new Checker();
+        checker.resultFieldName = resultFieldName;
+        checker.expectedResult = expectedResult;
+        checker.req = req;
+        checker.expectedStatus = expectedStatus;
+        checker.expectedResponseMap = expectedResponseMap;
+
+        return checker;
+    }
+
 }

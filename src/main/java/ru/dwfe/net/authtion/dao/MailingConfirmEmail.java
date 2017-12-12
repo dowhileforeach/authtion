@@ -1,6 +1,6 @@
 package ru.dwfe.net.authtion.dao;
 
-import ru.dwfe.net.authtion.Util;
+import ru.dwfe.net.authtion.util.Util;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

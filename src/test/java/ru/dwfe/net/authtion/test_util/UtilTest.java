@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ru.dwfe.net.authtion.util.Util;
 
 import java.io.IOException;
 import java.util.List;
@@ -229,6 +230,12 @@ public class UtilTest
                 else
                     assertEquals(checker.expectedError, getValueFromValueFromResponse(map, expectedErrorContainer, checker.expectedErrorFieldName));
             }
+
+            if (checker.expectedResponseMap != null)
+            {
+                log.info("[expected] = " + Util.getJSONfromObject(checker.expectedResponseMap));
+                checker.responseHandler(map);
+            }
         }
     }
 
@@ -256,7 +263,7 @@ public class UtilTest
         return parse(body).get(key);
     }
 
-    private static Object getValueFromResponse(Map<String, Object> map, String key)
+    public static Object getValueFromResponse(Map<String, Object> map, String key)
     {
         return map.get(key);
     }

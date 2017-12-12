@@ -1,23 +1,24 @@
 package ru.dwfe.net.authtion;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.dwfe.net.authtion.dao.MailingNewUserPassword;
 import ru.dwfe.net.authtion.dao.User;
 import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
-import ru.dwfe.net.authtion.dao.repository.MailingRestorePasswordRepository;
 import ru.dwfe.net.authtion.dao.repository.MailingNewUserPasswordRepository;
+import ru.dwfe.net.authtion.dao.repository.MailingRestorePasswordRepository;
 import ru.dwfe.net.authtion.service.UserService;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.Util.*;
 import static ru.dwfe.net.authtion.dao.User.*;
+import static ru.dwfe.net.authtion.util.Util.*;
 
 @RestController
 public class AppControllerV1
@@ -118,6 +119,32 @@ public class AppControllerV1
             }
             result = true;
         }
+        return getResponse("success", result, details);
+    }
+
+    @RequestMapping(value = API + "/user-data")
+    @PreAuthorize("hasAuthority('USER')")
+    public String userData(OAuth2Authentication authentication)
+    {
+        return getResponse("success", true, authentication.getPrincipal().toString());
+    }
+
+    @RequestMapping(value = API + "/public/user/{id}")
+    public String getPublicUserInfo(@PathVariable Long id)
+    {
+        boolean result = false;
+        Map<String, Object> details = new HashMap<>();
+
+        Optional<User> userById = userService.findById(id);
+        if (userById.isPresent())
+        {
+            User user = userById.get();
+            details.put("id", user.getId());
+            details.put("publicName", user.getPublicName());
+            result = true;
+        }
+        else details.put("error", "user doesn't exist");
+
         return getResponse("success", result, details);
     }
 

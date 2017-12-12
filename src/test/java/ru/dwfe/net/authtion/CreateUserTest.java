@@ -18,9 +18,11 @@ import ru.dwfe.net.authtion.test_util.UserTest;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.test_util.AuthorityType.*;
-import static ru.dwfe.net.authtion.test_util.UtilTest.*;
+import static ru.dwfe.net.authtion.test_util.AuthorityType.USER;
+import static ru.dwfe.net.authtion.test_util.UtilTest.checkAllResources;
+import static ru.dwfe.net.authtion.test_util.UtilTest.check_send_data;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 import static ru.dwfe.net.authtion.test_util.Variables_for_CreateUserTest.*;
 
@@ -91,6 +93,24 @@ public class CreateUserTest
 
         UserTest user2Test = UserTest.of(USER, user2.getEmail(), PASS_2_notExistedUser, client_TRUSTED, 200);
         checkAllResources(user2Test);
+    }
+
+    @Test
+    public void _04_userData()
+    {
+        logHead("User Data");
+        check_send_data(GET, resource_userData, USER_user.access_token, checkers_for_userData);
+    }
+
+    @Test
+    public void _05_publicUser()
+    {
+        logHead("Public User");
+        check_send_data(GET, resource_publicUser9, null, checkers_for_publicUser9);
+        check_send_data(GET, resource_publicUser9, USER_user.access_token, checkers_for_publicUser9);
+        check_send_data(GET, resource_publicUser9, FRONTEND_user.access_token, checkers_for_publicUser9);
+        check_send_data(GET, resource_publicUser1, null, checkers_for_publicUser1);
+        check_send_data(GET, resource_publicUser1, ADMIN_user.access_token, checkers_for_publicUser1);
     }
 
 //    @Test

@@ -1,4 +1,4 @@
-package ru.dwfe.net.authtion;
+package ru.dwfe.net.authtion.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,6 +61,14 @@ public class Util
                     "\"%s\": %s, " +
                     "\"details\": %s" +
                     "}", resultFieldName, responseResult, getJSONfromObject(details));
+    }
+
+    public static String getResponse(String resultFieldName, boolean responseResult, String details)
+    {
+        return String.format("{" +
+                "\"%s\": %s, " +
+                "\"details\": %s" +
+                "}", resultFieldName, responseResult, details);
     }
 
     public static String getJSONfromObject(Object value)
