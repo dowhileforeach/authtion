@@ -15,16 +15,13 @@ Therefore, for all API versions is one version "/oauth/token".
 See `test\java\ru.dwfe.authtion` classes.
 
 ## AuthorityTest
-See screenrecord:
 1. Login as: `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru`
 2. Try to access as `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru`, `not logged user` to resources:
    * `/public`
    * `/cities`
    * `/users`
    * `/check-user-id`
-   * `/check-user-pass`
-   * `/create-user`
-   * `/confirm-user`
+   * etc.
 
 ![AuthorityTest_pic](./img/AuthorityTest_pic.png)<br>
 <br>
@@ -55,3 +52,11 @@ curl http://localhost:8080/v1/check-user-id -H "Authorization: Bearer ACCESS_TOK
 curl http://localhost:8080/v1/create-user -H "Authorization: Bearer ACCESS_TOKEN" -H "Content-Type: application/json; charset=utf-8" -X POST -d '{}'
 curl http://localhost:8080/v1/confirm-user -d confirmkey=AnyString
 ```
+
+## UserPassword_CRU_Test
+
+### User: Create, Read, Update
+![UserPassword_CRU_Test_User](./img/UserPassword_CRU_Test_User.png)<br>
+
+### Password management
+![UserPassword_CRU_Test_Password](./img/UserPassword_CRU_Test_Password.png)<br>
