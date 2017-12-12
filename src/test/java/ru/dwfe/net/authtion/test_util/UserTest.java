@@ -3,7 +3,7 @@ package ru.dwfe.net.authtion.test_util;
 public class UserTest
 {
 
-    String username;
+    public String username;
     String password;
 
     Client client;

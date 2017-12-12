@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
+import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
 import ru.dwfe.net.authtion.dao.MailingNewUserPassword;
 import ru.dwfe.net.authtion.dao.User;
 import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
@@ -148,18 +149,18 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-//    @RequestMapping(value = API + "/req-confirm-email")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public String requestConfirmEmail(OAuth2Authentication authentication) throws JsonProcessingException
-//    {
-//        String id = ((User) authentication.getPrincipal()).getId();
-//        mailingConfirmEmailRepository.save(MailingConfirmEmail.of(id));
-//
-//        //TODO send e-mail
-//
-//        return getResponse("success", true, null);
-//    }
-//
+    @RequestMapping(value = API + "/req-confirm-email")
+    @PreAuthorize("hasAuthority('USER')")
+    public String requestConfirmEmail(OAuth2Authentication authentication)
+    {
+        String email = ((User) authentication.getPrincipal()).getEmail();
+        mailingConfirmEmailRepository.save(MailingConfirmEmail.of(email));
+
+        //TODO send e-mail
+
+        return getResponse("success", true, Map.of());
+    }
+
 //    @RequestMapping(API + "/confirm-email")
 //    public String confirmEmail(@RequestParam String key) throws JsonProcessingException
 //    {

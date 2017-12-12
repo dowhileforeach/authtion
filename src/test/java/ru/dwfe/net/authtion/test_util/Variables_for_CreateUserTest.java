@@ -83,9 +83,12 @@ public class Variables_for_CreateUserTest
     public static final List<Checker> checkers_for_publicUser9 = List.of(
             Checker.of("success", false, Map.of(), 200, "details", "error", "user doesn't exist")
     );
-
     public static final List<Checker> checkers_for_publicUser1 = List.of(
             Checker.of("success", true, Map.of(), 200, Map.of("id", 1, "publicName", "admin"))
+    );
+
+    public static final List<Checker> checkers_for_reqConfirmEmail = List.of(
+            Checker.of("success", true, Map.of(), 200)
     );
 
 

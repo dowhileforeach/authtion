@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.dwfe.net.authtion.dao.MailingNewUserPassword;
 import ru.dwfe.net.authtion.dao.User;
+import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
 import ru.dwfe.net.authtion.dao.repository.MailingNewUserPasswordRepository;
 import ru.dwfe.net.authtion.service.UserService;
 import ru.dwfe.net.authtion.test_util.UserTest;
@@ -40,6 +41,8 @@ public class CreateUserTest
 
     @Autowired
     MailingNewUserPasswordRepository mailingNewUserPasswordRepository;
+    @Autowired
+    MailingConfirmEmailRepository mailingConfirmEmailRepository;
 
     @Test
     public void _01_checkUserEmail()
@@ -85,14 +88,16 @@ public class CreateUserTest
         Optional<MailingNewUserPassword> mailingNewUserPasswordByEmail = mailingNewUserPasswordRepository.findById(EMAIL_2_notExistedUser);
         assertEquals(true, mailingNewUserPasswordByEmail.isPresent());
         String PASS_2_notExistedUser = mailingNewUserPasswordByEmail.get().getPassword();
-        assertEquals(true, PASS_2_notExistedUser.length() == 10);
+        assertEquals(true, PASS_2_notExistedUser.length() >= 9);
 
         //Test for new User access to all resources
         UserTest user1Test = UserTest.of(USER, user1.getEmail(), PASS_notExistedUser, client_TRUSTED, 200);
         checkAllResources(user1Test);
+        mailingConfirmEmailRepository.delete(mailingConfirmEmailRepository.findById(user1.getEmail()).get());
 
         UserTest user2Test = UserTest.of(USER, user2.getEmail(), PASS_2_notExistedUser, client_TRUSTED, 200);
         checkAllResources(user2Test);
+        mailingConfirmEmailRepository.delete(mailingConfirmEmailRepository.findById(user2.getEmail()).get());
     }
 
     @Test
@@ -111,6 +116,20 @@ public class CreateUserTest
         check_send_data(GET, resource_publicUser9, FRONTEND_user.access_token, checkers_for_publicUser9);
         check_send_data(GET, resource_publicUser1, null, checkers_for_publicUser1);
         check_send_data(GET, resource_publicUser1, ADMIN_user.access_token, checkers_for_publicUser1);
+    }
+
+    @Test
+    public void _06_requestConfirmEmail()
+    {
+        logHead("Request Confirm Email");
+
+        UserTest userTest = UserTest.of(USER, EMAIL_notExistedUser, PASS_notExistedUser, client_TRUSTED, 200);
+
+        assertEquals(false, mailingConfirmEmailRepository.findById(userTest.username).isPresent());
+
+        check_send_data(GET, resource_reqConfirmEmail, userTest.access_token, checkers_for_reqConfirmEmail);
+
+        assertEquals(true, mailingConfirmEmailRepository.findById(userTest.username).isPresent());
     }
 
 //    @Test
