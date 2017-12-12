@@ -84,11 +84,12 @@ CREATE TABLE `mailing_new_user_password` (
 
 DROP TABLE IF EXISTS `mailing_confirm_email`;
 CREATE TABLE `mailing_confirm_email` (
-  `user`        VARCHAR(50)
-                COLLATE utf8mb4_unicode_ci             NOT NULL,
-  `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`     DATETIME                                        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user`         VARCHAR(50)
+                 COLLATE utf8mb4_unicode_ci             NOT NULL,
+  `confirm_key`  VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `already_sent` TINYINT(1)                             NOT NULL DEFAULT '0',
+  `created`      DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`      DATETIME                                        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user`),
   UNIQUE KEY `mailing_confirm_email_user_uindex` (`user`),
   CONSTRAINT `mailing_confirm_email_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`email`)
@@ -101,11 +102,12 @@ CREATE TABLE `mailing_confirm_email` (
 
 DROP TABLE IF EXISTS `mailing_restore_password`;
 CREATE TABLE `mailing_restore_password` (
-  `user`        VARCHAR(50)
-                COLLATE utf8mb4_unicode_ci             NOT NULL,
-  `confirm_key` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`     DATETIME                                        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user`         VARCHAR(50)
+                 COLLATE utf8mb4_unicode_ci             NOT NULL,
+  `confirm_key`  VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `already_sent` TINYINT(1)                             NOT NULL DEFAULT '0',
+  `created`      DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated`      DATETIME                                        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user`),
   UNIQUE KEY `mailing_restore_password_user_uindex` (`user`),
   CONSTRAINT `mailing_restore_password_users_id_fk` FOREIGN KEY (`user`) REFERENCES `users` (`email`)

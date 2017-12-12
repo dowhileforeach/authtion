@@ -161,33 +161,35 @@ public class AppControllerV1
         return getResponse("success", true, Map.of());
     }
 
-//    @RequestMapping(API + "/confirm-email")
-//    public String confirmEmail(@RequestParam String key) throws JsonProcessingException
-//    {
-//        boolean result = false;
-//        String fieldName = "error";
-//        Map<String, Object> details = new HashMap<>();
-//
-//        if (isDefaultCheckOK(key, fieldName, details))
-//        {
-//            MailingConfirmEmail confirm = mailingConfirmEmailRepository.findByConfirmKey(key);
-//            if (confirm != null)
-//            {
-//                //The User is guaranteed to exist because: FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE
-//                User user = userService.findById(confirm.getUser()).get();
-//                user.setEmailConfirmed(true); //Now email is confirmed
-//                userService.save(user);
-//
-//                //delete this confirmation key from database
-//                mailingConfirmEmailRepository.delete(confirm);
-//
-//                result = true;
-//            }
-//            else details.put(fieldName, "key does not exist");
-//        }
-//        return getResponse("success", result, details);
-//    }
-//
+    @RequestMapping(API + "/confirm-email")
+    public String confirmEmail(@RequestParam String key)
+    {
+        boolean result = false;
+        String fieldName = "error";
+        Map<String, Object> details = new HashMap<>();
+
+        if (isDefaultCheckOK(key, fieldName, details))
+        {
+            Optional<MailingConfirmEmail> confirmByKey = mailingConfirmEmailRepository.findByConfirmKey(key);
+            if (confirmByKey.isPresent())
+            {
+                MailingConfirmEmail confirm = confirmByKey.get();
+
+                //The User is guaranteed to exist because: FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE
+                User user = userService.findByEmail(confirm.getUser()).get();
+                user.setEmailConfirmed(true); //Now email is confirmed
+                userService.save(user);
+
+                //delete this confirmation key from database
+                mailingConfirmEmailRepository.delete(confirm);
+
+                result = true;
+            }
+            else details.put(fieldName, "key does not exist");
+        }
+        return getResponse("success", result, details);
+    }
+
 //    @RequestMapping(value = API + "/change-user-pass", method = RequestMethod.POST)
 //    @PreAuthorize("hasAuthority('USER')")
 //    public String changeUserPass(@RequestBody String body, OAuth2Authentication authentication) throws JsonProcessingException

@@ -18,12 +18,16 @@ public class MailingRestorePassword
     @Column
     private String confirmKey;
 
+    @Column
+    private boolean alreadySent;
+
 
     public static MailingRestorePassword of(String user)
     {
         MailingRestorePassword confirm = new MailingRestorePassword();
         confirm.setUser(user);
         confirm.setConfirmKey(Util.getUniqStr(30));
+        confirm.setAlreadySent(false);
         return confirm;
     }
 
@@ -45,6 +49,16 @@ public class MailingRestorePassword
     public void setConfirmKey(String confirmKey)
     {
         this.confirmKey = confirmKey;
+    }
+
+    public boolean isAlreadySent()
+    {
+        return alreadySent;
+    }
+
+    public void setAlreadySent(boolean alreadySent)
+    {
+        this.alreadySent = alreadySent;
     }
 
     @Override

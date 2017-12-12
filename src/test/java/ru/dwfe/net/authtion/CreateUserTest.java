@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
 import ru.dwfe.net.authtion.dao.MailingNewUserPassword;
 import ru.dwfe.net.authtion.dao.User;
 import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
@@ -63,6 +64,10 @@ public class CreateUserTest
     public void _03_createUser()
     {
         logHead("Create User");
+
+        assertEquals(false, mailingNewUserPasswordRepository.findById(EMAIL_notExistedUser).isPresent());
+        assertEquals(false, mailingNewUserPasswordRepository.findById(EMAIL_2_notExistedUser).isPresent());
+
         check_send_data(POST, resource_createUser, FRONTEND_user.access_token, checkers_for_createUser());
 
         Optional<User> user1ByEmail = getUserByEmail(EMAIL_notExistedUser);
@@ -77,7 +82,7 @@ public class CreateUserTest
         Optional<User> user2ByEmail = getUserByEmail(EMAIL_2_notExistedUser);
         assertEquals(true, user2ByEmail.isPresent());
         User user2 = user2ByEmail.get();
-        assertEquals(true, user2.getId() > 1000);
+        assertEquals(true, user2.getId() >= 1000);
         assertEquals(true, "ozon".equals(user2.getPublicName()));
         assertEquals(true, user2.getPublicName().equals(user2.getFirstName()));
         assertEquals(true, user2.isAccountNonExpired() && user2.isAccountNonLocked() && user2.isCredentialsNonExpired() && user2.isEnabled());
@@ -125,11 +130,31 @@ public class CreateUserTest
 
         UserTest userTest = UserTest.of(USER, EMAIL_notExistedUser, PASS_notExistedUser, client_TRUSTED, 200);
 
-        assertEquals(false, mailingConfirmEmailRepository.findById(userTest.username).isPresent());
+        Optional<MailingConfirmEmail> confirmById = mailingConfirmEmailRepository.findById(userTest.username);
+        assertEquals(false, confirmById.isPresent());
 
         check_send_data(GET, resource_reqConfirmEmail, userTest.access_token, checkers_for_reqConfirmEmail);
 
-        assertEquals(true, mailingConfirmEmailRepository.findById(userTest.username).isPresent());
+        confirmById = mailingConfirmEmailRepository.findById(userTest.username);
+        assertEquals(true, confirmById.isPresent());
+        assertEquals(false, confirmById.get().isAlreadySent());
+    }
+
+    @Test
+    public void _07_confirmEmail()
+    {
+        logHead("Confirm Email");
+
+        Optional<MailingConfirmEmail> confirmById = mailingConfirmEmailRepository.findById(EMAIL_notExistedUser);
+        assertEquals(true, confirmById.isPresent());
+        String confirmKey = confirmById.get().getConfirmKey();
+
+        assertEquals(false, userService.findByEmail(EMAIL_notExistedUser).get().isEmailConfirmed());
+
+        check_send_data(GET, resource_confirmEmail, null, checkers_for_confirmEmail(confirmKey));
+
+        assertEquals(false, mailingConfirmEmailRepository.findById(EMAIL_notExistedUser).isPresent());
+        assertEquals(true, userService.findByEmail(EMAIL_notExistedUser).get().isEmailConfirmed());
     }
 
 //    @Test
