@@ -212,12 +212,41 @@ public class CreateUserTest
 
         confirmById = mailingRestorePasswordRepository.findById(EMAIL_NEW_User);
         assertEquals(true, confirmById.isPresent());
+    }
 
+    @Test
+    public void _11_restoreUserPass()
+    {
+        logHead("Restore User Password");
 
-//        userService.delete(getUserByEmail(EMAIL_NEW_User).get());
-//        userService.delete(getUserByEmail(EMAIL_2_NEW_User).get());
-//        assertEquals(false, getUserByEmail(EMAIL_NEW_User).isPresent());
-//        assertEquals(false, getUserByEmail(EMAIL_2_NEW_User).isPresent());
+        Optional<MailingRestorePassword> confirmById = mailingRestorePasswordRepository.findById(EMAIL_NEW_User);
+        assertEquals(true, confirmById.isPresent());
+
+        //oldpass
+        UserTest.of(USER, EMAIL_NEW_User, NEWPASS_NEW_User, client_TRUSTED,
+                200);
+        //newpass
+        UserTest.of(USER, EMAIL_NEW_User, PASS_NEW_User, client_TRUSTED,
+                400);
+
+        //change password
+        check_send_data(POST, resource_restoreUserPass, FRONTEND_user.access_token, checkers_for_restoreUserPass(confirmById.get().getConfirmKey()));
+
+        assertEquals(false, mailingRestorePasswordRepository.findById(EMAIL_NEW_User).isPresent());
+
+        //oldpass
+        UserTest.of(USER, EMAIL_NEW_User, NEWPASS_NEW_User, client_TRUSTED,
+                400);
+        //newpass
+        UserTest userTest = UserTest.of(USER, EMAIL_NEW_User, PASS_NEW_User, client_TRUSTED,
+                200);
+        checkAllResources(userTest);
+        mailingConfirmEmailRepository.delete(mailingConfirmEmailRepository.findById(userTest.username).get());
+
+        userService.delete(getUserByEmail(EMAIL_NEW_User).get());
+        userService.delete(getUserByEmail(EMAIL_2_NEW_User).get());
+        assertEquals(false, getUserByEmail(EMAIL_NEW_User).isPresent());
+        assertEquals(false, getUserByEmail(EMAIL_2_NEW_User).isPresent());
     }
 
 

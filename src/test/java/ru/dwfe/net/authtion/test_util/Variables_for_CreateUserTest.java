@@ -130,4 +130,30 @@ public class Variables_for_CreateUserTest
                 Checker.of("success", true,  Map.of("key", existedKey), 200, Map.of("email",EMAIL_NEW_User, "key",existedKey))
         );
     }
+
+    public static List<Checker> checkers_for_restoreUserPass(String existedKey)
+    {
+        List<Checker> list = new ArrayList<>(List.of(
+                Checker.of("success", false, Map.of(),                   200, "details", "newpass", "required field"),
+                Checker.of("success", false, Map.of("newpass", ""),      200, "details", "newpass", "can't be empty"),
+                Checker.of("success", false, Map.of("newpass", "54321"), 200, "details", "newpass", "length must be greater than or equal to 6 and less than or equal to 55"),
+                Checker.of("success", false, Map.of("newpass", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "details", "newpass", "length must be greater than or equal to 6 and less than or equal to 55")
+        ));
+        list.addAll(List.of(
+                Checker.of("success", false, Map.of("newpass",PASS_NEW_User),           200, "details", "key", "required field"),
+                Checker.of("success", false, Map.of("newpass",PASS_NEW_User, "key",""), 200, "details", "key", "can't be empty")
+        ));
+        list.addAll(List.of(
+                Checker.of("success", false, Map.of("newpass",PASS_NEW_User, "key","123"),                              200, "details", "email", "required field"),
+                Checker.of("success", false, Map.of("newpass",PASS_NEW_User, "key","123", "email",""),                  200, "details", "email", "can't be empty"),
+                Checker.of("success", false, Map.of("newpass",PASS_NEW_User, "key","123", "email","lllgyg_bnmkksk12345llogygyg_bnmkkskslwlwll@gmail.com"), 200, "details", "email", "length must be less than 50 characters"),
+                Checker.of("success", false, Map.of("newpass",PASS_NEW_User, "key","123", "email","shop"),              200, "details", "email", "must be valid e-mail address"),
+                Checker.of("success", false, Map.of("newpass",PASS_NEW_User, "key","123", "email","..puqu@mail.ru"),    200, "details", "email", "must be valid e-mail address"),
+                Checker.of("success", false, Map.of("newpass",PASS_NEW_User, "key","123", "email","ehlo@mail.ru"),      200, "details", "error", "key does not exist"),
+                Checker.of("success", false, Map.of("newpass",PASS_NEW_User, "key",existedKey, "email","ehlo@mail.ru"), 200, "details", "error", "email from request doesn't match with email associated with key"),
+                Checker.of("success", true,  Map.of("newpass",PASS_NEW_User, "key",existedKey, "email",EMAIL_NEW_User), 200)
+        ));
+        return list;
+    }
+
 }

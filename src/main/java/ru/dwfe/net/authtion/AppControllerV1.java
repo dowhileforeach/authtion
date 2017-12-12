@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.dao.User.*;
 import static ru.dwfe.net.authtion.util.Util.*;
 
@@ -265,37 +265,42 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-//    @RequestMapping(value = API + "/restore-user-pass", method = POST)
-//    @PreAuthorize("hasAuthority('FRONTEND')")
-//    public String restoreUserPass(@RequestBody String body) throws JsonProcessingException
-//    {
-//        boolean result = false;
-//        String fieldName = "error";
-//        Map<String, Object> details = new HashMap<>();
-//        Map<String, Object> map = parse(body);
-//
-//        String id = (String) getValue(map, "id");
-//        String key = (String) getValue(map, "key");
-//        String newpass = (String) getValue(map, "newpass");
-//
-//        if (isDefaultCheckOK(id, "id", details)
-//                && isDefaultCheckOK(key, "key", details)
-//                && canUsePassword(newpass, "newpass", details))
-//        {
-//            MailingRestorePassword confirm = mailingRestorePasswordRepository.findByConfirmKey(key);
-//            if (confirm != null)
-//            {
-//                //The User is guaranteed to exist because: FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE
-//                User user = userService.findById(id).get();
-//                user.setPassword(getBCryptEncodedPassword(newpass));
-//                userService.save(user);
-//
-//                mailingRestorePasswordRepository.delete(confirm);
-//
-//                result = true;
-//            }
-//            else details.put(fieldName, "key does not exist");
-//        }
-//        return getResponse("success", result, details);
-//    }
+    @RequestMapping(value = API + "/restore-user-pass", method = POST)
+    @PreAuthorize("hasAuthority('FRONTEND')")
+    public String restoreUserPass(@RequestBody String body)
+    {
+        boolean result = false;
+        String fieldName = "error";
+        Map<String, Object> details = new HashMap<>();
+        Map<String, Object> map = parse(body);
+
+        String email = (String) getValue(map, "email");
+        String key = (String) getValue(map, "key");
+        String newpass = (String) getValue(map, "newpass");
+
+        if (canUsePassword(newpass, "newpass", details)
+                && isDefaultCheckOK(key, "key", details)
+                && isDefaultEmailCheckOK(email, details))
+        {
+            Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(key);
+            if (confirmByKey.isPresent())
+            {
+                MailingRestorePassword confirm = confirmByKey.get();
+                if (email.equals(confirm.getUser()))
+                {
+                    //The User is guaranteed to exist because: FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE
+                    User user = userService.findByEmail(email).get();
+                    user.setPassword(getBCryptEncodedPassword(newpass));
+                    userService.save(user);
+
+                    mailingRestorePasswordRepository.delete(confirm);
+
+                    result = true;
+                }
+                else details.put(fieldName, "email from request doesn't match with email associated with key");
+            }
+            else details.put(fieldName, "key does not exist");
+        }
+        return getResponse("success", result, details);
+    }
 }
