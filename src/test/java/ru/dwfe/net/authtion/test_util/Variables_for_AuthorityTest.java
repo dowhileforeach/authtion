@@ -30,6 +30,7 @@ public class Variables_for_AuthorityTest
         result.put(resource_reqConfirmEmail, Map.of(USER, Map.of(GET, Map.of())));
         result.put(resource_confirmEmail, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))));
         result.put(resource_changeUserPass, Map.of(USER, Map.of(POST, Map.of())));
+        result.put(resource_reqRestoreUserPass, Map.of(FRONTEND, Map.of(POST, Map.of())));
 
         return result;
     }

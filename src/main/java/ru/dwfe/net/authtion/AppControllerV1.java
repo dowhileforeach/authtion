@@ -6,6 +6,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
 import ru.dwfe.net.authtion.dao.MailingNewUserPassword;
+import ru.dwfe.net.authtion.dao.MailingRestorePassword;
 import ru.dwfe.net.authtion.dao.User;
 import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
 import ru.dwfe.net.authtion.dao.repository.MailingNewUserPasswordRepository;
@@ -218,31 +219,31 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-//    @RequestMapping(value = API + "/req-restore-user-pass", method = POST)
-//    @PreAuthorize("hasAuthority('FRONTEND')")
-//    public String requestRestoreUserPass(@RequestBody String body) throws JsonProcessingException
-//    {
-//        boolean result = false;
-//        String fieldName = "error";
-//        Map<String, Object> details = new HashMap<>();
-//
-//        String id = (String) getValueFromJSON(body, "id");
-//
-//        if (isDefaultCheckOK(id, "id", details))
-//        {
-//            Optional<User> userById = userService.findById(id);
-//            if (userById.isPresent())
-//            {
-//                MailingRestorePassword confirm = MailingRestorePassword.of(id);
-//                mailingRestorePasswordRepository.save(confirm);
-//
-//                //TODO send e-mail
-//            }
-//            else details.put(fieldName, "user doesn't exist");
-//        }
-//        return getResponse("success", result, details);
-//    }
-//
+    @RequestMapping(value = API + "/req-restore-user-pass", method = POST)
+    @PreAuthorize("hasAuthority('FRONTEND')")
+    public String requestRestoreUserPass(@RequestBody String body)
+    {
+        boolean result = false;
+        Map<String, Object> details = new HashMap<>();
+
+        String email = (String) getValueFromJSON(body, "email");
+
+        if (isDefaultEmailCheckOK(email, details))
+        {
+            if (userService.existsByEmail(email))
+            {
+                MailingRestorePassword confirm = MailingRestorePassword.of(email);
+                mailingRestorePasswordRepository.save(confirm);
+
+                //TODO send e-mail
+
+                result = true;
+            }
+            else details.put("error", "user doesn't exist");
+        }
+        return getResponse("success", result, details);
+    }
+
 //    @RequestMapping(API + "/confirm-restore-user-pass")
 //    public String confirmRestoreUserPass(@RequestParam String key) throws JsonProcessingException
 //    {

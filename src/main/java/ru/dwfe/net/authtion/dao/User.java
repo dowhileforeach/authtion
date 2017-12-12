@@ -266,6 +266,22 @@ public class User implements UserDetails, CredentialsContainer
     {
         boolean result = false;
         String fieldName = "email";
+
+        if (isDefaultEmailCheckOK(email, details))
+        {
+            if (!userService.existsByEmail(email))
+            {
+                result = true;
+            }
+            else details.put(fieldName, "user is present");
+        }
+        return result;
+    }
+
+    public static boolean isDefaultEmailCheckOK(String email, Map<String, Object> details)
+    {
+        boolean result = false;
+        String fieldName = "email";
         int maxLength = 50;
 
         if (isDefaultCheckOK(email, fieldName, details))
@@ -274,11 +290,7 @@ public class User implements UserDetails, CredentialsContainer
             {
                 if (emailRegexPattern.matcher(email).matches())
                 {
-                    if (!userService.existsByEmail(email))
-                    {
-                        result = true;
-                    }
-                    else details.put(fieldName, "user is present");
+                    result = true;
                 }
                 else details.put(fieldName, "must be valid e-mail address");
             }

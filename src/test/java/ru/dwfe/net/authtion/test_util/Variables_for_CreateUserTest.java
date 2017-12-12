@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class Variables_for_CreateUserTest
 {
-    public static final String EMAIL_notExistedUser = "notExistedUser@ya.ru";
-    public static final String EMAIL_2_notExistedUser = "not_02_ExistedUser@ya.ru";
-    public static final String PASS_notExistedUser = "123456";
-    public static final String NEWPASS_notExistedUser = "1234567890";
+    public static final String EMAIL_NEW_User = "notExistedUser@ya.ru";
+    public static final String EMAIL_2_NEW_User = "not_02_ExistedUser@ya.ru";
+    public static final String PASS_NEW_User = "123456";
+    public static final String NEWPASS_NEW_User = "1234567890";
 
 //
 //    public static final String confirm_NONisCreateNewUser_user = "shop@ya.ru";
@@ -31,7 +31,7 @@ public class Variables_for_CreateUserTest
             Checker.of("canUse", false, Map.of("email", "user"),               200, "details", "email", "must be valid e-mail address"),
             Checker.of("canUse", false, Map.of("email", ".uuqu@mail.ru"),      200, "details", "email", "must be valid e-mail address"),
             Checker.of("canUse", false, Map.of("email", "user@ya.ru"),         200, "details", "email", "user is present"),
-            Checker.of("canUse", true,  Map.of("email", EMAIL_notExistedUser), 200)
+            Checker.of("canUse", true,  Map.of("email", EMAIL_NEW_User), 200)
     );
 
     public static final List<Checker> checkers_for_checkUserPass = List.of(
@@ -53,12 +53,12 @@ public class Variables_for_CreateUserTest
                 Checker.of("success", false, Map.of("email", "admin@ya.ru"),   200, "details", "email", "user is present")
         ));
         list.addAll(List.of(
-                Checker.of("success", true,  Map.of("email", EMAIL_2_notExistedUser, "firstName", "ozon"), 200),
-                Checker.of("success", false, Map.of("email", EMAIL_2_notExistedUser),                      200, "details", "email", "user is present"),
-                Checker.of("success", false, Map.of("email", EMAIL_notExistedUser, "password", ""),        200, "details", "password", "can't be empty"),
-                Checker.of("success", false, Map.of("email", EMAIL_notExistedUser, "password", "54321"),   200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
-                Checker.of("success", false, Map.of("email", EMAIL_notExistedUser, "password", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
-                Checker.of("success", true,  Map.of("email", EMAIL_notExistedUser, "password", PASS_notExistedUser, "publicName", "nobody"), 200)
+                Checker.of("success", true,  Map.of("email", EMAIL_2_NEW_User, "firstName", "ozon"), 200),
+                Checker.of("success", false, Map.of("email", EMAIL_2_NEW_User),                      200, "details", "email", "user is present"),
+                Checker.of("success", false, Map.of("email", EMAIL_NEW_User, "password", ""),        200, "details", "password", "can't be empty"),
+                Checker.of("success", false, Map.of("email", EMAIL_NEW_User, "password", "54321"),   200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
+                Checker.of("success", false, Map.of("email", EMAIL_NEW_User, "password", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
+                Checker.of("success", true,  Map.of("email", EMAIL_NEW_User, "password", PASS_NEW_User, "publicName", "nobody"), 200)
         ));
         return list;
     }
@@ -104,10 +104,20 @@ public class Variables_for_CreateUserTest
     public static final List<Checker> checkers_for_changeUserPass = List.of(
             Checker.of("success", false, Map.of(),                                                                  200, "details", "oldpass", "required field"),
             Checker.of("success", false, Map.of("oldpass", ""),                                                     200, "details", "oldpass", "can't be empty"),
-            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser),                                    200, "details", "newpass", "required field"),
-            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser, "newpass", ""),                     200, "details", "newpass", "can't be empty"),
-            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser, "newpass", "12345"),                200, "details", "newpass", "length must be greater than or equal to 6 and less than or equal to 55"),
-            Checker.of("success", false, Map.of("oldpass", PASS_notExistedUser + "1", "newpass", "1234567"),        200, "details", "oldpass", "wrong"),
-            Checker.of("success", true,  Map.of("oldpass", PASS_notExistedUser, "newpass", NEWPASS_notExistedUser), 200)
+            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User),                                    200, "details", "newpass", "required field"),
+            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User, "newpass", ""),                     200, "details", "newpass", "can't be empty"),
+            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User, "newpass", "12345"),                200, "details", "newpass", "length must be greater than or equal to 6 and less than or equal to 55"),
+            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User + "1", "newpass", "1234567"),        200, "details", "oldpass", "wrong"),
+            Checker.of("success", true,  Map.of("oldpass", PASS_NEW_User, "newpass", NEWPASS_NEW_User), 200)
+    );
+
+    public static final List<Checker> checkers_for_reqRestoreUserPass = List.of(
+            Checker.of("success", false, Map.of(),                              200, "details", "email", "required field"),
+            Checker.of("success", false, Map.of("email", ""),                   200, "details", "email", "can't be empty"),
+            Checker.of("success", false, Map.of("email", "123456789012345678901234567890kkklkklklklkklklklklklklklk"), 200, "details", "email", "length must be less than 50 characters"),
+            Checker.of("success", false, Map.of("email", "admin"),              200, "details", "email", "must be valid e-mail address"),
+            Checker.of("success", false, Map.of("email", "@uu@mail.ru"),        200, "details", "email", "must be valid e-mail address"),
+            Checker.of("success", false, Map.of("email", "!uu@mail.ru"),        200, "details", "error", "user doesn't exist"),
+            Checker.of("success", true,  Map.of("email", EMAIL_NEW_User), 200)
     );
 }
