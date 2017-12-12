@@ -13,6 +13,7 @@ import ru.dwfe.net.authtion.util.Util;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
@@ -90,7 +91,7 @@ public class UtilTest
 
     private static String performAuthentification(Request req, int expectedStatus) throws Exception
     {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = getHttpClient();
         try (Response response = client.newCall(req).execute())
         {
             String body = response.body().string();
@@ -146,7 +147,7 @@ public class UtilTest
 
         String body = null;
         int actualStatusCode = -1;
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = getHttpClient();
         try (Response resp = client.newCall(req).execute())
         {
             body = resp.body().string();
@@ -159,6 +160,16 @@ public class UtilTest
         }
         assertEquals(expectedStatus, actualStatusCode);
         return body;
+    }
+
+    private static OkHttpClient getHttpClient()
+    {
+        return new OkHttpClient
+                .Builder()
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .build();
     }
 
     public static String getResponseAfterPOSTrequest(String access_token, String resource, Map<String, Object> prorepty_value, int expectedStatus)

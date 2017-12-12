@@ -148,4 +148,14 @@ public class Variables_for_CreateUserTest
         return list;
     }
 
+    public static final List<Checker> checkers_for_userUpdate = List.of(
+            Checker.of("success", false, Map.of(),                                                     200, "details", "warning", "no changes found"),
+            Checker.of("success", false, Map.of("publicName","user"),                                  200, "details", "warning", "no changes found"),
+            Checker.of("success", false, Map.of("publicName","user", "firstName",""),                  200, "details", "warning", "no changes found"),
+            Checker.of("success", true,  Map.of("publicName","User", "firstName","", "lastName",""),   200, Map.of("publicName","change saved")),
+            Checker.of("success", true,  Map.of("publicName","User", "firstName","1", "lastName",""),  200, Map.of("firstName","change saved")),
+            Checker.of("success", true,  Map.of("publicName","User", "firstName","1", "lastName","2"), 200, Map.of("lastName","change saved")),
+            Checker.of("success", true,  Map.of("publicName","user", "firstName","", "lastName",""),   200, Map.of("lastName","change saved", "publicName","change saved", "firstName","change saved"))
+    );
+
 }

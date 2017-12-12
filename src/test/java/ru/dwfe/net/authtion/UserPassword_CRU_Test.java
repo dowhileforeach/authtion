@@ -110,14 +110,21 @@ public class UserPassword_CRU_Test
     }
 
     @Test
-    public void _04_userData()
+    public void _04_userUpdate()
+    {
+        logHead("User Update");
+        check_send_data(POST, resource_userUpdate, USER_user.access_token, checkers_for_userUpdate);
+    }
+
+    @Test
+    public void _05_userData()
     {
         logHead("User Data");
         check_send_data(GET, resource_userData, USER_user.access_token, checkers_for_userData);
     }
 
     @Test
-    public void _05_publicUser()
+    public void _06_publicUser()
     {
         logHead("Public User");
         check_send_data(GET, resource_publicUser9, null, checkers_for_publicUser9);
@@ -128,7 +135,7 @@ public class UserPassword_CRU_Test
     }
 
     @Test
-    public void _06_requestConfirmEmail()
+    public void _07_requestConfirmEmail()
     {
         logHead("Request Confirm Email");
 
@@ -146,7 +153,7 @@ public class UserPassword_CRU_Test
     }
 
     @Test
-    public void _07_confirmEmail()
+    public void _08_confirmEmail()
     {
         logHead("Confirm Email");
 
@@ -163,7 +170,7 @@ public class UserPassword_CRU_Test
     }
 
     @Test
-    public void _08_changeUserPass()
+    public void _09_changeUserPass()
     {
         logHead("Change User Pass");
 
@@ -187,7 +194,7 @@ public class UserPassword_CRU_Test
     }
 
     @Test
-    public void _09_reqRestoreUserPass()
+    public void _10_reqRestoreUserPass()
     {
         logHead("Request Restore User Password");
 
@@ -201,7 +208,7 @@ public class UserPassword_CRU_Test
     }
 
     @Test
-    public void _10_confirmRestoreUserPass()
+    public void _11_confirmRestoreUserPass()
     {
         logHead("Confirm Restore User Password");
 
@@ -215,7 +222,7 @@ public class UserPassword_CRU_Test
     }
 
     @Test
-    public void _11_restoreUserPass()
+    public void _12_restoreUserPass()
     {
         logHead("Restore User Password");
 

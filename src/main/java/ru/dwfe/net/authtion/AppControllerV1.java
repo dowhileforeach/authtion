@@ -124,7 +124,7 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = API + "/user-update")
+    @RequestMapping(value = API + "/user-update", method = POST)
     @PreAuthorize("hasAuthority('USER')")
     public String userUpdate(@RequestBody String body, OAuth2Authentication authentication)
     {
@@ -140,35 +140,46 @@ public class AppControllerV1
             String firstName = (String) getValue(map, "firstName");
             String lastName = (String) getValue(map, "lastName");
 
-            boolean isPublicName = publicName != null && !publicName.equals(userAuth.getPublicName());
-            boolean isFirstName = firstName != null && !firstName.equals(userAuth.getFirstName());
-            boolean isLastName = lastName != null && !lastName.equals(userAuth.getLastName());
+            boolean isPublicName = publicName != null;
+            boolean isFirstName = firstName != null;
+            boolean isLastName = lastName != null;
 
             if (isPublicName || isFirstName || isLastName)
             {
+                boolean wasModified = false;
                 User user = userService.findByEmail(userAuth.getEmail()).get();
 
-                if (isPublicName)
+                if (isPublicName && !publicName.equals(user.getPublicName()))
                 {
                     user.setPublicName(publicName);
                     details.put("publicName", "change saved");
+                    wasModified = true;
                 }
-                if (isFirstName)
+                if (isFirstName && !firstName.equals(user.getFirstName()))
                 {
                     user.setFirstName(firstName);
                     details.put("firstName", "change saved");
+                    wasModified = true;
                 }
-                if (isLastName)
+                if (isLastName && !lastName.equals(user.getLastName()))
                 {
                     user.setLastName(lastName);
                     details.put("lastName", "change saved");
+                    wasModified = true;
                 }
-                userService.save(user);
 
-                result = true;
+                if (wasModified)
+                {
+                    userService.save(user);
+
+                    result = true;
+                }
+                else details.put("warning", "no changes found");
             }
             else details.put("warning", "no changes found");
         }
+        else details.put("warning", "no changes found");
+
         return getResponse("success", result, details);
     }
 

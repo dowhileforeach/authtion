@@ -25,7 +25,7 @@ public class Variables_for_AuthorityTest
         result.put(resource_checkUserEmail, Map.of(FRONTEND, Map.of(POST, Map.of("email", "user"))));
         result.put(resource_checkUserPass, Map.of(FRONTEND, Map.of(POST, Map.of("password", "some password"))));
         result.put(resource_createUser, Map.of(FRONTEND, Map.of(POST, Map.of("email", "user", "password", "some password", "firstName", "some first name", "lastName", ""))));
-        result.put(resource_userUpdate, Map.of(USER, Map.of(GET, Map.of())));
+        result.put(resource_userUpdate, Map.of(USER, Map.of(POST, Map.of())));
         result.put(resource_userData, Map.of(USER, Map.of(GET, Map.of())));
         result.put(resource_publicUser1, Map.of(ANY, Map.of(GET, Map.of())));
         result.put(resource_reqConfirmEmail, Map.of(USER, Map.of(GET, Map.of())));
