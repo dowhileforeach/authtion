@@ -39,4 +39,6 @@ public class Variables_Global
     public static final String resource_confirmEmail = "/confirm-email";
     public static final String resource_changeUserPass = "/change-user-pass";
     public static final String resource_reqRestoreUserPass = "/req-restore-user-pass";
+    public static final String resource_confirmRestoreUserPass = "/confirm-restore-user-pass";
+    public static final String resource_restoreUserPass = "/restore-user-pass";
 }

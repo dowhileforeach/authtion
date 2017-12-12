@@ -244,26 +244,27 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-//    @RequestMapping(API + "/confirm-restore-user-pass")
-//    public String confirmRestoreUserPass(@RequestParam String key) throws JsonProcessingException
-//    {
-//        boolean result = false;
-//        String fieldName = "error";
-//        Map<String, Object> details = new HashMap<>();
-//
-//        if (isDefaultCheckOK(key, fieldName, details))
-//        {
-//            MailingRestorePassword confirm = mailingRestorePasswordRepository.findByConfirmKey(key);
-//            if (confirm != null)
-//            {
-//                details.put("id", confirm.getUser());
-//                result = true;
-//            }
-//            else details.put(fieldName, "key does not exist");
-//        }
-//        return getResponse("success", result, details);
-//    }
-//
+    @RequestMapping(API + "/confirm-restore-user-pass")
+    public String confirmRestoreUserPass(@RequestParam String key)
+    {
+        boolean result = false;
+        String fieldName = "error";
+        Map<String, Object> details = new HashMap<>();
+
+        if (isDefaultCheckOK(key, fieldName, details))
+        {
+            Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(key);
+            if (confirmByKey.isPresent())
+            {
+                details.put("email", confirmByKey.get().getUser());
+                details.put("key", key);
+                result = true;
+            }
+            else details.put(fieldName, "key does not exist");
+        }
+        return getResponse("success", result, details);
+    }
+
 //    @RequestMapping(value = API + "/restore-user-pass", method = POST)
 //    @PreAuthorize("hasAuthority('FRONTEND')")
 //    public String restoreUserPass(@RequestBody String body) throws JsonProcessingException

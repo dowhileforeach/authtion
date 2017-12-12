@@ -198,11 +198,26 @@ public class CreateUserTest
         Optional<MailingRestorePassword> confirmById = mailingRestorePasswordRepository.findById(EMAIL_NEW_User);
         assertEquals(true, confirmById.isPresent());
         assertEquals(false, confirmById.get().isAlreadySent());
+    }
 
-        userService.delete(getUserByEmail(EMAIL_NEW_User).get());
-        userService.delete(getUserByEmail(EMAIL_2_NEW_User).get());
-        assertEquals(false, getUserByEmail(EMAIL_NEW_User).isPresent());
-        assertEquals(false, getUserByEmail(EMAIL_2_NEW_User).isPresent());
+    @Test
+    public void _10_confirmRestoreUserPass()
+    {
+        logHead("Confirm Restore User Password");
+
+        Optional<MailingRestorePassword> confirmById = mailingRestorePasswordRepository.findById(EMAIL_NEW_User);
+        assertEquals(true, confirmById.isPresent());
+
+        check_send_data(GET, resource_confirmRestoreUserPass, null, checkers_for_confirmRestoreUserPass(confirmById.get().getConfirmKey()));
+
+        confirmById = mailingRestorePasswordRepository.findById(EMAIL_NEW_User);
+        assertEquals(true, confirmById.isPresent());
+
+
+//        userService.delete(getUserByEmail(EMAIL_NEW_User).get());
+//        userService.delete(getUserByEmail(EMAIL_2_NEW_User).get());
+//        assertEquals(false, getUserByEmail(EMAIL_NEW_User).isPresent());
+//        assertEquals(false, getUserByEmail(EMAIL_2_NEW_User).isPresent());
     }
 
 

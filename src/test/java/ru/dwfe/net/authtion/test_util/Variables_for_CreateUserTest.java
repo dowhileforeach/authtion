@@ -25,13 +25,13 @@ public class Variables_for_CreateUserTest
     /* BODIES */
 
     public static final List<Checker> checkers_for_checkUserEmail = List.of(
-            Checker.of("canUse", false, Map.of(),                              200, "details", "email", "required field"),
-            Checker.of("canUse", false, Map.of("email", ""),                   200, "details", "email", "can't be empty"),
+            Checker.of("canUse", false, Map.of(),                         200, "details", "email", "required field"),
+            Checker.of("canUse", false, Map.of("email", ""),              200, "details", "email", "can't be empty"),
             Checker.of("canUse", false, Map.of("email", "123456789012345678901234567890kkklkklklklkklklklklklklklk"), 200, "details", "email", "length must be less than 50 characters"),
-            Checker.of("canUse", false, Map.of("email", "user"),               200, "details", "email", "must be valid e-mail address"),
-            Checker.of("canUse", false, Map.of("email", ".uuqu@mail.ru"),      200, "details", "email", "must be valid e-mail address"),
-            Checker.of("canUse", false, Map.of("email", "user@ya.ru"),         200, "details", "email", "user is present"),
-            Checker.of("canUse", true,  Map.of("email", EMAIL_NEW_User), 200)
+            Checker.of("canUse", false, Map.of("email", "user"),          200, "details", "email", "must be valid e-mail address"),
+            Checker.of("canUse", false, Map.of("email", ".uuqu@mail.ru"), 200, "details", "email", "must be valid e-mail address"),
+            Checker.of("canUse", false, Map.of("email", "user@ya.ru"),    200, "details", "email", "user is present"),
+            Checker.of("canUse", true,  Map.of("email", EMAIL_NEW_User),  200)
     );
 
     public static final List<Checker> checkers_for_checkUserPass = List.of(
@@ -94,30 +94,40 @@ public class Variables_for_CreateUserTest
     public static List<Checker> checkers_for_confirmEmail(String existedKey)
     {
         return List.of(
-                Checker.of(null, null, Map.of(),                       400, null,      "message", "Required String parameter 'key' is not present"),
-                Checker.of("success", false, Map.of("key", ""),        200, "details", "error",   "can't be empty"),
-                Checker.of("success", false, Map.of("key", "123"),     200, "details", "error",   "key does not exist"),
-                Checker.of("success", true, Map.of("key", existedKey), 200)
+                Checker.of(null,      null,  Map.of(),                  400, null,      "message", "Required String parameter 'key' is not present"),
+                Checker.of("success", false, Map.of("key", ""),         200, "details", "error",   "can't be empty"),
+                Checker.of("success", false, Map.of("key", "123"),      200, "details", "error",   "key does not exist"),
+                Checker.of("success", true,  Map.of("key", existedKey), 200)
         );
     }
 
     public static final List<Checker> checkers_for_changeUserPass = List.of(
-            Checker.of("success", false, Map.of(),                                                                  200, "details", "oldpass", "required field"),
-            Checker.of("success", false, Map.of("oldpass", ""),                                                     200, "details", "oldpass", "can't be empty"),
-            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User),                                    200, "details", "newpass", "required field"),
-            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User, "newpass", ""),                     200, "details", "newpass", "can't be empty"),
-            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User, "newpass", "12345"),                200, "details", "newpass", "length must be greater than or equal to 6 and less than or equal to 55"),
-            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User + "1", "newpass", "1234567"),        200, "details", "oldpass", "wrong"),
+            Checker.of("success", false, Map.of(),                                                      200, "details", "oldpass", "required field"),
+            Checker.of("success", false, Map.of("oldpass", ""),                                         200, "details", "oldpass", "can't be empty"),
+            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User),                              200, "details", "newpass", "required field"),
+            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User, "newpass", ""),               200, "details", "newpass", "can't be empty"),
+            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User, "newpass", "12345"),          200, "details", "newpass", "length must be greater than or equal to 6 and less than or equal to 55"),
+            Checker.of("success", false, Map.of("oldpass", PASS_NEW_User + "1", "newpass", "1234567"),  200, "details", "oldpass", "wrong"),
             Checker.of("success", true,  Map.of("oldpass", PASS_NEW_User, "newpass", NEWPASS_NEW_User), 200)
     );
 
     public static final List<Checker> checkers_for_reqRestoreUserPass = List.of(
-            Checker.of("success", false, Map.of(),                              200, "details", "email", "required field"),
-            Checker.of("success", false, Map.of("email", ""),                   200, "details", "email", "can't be empty"),
+            Checker.of("success", false, Map.of(),                        200, "details", "email", "required field"),
+            Checker.of("success", false, Map.of("email", ""),             200, "details", "email", "can't be empty"),
             Checker.of("success", false, Map.of("email", "123456789012345678901234567890kkklkklklklkklklklklklklklk"), 200, "details", "email", "length must be less than 50 characters"),
-            Checker.of("success", false, Map.of("email", "admin"),              200, "details", "email", "must be valid e-mail address"),
-            Checker.of("success", false, Map.of("email", "@uu@mail.ru"),        200, "details", "email", "must be valid e-mail address"),
-            Checker.of("success", false, Map.of("email", "!uu@mail.ru"),        200, "details", "error", "user doesn't exist"),
+            Checker.of("success", false, Map.of("email", "admin"),        200, "details", "email", "must be valid e-mail address"),
+            Checker.of("success", false, Map.of("email", "@uu@mail.ru"),  200, "details", "email", "must be valid e-mail address"),
+            Checker.of("success", false, Map.of("email", "!uu@mail.ru"),  200, "details", "error", "user doesn't exist"),
             Checker.of("success", true,  Map.of("email", EMAIL_NEW_User), 200)
     );
+
+    public static List<Checker> checkers_for_confirmRestoreUserPass(String existedKey)
+    {
+        return List.of(
+                Checker.of(null,      null,  Map.of(),                  400, null,      "message", "Required String parameter 'key' is not present"),
+                Checker.of("success", false, Map.of("key", ""),         200, "details", "error",   "can't be empty"),
+                Checker.of("success", false, Map.of("key", "657"),      200, "details", "error",   "key does not exist"),
+                Checker.of("success", true,  Map.of("key", existedKey), 200, Map.of("email",EMAIL_NEW_User, "key",existedKey))
+        );
+    }
 }
