@@ -249,11 +249,6 @@ public class UserPassword_CRU_Test
                 200);
         checkAllResources(userTest);
         mailingConfirmEmailRepository.delete(mailingConfirmEmailRepository.findById(userTest.username).get());
-
-//        userService.delete(getUserByEmail(EMAIL_NEW_User).get());
-//        userService.delete(getUserByEmail(EMAIL_2_NEW_User).get());
-//        assertEquals(false, getUserByEmail(EMAIL_NEW_User).isPresent());
-//        assertEquals(false, getUserByEmail(EMAIL_2_NEW_User).isPresent());
     }
 
 

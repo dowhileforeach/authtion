@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @Service
 @Primary
+@Transactional(readOnly = true)
 public class UserService implements UserDetailsService
 {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
