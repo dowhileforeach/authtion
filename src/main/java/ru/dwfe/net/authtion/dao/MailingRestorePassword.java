@@ -2,7 +2,6 @@ package ru.dwfe.net.authtion.dao;
 
 import ru.dwfe.net.authtion.util.Util;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -12,13 +11,9 @@ import javax.persistence.Table;
 public class MailingRestorePassword
 {
     @Id
-    @Column
     private String user;
 
-    @Column
     private String confirmKey;
-
-    @Column
     private boolean alreadySent;
 
 

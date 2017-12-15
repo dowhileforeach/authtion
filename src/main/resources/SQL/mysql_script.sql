@@ -9,7 +9,7 @@ CREATE TABLE `users` (
                             COLLATE utf8mb4_unicode_ci              NOT NULL,
   `password`                VARCHAR(100)
                             COLLATE utf8mb4_unicode_ci              NOT NULL,
-  `public_name`             VARCHAR(20)
+  `nick_name`               VARCHAR(20)
                             COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',
   `first_name`              VARCHAR(20)
                             COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',

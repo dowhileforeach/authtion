@@ -285,6 +285,10 @@ public class UtilTest
         return next.get(key);
     }
 
+    private UtilTest()
+    {
+    }
+
     private static final Logger log = LoggerFactory.getLogger(UtilTest.class);
     private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 }

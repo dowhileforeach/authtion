@@ -24,14 +24,11 @@ public class User implements UserDetails, CredentialsContainer
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -40,21 +37,14 @@ public class User implements UserDetails, CredentialsContainer
             inverseJoinColumns = @JoinColumn(name = "authority", referencedColumnName = "authority"))
     private Set<Authority> authorities;
 
-    @Column
-    private String publicName;
-    @Column
+    private String nickName;
     private String firstName;
-    @Column
     private String lastName;
-    @Column
+
     private boolean accountNonExpired;
-    @Column
     private boolean credentialsNonExpired;
-    @Column
     private boolean accountNonLocked;
-    @Column
     private boolean enabled;
-    @Column
     private boolean emailConfirmed;
 
 
@@ -157,14 +147,14 @@ public class User implements UserDetails, CredentialsContainer
         this.authorities = authorities;
     }
 
-    public String getPublicName()
+    public String getNickName()
     {
-        return publicName;
+        return nickName;
     }
 
-    public void setPublicName(String publicName)
+    public void setNickName(String nickName)
     {
-        this.publicName = publicName;
+        this.nickName = nickName;
     }
 
     public String getFirstName()
@@ -246,7 +236,7 @@ public class User implements UserDetails, CredentialsContainer
                 " \"email\": \"" + email + "\",\n" +
                 " \"password\": \"****\",\n" +
                 " \"authorities\": " + authorities + ",\n" +
-                " \"publicName\": \"" + publicName + "\",\n" +
+                " \"nickName\": \"" + nickName + "\",\n" +
                 " \"firstName\": \"" + firstName + "\",\n" +
                 " \"lastName\": \"" + lastName + "\",\n" +
                 " \"accountNonExpired\": " + accountNonExpired + ",\n" +
@@ -331,7 +321,13 @@ public class User implements UserDetails, CredentialsContainer
 
         if (user.getFirstName() == null) user.setFirstName("");
         if (user.getLastName() == null) user.setLastName("");
-        if (user.getPublicName() == null) user.setPublicName(user.getFirstName());
+        if (user.getNickName() == null)
+            user.setNickName(getNickNameFromEmail(user.getEmail()));
+    }
+
+    public static String getNickNameFromEmail(String email)
+    {
+        return email.substring(0, email.indexOf('@'));
     }
 
     public static String getBCryptEncodedPassword(String rawPassword)

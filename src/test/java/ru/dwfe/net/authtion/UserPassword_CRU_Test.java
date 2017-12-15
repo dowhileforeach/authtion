@@ -78,7 +78,7 @@ public class UserPassword_CRU_Test
         assertEquals(true, user1ByEmail.isPresent());
         User user1 = user1ByEmail.get();
         assertEquals(true, user1.getId() > 1000);
-        assertEquals(true, "nobody".equals(user1.getPublicName()));
+        assertEquals(true, "nobody".equals(user1.getNickName()));
         assertEquals(true, user1.getFirstName().isEmpty());
         assertEquals(true, user1.isAccountNonExpired() && user1.isAccountNonLocked() && user1.isCredentialsNonExpired() && user1.isEnabled());
         assertEquals(false, user1.isEmailConfirmed());
@@ -87,8 +87,8 @@ public class UserPassword_CRU_Test
         assertEquals(true, user2ByEmail.isPresent());
         User user2 = user2ByEmail.get();
         assertEquals(true, user2.getId() >= 1000);
-        assertEquals(true, "ozon".equals(user2.getPublicName()));
-        assertEquals(true, user2.getPublicName().equals(user2.getFirstName()));
+        assertEquals(true, User.getNickNameFromEmail(user2.getEmail()).equals(user2.getNickName()));
+//        assertEquals(true, user2.getNickName().equals(user2.getFirstName()));
         assertEquals(true, user2.isAccountNonExpired() && user2.isAccountNonLocked() && user2.isCredentialsNonExpired() && user2.isEnabled());
         assertEquals(false, user2.isEmailConfirmed());
 
@@ -250,10 +250,10 @@ public class UserPassword_CRU_Test
         checkAllResources(userTest);
         mailingConfirmEmailRepository.delete(mailingConfirmEmailRepository.findById(userTest.username).get());
 
-        userService.delete(getUserByEmail(EMAIL_NEW_User).get());
-        userService.delete(getUserByEmail(EMAIL_2_NEW_User).get());
-        assertEquals(false, getUserByEmail(EMAIL_NEW_User).isPresent());
-        assertEquals(false, getUserByEmail(EMAIL_2_NEW_User).isPresent());
+//        userService.delete(getUserByEmail(EMAIL_NEW_User).get());
+//        userService.delete(getUserByEmail(EMAIL_2_NEW_User).get());
+//        assertEquals(false, getUserByEmail(EMAIL_NEW_User).isPresent());
+//        assertEquals(false, getUserByEmail(EMAIL_2_NEW_User).isPresent());
     }
 
 

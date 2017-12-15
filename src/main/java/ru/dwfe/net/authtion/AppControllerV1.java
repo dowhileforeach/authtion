@@ -136,23 +136,23 @@ public class AppControllerV1
         {
             User userAuth = (User) authentication.getPrincipal();
 
-            String publicName = (String) getValue(map, "publicName");
+            String nickName = (String) getValue(map, "nickName");
             String firstName = (String) getValue(map, "firstName");
             String lastName = (String) getValue(map, "lastName");
 
-            boolean isPublicName = publicName != null;
+            boolean isNickName = nickName != null;
             boolean isFirstName = firstName != null;
             boolean isLastName = lastName != null;
 
-            if (isPublicName || isFirstName || isLastName)
+            if (isNickName || isFirstName || isLastName)
             {
                 boolean wasModified = false;
                 User user = userService.findByEmail(userAuth.getEmail()).get();
 
-                if (isPublicName && !publicName.equals(user.getPublicName()))
+                if (isNickName && !nickName.equals(user.getNickName()))
                 {
-                    user.setPublicName(publicName);
-                    details.put("publicName", "change saved");
+                    user.setNickName(nickName);
+                    details.put("nickName", "change saved");
                     wasModified = true;
                 }
                 if (isFirstName && !firstName.equals(user.getFirstName()))
@@ -201,7 +201,7 @@ public class AppControllerV1
         {
             User user = userById.get();
             details.put("id", user.getId());
-            details.put("publicName", user.getPublicName());
+            details.put("nickName", user.getNickName());
             result = true;
         }
         else details.put("error", "user doesn't exist");

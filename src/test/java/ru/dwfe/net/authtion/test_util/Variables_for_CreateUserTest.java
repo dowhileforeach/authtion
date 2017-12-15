@@ -50,7 +50,7 @@ public class Variables_for_CreateUserTest
                 Checker.of("success", false, Map.of("email", EMAIL_NEW_User, "password", ""),        200, "details", "password", "can't be empty"),
                 Checker.of("success", false, Map.of("email", EMAIL_NEW_User, "password", "54321"),   200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
                 Checker.of("success", false, Map.of("email", EMAIL_NEW_User, "password", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
-                Checker.of("success", true,  Map.of("email", EMAIL_NEW_User, "password", PASS_NEW_User, "publicName", "nobody"), 200)
+                Checker.of("success", true,  Map.of("email", EMAIL_NEW_User, "password", PASS_NEW_User, "nickName", "nobody"), 200)
         ));
         return list;
     }
@@ -61,7 +61,7 @@ public class Variables_for_CreateUserTest
                     " \"email\": \"user@ya.ru\",\n" +
                     " \"password\": \"****\",\n" +
                     " \"authorities\": [\"USER\"],\n" +
-                    " \"publicName\": \"user\",\n" +
+                    " \"nickName\": \"user\",\n" +
                     " \"firstName\": \"\",\n" +
                     " \"lastName\": \"\",\n" +
                     " \"accountNonExpired\": true,\n" +
@@ -76,7 +76,7 @@ public class Variables_for_CreateUserTest
             Checker.of("success", false, Map.of(), 200, "details", "error", "user doesn't exist")
     );
     public static final List<Checker> checkers_for_publicUser1 = List.of(
-            Checker.of("success", true, Map.of(), 200, Map.of("id", 1, "publicName", "admin"))
+            Checker.of("success", true, Map.of(), 200, Map.of("id", 1, "nickName", "admin"))
     );
 
     public static final List<Checker> checkers_for_reqConfirmEmail = List.of(
@@ -150,12 +150,12 @@ public class Variables_for_CreateUserTest
 
     public static final List<Checker> checkers_for_userUpdate = List.of(
             Checker.of("success", false, Map.of(),                                                     200, "details", "warning", "no changes found"),
-            Checker.of("success", false, Map.of("publicName","user"),                                  200, "details", "warning", "no changes found"),
-            Checker.of("success", false, Map.of("publicName","user", "firstName",""),                  200, "details", "warning", "no changes found"),
-            Checker.of("success", true,  Map.of("publicName","User", "firstName","", "lastName",""),   200, Map.of("publicName","change saved")),
-            Checker.of("success", true,  Map.of("publicName","User", "firstName","1", "lastName",""),  200, Map.of("firstName","change saved")),
-            Checker.of("success", true,  Map.of("publicName","User", "firstName","1", "lastName","2"), 200, Map.of("lastName","change saved")),
-            Checker.of("success", true,  Map.of("publicName","user", "firstName","", "lastName",""),   200, Map.of("lastName","change saved", "publicName","change saved", "firstName","change saved"))
+            Checker.of("success", false, Map.of("nickName","user"),                                  200, "details", "warning", "no changes found"),
+            Checker.of("success", false, Map.of("nickName","user", "firstName",""),                  200, "details", "warning", "no changes found"),
+            Checker.of("success", true,  Map.of("nickName","User", "firstName","", "lastName",""),   200, Map.of("nickName","change saved")),
+            Checker.of("success", true,  Map.of("nickName","User", "firstName","1", "lastName",""),  200, Map.of("firstName","change saved")),
+            Checker.of("success", true,  Map.of("nickName","User", "firstName","1", "lastName","2"), 200, Map.of("lastName","change saved")),
+            Checker.of("success", true,  Map.of("nickName","user", "firstName","", "lastName",""),   200, Map.of("lastName","change saved", "nickName","change saved", "firstName","change saved"))
     );
 
 }

@@ -90,4 +90,8 @@ public class Util
     {
         return new BigInteger(requiredLength * 5, new SecureRandom()).toString(36);
     }
+
+    private Util()
+    {
+    }
 }

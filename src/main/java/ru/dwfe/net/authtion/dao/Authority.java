@@ -3,7 +3,6 @@ package ru.dwfe.net.authtion.dao;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -15,11 +14,10 @@ public class Authority implements GrantedAuthority
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
     @Id
-    @Column
     private String authority;
 
-    @Column
     private String description;
+
 
     public static Authority of(String authorityName)
     {
