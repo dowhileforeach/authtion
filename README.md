@@ -19,7 +19,7 @@ See `test\java\ru.dwfe.authtion` classes.
 2. Try to access as `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru`, `not logged user` to resources:
    * `/public`
    * `/cities`
-   * `/users`
+   * `/list-of-consumers`
    * `/create-consumer`
    * etc.
 
