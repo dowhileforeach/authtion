@@ -20,7 +20,7 @@ See `test\java\ru.dwfe.authtion` classes.
    * `/public`
    * `/cities`
    * `/users`
-   * `/check-user-id`
+   * `/create-consumer`
    * etc.
 
 ![AuthorityTest_pic](./img/AuthorityTest_pic.png)<br>
@@ -48,15 +48,14 @@ Templates for resources access:
 curl http://localhost:8080/v1/public
 curl http://localhost:8080/v1/cities -H "Authorization: Bearer ACCESS_TOKEN"
 curl http://localhost:8080/v1/users -H "Authorization: Bearer ACCESS_TOKEN"
-curl http://localhost:8080/v1/check-user-id -H "Authorization: Bearer ACCESS_TOKEN" -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"id": "user"}'
-curl http://localhost:8080/v1/create-user -H "Authorization: Bearer ACCESS_TOKEN" -H "Content-Type: application/json; charset=utf-8" -X POST -d '{}'
-curl http://localhost:8080/v1/confirm-user -d confirmkey=AnyString
+curl http://localhost:8080/v1/create-consumer -H "Authorization: Bearer ACCESS_TOKEN" -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"id": "user"}'
+...
 ```
 
-## UserPassword_CRU_Test
+## ConsumerPassword_CRU_Test
 
-### User: Create, Read, Update
-![UserPassword_CRU_Test_User](./img/UserPassword_CRU_Test_User.png)<br>
+### Consumer: Create, Read, Update
+![ConsumerPassword_CRU_Test_Consumer](./img/ConsumerPassword_CRU_Test_Consumer.png)<br>
 
 ### Password management
-![UserPassword_CRU_Test_Password](./img/UserPassword_CRU_Test_Password.png)<br>
+![ConsumerPassword_CRU_Test_Password](./img/ConsumerPassword_CRU_Test_Password.png)<br>
