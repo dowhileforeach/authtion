@@ -1,6 +1,6 @@
 package ru.dwfe.net.authtion.test_util;
 
-public enum AuthorityType
+public enum AuthorityLevel
 {
     ANY,
     USER,

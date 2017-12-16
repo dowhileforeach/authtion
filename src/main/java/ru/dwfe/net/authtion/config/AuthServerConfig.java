@@ -67,7 +67,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
 
         //Здесь Клиентом является Фронтэнд.
         //В качестве фронтенда может быть обычная HTML страничка + JavaScript, либо фреймворк, например, Angular.
-        //Если User логинится на Клиенте, то клиент должен методом POST отправить его credentials на сервер.
+        //Если Consumer логинится на Клиенте, то клиент должен методом POST отправить его credentials на сервер.
         //Протестировать логинг можно так:
         //curl withClient:secret@localhost:8080/oauth/token -d grant_type=password -d username=UserLogin -d password=UserPass
         //

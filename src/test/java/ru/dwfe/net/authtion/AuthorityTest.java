@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.dwfe.net.authtion.test_util.UserTest;
+import ru.dwfe.net.authtion.test_util.ConsumerTest;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,10 +26,10 @@ public class AuthorityTest
     {
         logHead("USER");
 
-        UserTest userTest = USER_user;
-        access_tokens.add(userTest.access_token);
+        ConsumerTest consumerTest = USER_consumer;
+        access_tokens.add(consumerTest.access_token);
 
-        checkAllResources(userTest);
+        checkAllResources(consumerTest);
     }
 
     @Test
@@ -37,10 +37,10 @@ public class AuthorityTest
     {
         logHead("ADMIN");
 
-        UserTest userTest = ADMIN_user;
-        access_tokens.add(userTest.access_token);
+        ConsumerTest consumerTest = ADMIN_consumer;
+        access_tokens.add(consumerTest.access_token);
 
-        checkAllResources(userTest);
+        checkAllResources(consumerTest);
     }
 
     @Test
@@ -48,10 +48,10 @@ public class AuthorityTest
     {
         logHead("FRONTEND");
 
-        UserTest userTest = FRONTEND_user;
-        access_tokens.add(userTest.access_token);
+        ConsumerTest consumerTest = FRONTEND_consumer;
+        access_tokens.add(consumerTest.access_token);
 
-        checkAllResources(userTest);
+        checkAllResources(consumerTest);
 
     }
 
@@ -60,7 +60,7 @@ public class AuthorityTest
     {
         logHead("ANONYMOUS");
 
-        checkAllResources(ANONYMOUS_user);
+        checkAllResources(ANONYMOUS_consumer);
     }
 
     @Test

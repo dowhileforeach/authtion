@@ -28,14 +28,14 @@ import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.RESOURC
 
 public class UtilTest
 {
-    public static void setAccessToken(UserTest userTest, int loginExpectedStatus)
+    public static void setAccessToken(ConsumerTest consumerTest, int loginExpectedStatus)
     {
-        Client client = userTest.client;
+        Client client = consumerTest.client;
 
-        Request req = auth_POST_Request(client.clientname, client.clientpass, userTest.username, userTest.password);
+        Request req = auth_POST_Request(client.clientname, client.clientpass, consumerTest.username, consumerTest.password);
         try
         {
-            userTest.access_token = login(req, loginExpectedStatus, client.maxTokenExpirationTime, client.minTokenExpirationTime);
+            consumerTest.access_token = login(req, loginExpectedStatus, client.maxTokenExpirationTime, client.minTokenExpirationTime);
         }
         catch (Exception e)
         {
@@ -50,7 +50,7 @@ public class UtilTest
                 username, userpass);
 
         log.info("Client's credentials - {}:{}", clientname, clientpass);
-        log.info("User's credentials - {}:{}", username, userpass);
+        log.info("Consumer's credentials - {}:{}", username, userpass);
 
         return new Request.Builder()
                 .url(url)
@@ -193,16 +193,16 @@ public class UtilTest
         return performRequest(req, expectedStatus);
     }
 
-    public static void checkAllResources(UserTest userTest)
+    public static void checkAllResources(ConsumerTest consumerTest)
     {
-        String access_token = userTest.access_token;
+        String access_token = consumerTest.access_token;
 
         RESOURCE_AUTHORITY_reqDATA().forEach((resource, next) -> {
 
-            Map.Entry<AuthorityType, Map<RequestMethod, Map<String, Object>>> next1 = next.entrySet().iterator().next();
+            Map.Entry<AuthorityLevel, Map<RequestMethod, Map<String, Object>>> next1 = next.entrySet().iterator().next();
             Map.Entry<RequestMethod, Map<String, Object>> next2 = next1.getValue().entrySet().iterator().next();
 
-            AuthorityType level = next1.getKey();
+            AuthorityLevel level = next1.getKey();
             RequestMethod method = next2.getKey();
             Map<String, Object> reqData = next2.getValue();
 
@@ -212,7 +212,7 @@ public class UtilTest
             else
                 req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
 
-            Map<AuthorityType, Integer> statusList = AUTHORITY_to_AUTHORITY_STATUS.get(userTest.level);
+            Map<AuthorityLevel, Integer> statusList = AUTHORITY_to_AUTHORITY_STATUS.get(consumerTest.level);
 
             performRequest(req, statusList.get(level));
         });

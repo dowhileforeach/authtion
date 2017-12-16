@@ -7,9 +7,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.dwfe.net.authtion.service.UserService;
+import ru.dwfe.net.authtion.service.ConsumerService;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -18,8 +19,8 @@ import java.util.regex.Pattern;
 import static ru.dwfe.net.authtion.util.Util.isDefaultCheckOK;
 
 @Entity
-@Table(name = "users")
-public class User implements UserDetails, CredentialsContainer
+@Table(name = "consumers")
+public class Consumer implements UserDetails, CredentialsContainer
 {
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
@@ -32,8 +33,8 @@ public class User implements UserDetails, CredentialsContainer
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_authority",
-            joinColumns = @JoinColumn(name = "user", referencedColumnName = "id"),
+    @JoinTable(name = "consumer_authority",
+            joinColumns = @JoinColumn(name = "consumer", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authority", referencedColumnName = "authority"))
     private Set<Authority> authorities;
 
@@ -75,7 +76,7 @@ public class User implements UserDetails, CredentialsContainer
     @Override
     public String getName()
     {   //method was overriden special for @JsonIgnore annotation
-        return getUsername(); // <- don't touch!
+        return getUsername(); // <- don't touch this!
         // The only way.
         // It affects the uniqueness of tokens:
         //   OAuth2Authentication
@@ -217,9 +218,9 @@ public class User implements UserDetails, CredentialsContainer
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        Consumer consumer = (Consumer) o;
 
-        return id.equals(user.id);
+        return id.equals(consumer.id);
     }
 
     @Override
@@ -252,18 +253,18 @@ public class User implements UserDetails, CredentialsContainer
         UTILs
     */
 
-    public static boolean canUseEmail(String email, UserService userService, Map<String, Object> details)
+    public static boolean canUseEmail(String email, ConsumerService consumerService, Map<String, Object> details)
     {
         boolean result = false;
         String fieldName = "email";
 
         if (isDefaultEmailCheckOK(email, details))
         {
-            if (!userService.existsByEmail(email))
+            if (!consumerService.existsByEmail(email))
             {
                 result = true;
             }
-            else details.put(fieldName, "user is present");
+            else details.put(fieldName, "is present");
         }
         return result;
     }
@@ -307,22 +308,40 @@ public class User implements UserDetails, CredentialsContainer
         return result;
     }
 
-    public static void prepareNewUser(User user)
+    public static void prepareNewConsumer(Consumer consumer)
     {
-        user.setPassword(getBCryptEncodedPassword(user.getPassword()));
+        consumer.setPassword(getBCryptEncodedPassword(consumer.getPassword()));
 
-        user.setAccountNonExpired(true);
-        user.setCredentialsNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setEnabled(true);
-        user.setEmailConfirmed(false);
+        consumer.setAccountNonExpired(true);
+        consumer.setCredentialsNonExpired(true);
+        consumer.setAccountNonLocked(true);
+        consumer.setEnabled(true);
+        consumer.setEmailConfirmed(false);
 
-        user.setAuthorities(Set.of(Authority.of("USER")));
+        consumer.setAuthorities(Set.of(Authority.of("USER")));
 
-        if (user.getFirstName() == null) user.setFirstName("");
-        if (user.getLastName() == null) user.setLastName("");
-        if (user.getNickName() == null)
-            user.setNickName(getNickNameFromEmail(user.getEmail()));
+
+        consumer.setFirstName(prepareStringField(consumer.getFirstName(), 20));
+        consumer.setLastName(prepareStringField(consumer.getLastName(), 20));
+
+        String nickName = consumer.getNickName();
+        if (nickName == null)
+            nickName = getNickNameFromEmail(consumer.getEmail());
+        consumer.setNickName(prepareStringField(nickName, 20));
+    }
+
+    public static String prepareStringField(String field, int maxLength)
+    {
+        String result;
+
+        if (field == null)
+            result = "";
+        else if (field.length() > maxLength)
+            result = field.substring(0, maxLength - 1);
+        else
+            result = field;
+
+        return result;
     }
 
     public static String getNickNameFromEmail(String email)

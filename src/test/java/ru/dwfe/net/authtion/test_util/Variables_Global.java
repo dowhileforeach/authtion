@@ -1,6 +1,6 @@
 package ru.dwfe.net.authtion.test_util;
 
-import static ru.dwfe.net.authtion.test_util.AuthorityType.*;
+import static ru.dwfe.net.authtion.test_util.AuthorityLevel.*;
 
 public class Variables_Global
 {
@@ -16,30 +16,10 @@ public class Variables_Global
     public static final Client client_FRONTEND = Client.of("Frontend", "frntndPass", 1_728_000, 864_000);
 
     /*
-        Users from backend database
+        Consumers from backend database
     */
-    public static final UserTest USER_user = UserTest.of(USER, "user@ya.ru", "passUser", client_TRUSTED, 200);
-    public static final UserTest ADMIN_user = UserTest.of(ADMIN, "admin@ya.ru", "passAdmin", client_UNTRUSTED, 200);
-    public static final UserTest FRONTEND_user = UserTest.of(FRONTEND, "shop@ya.ru", "passFrontend", client_FRONTEND, 200);
-    public static final UserTest ANONYMOUS_user = UserTest.getAnonymous();
-
-    /*
-        RESOURCES
-    */
-    public static final String resource_public = "/public";
-    public static final String resource_cities = "/cities";
-    public static final String resource_users = "/users";
-    public static final String resource_checkUserEmail = "/check-user-email";
-    public static final String resource_checkUserPass = "/check-user-pass";
-    public static final String resource_createUser = "/create-user";
-    public static final String resource_userUpdate = "/user-update";
-    public static final String resource_userData = "/user-data";
-    public static final String resource_publicUser1 = "/public/user/1";
-    public static final String resource_publicUser9 = "/public/user/9";
-    public static final String resource_reqConfirmEmail = "/req-confirm-email";
-    public static final String resource_confirmEmail = "/confirm-email";
-    public static final String resource_changeUserPass = "/change-user-pass";
-    public static final String resource_reqRestoreUserPass = "/req-restore-user-pass";
-    public static final String resource_confirmRestoreUserPass = "/confirm-restore-user-pass";
-    public static final String resource_restoreUserPass = "/restore-user-pass";
+    public static final ConsumerTest USER_consumer = ConsumerTest.of(USER, "user@ya.ru", "passUser", client_TRUSTED, 200);
+    public static final ConsumerTest ADMIN_consumer = ConsumerTest.of(ADMIN, "admin@ya.ru", "passAdmin", client_UNTRUSTED, 200);
+    public static final ConsumerTest FRONTEND_consumer = ConsumerTest.of(FRONTEND, "shop@ya.ru", "passFrontend", client_FRONTEND, 200);
+    public static final ConsumerTest ANONYMOUS_consumer = ConsumerTest.getAnonymous();
 }

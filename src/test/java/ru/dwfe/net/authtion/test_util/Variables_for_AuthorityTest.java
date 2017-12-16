@@ -7,33 +7,33 @@ import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.test_util.AuthorityType.*;
-import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
+import static ru.dwfe.net.authtion.test_util.AuthorityLevel.*;
+import static ru.dwfe.net.authtion.Global.*;
 
 public class Variables_for_AuthorityTest
 {
     /*
         RESOURCES
     */
-    public static final Map<String, Map<AuthorityType, Map<RequestMethod, Map<String, Object>>>> RESOURCE_AUTHORITY_reqDATA()
+    public static final Map<String, Map<AuthorityLevel, Map<RequestMethod, Map<String, Object>>>> RESOURCE_AUTHORITY_reqDATA()
     {
-        Map<String, Map<AuthorityType, Map<RequestMethod, Map<String, Object>>>> result = new HashMap<>();
+        Map<String, Map<AuthorityLevel, Map<RequestMethod, Map<String, Object>>>> result = new HashMap<>();
 
         result.put(resource_public, Map.of(ANY, Map.of(GET, Map.of())));
         result.put(resource_cities, Map.of(USER, Map.of(GET, Map.of())));
         result.put(resource_users, Map.of(ADMIN, Map.of(GET, Map.of())));
-        result.put(resource_checkUserEmail, Map.of(FRONTEND, Map.of(POST, Map.of("email", "user"))));
-        result.put(resource_checkUserPass, Map.of(FRONTEND, Map.of(POST, Map.of("password", "some password"))));
-        result.put(resource_createUser, Map.of(FRONTEND, Map.of(POST, Map.of("email", "user", "password", "some password", "firstName", "some first name", "lastName", ""))));
-        result.put(resource_userUpdate, Map.of(USER, Map.of(POST, Map.of())));
-        result.put(resource_userData, Map.of(USER, Map.of(GET, Map.of())));
-        result.put(resource_publicUser1, Map.of(ANY, Map.of(GET, Map.of())));
-        result.put(resource_reqConfirmEmail, Map.of(USER, Map.of(GET, Map.of())));
-        result.put(resource_confirmEmail, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))));
-        result.put(resource_changeUserPass, Map.of(USER, Map.of(POST, Map.of())));
-        result.put(resource_reqRestoreUserPass, Map.of(FRONTEND, Map.of(POST, Map.of())));
-        result.put(resource_confirmRestoreUserPass, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))));
-        result.put(resource_restoreUserPass, Map.of(FRONTEND, Map.of(POST, Map.of())));
+        result.put(resource_checkConsumerEmail, Map.of(FRONTEND, Map.of(POST, Map.of("email", "user"))));
+        result.put(resource_checkConsumerPass, Map.of(FRONTEND, Map.of(POST, Map.of("password", "some password"))));
+        result.put(resource_createConsumer, Map.of(FRONTEND, Map.of(POST, Map.of("email", "user", "password", "some password", "firstName", "some first name", "lastName", ""))));
+        result.put(resource_updateConsumer, Map.of(USER, Map.of(POST, Map.of())));
+        result.put(resource_getConsumerData, Map.of(USER, Map.of(GET, Map.of())));
+        result.put(resource_publicConsumer + "/1", Map.of(ANY, Map.of(GET, Map.of())));
+        result.put(resource_reqConfirmConsumerEmail, Map.of(USER, Map.of(GET, Map.of())));
+        result.put(resource_confirmConsumerEmail, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))));
+        result.put(resource_changeConsumerPass, Map.of(USER, Map.of(POST, Map.of())));
+        result.put(resource_reqRestoreConsumerPass, Map.of(FRONTEND, Map.of(POST, Map.of())));
+        result.put(resource_confirmRestoreConsumerPass, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))));
+        result.put(resource_restoreConsumerPass, Map.of(FRONTEND, Map.of(POST, Map.of())));
 
         return result;
     }
@@ -44,7 +44,7 @@ public class Variables_for_AuthorityTest
         401 = Unauthorized
         403 = Forbidden, access_denied
     */
-    public static final Map<AuthorityType, Map<AuthorityType, Integer>> AUTHORITY_to_AUTHORITY_STATUS = Map.of(
+    public static final Map<AuthorityLevel, Map<AuthorityLevel, Integer>> AUTHORITY_to_AUTHORITY_STATUS = Map.of(
             ANY, Map.of(
                     ANY, 200,
                     USER, 401,

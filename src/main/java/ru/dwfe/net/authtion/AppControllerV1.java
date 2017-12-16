@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
-import ru.dwfe.net.authtion.dao.MailingNewUserPassword;
-import ru.dwfe.net.authtion.dao.MailingRestorePassword;
-import ru.dwfe.net.authtion.dao.User;
-import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
-import ru.dwfe.net.authtion.dao.repository.MailingNewUserPasswordRepository;
-import ru.dwfe.net.authtion.dao.repository.MailingRestorePasswordRepository;
-import ru.dwfe.net.authtion.service.UserService;
+import ru.dwfe.net.authtion.dao.Consumer;
+import ru.dwfe.net.authtion.dao.MailingConfirmConsumerEmail;
+import ru.dwfe.net.authtion.dao.MailingNewConsumerPassword;
+import ru.dwfe.net.authtion.dao.MailingRestoreConsumerPassword;
+import ru.dwfe.net.authtion.dao.repository.MailingConfirmConsumerEmailRepository;
+import ru.dwfe.net.authtion.dao.repository.MailingNewConsumerPasswordRepository;
+import ru.dwfe.net.authtion.dao.repository.MailingRestoreConsumerPasswordRepository;
+import ru.dwfe.net.authtion.service.ConsumerService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +19,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.dao.User.*;
+import static ru.dwfe.net.authtion.Global.*;
+import static ru.dwfe.net.authtion.dao.Consumer.*;
 import static ru.dwfe.net.authtion.util.Util.*;
 
 @RestController
@@ -28,51 +29,51 @@ public class AppControllerV1
     private static final String API = "/v1";
 
     @Autowired
-    UserService userService;
+    ConsumerService consumerService;
 
     @Autowired
-    MailingNewUserPasswordRepository mailingNewUserPasswordRepository;
+    MailingNewConsumerPasswordRepository mailingNewConsumerPasswordRepository;
     @Autowired
-    MailingConfirmEmailRepository mailingConfirmEmailRepository;
+    MailingConfirmConsumerEmailRepository mailingConfirmConsumerEmailRepository;
     @Autowired
-    MailingRestorePasswordRepository mailingRestorePasswordRepository;
+    MailingRestoreConsumerPasswordRepository mailingRestoreConsumerPasswordRepository;
 
-    @RequestMapping(API + "/public")
+    @RequestMapping(API + resource_public)
     public String publicResource()
     {
         return "{\"public\": true}";
     }
 
-    @RequestMapping(API + "/cities")
+    @RequestMapping(API + resource_cities)
     @PreAuthorize("hasAuthority('USER')")
     public String cities()
     {
         return "{\"cities\": true}";
     }
 
-    @RequestMapping(API + "/users")
+    @RequestMapping(API + resource_users)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<User> users()
+    public List<Consumer> users()
     {
-        return userService.findAll();
+        return consumerService.findAll();
     }
 
-    @RequestMapping(value = API + "/check-user-email", method = POST)
+    @RequestMapping(value = API + resource_checkConsumerEmail, method = POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String checkUserId(@RequestBody String body)
+    public String checkConsumerEmail(@RequestBody String body)
     {
         boolean result;
         Map<String, Object> details = new HashMap<>();
 
         String email = (String) getValueFromJSON(body, "email");
-        result = canUseEmail(email, userService, details);
+        result = canUseEmail(email, consumerService, details);
 
         return getResponse("canUse", result, details);
     }
 
-    @RequestMapping(value = API + "/check-user-pass", method = POST)
+    @RequestMapping(value = API + resource_checkConsumerPass, method = POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String checkUserPass(@RequestBody String body)
+    public String checkConsumerPass(@RequestBody String body)
     {
         boolean result;
         Map<String, Object> details = new HashMap<>();
@@ -83,21 +84,21 @@ public class AppControllerV1
         return getResponse("canUse", result, details);
     }
 
-    @RequestMapping(value = API + "/create-user", method = POST)
+    @RequestMapping(value = API + resource_createConsumer, method = POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String createUser(@RequestBody User user)
+    public String createConsumer(@RequestBody Consumer consumer)
     {
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
         String automaticallyGeneratedPassword = "";
 
-        if (canUseEmail(user.getEmail(), userService, details))
+        if (canUseEmail(consumer.getEmail(), consumerService, details))
         {
-            String receivedPassword = user.getPassword();
+            String receivedPassword = consumer.getPassword();
             if (receivedPassword == null)
             {   //if password wasn't passed
                 automaticallyGeneratedPassword = getUniqStr(10);
-                user.setPassword(automaticallyGeneratedPassword);
+                consumer.setPassword(automaticallyGeneratedPassword);
             }
             else
             {  //if password was passed
@@ -107,15 +108,15 @@ public class AppControllerV1
         if (details.size() == 0)
         {
             //prepare
-            prepareNewUser(user);
+            prepareNewConsumer(consumer);
 
-            //put user to the database
-            userService.save(user);
+            //put consumer to the database
+            consumerService.save(consumer);
 
             if (!automaticallyGeneratedPassword.isEmpty())
-            { //If the password was not passed, then it is necessary to send an automatically generated password to the user
-                mailingNewUserPasswordRepository
-                        .save(MailingNewUserPassword.of(user.getEmail(), automaticallyGeneratedPassword));
+            { //If the password was not passed, then it is necessary to send an automatically generated password to the consumer
+                mailingNewConsumerPasswordRepository
+                        .save(MailingNewConsumerPassword.of(consumer.getEmail(), automaticallyGeneratedPassword));
 
                 //TODO send e-mail
             }
@@ -124,21 +125,29 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = API + "/user-update", method = POST)
+    @RequestMapping(value = API + resource_updateConsumer, method = POST)
     @PreAuthorize("hasAuthority('USER')")
-    public String userUpdate(@RequestBody String body, OAuth2Authentication authentication)
+    public String updateConsumer(@RequestBody String body, OAuth2Authentication authentication)
     {
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
         Map<String, Object> map = parse(body);
 
+        final String WARNING = "warning";
+        final String NO_CHANGES_FOUND = "no changes found";
+        final String CHANGE_SAVED = "change saved";
+
+        final String NICKNAME_FIELD = "nickName";
+        final String FIRSTNAME_FIELD = "firstName";
+        final String LASTNAME_FIELD = "lastName";
+
         if (map.size() > 0)
         {
-            User userAuth = (User) authentication.getPrincipal();
+            Consumer consumerAuth = (Consumer) authentication.getPrincipal();
 
-            String nickName = (String) getValue(map, "nickName");
-            String firstName = (String) getValue(map, "firstName");
-            String lastName = (String) getValue(map, "lastName");
+            String nickName = (String) getValue(map, NICKNAME_FIELD);
+            String firstName = (String) getValue(map, FIRSTNAME_FIELD);
+            String lastName = (String) getValue(map, LASTNAME_FIELD);
 
             boolean isNickName = nickName != null;
             boolean isFirstName = firstName != null;
@@ -147,82 +156,82 @@ public class AppControllerV1
             if (isNickName || isFirstName || isLastName)
             {
                 boolean wasModified = false;
-                User user = userService.findByEmail(userAuth.getEmail()).get();
+                Consumer consumer = consumerService.findByEmail(consumerAuth.getEmail()).get();
 
-                if (isNickName && !nickName.equals(user.getNickName()))
+                if (isNickName && !nickName.equals(consumer.getNickName()))
                 {
-                    user.setNickName(nickName);
-                    details.put("nickName", "change saved");
+                    consumer.setNickName(nickName);
+                    details.put(NICKNAME_FIELD, CHANGE_SAVED);
                     wasModified = true;
                 }
-                if (isFirstName && !firstName.equals(user.getFirstName()))
+                if (isFirstName && !firstName.equals(consumer.getFirstName()))
                 {
-                    user.setFirstName(firstName);
-                    details.put("firstName", "change saved");
+                    consumer.setFirstName(firstName);
+                    details.put(FIRSTNAME_FIELD, CHANGE_SAVED);
                     wasModified = true;
                 }
-                if (isLastName && !lastName.equals(user.getLastName()))
+                if (isLastName && !lastName.equals(consumer.getLastName()))
                 {
-                    user.setLastName(lastName);
-                    details.put("lastName", "change saved");
+                    consumer.setLastName(lastName);
+                    details.put(LASTNAME_FIELD, CHANGE_SAVED);
                     wasModified = true;
                 }
 
                 if (wasModified)
                 {
-                    userService.save(user);
+                    consumerService.save(consumer);
 
                     result = true;
                 }
-                else details.put("warning", "no changes found");
+                else details.put(WARNING, NO_CHANGES_FOUND);
             }
-            else details.put("warning", "no changes found");
+            else details.put(WARNING, NO_CHANGES_FOUND);
         }
-        else details.put("warning", "no changes found");
+        else details.put(WARNING, NO_CHANGES_FOUND);
 
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = API + "/user-data")
+    @RequestMapping(value = API + resource_getConsumerData)
     @PreAuthorize("hasAuthority('USER')")
-    public String userData(OAuth2Authentication authentication)
+    public String getConsumerData(OAuth2Authentication authentication)
     {
         return getResponse("success", true, authentication.getPrincipal().toString());
     }
 
-    @RequestMapping(value = API + "/public/user/{id}")
-    public String getPublicUserInfo(@PathVariable Long id)
+    @RequestMapping(value = API + resource_publicConsumer + "/{id}")
+    public String publicConsumer(@PathVariable Long id)
     {
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
 
-        Optional<User> userById = userService.findById(id);
-        if (userById.isPresent())
+        Optional<Consumer> consumerById = consumerService.findById(id);
+        if (consumerById.isPresent())
         {
-            User user = userById.get();
-            details.put("id", user.getId());
-            details.put("nickName", user.getNickName());
+            Consumer consumer = consumerById.get();
+            details.put("id", consumer.getId());
+            details.put("nickName", consumer.getNickName());
             result = true;
         }
-        else details.put("error", "user doesn't exist");
+        else details.put("error", "not exist");
 
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = API + "/req-confirm-email")
+    @RequestMapping(value = API + resource_reqConfirmConsumerEmail)
     @PreAuthorize("hasAuthority('USER')")
     public String requestConfirmEmail(OAuth2Authentication authentication)
     {
-        String email = ((User) authentication.getPrincipal()).getEmail();
-        mailingConfirmEmailRepository.save(MailingConfirmEmail.of(email));
+        String email = ((Consumer) authentication.getPrincipal()).getEmail();
+        mailingConfirmConsumerEmailRepository.save(MailingConfirmConsumerEmail.of(email));
 
         //TODO send e-mail
 
         return getResponse("success", true, Map.of());
     }
 
-    @RequestMapping(API + "/confirm-email")
-    public String confirmEmail(@RequestParam String key)
+    @RequestMapping(API + resource_confirmConsumerEmail)
+    public String confirmConsumerEmail(@RequestParam String key)
     {
         boolean result = false;
         String fieldName = "error";
@@ -230,18 +239,18 @@ public class AppControllerV1
 
         if (isDefaultCheckOK(key, fieldName, details))
         {
-            Optional<MailingConfirmEmail> confirmByKey = mailingConfirmEmailRepository.findByConfirmKey(key);
+            Optional<MailingConfirmConsumerEmail> confirmByKey = mailingConfirmConsumerEmailRepository.findByConfirmKey(key);
             if (confirmByKey.isPresent())
             {
-                MailingConfirmEmail confirm = confirmByKey.get();
+                MailingConfirmConsumerEmail confirm = confirmByKey.get();
 
-                //The User is guaranteed to exist because: FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE
-                User user = userService.findByEmail(confirm.getUser()).get();
-                user.setEmailConfirmed(true); //Now email is confirmed
-                userService.save(user);
+                //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
+                Consumer consumer = consumerService.findByEmail(confirm.getConsumer()).get();
+                consumer.setEmailConfirmed(true); //Now email is confirmed
+                consumerService.save(consumer);
 
                 //delete this confirmation key from database
-                mailingConfirmEmailRepository.delete(confirm);
+                mailingConfirmConsumerEmailRepository.delete(confirm);
 
                 result = true;
             }
@@ -250,9 +259,9 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = API + "/change-user-pass", method = POST)
+    @RequestMapping(value = API + resource_changeConsumerPass, method = POST)
     @PreAuthorize("hasAuthority('USER')")
-    public String changeUserPass(@RequestBody String body, OAuth2Authentication authentication)
+    public String changeConsumerPass(@RequestBody String body, OAuth2Authentication authentication)
     {
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
@@ -264,12 +273,12 @@ public class AppControllerV1
         if (isDefaultCheckOK(oldpass, "oldpass", details)
                 && canUsePassword(newpass, "newpass", details))
         {
-            Long id = ((User) authentication.getPrincipal()).getId();
-            User user = userService.findById(id).get();
-            if (matchPassword("{bcrypt}", oldpass, user.getPassword()))
+            Long id = ((Consumer) authentication.getPrincipal()).getId();
+            Consumer consumer = consumerService.findById(id).get();
+            if (matchPassword("{bcrypt}", oldpass, consumer.getPassword()))
             {
-                user.setPassword(getBCryptEncodedPassword(newpass));
-                userService.save(user);
+                consumer.setPassword(getBCryptEncodedPassword(newpass));
+                consumerService.save(consumer);
 
                 result = true;
             }
@@ -278,9 +287,9 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = API + "/req-restore-user-pass", method = POST)
+    @RequestMapping(value = API + resource_reqRestoreConsumerPass, method = POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String requestRestoreUserPass(@RequestBody String body)
+    public String reqRestoreConsumerPass(@RequestBody String body)
     {
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
@@ -289,22 +298,22 @@ public class AppControllerV1
 
         if (isDefaultEmailCheckOK(email, details))
         {
-            if (userService.existsByEmail(email))
+            if (consumerService.existsByEmail(email))
             {
-                MailingRestorePassword confirm = MailingRestorePassword.of(email);
-                mailingRestorePasswordRepository.save(confirm);
+                MailingRestoreConsumerPassword confirm = MailingRestoreConsumerPassword.of(email);
+                mailingRestoreConsumerPasswordRepository.save(confirm);
 
                 //TODO send e-mail
 
                 result = true;
             }
-            else details.put("error", "user doesn't exist");
+            else details.put("error", "not exist");
         }
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(API + "/confirm-restore-user-pass")
-    public String confirmRestoreUserPass(@RequestParam String key)
+    @RequestMapping(API + resource_confirmRestoreConsumerPass)
+    public String confirmRestoreConsumerPass(@RequestParam String key)
     {
         boolean result = false;
         String fieldName = "error";
@@ -312,10 +321,10 @@ public class AppControllerV1
 
         if (isDefaultCheckOK(key, fieldName, details))
         {
-            Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(key);
+            Optional<MailingRestoreConsumerPassword> confirmByKey = mailingRestoreConsumerPasswordRepository.findByConfirmKey(key);
             if (confirmByKey.isPresent())
             {
-                details.put("email", confirmByKey.get().getUser());
+                details.put("email", confirmByKey.get().getConsumer());
                 details.put("key", key);
                 result = true;
             }
@@ -324,9 +333,9 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = API + "/restore-user-pass", method = POST)
+    @RequestMapping(value = API + resource_restoreConsumerPass, method = POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
-    public String restoreUserPass(@RequestBody String body)
+    public String restoreConsumerPass(@RequestBody String body)
     {
         boolean result = false;
         String fieldName = "error";
@@ -341,18 +350,18 @@ public class AppControllerV1
                 && isDefaultCheckOK(key, "key", details)
                 && isDefaultEmailCheckOK(email, details))
         {
-            Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(key);
+            Optional<MailingRestoreConsumerPassword> confirmByKey = mailingRestoreConsumerPasswordRepository.findByConfirmKey(key);
             if (confirmByKey.isPresent())
             {
-                MailingRestorePassword confirm = confirmByKey.get();
-                if (email.equals(confirm.getUser()))
+                MailingRestoreConsumerPassword confirm = confirmByKey.get();
+                if (email.equals(confirm.getConsumer()))
                 {
-                    //The User is guaranteed to exist because: FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE
-                    User user = userService.findByEmail(email).get();
-                    user.setPassword(getBCryptEncodedPassword(newpass));
-                    userService.save(user);
+                    //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
+                    Consumer consumer = consumerService.findByEmail(email).get();
+                    consumer.setPassword(getBCryptEncodedPassword(newpass));
+                    consumerService.save(consumer);
 
-                    mailingRestorePasswordRepository.delete(confirm);
+                    mailingRestoreConsumerPasswordRepository.delete(confirm);
 
                     result = true;
                 }

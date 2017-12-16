@@ -7,33 +7,33 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mailing_restore_password")
-public class MailingRestorePassword
+@Table(name = "mailing_confirm_consumer_email")
+public class MailingConfirmConsumerEmail
 {
     @Id
-    private String user;
+    private String consumer;
 
     private String confirmKey;
     private boolean alreadySent;
 
 
-    public static MailingRestorePassword of(String user)
+    public static MailingConfirmConsumerEmail of(String email)
     {
-        MailingRestorePassword confirm = new MailingRestorePassword();
-        confirm.setUser(user);
+        MailingConfirmConsumerEmail confirm = new MailingConfirmConsumerEmail();
+        confirm.setConsumer(email);
         confirm.setConfirmKey(Util.getUniqStr(30));
         confirm.setAlreadySent(false);
         return confirm;
     }
 
-    public String getUser()
+    public String getConsumer()
     {
-        return user;
+        return consumer;
     }
 
-    public void setUser(String user)
+    public void setConsumer(String email)
     {
-        this.user = user;
+        this.consumer = email;
     }
 
     public String getConfirmKey()
@@ -62,15 +62,15 @@ public class MailingRestorePassword
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MailingRestorePassword that = (MailingRestorePassword) o;
+        MailingConfirmConsumerEmail that = (MailingConfirmConsumerEmail) o;
 
-        return user.equals(that.user);
+        return consumer.equals(that.consumer);
     }
 
     @Override
     public int hashCode()
     {
-        return user.hashCode();
+        return consumer.hashCode();
     }
 
     @Override
