@@ -7,7 +7,7 @@ public class Global
     */
     public static final String resource_public = "/public";
     public static final String resource_cities = "/cities";
-    public static final String resource_users = "/users";
+    public static final String resource_listOfConsumers = "/list-of-consumers";
     public static final String resource_checkConsumerEmail = "/check-consumer-email";
     public static final String resource_checkConsumerPass = "/check-consumer-pass";
     public static final String resource_createConsumer = "/create-consumer";

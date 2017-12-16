@@ -51,13 +51,6 @@ public class AppControllerV1
         return "{\"cities\": true}";
     }
 
-    @RequestMapping(API + resource_users)
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Consumer> users()
-    {
-        return consumerService.findAll();
-    }
-
     @RequestMapping(value = API + resource_checkConsumerEmail, method = POST)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String checkConsumerEmail(@RequestBody String body)
@@ -196,6 +189,13 @@ public class AppControllerV1
     public String getConsumerData(OAuth2Authentication authentication)
     {
         return getResponse("success", true, authentication.getPrincipal().toString());
+    }
+
+    @RequestMapping(API + resource_listOfConsumers)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Consumer> users()
+    {
+        return consumerService.findAll();
     }
 
     @RequestMapping(value = API + resource_publicConsumer + "/{id}")
