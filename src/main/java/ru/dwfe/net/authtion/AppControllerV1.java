@@ -106,8 +106,7 @@ public class AppControllerV1
             }
         }
         if (details.size() == 0)
-        {
-            //prepare
+        {   //prepare
             prepareNewConsumer(consumer);
 
             //put consumer to the database

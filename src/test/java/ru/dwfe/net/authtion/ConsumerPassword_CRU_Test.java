@@ -28,7 +28,6 @@ import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.test_util.AuthorityLevel.USER;
 import static ru.dwfe.net.authtion.test_util.UtilTest.checkAllResources;
 import static ru.dwfe.net.authtion.test_util.UtilTest.check_send_data;
-import static ru.dwfe.net.authtion.test_util.UtilTest.performRequest;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 import static ru.dwfe.net.authtion.test_util.Variables_for_ConsumerPassword_CRU_Test.*;
 

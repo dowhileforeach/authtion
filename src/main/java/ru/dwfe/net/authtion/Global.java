@@ -2,7 +2,6 @@ package ru.dwfe.net.authtion;
 
 public class Global
 {
-
     /*
         RESOURCES
     */
