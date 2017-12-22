@@ -149,7 +149,7 @@ public class ConsumerPassword_CRU_Test
         confirmById = mailingConfirmConsumerEmailRepository.findById(consumerTest.username);
         assertEquals(true, confirmById.isPresent());
         assertEquals(false, confirmById.get().isAlreadySent());
-        assertEquals(true, confirmById.get().getConfirmKey().length() >= 29);
+        assertEquals(true, confirmById.get().getConfirmKey().length() >= 28);
     }
 
     @Test

@@ -6,6 +6,7 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.dwfe.net.authtion.service.ConsumerService;
 
@@ -278,7 +279,7 @@ public class Consumer implements UserDetails, CredentialsContainer
         {
             if (email.length() < maxLength)
             {
-                if (emailRegexPattern.matcher(email).matches())
+                if (EMAIL_PATTERN.matcher(email).matches())
                 {
                     result = true;
                 }
@@ -307,10 +308,16 @@ public class Consumer implements UserDetails, CredentialsContainer
         return result;
     }
 
+    public static void setNewPassword(boolean isNewPassBcrypted, Consumer consumer, String newpass)
+    {
+        if (isNewPassBcrypted)
+            consumer.setPassword(newpass);
+        else
+            consumer.setPassword(getBCryptEncodedPassword(newpass));
+    }
+
     public static void prepareNewConsumer(Consumer consumer)
     {
-        consumer.setPassword(getBCryptEncodedPassword(consumer.getPassword()));
-
         consumer.setAccountNonExpired(true);
         consumer.setCredentialsNonExpired(true);
         consumer.setAccountNonLocked(true);
@@ -356,10 +363,13 @@ public class Consumer implements UserDetails, CredentialsContainer
     public static boolean matchPassword(String type, String rawPassword, String rawEncodedPassword)
     {
         String encodedPassword = rawEncodedPassword.replace(type, "");
-        return new BCryptPasswordEncoder().matches(rawPassword, encodedPassword);
+        return BCrypt.checkpw(rawPassword, encodedPassword);
     }
 
     // http://emailregex.com/
     // RFC 5322: http://www.ietf.org/rfc/rfc5322.txt
-    private static final Pattern emailRegexPattern = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])", Pattern.CASE_INSENSITIVE);
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])", Pattern.CASE_INSENSITIVE);
+
+    // org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+    public static final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
 }
