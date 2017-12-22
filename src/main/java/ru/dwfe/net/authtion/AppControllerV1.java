@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.dao.Consumer.*;
 import static ru.dwfe.net.authtion.util.Util.*;
@@ -37,20 +36,20 @@ public class AppControllerV1
     @Autowired
     MailingRestoreConsumerPasswordRepository mailingRestoreConsumerPasswordRepository;
 
-    @RequestMapping(resource_public)
+    @GetMapping(resource_public)
     public String publicResource()
     {
         return "{\"public\": true}";
     }
 
-    @RequestMapping(resource_cities)
+    @GetMapping(resource_cities)
     @PreAuthorize("hasAuthority('USER')")
     public String cities()
     {
         return "{\"cities\": true}";
     }
 
-    @RequestMapping(value = resource_checkConsumerEmail, method = POST)
+    @PostMapping(resource_checkConsumerEmail)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String checkConsumerEmail(@RequestBody String body)
     {
@@ -63,7 +62,7 @@ public class AppControllerV1
         return getResponse("canUse", result, details);
     }
 
-    @RequestMapping(value = resource_checkConsumerPass, method = POST)
+    @PostMapping(resource_checkConsumerPass)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String checkConsumerPass(@RequestBody String body)
     {
@@ -76,7 +75,7 @@ public class AppControllerV1
         return getResponse("canUse", result, details);
     }
 
-    @RequestMapping(value = resource_createConsumer, method = POST)
+    @PostMapping(resource_createConsumer)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String createConsumer(@RequestBody Consumer consumer)
     {
@@ -116,7 +115,7 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = resource_updateConsumer, method = POST)
+    @PostMapping(resource_updateConsumer)
     @PreAuthorize("hasAuthority('USER')")
     public String updateConsumer(@RequestBody String body, OAuth2Authentication authentication)
     {
@@ -183,21 +182,21 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(resource_getConsumerData)
+    @GetMapping(resource_getConsumerData)
     @PreAuthorize("hasAuthority('USER')")
     public String getConsumerData(OAuth2Authentication authentication)
     {
         return getResponse("success", true, authentication.getPrincipal().toString());
     }
 
-    @RequestMapping(resource_listOfConsumers)
+    @GetMapping(resource_listOfConsumers)
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Consumer> users()
     {
         return consumerService.findAll();
     }
 
-    @RequestMapping(resource_publicConsumer + "/{id}")
+    @GetMapping(resource_publicConsumer + "/{id}")
     public String publicConsumer(@PathVariable Long id)
     {
         boolean result = false;
@@ -216,7 +215,7 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(resource_reqConfirmConsumerEmail)
+    @GetMapping(resource_reqConfirmConsumerEmail)
     @PreAuthorize("hasAuthority('USER')")
     public String requestConfirmEmail(OAuth2Authentication authentication)
     {
@@ -228,7 +227,7 @@ public class AppControllerV1
         return getResponse("success", true, Map.of());
     }
 
-    @RequestMapping(resource_confirmConsumerEmail)
+    @GetMapping(resource_confirmConsumerEmail)
     public String confirmConsumerEmail(@RequestParam String key)
     {
         boolean result = false;
@@ -257,7 +256,7 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = resource_changeConsumerPass, method = POST)
+    @PostMapping(resource_changeConsumerPass)
     @PreAuthorize("hasAuthority('USER')")
     public String changeConsumerPass(@RequestBody String body, OAuth2Authentication authentication)
     {
@@ -285,7 +284,7 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = resource_reqRestoreConsumerPass, method = POST)
+    @PostMapping(resource_reqRestoreConsumerPass)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String reqRestoreConsumerPass(@RequestBody String body)
     {
@@ -310,7 +309,7 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(resource_confirmRestoreConsumerPass)
+    @GetMapping(resource_confirmRestoreConsumerPass)
     public String confirmRestoreConsumerPass(@RequestParam String key)
     {
         boolean result = false;
@@ -331,7 +330,7 @@ public class AppControllerV1
         return getResponse("success", result, details);
     }
 
-    @RequestMapping(value = resource_restoreConsumerPass, method = POST)
+    @PostMapping(resource_restoreConsumerPass)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String restoreConsumerPass(@RequestBody String body)
     {
