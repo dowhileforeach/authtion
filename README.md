@@ -6,8 +6,8 @@
 Java 9, Spring Boot 2, OAuth 2, RESTful, MySQL<br>
 
 ## API versioning
-In this project, the version of the API = "v1", the controller class is called "AppControllerV1".<br>
-When developing a new API should create a new controller class, e.g. "AppControllerV2", "AppControllerV3" etc.<br><br>
+In this project, the version of the API = "v1", the controller class is called "ControllerAuthtionV1".<br>
+When developing a new API should create a new controller class, e.g. "ControllerAuthtionV2", "ControllerAuthtionV3" etc.<br><br>
 Unfortunately for resource authentication "/oauth/token" spring-security-oauth2 does not provide for versioning.<br>
 Therefore, for all API versions is one version "/oauth/token".
 

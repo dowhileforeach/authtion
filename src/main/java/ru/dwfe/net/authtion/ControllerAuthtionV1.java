@@ -24,7 +24,7 @@ import static ru.dwfe.net.authtion.util.Util.*;
 
 @RestController
 @RequestMapping("/v1")
-public class AppControllerV1
+public class ControllerAuthtionV1
 {
     @Autowired
     ConsumerService consumerService;
