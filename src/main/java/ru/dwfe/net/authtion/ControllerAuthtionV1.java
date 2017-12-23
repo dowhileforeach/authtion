@@ -36,19 +36,6 @@ public class ControllerAuthtionV1
     @Autowired
     MailingRestoreConsumerPasswordRepository mailingRestoreConsumerPasswordRepository;
 
-    @GetMapping(resource_public)
-    public String publicResource()
-    {
-        return "{\"public\": true}";
-    }
-
-    @GetMapping(resource_cities)
-    @PreAuthorize("hasAuthority('USER')")
-    public String cities()
-    {
-        return "{\"cities\": true}";
-    }
-
     @PostMapping(resource_checkConsumerEmail)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String checkConsumerEmail(@RequestBody String body)

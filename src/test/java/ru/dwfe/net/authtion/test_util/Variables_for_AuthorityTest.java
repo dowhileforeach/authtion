@@ -19,8 +19,6 @@ public class Variables_for_AuthorityTest
     {
         Map<String, Map<AuthorityLevel, Map<RequestMethod, Map<String, Object>>>> result = new HashMap<>();
 
-        result.put(resource_public, Map.of(ANY, Map.of(GET, Map.of())));
-        result.put(resource_cities, Map.of(USER, Map.of(GET, Map.of())));
         result.put(resource_listOfConsumers, Map.of(ADMIN, Map.of(GET, Map.of())));
         result.put(resource_checkConsumerEmail, Map.of(FRONTEND, Map.of(POST, Map.of("email", "user"))));
         result.put(resource_checkConsumerPass, Map.of(FRONTEND, Map.of(POST, Map.of("password", "some password"))));

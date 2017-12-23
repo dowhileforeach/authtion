@@ -6,8 +6,6 @@ public class Global
     /*
         Authtion RESOURCES
     */
-    public static final String                     resource_public = "/public";
-    public static final String                     resource_cities = "/cities";
 
     public static final String         resource_checkConsumerEmail = "/check-consumer-email";
     public static final String          resource_checkConsumerPass = "/check-consumer-pass";
