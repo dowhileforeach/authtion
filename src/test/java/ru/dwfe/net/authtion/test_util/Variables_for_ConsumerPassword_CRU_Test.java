@@ -22,7 +22,6 @@ public class Variables_for_ConsumerPassword_CRU_Test
 
 
 
-
     /* BODIES */
 
     public static final List<Checker> checkers_for_checkConsumerEmail = List.of(

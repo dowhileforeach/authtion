@@ -189,8 +189,6 @@ public class ConsumerPassword_CRU_Test
     @Test
     public void _09_changeConsumerPass()
     {
-        logHead("Change Consumer Pass");
-
         changeConsumerPass(EMAIL_NEW_Consumer, PASS_NEW_Consumer, NEWPASS_NEW_Consumer, checkers_for_changeConsumerPass);
 
         changeConsumerPass(EMAIL_3_NEW_Consumer, PASS_FOR_EMAIL_3_Consumer_Decoded, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, checkers_for_changeConsumerPass_3);
@@ -198,6 +196,8 @@ public class ConsumerPassword_CRU_Test
 
     private void changeConsumerPass(String email, String oldpass, String newpass, List<Checker> checkers)
     {
+        logHead("Change Consumer Pass = " + email);
+
         //newpass
         ConsumerTest.of(USER, email, newpass, client_TRUSTED, 400);
         //oldpass
@@ -219,6 +219,7 @@ public class ConsumerPassword_CRU_Test
     public void _10_restorePassword()
     {
         restorePassword(EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, PASS_NEW_Consumer, PASS_NEW_Consumer);
+
         restorePassword(EMAIL_3_NEW_Consumer, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Encoded);
     }
 

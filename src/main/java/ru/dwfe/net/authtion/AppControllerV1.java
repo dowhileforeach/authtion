@@ -81,33 +81,29 @@ public class AppControllerV1
     {
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
+
+        String password = consumer.getPassword();
         String automaticallyGeneratedPassword = "";
-        String newpass = null;
 
         if (canUseEmail(consumer.getEmail(), consumerService, details))
-        {
-            String receivedPassword = consumer.getPassword();
-            if (receivedPassword == null)
+            if (password == null)
             { //if password wasn't passed
                 automaticallyGeneratedPassword = getUniqStr(10);
-                newpass = automaticallyGeneratedPassword;
+                password = automaticallyGeneratedPassword;
             }
-            else
-            { //if password was passed
-                canUsePassword(receivedPassword, "password", details);
-                newpass = receivedPassword;
-            }
-        }
+            else //if password was passed
+                canUsePassword(password, "password", details);
+
         if (details.size() == 0)
         {   //prepare
-            setNewPassword(consumer, newpass);
+            setNewPassword(consumer, password);
             prepareNewConsumer(consumer);
 
             //put consumer to the database
             consumerService.save(consumer);
 
             if (!automaticallyGeneratedPassword.isEmpty())
-            { //If the password was not passed, then it is necessary to send an automatically generated password to the consumer
+            { //if the password was not passed, then it is necessary to send an automatically generated password to the new consumer
                 mailingNewConsumerPasswordRepository
                         .save(MailingNewConsumerPassword.of(consumer.getEmail(), automaticallyGeneratedPassword));
 
