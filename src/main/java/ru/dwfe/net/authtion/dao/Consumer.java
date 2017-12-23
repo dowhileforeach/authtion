@@ -290,6 +290,11 @@ public class Consumer implements UserDetails, CredentialsContainer
         return result;
     }
 
+    public static boolean isPasswordBcrypted(String password)
+    {
+        return BCRYPT_PATTERN.matcher(password).matches();
+    }
+
     public static boolean canUsePassword(String password, String fieldName, Map<String, Object> details)
     {
         boolean result = false;
@@ -298,7 +303,8 @@ public class Consumer implements UserDetails, CredentialsContainer
 
         if (isDefaultCheckOK(password, fieldName, details))
         {
-            if (password.length() >= minLenght && password.length() <= maxLenght)
+            if (isPasswordBcrypted(password)
+                    || password.length() >= minLenght && password.length() <= maxLenght)
             {
                 result = true;
             }
@@ -308,12 +314,18 @@ public class Consumer implements UserDetails, CredentialsContainer
         return result;
     }
 
-    public static void setNewPassword(boolean isNewPassBcrypted, Consumer consumer, String newpass)
+    public static void setNewPassword(Consumer consumer, String password)
     {
-        if (isNewPassBcrypted)
-            consumer.setPassword(newpass);
+        if (isPasswordBcrypted(password))
+            consumer.setPassword("{bcrypt}" + password);
         else
-            consumer.setPassword(getBCryptEncodedPassword(newpass));
+            consumer.setPassword("{bcrypt}" + new BCryptPasswordEncoder().encode(password));
+    }
+
+    public static boolean matchPassword(String rawPassword, String rawEncodedPassword)
+    {
+        String encodedPassword = rawEncodedPassword.replace("{bcrypt}", "");
+        return BCrypt.checkpw(rawPassword, encodedPassword);
     }
 
     public static void prepareNewConsumer(Consumer consumer)
@@ -353,17 +365,6 @@ public class Consumer implements UserDetails, CredentialsContainer
     public static String getNickNameFromEmail(String email)
     {
         return email.substring(0, email.indexOf('@'));
-    }
-
-    public static String getBCryptEncodedPassword(String rawPassword)
-    {
-        return "{bcrypt}" + new BCryptPasswordEncoder().encode(rawPassword);
-    }
-
-    public static boolean matchPassword(String type, String rawPassword, String rawEncodedPassword)
-    {
-        String encodedPassword = rawEncodedPassword.replace(type, "");
-        return BCrypt.checkpw(rawPassword, encodedPassword);
     }
 
     // http://emailregex.com/

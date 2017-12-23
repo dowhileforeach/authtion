@@ -17,8 +17,10 @@ import ru.dwfe.net.authtion.dao.repository.MailingConfirmConsumerEmailRepository
 import ru.dwfe.net.authtion.dao.repository.MailingNewConsumerPasswordRepository;
 import ru.dwfe.net.authtion.dao.repository.MailingRestoreConsumerPasswordRepository;
 import ru.dwfe.net.authtion.service.ConsumerService;
+import ru.dwfe.net.authtion.test_util.Checker;
 import ru.dwfe.net.authtion.test_util.ConsumerTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -75,6 +77,7 @@ public class ConsumerPassword_CRU_Test
 
         check_send_data(POST, resource_createConsumer, FRONTEND_consumer.access_token, checkers_for_createConsumer());
 
+        //just new user
         Optional<Consumer> consumer1ByEmail = getConsumerByEmail(EMAIL_NEW_Consumer);
         assertEquals(true, consumer1ByEmail.isPresent());
         Consumer consumer1 = consumer1ByEmail.get();
@@ -83,7 +86,9 @@ public class ConsumerPassword_CRU_Test
         assertEquals(true, consumer1.getFirstName().isEmpty());
         assertEquals(true, consumer1.isAccountNonExpired() && consumer1.isAccountNonLocked() && consumer1.isCredentialsNonExpired() && consumer1.isEnabled());
         assertEquals(false, consumer1.isEmailConfirmed());
+        assertEquals(false, mailingNewConsumerPasswordRepository.findById(EMAIL_NEW_Consumer).isPresent());
 
+        //new user, password was not passed
         Optional<Consumer> consumer2ByEmail = getConsumerByEmail(EMAIL_2_NEW_Consumer);
         assertEquals(true, consumer2ByEmail.isPresent());
         Consumer consumer2 = consumer2ByEmail.get();
@@ -91,13 +96,21 @@ public class ConsumerPassword_CRU_Test
         assertEquals(true, Consumer.prepareStringField(Consumer.getNickNameFromEmail(consumer2.getEmail()), 20).equals(consumer2.getNickName()));
         assertEquals(true, consumer2.isAccountNonExpired() && consumer2.isAccountNonLocked() && consumer2.isCredentialsNonExpired() && consumer2.isEnabled());
         assertEquals(false, consumer2.isEmailConfirmed());
-
-        assertEquals(false, mailingNewConsumerPasswordRepository.findById(EMAIL_NEW_Consumer).isPresent());
-
         Optional<MailingNewConsumerPassword> mailingNewConsumerPasswordByEmail = mailingNewConsumerPasswordRepository.findById(EMAIL_2_NEW_Consumer);
         assertEquals(true, mailingNewConsumerPasswordByEmail.isPresent());
         String PASS_2_notExistedConsumer = mailingNewConsumerPasswordByEmail.get().getPassword();
         assertEquals(true, PASS_2_notExistedConsumer.length() >= 9);
+
+        //new user, already encoded password was passed
+        Optional<Consumer> consumer3ByEmail = getConsumerByEmail(EMAIL_3_NEW_Consumer);
+        assertEquals(true, consumer3ByEmail.isPresent());
+        Consumer consumer3 = consumer3ByEmail.get();
+        assertEquals(true, consumer3.getPassword().equals("{bcrypt}" + PASS_FOR_EMAIL_3_Consumer_Encoded));
+        assertEquals(true, "hello world".equals(consumer3.getNickName()));
+        assertEquals(true, consumer3.isAccountNonExpired() && consumer3.isAccountNonLocked() && consumer3.isCredentialsNonExpired() && consumer3.isEnabled());
+        assertEquals(false, consumer3.isEmailConfirmed());
+        assertEquals(false, mailingNewConsumerPasswordRepository.findById(consumer3.getEmail()).isPresent());
+
 
         //Test for new Consumer access to all resources
         ConsumerTest consumer1Test = ConsumerTest.of(USER, consumer1.getEmail(), PASS_NEW_Consumer, client_TRUSTED, 200);
@@ -107,6 +120,10 @@ public class ConsumerPassword_CRU_Test
         ConsumerTest consumer2Test = ConsumerTest.of(USER, consumer2.getEmail(), PASS_2_notExistedConsumer, client_TRUSTED, 200);
         checkAllResources(consumer2Test);
         mailingConfirmConsumerEmailRepository.delete(mailingConfirmConsumerEmailRepository.findById(consumer2.getEmail()).get());
+
+        ConsumerTest consumer3Test = ConsumerTest.of(USER, consumer3.getEmail(), PASS_FOR_EMAIL_3_Consumer_Decoded, client_TRUSTED, 200);
+        checkAllResources(consumer3Test);
+        mailingConfirmConsumerEmailRepository.delete(mailingConfirmConsumerEmailRepository.findById(consumer3.getEmail()).get());
     }
 
     @Test
@@ -174,79 +191,92 @@ public class ConsumerPassword_CRU_Test
     {
         logHead("Change Consumer Pass");
 
+        changeConsumerPass(EMAIL_NEW_Consumer, PASS_NEW_Consumer, NEWPASS_NEW_Consumer, checkers_for_changeConsumerPass);
+
+        changeConsumerPass(EMAIL_3_NEW_Consumer, PASS_FOR_EMAIL_3_Consumer_Decoded, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, checkers_for_changeConsumerPass_3);
+    }
+
+    private void changeConsumerPass(String email, String oldpass, String newpass, List<Checker> checkers)
+    {
         //newpass
-        ConsumerTest.of(USER, EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, client_TRUSTED,
-                400);
+        ConsumerTest.of(USER, email, newpass, client_TRUSTED, 400);
         //oldpass
-        ConsumerTest consumerTest = ConsumerTest.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED,
-                200);
+        ConsumerTest consumerTest = ConsumerTest.of(USER, email, oldpass, client_TRUSTED, 200);
+
         //change oldpass
-        check_send_data(POST, resource_changeConsumerPass, consumerTest.access_token, checkers_for_changeConsumerPass);
+        check_send_data(POST, resource_changeConsumerPass, consumerTest.access_token, checkers);
 
         //oldpass
-        ConsumerTest.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED,
-                400);
+        ConsumerTest.of(USER, email, oldpass, client_TRUSTED, 400);
         //newpass
-        consumerTest = ConsumerTest.of(USER, EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, client_TRUSTED,
-                200);
+        consumerTest = ConsumerTest.of(USER, email, newpass, client_TRUSTED, 200);
+
         checkAllResources(consumerTest);
         mailingConfirmConsumerEmailRepository.delete(mailingConfirmConsumerEmailRepository.findById(consumerTest.username).get());
     }
 
     @Test
-    public void _10_reqRestoreConsumerPass()
+    public void _10_restorePassword()
     {
-        logHead("Request Restore Consumer Password");
+        restorePassword(EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, PASS_NEW_Consumer, PASS_NEW_Consumer);
+        restorePassword(EMAIL_3_NEW_Consumer, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Encoded);
+    }
 
-        assertEquals(false, mailingRestoreConsumerPasswordRepository.findById(EMAIL_NEW_Consumer).isPresent());
+    public void restorePassword(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
+    {
+        reqRestoreConsumerPass(email);
+        confirmRestoreConsumerPass(email);
+        restoreConsumerPass(email, oldpassDecoded, newpassDecoded, newpassForCheckers);
+    }
 
-        check_send_data(POST, resource_reqRestoreConsumerPass, FRONTEND_consumer.access_token, checkers_for_reqRestoreConsumerPass);
+    public void reqRestoreConsumerPass(String email)
+    {
+        logHead("Request Restore Consumer Password = " + email);
 
-        Optional<MailingRestoreConsumerPassword> confirmById = mailingRestoreConsumerPasswordRepository.findById(EMAIL_NEW_Consumer);
+        assertEquals(false, mailingRestoreConsumerPasswordRepository.findById(email).isPresent());
+
+        check_send_data(POST, resource_reqRestoreConsumerPass, FRONTEND_consumer.access_token, checkers_for_reqRestoreConsumerPass(email));
+
+        Optional<MailingRestoreConsumerPassword> confirmById = mailingRestoreConsumerPasswordRepository.findById(email);
         assertEquals(true, confirmById.isPresent());
         assertEquals(false, confirmById.get().isAlreadySent());
     }
 
-    @Test
-    public void _11_confirmRestoreConsumerPass()
+    public void confirmRestoreConsumerPass(String email)
     {
-        logHead("Confirm Restore Consumer Password");
+        logHead("Confirm Restore Consumer Password = " + email);
 
-        Optional<MailingRestoreConsumerPassword> confirmById = mailingRestoreConsumerPasswordRepository.findById(EMAIL_NEW_Consumer);
+        Optional<MailingRestoreConsumerPassword> confirmById = mailingRestoreConsumerPasswordRepository.findById(email);
         assertEquals(true, confirmById.isPresent());
 
-        check_send_data(GET, resource_confirmRestoreConsumerPass, null, checkers_for_confirmRestoreConsumerPass(confirmById.get().getConfirmKey()));
+        check_send_data(GET, resource_confirmRestoreConsumerPass, null, checkers_for_confirmRestoreConsumerPass(email, confirmById.get().getConfirmKey()));
 
-        confirmById = mailingRestoreConsumerPasswordRepository.findById(EMAIL_NEW_Consumer);
+        confirmById = mailingRestoreConsumerPasswordRepository.findById(email);
         assertEquals(true, confirmById.isPresent());
     }
 
-    @Test
-    public void _12_restoreConsumerPass()
+    public void restoreConsumerPass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
     {
-        logHead("Restore Consumer Password");
+        logHead("Restore Consumer Password = " + email);
 
-        Optional<MailingRestoreConsumerPassword> confirmById = mailingRestoreConsumerPasswordRepository.findById(EMAIL_NEW_Consumer);
+        Optional<MailingRestoreConsumerPassword> confirmById = mailingRestoreConsumerPasswordRepository.findById(email);
         assertEquals(true, confirmById.isPresent());
 
         //oldpass
-        ConsumerTest.of(USER, EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, client_TRUSTED,
-                200);
+        ConsumerTest.of(USER, email, oldpassDecoded, client_TRUSTED, 200);
         //newpass
-        ConsumerTest.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED,
-                400);
+        ConsumerTest.of(USER, email, newpassDecoded, client_TRUSTED, 400);
 
         //change password
-        check_send_data(POST, resource_restoreConsumerPass, FRONTEND_consumer.access_token, checkers_for_restoreConsumerPass(confirmById.get().getConfirmKey()));
+        check_send_data(POST, resource_restoreConsumerPass, FRONTEND_consumer.access_token,
+                checkers_for_restoreConsumerPass(email, newpassForCheckers, confirmById.get().getConfirmKey()));
 
-        assertEquals(false, mailingRestoreConsumerPasswordRepository.findById(EMAIL_NEW_Consumer).isPresent());
+        assertEquals(false, mailingRestoreConsumerPasswordRepository.findById(email).isPresent());
 
         //oldpass
-        ConsumerTest.of(USER, EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, client_TRUSTED,
-                400);
+        ConsumerTest.of(USER, email, oldpassDecoded, client_TRUSTED, 400);
         //newpass
-        ConsumerTest consumerTest = ConsumerTest.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED,
-                200);
+        ConsumerTest consumerTest = ConsumerTest.of(USER, email, newpassDecoded, client_TRUSTED, 200);
         checkAllResources(consumerTest);
         mailingConfirmConsumerEmailRepository.delete(mailingConfirmConsumerEmailRepository.findById(consumerTest.username).get());
     }

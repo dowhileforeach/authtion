@@ -82,6 +82,7 @@ public class AppControllerV1
         boolean result = false;
         Map<String, Object> details = new HashMap<>();
         String automaticallyGeneratedPassword = "";
+        String newpass = null;
 
         if (canUseEmail(consumer.getEmail(), consumerService, details))
         {
@@ -89,23 +90,17 @@ public class AppControllerV1
             if (receivedPassword == null)
             { //if password wasn't passed
                 automaticallyGeneratedPassword = getUniqStr(10);
-                consumer.setPassword(getBCryptEncodedPassword(automaticallyGeneratedPassword));
+                newpass = automaticallyGeneratedPassword;
             }
             else
             { //if password was passed
-                if (BCRYPT_PATTERN.matcher(receivedPassword).matches())
-                {
-                    //nothing
-                }
-                else
-                {
-                    canUsePassword(receivedPassword, "password", details);
-                    consumer.setPassword(getBCryptEncodedPassword(receivedPassword));
-                }
+                canUsePassword(receivedPassword, "password", details);
+                newpass = receivedPassword;
             }
         }
         if (details.size() == 0)
         {   //prepare
+            setNewPassword(consumer, newpass);
             prepareNewConsumer(consumer);
 
             //put consumer to the database
@@ -275,25 +270,19 @@ public class AppControllerV1
         String oldpass = (String) getValue(map, "oldpass");
         String newpass = (String) getValue(map, "newpass");
 
-        if (isDefaultCheckOK(oldpass, "oldpass", details) && isDefaultCheckOK(newpass, "newpass", details))
+        if (isDefaultCheckOK(oldpass, "oldpass", details)
+                && canUsePassword(newpass, "newpass", details))
         {
-            boolean isNewPassBcrypted = BCRYPT_PATTERN.matcher(newpass).matches();
-            if (!isNewPassBcrypted)
-                canUsePassword(newpass, "newpass", details);
-
-            if (details.size() == 0)
+            Long id = ((Consumer) authentication.getPrincipal()).getId();
+            Consumer consumer = consumerService.findById(id).get();
+            if (matchPassword(oldpass, consumer.getPassword()))
             {
-                Long id = ((Consumer) authentication.getPrincipal()).getId();
-                Consumer consumer = consumerService.findById(id).get();
-                if (matchPassword("{bcrypt}", oldpass, consumer.getPassword()))
-                {
-                    setNewPassword(isNewPassBcrypted, consumer, newpass);
-                    consumerService.save(consumer);
+                setNewPassword(consumer, newpass);
+                consumerService.save(consumer);
 
-                    result = true;
-                }
-                else details.put("oldpass", "wrong");
+                result = true;
             }
+            else details.put("oldpass", "wrong");
         }
         return getResponse("success", result, details);
     }
@@ -357,35 +346,28 @@ public class AppControllerV1
         String key = (String) getValue(map, "key");
         String newpass = (String) getValue(map, "newpass");
 
-        if (isDefaultCheckOK(newpass, "newpass", details))
+        if (canUsePassword(newpass, "newpass", details)
+                && isDefaultCheckOK(key, "key", details)
+                && isDefaultEmailCheckOK(email, details))
         {
-            boolean isNewPassBcrypted = BCRYPT_PATTERN.matcher(newpass).matches();
-            if (!isNewPassBcrypted)
-                canUsePassword(newpass, "newpass", details);
-
-            if (details.size() == 0
-                    && isDefaultCheckOK(key, "key", details)
-                    && isDefaultEmailCheckOK(email, details))
+            Optional<MailingRestoreConsumerPassword> confirmByKey = mailingRestoreConsumerPasswordRepository.findByConfirmKey(key);
+            if (confirmByKey.isPresent())
             {
-                Optional<MailingRestoreConsumerPassword> confirmByKey = mailingRestoreConsumerPasswordRepository.findByConfirmKey(key);
-                if (confirmByKey.isPresent())
+                MailingRestoreConsumerPassword confirm = confirmByKey.get();
+                if (email.equals(confirm.getConsumer()))
                 {
-                    MailingRestoreConsumerPassword confirm = confirmByKey.get();
-                    if (email.equals(confirm.getConsumer()))
-                    {
-                        //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
-                        Consumer consumer = consumerService.findByEmail(email).get();
-                        setNewPassword(isNewPassBcrypted, consumer, newpass);
-                        consumerService.save(consumer);
+                    //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
+                    Consumer consumer = consumerService.findByEmail(email).get();
+                    setNewPassword(consumer, newpass);
+                    consumerService.save(consumer);
 
-                        mailingRestoreConsumerPasswordRepository.delete(confirm);
+                    mailingRestoreConsumerPasswordRepository.delete(confirm);
 
-                        result = true;
-                    }
-                    else details.put(fieldName, "email from request doesn't match with email associated with key");
+                    result = true;
                 }
-                else details.put(fieldName, "key does not exist");
+                else details.put(fieldName, "email from request doesn't match with email associated with key");
             }
+            else details.put(fieldName, "key does not exist");
         }
         return getResponse("success", result, details);
     }
