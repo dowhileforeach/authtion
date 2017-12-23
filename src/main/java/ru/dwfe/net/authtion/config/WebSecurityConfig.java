@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     {
         Map<String, PasswordEncoder> encoders = new HashMap<>();
         String idForEncode = "bcrypt";
-        encoders.put("bcrypt", new BCryptPasswordEncoder());
+        encoders.put("bcrypt", new BCryptPasswordEncoder(10));
 
         return new DelegatingPasswordEncoder(idForEncode, encoders);
     }
