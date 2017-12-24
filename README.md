@@ -8,14 +8,14 @@ Java 9, Spring Boot 2, OAuth 2, RESTful, MySQL<br>
 ## API versioning
 In this project, the version of the API = "v1", the controller class is called "ControllerAuthtionV1".<br>
 When developing a new API should create a new controller class, e.g. "ControllerAuthtionV2", "ControllerAuthtionV3" etc.<br><br>
-Unfortunately for resource authentication "/oauth/token" spring-security-oauth2 does not provide for versioning.<br>
-Therefore, for all API versions is one version "/oauth/token".
+Unfortunately for resource authentication `/oauth/token` spring-security-oauth2 does not provide for versioning.<br>
+Therefore, for all API versions is one version `/oauth/token`, which mapped to `/{current API version}/sign-in`.
 
 # Automated TESTs
 See `test\java\ru.dwfe.authtion` classes.
 
 ## AuthorityTest
-1. Login as: `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru` and `some more`
+1. Sign In as: `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru` and `some more`
 2. Try to access as `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru`, `not logged user` and `some more` to resources:
    * `/public/consumer/{id}`
    * `/get-consumer-data`
@@ -28,26 +28,26 @@ See `test\java\ru.dwfe.authtion` classes.
 ![AuthorityTest_RespReq](./img/AuthorityTest_RespReq.png)
 
 #### For Manual tests
-`user@ya.ru` login:
+Sign In as `user@ya.ru`:
 ```
-curl Trusted:trPass@localhost:8080/oauth/token -d grant_type=password -d username=user@ya.ru -d password=passUser
-```
-
-`admin@ya.ru` login:
-```
-curl Untrusted:untrPass@localhost:8080/oauth/token -d grant_type=password -d username=admin@ya.ru -d password=passAdmin
+curl Trusted:trPass@localhost:8080/v1/sign-in -d grant_type=password -d username=user@ya.ru -d password=passUser
 ```
 
-`shop@ya.ru` login:
+Sign In as `admin@ya.ru`:
 ```
-curl Trusted:trPass@localhost:8080/oauth/token -d grant_type=password -d username=shop@ya.ru -d password=passFrontend
+curl Untrusted:untrPass@localhost:8080/v1/sign-in -d grant_type=password -d username=admin@ya.ru -d password=passAdmin
 ```
 
-Templates for resources access:
+Sign In as `shop@ya.ru`:
 ```
-curl http://localhost:8080/v1/public
-curl http://localhost:8080/v1/cities -H "Authorization: Bearer ACCESS_TOKEN"
-curl http://localhost:8080/v1/users -H "Authorization: Bearer ACCESS_TOKEN"
+curl Trusted:trPass@localhost:8080/v1/sign-in -d grant_type=password -d username=shop@ya.ru -d password=passFrontend
+```
+
+Templates for accessing to resources:
+```
+curl http://localhost:8080/v1/public/consumer/1
+curl http://localhost:8080/v1/get-consumer-data -H "Authorization: Bearer ACCESS_TOKEN"
+curl http://localhost:8080/v1/list-of-consumers -H "Authorization: Bearer ACCESS_TOKEN"
 curl http://localhost:8080/v1/create-consumer -H "Authorization: Bearer ACCESS_TOKEN" -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"id": "user"}'
 ...
 ```

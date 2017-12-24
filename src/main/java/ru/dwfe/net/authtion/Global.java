@@ -1,9 +1,9 @@
 package ru.dwfe.net.authtion;
 
 public class Global
-{   private Global(){}
+{    private Global(){}
 
-    public static final String API_V1 = "/v1";
+    public static final String              API_V1 = "/v1";
     public static final String API_CURRENT_VERSION = API_V1;
 
     /*
