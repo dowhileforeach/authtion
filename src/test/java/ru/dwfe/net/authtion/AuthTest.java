@@ -17,7 +17,7 @@ import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.TOTAL_ACCESS_TOKEN_COUNT;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class AuthorityTest
+public class AuthTest
 {
     private static Set<String> access_tokens = new HashSet<>();
 
@@ -81,5 +81,5 @@ public class AuthorityTest
 
     }
 
-    private static final Logger log = LoggerFactory.getLogger(AuthorityTest.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthTest.class);
 }

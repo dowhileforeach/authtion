@@ -14,7 +14,7 @@ Therefore, for all API versions is one version `/oauth/token`, which mapped to `
 # Automated TESTs
 See `test\java\ru.dwfe.authtion` classes.
 
-## AuthorityTest
+## AuthTest
 1. Sign In as: `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru` and `some more`
 2. Try to access as `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru`, `not logged user` and `some more` to resources:
    * `/public/consumer/{id}`
@@ -23,9 +23,9 @@ See `test\java\ru.dwfe.authtion` classes.
    * `/create-consumer`
    * etc.
 
-![AuthorityTest_pic](./img/AuthorityTest_pic.png)<br>
+![AuthTest_pic](./img/AuthTest_pic.png)<br>
 <br>
-![AuthorityTest_RespReq](./img/AuthorityTest_RespReq.png)
+![AuthTest_RespReq](./img/AuthTest_RespReq.png)
 
 #### For Manual tests
 Sign In as `user@ya.ru`:
