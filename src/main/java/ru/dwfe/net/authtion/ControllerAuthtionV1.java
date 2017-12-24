@@ -2,9 +2,10 @@ package ru.dwfe.net.authtion;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.web.bind.annotation.*;
 import ru.dwfe.net.authtion.dao.Consumer;
 import ru.dwfe.net.authtion.dao.MailingConfirmConsumerEmail;
@@ -363,10 +364,12 @@ public class ControllerAuthtionV1
 
     @GetMapping(resource_signOut)
     @PreAuthorize("hasAuthority('USER')")
-    public void signOut(OAuth2Authentication authentication)
+    public String signOut(OAuth2Authentication authentication)
     {
-        String tokenValue = ((DefaultTokenServices) tokenServices).getAccessToken(authentication).getValue();
-        tokenServices.revokeToken(tokenValue);
+        OAuth2AccessToken accessToken = ((AuthorizationServerTokenServices) tokenServices).getAccessToken(authentication);
+        tokenServices.revokeToken(accessToken.getValue());
+
+        return getResponse("success", true, Map.of());
     }
 }
 
