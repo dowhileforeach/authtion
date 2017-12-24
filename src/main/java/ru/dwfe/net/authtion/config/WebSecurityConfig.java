@@ -29,13 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure(AuthenticationManagerBuilder auth) throws Exception
     {
         auth
-                .userDetailsService(userDetailsService)   //проверка существования входящего user ID в базе
-                .passwordEncoder(bcrypt());               //проверка raw пароля пользователя
+                .userDetailsService(userDetailsService)   //проверка существования входящего user ID (e-mail) в базе
+                .passwordEncoder(bcrypt());               //проверка raw пароля с его хешем в базе
 
-        //Любой алгоритм кодирования(хеширования) не предназначен для обеспечения безопасности.
-        //Поэтому на стороне бэкенда пароли в базе в виде BCrypt хеша это всего лишь попытка
-        //защититься от дурака, который максимум может скопировать чужой пароль в открытом виде
-        //либо его хеш и который не умеет/желает брутфорсить.
+        //Пароли в базе в виде BCrypt хеша это всего лишь навсего попытка защититься от дурака,
+        //который максимум может скопировать чужой пароль в открытом виде (если он не захеширован),
+        //либо хеш пароля, и который не умеет/не желает брутфорсить.
     }
 
     @Bean

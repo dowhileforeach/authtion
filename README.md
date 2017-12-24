@@ -40,7 +40,7 @@ curl Untrusted:untrPass@localhost:8080/v1/sign-in -d grant_type=password -d user
 
 Sign In as `shop@ya.ru`:
 ```
-curl Trusted:trPass@localhost:8080/v1/sign-in -d grant_type=password -d username=shop@ya.ru -d password=passFrontend
+curl Frontend:frntndPass@localhost:8080/v1/sign-in -d grant_type=password -d username=shop@ya.ru -d password=passFrontend
 ```
 
 Templates for accessing to resources:
