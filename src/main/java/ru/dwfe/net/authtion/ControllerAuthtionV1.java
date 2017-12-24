@@ -2,7 +2,10 @@ package ru.dwfe.net.authtion;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 import ru.dwfe.net.authtion.dao.Consumer;
 import ru.dwfe.net.authtion.dao.MailingConfirmConsumerEmail;
@@ -23,7 +26,7 @@ import static ru.dwfe.net.authtion.dao.Consumer.*;
 import static ru.dwfe.net.authtion.util.Util.*;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping(API_V1)
 public class ControllerAuthtionV1
 {
     @Autowired
@@ -35,6 +38,9 @@ public class ControllerAuthtionV1
     MailingConfirmConsumerEmailRepository mailingConfirmConsumerEmailRepository;
     @Autowired
     MailingRestoreConsumerPasswordRepository mailingRestoreConsumerPasswordRepository;
+
+    @Autowired
+    private TokenStore tokenStore;
 
     @PostMapping(resource_checkConsumerEmail)
     @PreAuthorize("hasAuthority('FRONTEND')")
@@ -354,4 +360,15 @@ public class ControllerAuthtionV1
         }
         return getResponse("success", result, details);
     }
+
+    @GetMapping(resource_signOut)
+    @PreAuthorize("hasAuthority('USER')")
+    public void signOut(OAuth2Authentication authentication)
+    {
+        String tokenValue = ((OAuth2AuthenticationDetails) authentication.getDetails()).getTokenValue();
+        OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(tokenValue);
+        tokenStore.removeAccessToken(oAuth2AccessToken);
+    }
 }
+
+

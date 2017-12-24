@@ -11,6 +11,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
+import static ru.dwfe.net.authtion.Global.API_CURRENT_VERSION;
+import static ru.dwfe.net.authtion.Global.resource_signIn;
+
 @Configuration
 @EnableAuthorizationServer
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
@@ -24,6 +27,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception
     {
         endpoints
+                .pathMapping("/oauth/token", API_CURRENT_VERSION + resource_signIn)
                 .authenticationManager(authenticationManager)
                 .tokenStore(tokenStore)
         ;

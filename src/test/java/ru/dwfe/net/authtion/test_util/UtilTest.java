@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ru.dwfe.net.authtion.Global;
 import ru.dwfe.net.authtion.util.Util;
 
 import java.io.IOException;
@@ -22,7 +23,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.ALL_BEFORE_RESOURCE;
-import static ru.dwfe.net.authtion.test_util.Variables_Global.PROTOCOL_HOST_PORT;
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.AUTHORITY_to_AUTHORITY_STATUS;
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.RESOURCE_AUTHORITY_reqDATA;
 
@@ -45,8 +45,8 @@ public class UtilTest
 
     private static Request auth_POST_Request(String clientname, String clientpass, String username, String userpass)
     {
-        String url = String.format(PROTOCOL_HOST_PORT
-                        + "/oauth/token?grant_type=password&username=%s&password=%s",
+        String url = String.format(ALL_BEFORE_RESOURCE + Global.resource_signIn
+                        + "?grant_type=password&username=%s&password=%s",
                 username, userpass);
 
         log.info("Client's credentials - {}:{}", clientname, clientpass);
