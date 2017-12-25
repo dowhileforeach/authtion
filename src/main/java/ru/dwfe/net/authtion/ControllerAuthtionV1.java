@@ -47,33 +47,30 @@ public class ControllerAuthtionV1
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String checkConsumerEmail(@RequestBody String body)
     {
-        boolean result;
         Map<String, Object> details = new HashMap<>();
 
         String email = (String) getValueFromJSON(body, "email");
-        result = canUseEmail(email, consumerService, details);
+        canUseEmail(email, consumerService, details);
 
-        return getResponse("canUse", result, details);
+        return getResponse("canUse", details);
     }
 
     @PostMapping(resource_checkConsumerPass)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String checkConsumerPass(@RequestBody String body)
     {
-        boolean result;
         Map<String, Object> details = new HashMap<>();
 
         String password = (String) getValueFromJSON(body, "password");
-        result = canUsePassword(password, "password", details);
+        canUsePassword(password, "password", details);
 
-        return getResponse("canUse", result, details);
+        return getResponse("canUse", details);
     }
 
     @PostMapping(resource_createConsumer)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String createConsumer(@RequestBody Consumer consumer)
     {
-        boolean result = false;
         Map<String, Object> details = new HashMap<>();
 
         String password = consumer.getPassword();
@@ -103,9 +100,8 @@ public class ControllerAuthtionV1
 
                 //TODO send e-mail
             }
-            result = true;
         }
-        return getResponse("success", result, details);
+        return getResponse("success", details);
     }
 
     @PostMapping(resource_updateConsumer)
@@ -163,10 +159,10 @@ public class ControllerAuthtionV1
                 if (wasModified)
                 {
                     consumerService.save(consumer);
-
                     result = true;
                 }
-                else details.put(WARNING, NO_CHANGES_FOUND);
+                else
+                    details.put(WARNING, NO_CHANGES_FOUND);
             }
             else details.put(WARNING, NO_CHANGES_FOUND);
         }
@@ -217,13 +213,12 @@ public class ControllerAuthtionV1
 
         //TODO send e-mail
 
-        return getResponse("success", true, Map.of());
+        return getResponse("success", Map.of());
     }
 
     @GetMapping(resource_confirmConsumerEmail)
     public String confirmConsumerEmail(@RequestParam String key)
     {
-        boolean result = false;
         String fieldName = "error";
         Map<String, Object> details = new HashMap<>();
 
@@ -241,19 +236,16 @@ public class ControllerAuthtionV1
 
                 //delete this confirmation key from database
                 mailingConfirmConsumerEmailRepository.delete(confirm);
-
-                result = true;
             }
             else details.put(fieldName, "key does not exist");
         }
-        return getResponse("success", result, details);
+        return getResponse("success", details);
     }
 
     @PostMapping(resource_changeConsumerPass)
     @PreAuthorize("hasAuthority('USER')")
     public String changeConsumerPass(@RequestBody String body, OAuth2Authentication authentication)
     {
-        boolean result = false;
         Map<String, Object> details = new HashMap<>();
         Map<String, Object> map = parse(body);
 
@@ -269,19 +261,16 @@ public class ControllerAuthtionV1
             {
                 setNewPassword(consumer, newpass);
                 consumerService.save(consumer);
-
-                result = true;
             }
             else details.put("oldpass", "wrong");
         }
-        return getResponse("success", result, details);
+        return getResponse("success", details);
     }
 
     @PostMapping(resource_reqRestoreConsumerPass)
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String reqRestoreConsumerPass(@RequestBody String body)
     {
-        boolean result = false;
         Map<String, Object> details = new HashMap<>();
 
         String email = (String) getValueFromJSON(body, "email");
@@ -294,12 +283,10 @@ public class ControllerAuthtionV1
                 mailingRestoreConsumerPasswordRepository.save(confirm);
 
                 //TODO send e-mail
-
-                result = true;
             }
             else details.put("error", "not exist");
         }
-        return getResponse("success", result, details);
+        return getResponse("success", details);
     }
 
     @GetMapping(resource_confirmRestoreConsumerPass)
@@ -327,7 +314,6 @@ public class ControllerAuthtionV1
     @PreAuthorize("hasAuthority('FRONTEND')")
     public String restoreConsumerPass(@RequestBody String body)
     {
-        boolean result = false;
         String fieldName = "error";
         Map<String, Object> details = new HashMap<>();
         Map<String, Object> map = parse(body);
@@ -352,14 +338,12 @@ public class ControllerAuthtionV1
                     consumerService.save(consumer);
 
                     mailingRestoreConsumerPasswordRepository.delete(confirm);
-
-                    result = true;
                 }
                 else details.put(fieldName, "email from request doesn't match with email associated with key");
             }
             else details.put(fieldName, "key does not exist");
         }
-        return getResponse("success", result, details);
+        return getResponse("success", details);
     }
 
     @GetMapping(resource_signOut)
@@ -369,7 +353,7 @@ public class ControllerAuthtionV1
         OAuth2AccessToken accessToken = ((AuthorizationServerTokenServices) tokenServices).getAccessToken(authentication);
         tokenServices.revokeToken(accessToken.getValue());
 
-        return getResponse("success", true, Map.of());
+        return getResponse("success", Map.of());
     }
 }
 

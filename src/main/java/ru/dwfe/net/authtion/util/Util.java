@@ -47,6 +47,11 @@ public class Util
         return value != null && !value.isEmpty();
     }
 
+    public static String getResponse(String resultFieldName, Map<String, Object> details)
+    {
+        return getResponse(resultFieldName, details.size() == 0, details);
+    }
+
     public static String getResponse(String resultFieldName, boolean responseResult, Map<String, Object> details)
     {
         if (details == null || details.size() == 0)
