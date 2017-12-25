@@ -6,13 +6,16 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.dwfe.net.authtion.test_util.ConsumerTest;
+import ru.dwfe.net.authtion.test_util.SignInType;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static ru.dwfe.net.authtion.test_util.UtilTest.checkAllResources;
+import static ru.dwfe.net.authtion.test_util.SignInType.Refresh;
+import static ru.dwfe.net.authtion.test_util.UtilTest.performResourceAccessing;
+import static ru.dwfe.net.authtion.test_util.UtilTest.setNewTokens;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.TOTAL_ACCESS_TOKEN_COUNT;
 
@@ -29,7 +32,13 @@ public class AuthTest
         ConsumerTest consumerTest = USER_consumer;
         access_tokens.add(consumerTest.access_token);
 
-        checkAllResources(consumerTest);
+        performResourceAccessing(consumerTest);
+
+        String old_access_token = consumerTest.access_token;
+        String old_refresh_token = consumerTest.refresh_token;
+        setNewTokens(consumerTest, 200, Refresh);
+        assertEquals(false, old_access_token.equals(consumerTest.access_token));
+        assertEquals(false, old_refresh_token.equals(consumerTest.refresh_token));
     }
 
     @Test
@@ -40,7 +49,7 @@ public class AuthTest
         ConsumerTest consumerTest = ADMIN_consumer;
         access_tokens.add(consumerTest.access_token);
 
-        checkAllResources(consumerTest);
+        performResourceAccessing(consumerTest);
     }
 
     @Test
@@ -51,7 +60,7 @@ public class AuthTest
         ConsumerTest consumerTest = FRONTEND_consumer;
         access_tokens.add(consumerTest.access_token);
 
-        checkAllResources(consumerTest);
+        performResourceAccessing(consumerTest);
 
     }
 
@@ -60,7 +69,7 @@ public class AuthTest
     {
         logHead("ANONYMOUS");
 
-        checkAllResources(ANONYMOUS_consumer);
+        performResourceAccessing(ANONYMOUS_consumer);
     }
 
     @Test

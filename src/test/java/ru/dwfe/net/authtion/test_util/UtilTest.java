@@ -22,28 +22,47 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static ru.dwfe.net.authtion.test_util.SignInType.SignIn;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.ALL_BEFORE_RESOURCE;
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.AUTHORITY_to_AUTHORITY_STATUS;
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.RESOURCE_AUTHORITY_reqDATA;
 
 public class UtilTest
 {
-    public static void setAccessToken(ConsumerTest consumerTest, int loginExpectedStatus)
+    public static void setNewTokens(ConsumerTest consumerTest, int signInExpectedStatus, SignInType signInType)
     {
         Client client = consumerTest.client;
+        Request req;
 
-        Request req = auth_POST_Request(client.clientname, client.clientpass, consumerTest.username, consumerTest.password);
-        try
+        if (SignIn == signInType)
+            req = auth_signIn_POST_Request(client.clientname, client.clientpass, consumerTest.username, consumerTest.password);
+        else
+            req = auth_refresh_POST_Request(client.clientname, client.clientpass, consumerTest.refresh_token);
+
+        String body = performSignIn(req, signInExpectedStatus);
+
+        String access_token = "";
+        String refresh_token = "";
+
+        if (signInExpectedStatus == 200)
         {
-            consumerTest.access_token = login(req, loginExpectedStatus, client.maxTokenExpirationTime, client.minTokenExpirationTime);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+            Map<String, Object> map = parse(body);
+
+            access_token = (String) getValueFromResponse(map, "access_token");
+            assertThat(access_token.length(), greaterThan(0));
+
+            refresh_token = (String) getValueFromResponse(map, "refresh_token");
+            assertThat(refresh_token.length(), greaterThan(0));
+
+            assertThat((int) getValueFromResponse(map, "expires_in"),
+                    is(both(greaterThan(client.minTokenExpirationTime)).and(lessThanOrEqualTo(client.maxTokenExpirationTime))));
+
+            consumerTest.access_token = access_token;
+            consumerTest.refresh_token = refresh_token;
         }
     }
 
-    private static Request auth_POST_Request(String clientname, String clientpass, String username, String userpass)
+    private static Request auth_signIn_POST_Request(String clientname, String clientpass, String username, String userpass)
     {
         String url = String.format(ALL_BEFORE_RESOURCE + Global.resource_signIn
                         + "?grant_type=password&username=%s&password=%s",
@@ -59,47 +78,41 @@ public class UtilTest
                 .build();
     }
 
-    private static String login(Request req, int loginExpectedStatus, int maxExpirationTime, int minExpirationTime)
+    private static Request auth_refresh_POST_Request(String clientname, String clientpass, String refresh_token)
     {
-        log.info("get Token");
+        String url = String.format(ALL_BEFORE_RESOURCE + Global.resource_signIn
+                + "?grant_type=refresh_token&refresh_token=%s", refresh_token);
+
+        log.info("Client's credentials - {}:{}", clientname, clientpass);
+        log.info("Refresh token: {}", refresh_token);
+
+        return new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", Credentials.basic(clientname, clientpass))
+                .post(RequestBody.create(MediaType.parse("text/x-markdown; charset=utf-8"), ""))
+                .build();
+    }
+
+    private static String performSignIn(Request req, int expectedStatus)
+    {
+        log.info("get Tokens");
         log.info("-> Authorization: {}", req.header("Authorization"));
         log.info("-> " + req.url().toString());
 
         String body = "";
-        try
+        OkHttpClient client = getHttpClient();
+        try (Response response = client.newCall(req).execute())
         {
-            body = performAuthentification(req, loginExpectedStatus);
+            body = response.body().string();
+            log.info("<- tokens\n{}\n", body);
+            assertEquals(expectedStatus, response.code());
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
         assertEquals(false, body.isEmpty());
-
-        String access_token = "";
-        if (loginExpectedStatus == 200)
-        {
-            Map<String, Object> map = parse(body);
-            access_token = (String) getValueFromResponse(map, "access_token");
-            assertThat(access_token.length(), greaterThan(0));
-
-            assertThat((int) getValueFromResponse(map, "expires_in"),
-                    is(both(greaterThan(minExpirationTime)).and(lessThanOrEqualTo(maxExpirationTime))));
-        }
-        return access_token;
-    }
-
-    private static String performAuthentification(Request req, int expectedStatus) throws Exception
-    {
-        OkHttpClient client = getHttpClient();
-        try (Response response = client.newCall(req).execute())
-        {
-            String body = response.body().string();
-            log.info("<- token\n{}\n", body);
-            assertEquals(expectedStatus, response.code());
-
-            return body;
-        }
+        return body;
     }
 
     public static Request GET_request(String url, String access_token, Map<String, Object> queries)
@@ -193,9 +206,10 @@ public class UtilTest
         return performRequest(req, expectedStatus);
     }
 
-    public static void checkAllResources(ConsumerTest consumerTest)
+    public static void performResourceAccessing(ConsumerTest consumerTest)
     {
         String access_token = consumerTest.access_token;
+        AuthorityLevel consumerLevel = consumerTest.level;
 
         RESOURCE_AUTHORITY_reqDATA().forEach((resource, next) -> {
 
@@ -212,7 +226,7 @@ public class UtilTest
             else
                 req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
 
-            Map<AuthorityLevel, Integer> statusList = AUTHORITY_to_AUTHORITY_STATUS.get(consumerTest.level);
+            Map<AuthorityLevel, Integer> statusList = AUTHORITY_to_AUTHORITY_STATUS.get(consumerLevel);
 
             performRequest(req, statusList.get(level));
         });

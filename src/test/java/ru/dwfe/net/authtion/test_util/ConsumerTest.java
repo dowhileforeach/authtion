@@ -1,5 +1,7 @@
 package ru.dwfe.net.authtion.test_util;
 
+import static ru.dwfe.net.authtion.test_util.SignInType.SignIn;
+
 public class ConsumerTest
 {
 
@@ -11,9 +13,10 @@ public class ConsumerTest
     public AuthorityLevel level;
 
     public String access_token;
+    public String refresh_token;
 
 
-    public static ConsumerTest of(AuthorityLevel level, String username, String password, Client client, int loginExpectedStatus)
+    public static ConsumerTest of(AuthorityLevel level, String username, String password, Client client, int signInExpectedStatus)
     {
         ConsumerTest consumerTest = new ConsumerTest();
         consumerTest.level = level;
@@ -21,7 +24,7 @@ public class ConsumerTest
         consumerTest.password = password;
         consumerTest.client = client;
 
-        UtilTest.setAccessToken(consumerTest, loginExpectedStatus);
+        UtilTest.setNewTokens(consumerTest, signInExpectedStatus, SignIn);
 
         return consumerTest;
     }

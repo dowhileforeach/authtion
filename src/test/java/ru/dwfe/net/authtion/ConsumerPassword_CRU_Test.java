@@ -28,7 +28,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.test_util.AuthorityLevel.USER;
-import static ru.dwfe.net.authtion.test_util.UtilTest.checkAllResources;
+import static ru.dwfe.net.authtion.test_util.UtilTest.performResourceAccessing;
 import static ru.dwfe.net.authtion.test_util.UtilTest.check_send_data;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 import static ru.dwfe.net.authtion.test_util.Variables_for_ConsumerPassword_CRU_Test.*;
@@ -114,15 +114,15 @@ public class ConsumerPassword_CRU_Test
 
         //Test for new Consumer access to all resources
         ConsumerTest consumer1Test = ConsumerTest.of(USER, consumer1.getEmail(), PASS_NEW_Consumer, client_TRUSTED, 200);
-        checkAllResources(consumer1Test);
+        performResourceAccessing(consumer1Test);
         mailingConfirmConsumerEmailRepository.delete(mailingConfirmConsumerEmailRepository.findById(consumer1.getEmail()).get());
 
         ConsumerTest consumer2Test = ConsumerTest.of(USER, consumer2.getEmail(), PASS_2_notExistedConsumer, client_TRUSTED, 200);
-        checkAllResources(consumer2Test);
+        performResourceAccessing(consumer2Test);
         mailingConfirmConsumerEmailRepository.delete(mailingConfirmConsumerEmailRepository.findById(consumer2.getEmail()).get());
 
         ConsumerTest consumer3Test = ConsumerTest.of(USER, consumer3.getEmail(), PASS_FOR_EMAIL_3_Consumer_Decoded, client_TRUSTED, 200);
-        checkAllResources(consumer3Test);
+        performResourceAccessing(consumer3Test);
         mailingConfirmConsumerEmailRepository.delete(mailingConfirmConsumerEmailRepository.findById(consumer3.getEmail()).get());
     }
 
@@ -211,7 +211,7 @@ public class ConsumerPassword_CRU_Test
         //newpass
         consumerTest = ConsumerTest.of(USER, email, newpass, client_TRUSTED, 200);
 
-        checkAllResources(consumerTest);
+        performResourceAccessing(consumerTest);
         mailingConfirmConsumerEmailRepository.delete(mailingConfirmConsumerEmailRepository.findById(consumerTest.username).get());
     }
 
@@ -278,7 +278,7 @@ public class ConsumerPassword_CRU_Test
         ConsumerTest.of(USER, email, oldpassDecoded, client_TRUSTED, 400);
         //newpass
         ConsumerTest consumerTest = ConsumerTest.of(USER, email, newpassDecoded, client_TRUSTED, 200);
-        checkAllResources(consumerTest);
+        performResourceAccessing(consumerTest);
         mailingConfirmConsumerEmailRepository.delete(mailingConfirmConsumerEmailRepository.findById(consumerTest.username).get());
     }
 
