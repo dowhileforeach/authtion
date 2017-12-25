@@ -22,9 +22,11 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static ru.dwfe.net.authtion.test_util.ResourceAccessingType.BAD_ACCESS_TOKEN;
 import static ru.dwfe.net.authtion.test_util.SignInType.SignIn;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.ALL_BEFORE_RESOURCE;
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.AUTHORITY_to_AUTHORITY_STATUS;
+import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.AUTHORITY_to_AUTHORITY_STATUS_BAD_ACCESS_TOKEN;
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.RESOURCE_AUTHORITY_reqDATA;
 
 public class UtilTest
@@ -206,10 +208,14 @@ public class UtilTest
         return performRequest(req, expectedStatus);
     }
 
-    public static void performResourceAccessing(ConsumerTest consumerTest)
+    public static void performResourceAccessing(String access_token, AuthorityLevel consumerLevel, ResourceAccessingType resourceAccessingType)
     {
-        String access_token = consumerTest.access_token;
-        AuthorityLevel consumerLevel = consumerTest.level;
+        Map<AuthorityLevel, Map<AuthorityLevel, Integer>> statusMap;
+
+        if (BAD_ACCESS_TOKEN == resourceAccessingType)
+            statusMap = AUTHORITY_to_AUTHORITY_STATUS_BAD_ACCESS_TOKEN;
+        else
+            statusMap = AUTHORITY_to_AUTHORITY_STATUS;
 
         RESOURCE_AUTHORITY_reqDATA().forEach((resource, next) -> {
 
@@ -226,7 +232,7 @@ public class UtilTest
             else
                 req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
 
-            Map<AuthorityLevel, Integer> statusList = AUTHORITY_to_AUTHORITY_STATUS.get(consumerLevel);
+            Map<AuthorityLevel, Integer> statusList = statusMap.get(consumerLevel);
 
             performRequest(req, statusList.get(level));
         });

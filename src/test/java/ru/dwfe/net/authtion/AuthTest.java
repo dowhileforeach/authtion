@@ -6,6 +6,7 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.dwfe.net.authtion.test_util.ConsumerTest;
+import ru.dwfe.net.authtion.test_util.ResourceAccessingType;
 import ru.dwfe.net.authtion.test_util.SignInType;
 
 import java.util.HashSet;
@@ -13,6 +14,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static ru.dwfe.net.authtion.test_util.ResourceAccessingType.BAD_ACCESS_TOKEN;
+import static ru.dwfe.net.authtion.test_util.ResourceAccessingType.USUAL;
 import static ru.dwfe.net.authtion.test_util.SignInType.Refresh;
 import static ru.dwfe.net.authtion.test_util.UtilTest.performResourceAccessing;
 import static ru.dwfe.net.authtion.test_util.UtilTest.setNewTokens;
@@ -32,13 +35,21 @@ public class AuthTest
         ConsumerTest consumerTest = USER_consumer;
         access_tokens.add(consumerTest.access_token);
 
-        performResourceAccessing(consumerTest);
+        performFullAuthTest(consumerTest);
+    }
+
+    public void performFullAuthTest(ConsumerTest consumerTest)
+    {
+        performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
 
         String old_access_token = consumerTest.access_token;
         String old_refresh_token = consumerTest.refresh_token;
         setNewTokens(consumerTest, 200, Refresh);
         assertEquals(false, old_access_token.equals(consumerTest.access_token));
-        assertEquals(false, old_refresh_token.equals(consumerTest.refresh_token));
+        assertEquals(true, old_refresh_token.equals(consumerTest.refresh_token));
+
+        performResourceAccessing(old_access_token, consumerTest.level, BAD_ACCESS_TOKEN);
+        performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
     }
 
     @Test
@@ -49,7 +60,7 @@ public class AuthTest
         ConsumerTest consumerTest = ADMIN_consumer;
         access_tokens.add(consumerTest.access_token);
 
-        performResourceAccessing(consumerTest);
+        performFullAuthTest(consumerTest);
     }
 
     @Test
@@ -60,8 +71,7 @@ public class AuthTest
         ConsumerTest consumerTest = FRONTEND_consumer;
         access_tokens.add(consumerTest.access_token);
 
-        performResourceAccessing(consumerTest);
-
+        performFullAuthTest(consumerTest);
     }
 
     @Test
@@ -69,7 +79,8 @@ public class AuthTest
     {
         logHead("ANONYMOUS");
 
-        performResourceAccessing(ANONYMOUS_consumer);
+        ConsumerTest consumerTest = ANONYMOUS_consumer;
+        performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
     }
 
     @Test

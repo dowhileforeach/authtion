@@ -65,6 +65,24 @@ public class Variables_for_AuthorityTest
                     FRONTEND, 200)
     );
 
+    public static final Map<AuthorityLevel, Map<AuthorityLevel, Integer>> AUTHORITY_to_AUTHORITY_STATUS_BAD_ACCESS_TOKEN = Map.of(
+            USER, Map.of(
+                    ANY, 401,
+                    USER, 401,
+                    ADMIN, 401,
+                    FRONTEND, 401),
+            ADMIN, Map.of(
+                    ANY, 401,
+                    USER, 401,
+                    ADMIN, 401,
+                    FRONTEND, 401),
+            FRONTEND, Map.of(
+                    ANY, 401,
+                    USER, 401,
+                    ADMIN, 401,
+                    FRONTEND, 401)
+    );
+
 
     /* OTHER */
 
