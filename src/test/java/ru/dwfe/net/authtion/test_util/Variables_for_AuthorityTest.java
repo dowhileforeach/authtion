@@ -39,6 +39,7 @@ public class Variables_for_AuthorityTest
 
     /* Expected statuses:
         200 = OK
+        400 = Bad Request
         401 = Unauthorized
         403 = Forbidden, access_denied
     */
