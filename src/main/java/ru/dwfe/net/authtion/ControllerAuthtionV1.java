@@ -178,13 +178,6 @@ public class ControllerAuthtionV1
         return getResponse("success", true, authentication.getPrincipal().toString());
     }
 
-    @GetMapping(resource_listOfConsumers)
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Consumer> users()
-    {
-        return consumerService.findAll();
-    }
-
     @GetMapping(resource_publicConsumer + "/{id}")
     public String publicConsumer(@PathVariable Long id)
     {
@@ -202,6 +195,13 @@ public class ControllerAuthtionV1
         else details.put("error", "not exist");
 
         return getResponse("success", result, details);
+    }
+
+    @GetMapping(resource_listOfConsumers)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Consumer> users()
+    {
+        return consumerService.findAll();
     }
 
     @GetMapping(resource_reqConfirmConsumerEmail)
