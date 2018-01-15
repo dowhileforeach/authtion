@@ -1,0 +1,3155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>0047D571-6486-4A7E-8905-C73D017DADFD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>008EC6B9-151E-459D-A040-0D9D8B124B29</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>00B49205-EB34-44FD-B11B-A0EBAB30422C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>00C769F4-685B-47BE-8421-AC1D7EDD751D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 559}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>016C63BB-AF01-4C6E-B4AD-DDD181804CFC</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0237F032-F320-4E91-9766-94BD22761EC5</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 1141}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>025409B0-FD9D-48F2-B215-632309850E6B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0351C33F-D026-415A-813B-35CFDFA344AE</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 661}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0529202F-82A1-47ED-9CC3-8AE79A3280CB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>05AACC38-0866-495A-90A4-13ABC2CD4769</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>05ABDEED-D543-441A-BEED-73A2E4A02917</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 1439}, {1100, 701}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>05AC2A06-954F-4047-B702-A22BEAD76FC4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0634D30B-AA20-43CD-A925-8D49A94229E1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>06536B1A-142B-4653-B4A7-707EA537283A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>082DB7D4-A3B9-4834-8CCD-DEFD10DCF05D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>083CF7AB-2C09-43A5-A353-CCA8881394AD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>08735E19-0B92-45F3-A035-721C5EFDC76D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>08CDAC33-2FB6-4EF3-8E7F-A4A316E91850</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0958A40B-7C41-457C-85EA-590444DF84DD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>097157F0-1370-44B9-A552-466DFE2065C1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0A22CD45-421E-4D5B-85D5-19ECA5963257</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0A99DA48-E402-45A4-9D2F-C17B83A2A4CE</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 2052}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0AB6526F-0C5E-4483-8BC8-72A6816C89F8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0B60C721-B4CA-4754-94DD-57A76C5CC93F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0C48B01C-F208-4D33-A0AD-30294EAC287C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 159}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0C6B0763-9C80-4576-9EF4-CDB29686194A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0D10DAEE-E70E-481E-953D-5CCC9C421991</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 703}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0DF12683-CE2C-4D4D-B120-A102B5210867</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 192}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0FBDB3F2-21F2-481F-8251-5D5F2358083D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0FF10569-A73A-445C-9184-906B519EA46D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>0FF489C4-59C4-4D55-9E79-DEB0779191CB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 1760}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>112C107F-F36A-4450-8B9D-A4560ADFE6F1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>115CF20F-5BEB-4A0B-8C6D-571976C6C307</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>11C74F36-7527-443C-8BDF-D8640E890921</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>13B2353E-EA3A-428D-9D68-F00A47F00696</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1407930B-35B6-409E-BA14-DFB1FB7CDF57</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>154D87A2-CEDF-43D1-89D8-958F1A8B4498</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>15FAF26A-9FAE-41F7-A886-2517529F9481</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 139}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1741007E-C06D-4C6A-B557-33425AF20045</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>17EFC577-2717-4F70-A10B-AA4E9A87F90A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>17FB89B5-9FFD-4B4F-9774-656A82D01936</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1885DAAD-0BAF-4C6D-A2D2-AED60C43E387</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>18E160CD-24A4-489C-A7BC-5DBD945AB913</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>196AB285-26C2-4F63-9774-E79788B9F583</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1999756C-4AAD-481E-BC0F-8691F62FF51B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 441}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1A2F8601-5C28-4CC5-8236-D58AE4090994</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 391}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1AF28965-9901-4A1A-A154-1B44CBBD2663</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1170, 581}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1B3B6F5B-EFB7-41B2-A259-D9A88BC40E27</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1B5DD049-E115-4292-9064-A67945673CB6</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 703}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1B7F6D2A-2E6D-4AD6-9AF6-585C40AC627F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1D103104-AFD6-4016-8093-4B35879D7426</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1D5C041F-FE87-42A1-BD37-51139AD0B0E3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1E05739C-C78F-45E0-B883-025B05E1EE94</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1EC6A6DB-AB3C-42DA-9D6A-F02CA05BD9C4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 45}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1F42BC7D-7895-4531-8E8F-FACD70017455</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>1FE8FFE9-66F4-409E-AC57-2B0AAB8D088D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 297}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>204112FF-7EF1-4732-B154-40FB220C2F93</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>206E77EC-2F27-453A-87E6-0918E533AC68</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 112}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2103B76B-F930-45C8-B5FD-9656FE9FB830</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>21C137D0-64CA-434A-9EEE-68CEF29D81F9</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>21C3304F-22B9-43D7-9728-597B14189A38</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1150, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>21DD2505-28BC-46DD-86EF-B0C63D790AFA</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>220F7008-BD2A-42E8-AE76-9E7128DB4781</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>225FED89-3F06-4657-8533-37312F840123</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>236143C9-5A5F-4AC5-80F4-63FFAD3D9B54</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>23629E73-0450-43F6-BF38-2D3464123E0A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>241E734B-127E-4B28-ACA3-91B8D902939A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>24501545-DFE8-4796-BF14-F4841BFC12E5</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2472AD71-8116-4DF3-B767-67920A3374D4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2494F115-4F10-433A-B636-65EB4EED754A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>24CF51D0-966A-47C9-857C-6608D739F073</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>25A0A3BB-11BF-4E0F-9943-A604F5842445</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {950, 593}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>26079AE1-4229-4547-B4AC-C81A22176DD2</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>27DF4300-E8DA-4E1D-9252-28956DE3CC71</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>295B6883-6DEC-43DF-A287-D83ACF4E36E8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>29BD048E-8FD3-44C5-BDD6-9A3BD771959F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2A075CBF-DEDC-4654-AE4C-40F43FF8FD71</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2B22A962-5063-4DCD-9144-7F39AD14CD8B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2B742FA2-7B5C-4822-BCE6-B8000815F28D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2BBC2FF1-D865-42DA-9C9C-C2DB8A32C672</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2BCFE58B-A3DC-4A74-805F-F9134036CD63</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2C07D6D6-7FB2-444F-BFE7-F8B47A59A2E9</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2C89B1B7-0B46-4634-8699-BC22CB70949A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2D30D0BC-CA2E-4CFB-B2E8-6F81FFEFFB32</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2DC79DAD-7EC3-4F25-966D-FD871DFE9F20</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2E243875-84D0-4A11-B447-0113E1487D1A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2EDDF61D-B75D-4646-A383-C36C4CE35737</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2F838BD4-960E-4C66-B777-F19782243085</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2F9F5E96-AE8B-406C-9322-1F00A0E8D821</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>2FB88844-C451-462E-AB8B-CC04F5D1BAA7</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>30CD2974-F7A6-4158-A91B-11740AAE71D8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>31EB9F88-B8F7-4FFA-AD8E-F84FB0497D7D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>325D70DC-C054-4934-9350-A60CE2785293</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>32B10542-382E-446C-84CE-9D86C8680C97</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 701}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>338D5B44-46EA-41FB-8AB7-A9708BE65999</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>33A1FD63-0330-43B4-9C2E-4CA038022099</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>34265F0E-394B-47A4-944A-207F7C618156</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>344E56B9-B82B-4427-8169-13026ECEF73D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>37373279-EA08-4AAA-AC16-4F60F0EF6081</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>373A8291-260F-4B12-B49E-CFC42A97B97A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1115, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>378269B7-1627-4314-8D09-2ED684065A48</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 619}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>37BF66C9-E149-4FA8-9301-D37E59B429E6</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>37DF7C94-7BAA-49A5-B6F8-5C55279F4023</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>37E2091A-1022-4F81-93FA-885EE8F1B7A3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>37F67714-2C0D-477A-A990-2B91A0017F62</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>38EFFC2F-EDD6-4782-8FCC-B957BC6FA8ED</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>39680E83-6CEB-4212-836B-FC21A7623C3F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>39A15F7E-804E-4987-A77A-C2AC18DDA548</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 1440}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3B2020BC-9AD9-4A19-9B13-1BF59F843D09</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3B8C7D4C-A319-44BE-87D3-ADE9BFB3F75C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 5}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3C3E2AFF-25AD-45B8-9E8C-014AB2BF1DFE</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3C57B2D9-3110-47D7-B3B1-82F8FFB287CD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3CD46877-D66B-4216-8FFA-A83E8EB66CBD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3D201DC0-7AEB-4882-8C2F-1500445D5317</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3D436203-D345-46B1-A8C6-1F3CC3993E7F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3D9F438A-4426-4ECF-AA58-E220F3DC7770</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3DD44E09-0E61-4EE3-96BD-78B0BF58699A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3E2A4697-7661-4EC6-BD0A-AFCA4ADF9E47</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3F62AC29-A43D-497C-B830-24638195232B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3FBA72DE-3D9A-4370-801C-B4020D28F7BF</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{120, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>3FFA20AD-2BBB-45CE-81DE-4DDF714FB214</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>409B5DE1-58C6-4F46-B0BC-B6E2C02932CF</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>409DDD18-4735-4D99-97CC-6649BBE4BC66</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {950, 593}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>41AC7A32-7EF1-4CF0-A7FF-265B31E36B8C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>41F8F931-34AE-4F13-A454-836AF1B7A6C2</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 269}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>423E5782-A3D4-4A42-8AE9-E760F36B0E2A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>43F116D6-AE97-4DA3-8496-C74998E2E0E1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4451F5EA-33BE-440C-9070-534C9A2DB434</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4481D32C-6E47-45AF-92FB-8EA00E76AE25</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>44B8AAA1-D401-4391-BDA1-72594DA8DC91</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 303}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>458C4F0B-5B33-452B-97B6-7C320D4D27B9</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4591A577-BCCA-43F0-A8CB-7246FA2C394C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>46AB4720-38D9-47B2-AA07-238E9FA4B303</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>46BF5EA4-244B-45AF-89E7-5122C7DD540B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4707A5D2-B6B2-4850-95E3-997F5C9A56A6</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>47D016E7-DB77-4344-9E72-EE273FECA6E8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>47DA0CB5-5906-439D-8EF6-07B28939F2C5</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>481B7B66-0E59-4960-AE6E-DD21B2EE6923</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>48D6BCB1-0AFA-486C-A9B9-367C079413F1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>49C8AA5B-DB62-4B11-9FD4-FAA8668675BB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4A363854-2DBE-46FB-9E74-CA6370ED35FC</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 112}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4AB582B3-92F1-4995-BF16-98D5B5159E69</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4B1F9EEB-A8C6-4715-AE9F-7CF8434E7502</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4C468DA9-6849-4DF7-A714-ECC159601FFC</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{3, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4CC0E092-B811-4AF7-B788-C6BEB45D94FD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 5741}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4DC238FE-15BF-4A7F-889E-42D554015789</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4E8189BE-B691-40AF-B84D-B545E242B313</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4F583C15-F693-424C-A89E-B921D132AD05</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 45}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4F601FCD-4979-43B7-B219-885CD489FE3F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4FA92C37-0189-4D70-B83F-CD4C1ABCAFCC</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>4FFBAEA4-0BB8-4173-B8AA-03AD7DC478D1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>52E4A28E-BF51-418E-AE45-90351DFD1ACE</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>53111B4C-3D1C-4AC7-9765-344FE237DF87</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>541DC2E8-E725-444F-AD24-A76E86FCC360</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>54F5EF7B-C9C3-41EF-B89F-6B70F84B901E</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>568B9779-B927-40B7-BCFF-3CA3A11A9145</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 1107}, {779, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>56A516CE-02F6-4E70-B051-0274259798AD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>56E1499C-1B50-49EE-A342-7B656F0BF715</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>5780977E-B9E2-4A7B-896C-97947DEAC71C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>582A7F43-AB6D-426E-BDCA-9BB7AF2A2CC5</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {950, 593}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>5857CC0C-990A-436C-B1BF-8131AD4CC238</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>592BB938-FB5C-499F-B885-778D5EEDED32</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 7}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>595C8C51-04F7-46A1-8F0E-DCD1C8FD2406</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>596A0F70-4C60-4A9B-9DE0-F82CDC7AF026</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>59BD4A35-2E0B-4A34-BDD2-DEE657769665</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>59C9D825-46A5-4649-9A88-537DF0439C40</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>5A5F6C82-A4EB-49F9-929C-68B25EB7D4F2</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>5B3A1EA1-9D3A-4E55-80D5-58E77A9C12D0</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>5B676D56-468A-4583-BD44-8BF4F2736F50</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>5C2578F7-B346-4BF1-B599-9684A03F0543</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 701}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>5F76B2C4-8786-4B84-BF5B-1898EAEDE138</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>5F8AD40A-F872-4813-AD94-B4EBDFD98786</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>5FECBAA6-9B49-4950-86A7-C1C4061D2CA0</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>60387746-A642-445E-A2C5-24F5E9570040</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>60A3D957-5823-4CB7-9212-AD1467012365</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 618}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>62A36D94-237D-4E7F-83AE-BEBE7EC44C30</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>644A3485-CD4F-4B77-A142-D983E4C1E3C5</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{57, 45}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>655D5A42-C83D-4AE2-98D7-8179B19D8578</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>659F9A1D-AFA1-4769-8399-35ACC103CC82</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>66B22E27-3D17-4C54-9CD5-DF8DE2594285</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>68EB652C-C491-4004-BFC9-DF84B3FB1AB9</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 343}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>6AE0FB09-458E-47DA-94F6-61452B0C2756</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 1}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>6B6CE589-6957-409E-B14A-CAE77CCFF9F4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>6C9D3B35-073B-4D25-971C-F626AB0459F3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>6CC293C8-23B9-4994-8CB9-A80C78B8D44D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>6CD25068-4982-4A55-BCD1-0D8A2FE4A360</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 491}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>6D974A03-9D15-4BBE-B963-85066377D9E6</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>6D97AB29-33D9-40BB-99BD-EF1B97C24E69</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>6E0A10CE-1331-4EB3-BFAF-952A8684023E</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 13}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>6FCFFD34-A81F-4407-A236-A988A0D58B40</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>70CB187B-191C-4389-8A20-6503F34593EC</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>70CBC3F0-FFC1-4C2A-9259-17D0393DC10C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>70F6865D-700C-4CFA-831D-FA3E29057407</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>714573B8-D919-487F-8BE4-0242AF6F220A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>71843119-C4A3-4CCB-A60A-6E4AE65DF1A9</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>72419785-D5F9-4B70-8DA2-C43227009578</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>734CFCDB-47F5-4086-B44B-4B3B74EE4C94</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 701}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>7374BCD2-107A-460E-9A3F-704F2937B8B6</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>73789A85-9DC5-4290-8C00-4DCA917AB75D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>73B7DAD3-0539-44E2-A45D-FCA1A1B5BB87</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>73E3B068-B300-46FE-8EFB-F6C9EAEF599A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>73F4329E-2B8C-49E1-BD96-B50AE420761F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>752D18E6-D509-465B-A2A1-7030D796EA31</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {950, 593}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>7589FB93-D176-44C6-97C6-4657A4AE93E3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>75B6F4EA-9873-42EB-9E43-7957DB22703E</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1170, 594}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>772E69A8-167C-4831-9F1A-1DE5AA8707C1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>7863DBD8-F3A8-4C5D-8C3C-26A868A5F8C7</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>78659B6A-7EA7-4F89-8BF5-ED1F9C6261C1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>78781CE5-4B89-4DA4-B3B7-CA42704F67F8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{1223, 651}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>7909857E-19E9-4B31-9712-22DD91479E65</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>799A46C0-BF27-42D6-8F75-0FD18163DD44</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>7A670CB4-DF44-4F49-A380-5CE7589EE6D9</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {950, 593}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>7BB01CE7-6FDF-4B04-BAD5-9172F60A0640</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>7D13D663-C86C-4935-89B7-CB67102DB7BA</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>7F4387A6-0D65-47BB-8B19-A357A18BCA41</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>80282C0C-C338-43D7-A93F-873630624F86</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>80B97869-27C2-4185-9F36-0C19DDA8211F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>812014DC-D220-40E6-A587-49672772FD32</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{522, 323}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>81212DE2-4398-4AAB-97AE-BB15A9A2DB9D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{1, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>81830E6A-1B20-4647-8AA6-BCC09F09CCAB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>81D762E5-7E9D-42E6-828D-FF97E9104EC1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>83F1023A-FD09-43E5-8618-7C24CB302856</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>8422F071-BF36-4D45-A157-34F95CE3A263</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>84CCEDDC-98AA-4F1C-91BB-FBF8D45B9419</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>853F25E3-1C16-46BA-9A26-24E5075559A3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>85A501B8-DFB1-418B-A8CD-BB91C178CA85</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>86C89AFE-BD7A-4ED7-96D4-320508936543</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>87A39492-3E4D-48AD-93CE-63500778CF95</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>88514327-7EE7-490F-9B80-C913E8896A94</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>8876EAA0-EC9D-44FA-862C-ED56C480001B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>889AC278-E720-42E4-AE8D-6DC8E32DA0B6</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 1949}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>88B9852E-C0EF-4317-8C83-201AD8F00CFB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>89E9731D-5477-41A1-8B70-371A89DA1FF1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 701}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>8A5918DC-B4E4-4793-80EC-31DBC854C2B6</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 46}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>8B622612-9992-4532-A2F1-9151391AE6FF</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>8B6F829E-3EAA-4AE5-93AC-23D3E76BE460</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>8ED5E8DD-14F6-445A-A461-2A9E04B17B1B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>8EF68091-C816-4179-9651-AD079E9D5611</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>8F264D42-2C21-40BB-8101-38F824ECC12F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>90F51A31-CE20-438C-BC7E-0BA8D5CF1249</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {950, 593}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>913E0E71-E5C6-4555-85CC-1F37AE6E8B1B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>92787369-DBF7-43ED-9CFC-EAA9D0584E2C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>92A85CCC-67A1-49AF-B8C9-0038C4CC82D9</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>93CA6669-A3FB-4F8C-90DD-88F91E7110DD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>947D581A-82FF-4D81-B058-9DB6D6B8FE89</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>948C4A20-244A-4296-B63F-E902AA63F6B7</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>955D5B04-13ED-4758-8074-58BB1C52BE58</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 691}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>95D89D10-8736-4F81-9F5B-67D0A14EC18E</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>95F925A0-0069-4658-8A00-0EB0F021C18A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>96C68803-AACE-4BC7-8AB6-01C4B497550E</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>974CDEBE-C36F-4450-B725-404D6E7EB1C7</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>987AE8BD-BAFA-4D65-8BDF-5AD3AF95E2A4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 45}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>99EBA8F2-F66B-4704-9825-728A7AA8ECD4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 133}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9A796A39-3C66-46EA-A44D-0A09E3CCB927</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9BEEEADA-0D7C-4815-B54F-01C3F73FEE26</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9BF77AD8-236A-455F-B04D-371AA426D9FE</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9C6091C3-10C7-4470-A065-B5B42D689EE5</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 4}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9C7372CA-425A-4A00-BA34-462E7B8C95E3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9CB01BD9-6F9D-4401-8857-157A7CDCAE2C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9D4F3B34-5463-472E-BDE5-A49F81D513BA</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9D5B1985-2D41-482F-A2E6-C7F3AF8A482C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9DE38186-A1D3-4A27-88D9-C61C03C45AF4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9DE90249-E945-4999-9C88-E7338A225685</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>9EFDCDAB-2071-43D2-A976-397390525DE1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 485}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A098367D-6C7F-41B7-90DF-3B407CF44C01</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A16538DB-90D7-47DC-89A4-028DE69847D5</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A1AA0F6C-15DA-429F-8071-C72D563815B2</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 1}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A4C89EEF-022B-4C1E-9E0E-9053E3BC3815</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 2751}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A5D995A6-FB43-4D4C-9409-5625B6EE9D14</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 701}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A61B1017-F1EE-488E-B4F4-54C17C20CB94</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A66CA641-C152-4DD5-844D-1130C318B8DC</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A6956D1B-F8F9-479E-8952-252C14B45F38</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A69CBA91-652D-4850-AA8A-546748F3DF3E</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A6CF3504-E649-4BDB-85CA-A7221F4F2118</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A6D6F143-7DE7-43E2-A1C0-8B15FC8108D6</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A7388558-C5ED-4312-9BD3-4102FE7D48A5</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>A97D02AE-0B1E-4C96-91D7-4AF33560A68A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AA0F1168-BCCD-4982-A5C7-52DE4C60A90D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AA515AFB-1DDF-42A3-8C1B-77780F8D7CFB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 33}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AAE4B1D7-0882-4FCB-803C-D27B936D56B3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AB2678CB-A051-4425-9283-6F604BBB65DE</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>ABD16D21-AD5C-4D66-BAD1-892FB5952DB0</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AC3B6C57-E564-4EA8-9974-0FEB636E6FAB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AC5C1244-4B5D-4E44-97E1-0F268896647F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AD35BE60-8CD6-4C67-A2EA-39B845B66E52</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 269}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AE2D0EF0-56A0-43C5-9275-E0DD396EE909</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AE954AB5-AE06-4A49-AFFD-5F83FD0186A1</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AEAA04D1-4CC7-4EBA-8CC7-4125DC277C6B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 8}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>AEEA6421-B8E2-494F-B21D-FF9689E2B7FA</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B00DC91B-35C6-45A5-8AEA-E25B4CB65AB0</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 593}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B0E9E951-5EF2-4FE3-A79D-0478F48DF869</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 1}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B1B8A061-1CB5-43AD-997D-0A28048DF4E3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B1D0F3A1-4D31-4671-9AF9-00DFEC0180E7</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B20085FA-FA20-4E06-860C-7133D44C3C09</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B20D19DA-F9D1-4E84-9CEB-C61B781C906E</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B2B3AA82-35B4-4291-8600-A787B52A76C4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B326B7F2-4560-41A7-A306-6238335F5531</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B36A829B-243B-4AD8-B3A2-D92722A02DD9</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 47}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B3910A00-688F-4E6F-B5FD-9D753ECBDCF8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 2491}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B3F7944E-6709-4ECE-9896-B9B5BBD46DBF</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B4E50984-E297-4738-A588-98479EAA471D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B63CB134-625A-4677-A27C-51062730597A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B6AC6332-3C9C-4797-B0F2-CA0F99F32213</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B893ADBA-D3D5-4F8E-9BEC-E7286DCD4796</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>B9110AC7-F264-4A19-96C7-2D98346505F7</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 2281}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BB40DD0E-8E19-4342-ADAB-F4C420BC16D0</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BBA81CB6-A62B-4E7D-B6AA-9622ECFA5443</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 808}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BC29EA8C-92D5-450D-ABC8-F8342CCC1E43</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BC86DBAD-27A2-400B-A10D-002FA0E4FE57</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 112}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BC98BFB6-C5D4-4F67-9C5E-56079EDFBEDB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BE1BE44C-8423-4723-B99F-E5B6F828EFD6</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BE20334E-8912-48CB-A662-6B57F1758493</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BE4B3A9D-1562-44BF-AB8B-B4BA63A741AF</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BE4F5AEA-5A84-4189-A735-1F91FEF06916</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BF04DDD6-BF11-44A8-9338-717C1890853A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>BF4F320B-E17D-45E7-99A1-DF685B54E032</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>Bottombar Visible</key>
+	<false/>
+	<key>C0394C77-48C4-4B7A-8BAE-19842320C535</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C03C38A0-8CD9-4455-9B1D-615A9850E544</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C05FA971-5FC2-4703-8D72-ECC5046E8E29</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1150, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C19A3D53-65C1-489B-95D3-D6F6FE174AFA</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 7}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C19F4EAC-B16A-4570-AD49-554282440EAB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C270AA84-202F-4809-B4D0-B38B01E5A847</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C2877967-6814-418F-B925-C30E83D28BDB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C3025253-114B-4C61-AF81-2CCC78C33199</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C3519F33-BD6B-4D69-851E-29509CC6C37D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C355488B-F4F8-42F2-AF29-07906CAC799A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C3D67DCC-AB7D-48D9-90DD-D34E139E7CD8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C48239AA-D307-4ECF-A83D-8C93DB051E59</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C505BE49-D29C-4B0A-8AEE-614BBBA16092</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 1742}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C56C7EAC-7012-4E27-9E56-5E221B180A2B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C5AEE76C-D837-4432-A193-D1609751D6FF</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C652FE00-DDDE-4D17-92DE-044E22E483E7</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C85E066D-4826-4271-9359-57AD2635184F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C8DA9953-008A-4D85-AE47-F6F521A19824</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C94CBA53-1D48-4BD9-AA27-295A3A6E8FD3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 2054}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C9B887B0-75A3-41D0-B732-4F0CCA7A67A2</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C9C27E47-DBA5-4451-99F2-85BA324A7337</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 16}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>C9C35FB0-4795-4523-99A9-D375E3CC497F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>CA3C66A6-4735-4AD8-95CF-587341382C31</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>CA85ADE3-BC73-4F66-B567-D4402317E7DD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>CAB74C12-C052-4A71-A68E-0E96DCCF9599</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>CBD0D14B-21C7-42C5-ADDD-F91B65308A8B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>CC0E460D-C131-4361-A2E1-E5D54B5602F4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 3161}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>CCE44915-4725-4296-B65C-D034E4BCAA85</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>CCF9AA54-5D94-408A-96E0-D271154EC6C7</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>CE4DBCE7-06FE-4F2D-ABAD-CE732AD24A2D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1115, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>CF2F55D7-FC88-496F-9F5A-319CAD821E53</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1170, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D008BAF0-8BA4-4FB0-A656-C566A4E67857</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D0643664-0CAD-4771-B76D-0D354287C7EE</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D222B55C-16BE-4337-AAAD-C279A66081BD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 104}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D2263247-95FF-495D-9113-2D4B6E9789DF</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D331E4DE-D91F-4B9D-9198-ABCBE5A4D3C3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D41177DF-CEB0-4E82-8029-43104D5F639B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 695}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D4E26035-4FB0-4BDD-AB43-2C3C122BC767</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D504D774-2878-4F19-BB14-AF9909A606BB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D5607EFB-1BA4-4377-96E1-4566B3779338</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D574EDC2-BE55-46CE-AF35-9854DB14CEC8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1115, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D5CF648A-130B-4A80-80F9-ABEB2A9D4226</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D641B86F-5B39-4424-B49C-BE519EA38190</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D868538B-0CC1-4448-BF97-9D162D8954B4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 6577}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D8878577-5944-448B-B919-80986B35A7FA</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D88D3351-0B38-4D4B-8B3F-FB31D7136872</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>D8DA0BB2-5E7A-473E-970B-0E6492A38EC8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DA6F4F9E-5ACF-4AE0-9CF9-95C297F37B5A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DA8285A8-8422-48BC-BE24-45B5DBC77F70</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DA966F14-B2CA-4C31-A2E7-5A6F7DD6DB6E</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DCC60A4E-79A9-4EE2-96CE-A182562A0146</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DCE1DC92-33E6-4C26-961B-8127012A0989</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DD9A8D00-EBC2-454E-B41F-BC8DEA3C2067</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DD9BE6AF-46B5-4C7E-8B6B-53A98A4C8C03</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DE830798-359D-4FDA-AED8-9C984C6227DB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DF27DB64-0730-468C-AB66-D74F14B1025D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DF7B60E5-9959-46D4-96F6-8912D00FA952</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>DFBC0763-B8B3-4EFA-A5AF-ABD115FDF8B8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E048F7D8-90D7-4617-AE4A-80205FF1B6F3</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E06A2C3D-FFB0-42E4-9E8D-42684D0611E8</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E15BCC60-480B-4266-954A-BEAF910A3CDB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E1CAEECE-76DD-42DF-A673-ABEE5B0FB8DA</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E1CB2044-7D48-46CD-853B-7666AD4BC745</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E20730D8-3077-407E-984D-BE02235864E9</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 701}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E24FABF9-66E1-42C4-BA8D-006C7ECA2359</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E4F63007-9ECD-4A76-9444-308F5ED3F581</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{1070, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E5E61BBD-5123-4C91-87FC-7F1EEDF2393F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E673AE0A-1F0D-4085-827D-3C047BB44EF9</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E6863404-A19F-4B76-B825-DACA4A528EB0</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E7084B4C-FC85-4F13-BC94-95C1FFCFCE68</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E7906703-3299-4186-B559-75CE0B114A22</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 608}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E88014E7-8FF1-4AA1-AE7F-FB2501ED4CD4</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>E88C9C5B-868F-48DE-9259-E523302E5BDC</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>EADFADD5-756C-4F95-89CD-31BA98BF0205</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>EAFFD6FD-7A86-499D-A21C-0F78D06C6FCD</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>EB114F77-3BE4-4159-9205-8CBE083310C0</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>EDB66147-FAD1-4EAD-B872-FC716C85B71C</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>EDC14AB1-0EAA-4061-8557-E67BFF646F28</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>EEA8735C-50FD-458C-BA75-6D5106C93C86</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 302}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>EF506357-C5E3-467D-8ADA-44B8FB6A73A2</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>EF8D08C9-B080-4E86-8865-88246B702221</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>Expanded Ideaspaces For Section 00000000-0000-0000-0000-0000000TRASH</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section 00000000-0000-0000-0000-00000ARCHIVE</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section 152188B7-EF32-4CF5-8EC5-E0E73950AE78</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section 189A61A8-7B8E-4A42-8585-83375134AE42</key>
+	<array>
+		<string>236143C9-5A5F-4AC5-80F4-63FFAD3D9B54</string>
+		<string>A6956D1B-F8F9-479E-8952-252C14B45F38</string>
+		<string>C270AA84-202F-4809-B4D0-B38B01E5A847</string>
+	</array>
+	<key>Expanded Ideaspaces For Section 1BD90F9C-9EC8-4B78-84E9-5AE269E3CEDE</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section 3B70A0AF-F13E-4E18-B267-9149AF9C0697</key>
+	<array>
+		<string>B0E9E951-5EF2-4FE3-A79D-0478F48DF869</string>
+		<string>A1AA0F6C-15DA-429F-8071-C72D563815B2</string>
+	</array>
+	<key>Expanded Ideaspaces For Section 49AC7C1A-109E-460E-A7F6-CE393AD6F60D</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section 571BB7A6-B4EF-4EE8-9703-788F3EA1A53E</key>
+	<array>
+		<string>D0643664-0CAD-4771-B76D-0D354287C7EE</string>
+		<string>B74F7EBE-4208-4411-A0A1-1E984FE8A7FF</string>
+		<string>CC3FF39D-B259-4550-B8F5-DE12B84183D3</string>
+		<string>206E77EC-2F27-453A-87E6-0918E533AC68</string>
+		<string>2494F115-4F10-433A-B636-65EB4EED754A</string>
+		<string>864C643C-5DB9-4E34-94E8-6EE2EDC00D4D</string>
+		<string>9A4C77C2-3BDA-4197-92AF-EBE1590BDAD2</string>
+		<string>1D103104-AFD6-4016-8093-4B35879D7426</string>
+		<string>C702A757-C5B3-43B2-B7DB-64E25EF24780</string>
+		<string>48D6BCB1-0AFA-486C-A9B9-367C079413F1</string>
+		<string>5AD77906-FD1D-491C-9445-5DA6C0DAA135</string>
+		<string>A97D02AE-0B1E-4C96-91D7-4AF33560A68A</string>
+	</array>
+	<key>Expanded Ideaspaces For Section 6CB2A685-17D2-414C-8A2E-EDB1D44A8856</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section 81C15CD6-6179-4C93-B477-1CBDFCD6A385</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section 85F5F61C-6EF9-40A2-9318-39C9C974707B</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section 9FB48F54-1FAC-4D6B-91A7-797D6D457F1C</key>
+	<array>
+		<string>D41177DF-CEB0-4E82-8029-43104D5F639B</string>
+	</array>
+	<key>Expanded Ideaspaces For Section C3A6DE73-24FC-4196-AD9B-E6E6B265C89F</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section C6793BD2-4603-4819-AC61-BF3F2F03DA57</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section CB805DBD-A62A-4DBC-AE6A-5BCEE6FC0430</key>
+	<array>
+		<string>EF8D08C9-B080-4E86-8865-88246B702221</string>
+		<string>80B97869-27C2-4185-9F36-0C19DDA8211F</string>
+		<string>E86BF55B-A7A8-4FA8-ACE3-DCF60FB49163</string>
+	</array>
+	<key>Expanded Ideaspaces For Section DA10B397-3B45-48D5-B20A-17D344CF8328</key>
+	<array>
+		<string>99EBA8F2-F66B-4704-9825-728A7AA8ECD4</string>
+	</array>
+	<key>Expanded Ideaspaces For Section DCCAB960-02BF-4ABC-90B0-7948F375FFE2</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section DEFBCEDE-CE78-4641-A852-F483EE33F287</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section E50C6194-8645-46FA-9960-42693C011C97</key>
+	<array/>
+	<key>Expanded Ideaspaces For Section EE5BFEEA-A647-4F5F-B6B4-AA9ED319379C</key>
+	<array>
+		<string>0B773A0D-8E02-49F1-87D3-4BB6ABEC3BDB</string>
+		<string>F4E0E542-50DC-436D-8FDD-50FAA10F2AB7</string>
+	</array>
+	<key>Expanded Sections</key>
+	<array/>
+	<key>F01F4DDD-BE7A-4605-9F2D-5381481AD41B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 54}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F07E2ECA-062E-4099-BB54-54E4F4D36B8D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F10AF464-56EC-474A-9E03-0EC204AA68D0</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 2191}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F17F8B5A-DAA2-425A-9A42-83A2DDD3D844</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F20EA904-B620-4C16-80A1-B4347291344E</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F219AFE1-06B7-4299-9355-CB1CB88B5057</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F3F03342-4467-43A0-ABE4-DF52A5787D4A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F4E0E542-50DC-436D-8FDD-50FAA10F2AB7</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F62A8ED1-C8CB-40B4-A08C-DEB87E2C1459</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F69307CD-7C57-48AE-A84D-8B11E8FE352F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F6DBD35C-B8EF-48F8-9513-D66C53AAED35</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 186}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F755D873-035D-4D01-929E-3F52135AD695</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F8548A65-96B0-4FCD-B150-032412CF53DF</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F8DAD198-1D73-44F1-A765-87A8C130C876</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F8E2A72B-BAFD-40AC-9F91-6C3FCC07120A</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>F9B6E5CD-B5E4-451D-B85E-731304164CFF</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 727}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>FA7883D9-11E6-4BAE-9260-3E938F78FFFA</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 609}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>FC0CD312-B64A-4AA0-911A-D523CBEE8E86</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>FF21F0D5-07E8-4549-9B63-C0CDCE7E688F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>FF2F2C31-C8B6-44B4-B649-95D6B6C0BC7B</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>FF76B048-E354-4050-BF10-E119B6913526</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 489}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>FF95F57D-55D5-43CD-B472-EB97ED805CC7</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 3936}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>FF9A9223-DF14-4932-A86E-D88E1A9E816F</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 656}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>Last Viewed Ideaspaces For Section 00000000-0000-0000-0000-0000000TRASH</key>
+	<array>
+		<string>AE2D0EF0-56A0-43C5-9275-E0DD396EE909</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section 00000000-0000-0000-0000-00000ARCHIVE</key>
+	<array/>
+	<key>Last Viewed Ideaspaces For Section 152188B7-EF32-4CF5-8EC5-E0E73950AE78</key>
+	<array>
+		<string>93CA6669-A3FB-4F8C-90DD-88F91E7110DD</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section 189A61A8-7B8E-4A42-8585-83375134AE42</key>
+	<array>
+		<string>DF7B60E5-9959-46D4-96F6-8912D00FA952</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section 1BD90F9C-9EC8-4B78-84E9-5AE269E3CEDE</key>
+	<array>
+		<string>F9B6E5CD-B5E4-451D-B85E-731304164CFF</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section 3B70A0AF-F13E-4E18-B267-9149AF9C0697</key>
+	<array>
+		<string>4CC0E092-B811-4AF7-B788-C6BEB45D94FD</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section 49AC7C1A-109E-460E-A7F6-CE393AD6F60D</key>
+	<array/>
+	<key>Last Viewed Ideaspaces For Section 571BB7A6-B4EF-4EE8-9703-788F3EA1A53E</key>
+	<array>
+		<string>A098367D-6C7F-41B7-90DF-3B407CF44C01</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section 6CB2A685-17D2-414C-8A2E-EDB1D44A8856</key>
+	<array>
+		<string>6E0A10CE-1331-4EB3-BFAF-952A8684023E</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section 81C15CD6-6179-4C93-B477-1CBDFCD6A385</key>
+	<array>
+		<string>FF21F0D5-07E8-4549-9B63-C0CDCE7E688F</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section 85F5F61C-6EF9-40A2-9318-39C9C974707B</key>
+	<array/>
+	<key>Last Viewed Ideaspaces For Section 9FB48F54-1FAC-4D6B-91A7-797D6D457F1C</key>
+	<array>
+		<string>2D30D0BC-CA2E-4CFB-B2E8-6F81FFEFFB32</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section C3A6DE73-24FC-4196-AD9B-E6E6B265C89F</key>
+	<array>
+		<string>325D70DC-C054-4934-9350-A60CE2785293</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section C6793BD2-4603-4819-AC61-BF3F2F03DA57</key>
+	<array>
+		<string>8B622612-9992-4532-A2F1-9151391AE6FF</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section CB805DBD-A62A-4DBC-AE6A-5BCEE6FC0430</key>
+	<array>
+		<string>EF8D08C9-B080-4E86-8865-88246B702221</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section DA10B397-3B45-48D5-B20A-17D344CF8328</key>
+	<array>
+		<string>409B5DE1-58C6-4F46-B0BC-B6E2C02932CF</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section DCCAB960-02BF-4ABC-90B0-7948F375FFE2</key>
+	<array/>
+	<key>Last Viewed Ideaspaces For Section DEFBCEDE-CE78-4641-A852-F483EE33F287</key>
+	<array>
+		<string>86C89AFE-BD7A-4ED7-96D4-320508936543</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section E50C6194-8645-46FA-9960-42693C011C97</key>
+	<array>
+		<string>AA515AFB-1DDF-42A3-8C1B-77780F8D7CFB</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section EE5BFEEA-A647-4F5F-B6B4-AA9ED319379C</key>
+	<array>
+		<string>9CB01BD9-6F9D-4401-8857-157A7CDCAE2C</string>
+	</array>
+	<key>Last Viewed Section</key>
+	<array>
+		<string>DA10B397-3B45-48D5-B20A-17D344CF8328</string>
+	</array>
+	<key>Normal Window Layout</key>
+	<string>{{0, 4}, {1366, 741}}</string>
+	<key>Organizer Visible</key>
+	<true/>
+	<key>Organizer Width</key>
+	<integer>265</integer>
+	<key>Primary Asset UUID Last Viewed</key>
+	<string>206E77EC-2F27-453A-87E6-0918E533AC68</string>
+	<key>Scroll Position For Section 00000000-0000-0000-0000-0000000TRASH</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section 00000000-0000-0000-0000-00000ARCHIVE</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section 152188B7-EF32-4CF5-8EC5-E0E73950AE78</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section 189A61A8-7B8E-4A42-8585-83375134AE42</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section 1BD90F9C-9EC8-4B78-84E9-5AE269E3CEDE</key>
+	<string>{0, 70}</string>
+	<key>Scroll Position For Section 3B70A0AF-F13E-4E18-B267-9149AF9C0697</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section 49AC7C1A-109E-460E-A7F6-CE393AD6F60D</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section 571BB7A6-B4EF-4EE8-9703-788F3EA1A53E</key>
+	<string>{0, 196}</string>
+	<key>Scroll Position For Section 6CB2A685-17D2-414C-8A2E-EDB1D44A8856</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section 81C15CD6-6179-4C93-B477-1CBDFCD6A385</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section 85F5F61C-6EF9-40A2-9318-39C9C974707B</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section 9FB48F54-1FAC-4D6B-91A7-797D6D457F1C</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section C3A6DE73-24FC-4196-AD9B-E6E6B265C89F</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section C6793BD2-4603-4819-AC61-BF3F2F03DA57</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section CB805DBD-A62A-4DBC-AE6A-5BCEE6FC0430</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section DA10B397-3B45-48D5-B20A-17D344CF8328</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section DCCAB960-02BF-4ABC-90B0-7948F375FFE2</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section DEFBCEDE-CE78-4641-A852-F483EE33F287</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section E50C6194-8645-46FA-9960-42693C011C97</key>
+	<string>{0, 0}</string>
+	<key>Scroll Position For Section EE5BFEEA-A647-4F5F-B6B4-AA9ED319379C</key>
+	<string>{0, 0}</string>
+	<key>Secondary View Vertical</key>
+	<true/>
+	<key>Secondary View Visible</key>
+	<false/>
+	<key>Sections Height</key>
+	<integer>93</integer>
+	<key>Sections Visible</key>
+	<true/>
+	<key>Toolbar Visible</key>
+	<true/>
+</dict>
+</plist>
