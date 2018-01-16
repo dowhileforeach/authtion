@@ -509,7 +509,7 @@
 	<key>309B12B0-381D-44B0-A1E1-A17552251F5E</key>
 	<dict>
 		<key>Visible Rect</key>
-		<string>{{0, 0}, {1100, 660}}</string>
+		<string>{{1, 0}, {1100, 660}}</string>
 		<key>Zoom Factor</key>
 		<real>1</real>
 	</dict>
