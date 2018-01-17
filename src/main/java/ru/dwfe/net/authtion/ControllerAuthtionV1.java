@@ -93,12 +93,17 @@ public class ControllerAuthtionV1
             //put consumer to the database
             consumerService.save(consumer);
 
-            if (!automaticallyGeneratedPassword.isEmpty())
+            if (automaticallyGeneratedPassword.isEmpty())
+            {
+                //TODO: service alert #1
+            }
+            else
             { //if the password was not passed, then it is necessary to send an automatically generated password to the new consumer
                 mailingNewConsumerPasswordRepository
                         .save(MailingNewConsumerPassword.of(consumer.getEmail(), automaticallyGeneratedPassword));
 
-                //TODO send e-mail
+                //TODO: service alert #2
+                //      set Consumer field 'email_confirmed' to true
             }
         }
         return getResponse("success", details);
@@ -211,7 +216,7 @@ public class ControllerAuthtionV1
         String email = ((Consumer) authentication.getPrincipal()).getEmail();
         mailingConfirmConsumerEmailRepository.save(MailingConfirmConsumerEmail.of(email));
 
-        //TODO send e-mail
+        //TODO: service alert #3
 
         return getResponse("success", Map.of());
     }
@@ -261,6 +266,8 @@ public class ControllerAuthtionV1
             {
                 setNewPassword(consumer, newpass);
                 consumerService.save(consumer);
+
+                //TODO: service alert #4
             }
             else details.put("oldpass", "wrong");
         }
@@ -282,7 +289,7 @@ public class ControllerAuthtionV1
                 MailingRestoreConsumerPassword confirm = MailingRestoreConsumerPassword.of(email);
                 mailingRestoreConsumerPasswordRepository.save(confirm);
 
-                //TODO send e-mail
+                //TODO: service alert #5
             }
             else details.put("error", "not exist");
         }
