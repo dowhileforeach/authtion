@@ -2517,6 +2517,13 @@
 		<key>Zoom Factor</key>
 		<real>1</real>
 	</dict>
+	<key>E440DC55-CCA4-41E1-A634-1F0EBA0783DB</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 660}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
 	<key>E4F6789C-1F83-41F4-AB18-95C8C7801797</key>
 	<dict>
 		<key>Visible Rect</key>
@@ -2689,9 +2696,7 @@
 	<key>Expanded Ideaspaces For Section EC79A2BB-64B3-47A2-B7ED-B0BAD887AC41</key>
 	<array/>
 	<key>Expanded Ideaspaces For Section EE5BFEEA-A647-4F5F-B6B4-AA9ED319379C</key>
-	<array>
-		<string>70CF0231-AD8A-4AC1-9278-15ACF339A146</string>
-	</array>
+	<array/>
 	<key>Expanded Ideaspaces For Section FB5FFC29-29FB-42FD-9B1E-4FA49226B71D</key>
 	<array/>
 	<key>Expanded Sections</key>
@@ -2894,7 +2899,7 @@
 	</array>
 	<key>Last Viewed Ideaspaces For Section EE5BFEEA-A647-4F5F-B6B4-AA9ED319379C</key>
 	<array>
-		<string>E4F6789C-1F83-41F4-AB18-95C8C7801797</string>
+		<string>E440DC55-CCA4-41E1-A634-1F0EBA0783DB</string>
 	</array>
 	<key>Last Viewed Ideaspaces For Section FB5FFC29-29FB-42FD-9B1E-4FA49226B71D</key>
 	<array>
@@ -2911,7 +2916,7 @@
 	<key>Organizer Width</key>
 	<integer>265</integer>
 	<key>Primary Asset UUID Last Viewed</key>
-	<string>E4F6789C-1F83-41F4-AB18-95C8C7801797</string>
+	<string>E440DC55-CCA4-41E1-A634-1F0EBA0783DB</string>
 	<key>Scroll Position For Section 00000000-0000-0000-0000-0000000TRASH</key>
 	<string>{0, 0}</string>
 	<key>Scroll Position For Section 00000000-0000-0000-0000-00000ARCHIVE</key>

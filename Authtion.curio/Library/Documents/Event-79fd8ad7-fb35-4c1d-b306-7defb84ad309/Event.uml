@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>org.springframework.boot.actuate.audit.AuditEvent</OriginalElement>
+  <nodes>
+    <node x="395.0" y="80.0">org.springframework.context.ApplicationEventPublisherAware</node>
+    <node x="105.74999999999997" y="0.0">org.springframework.context.ApplicationEvent</node>
+    <node x="0.0" y="395.0">org.springframework.boot.actuate.audit.InMemoryAuditEventRepository</node>
+    <node x="187.99999999999997" y="80.0">org.springframework.boot.actuate.audit.listener.AuditApplicationEvent</node>
+    <node x="30.0" y="315.0">org.springframework.boot.actuate.audit.AuditEventRepository</node>
+    <node x="193.74999999999997" y="240.0">org.springframework.boot.actuate.security.AuthorizationAuditListener</node>
+    <node x="0.0" y="470.0">org.springframework.boot.actuate.audit.AuditEvent</node>
+    <node x="167.24999999999997" y="160.0">org.springframework.boot.actuate.security.AbstractAuthorizationAuditListener</node>
+    <node x="289.0" y="315.0">org.springframework.context.ApplicationEventPublisher</node>
+    <node x="0.0" y="80.0">org.springframework.context.ApplicationListener</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="org.springframework.context.ApplicationListener" target="org.springframework.context.ApplicationEvent">
+      <point x="0.0" y="-15.0" />
+      <point x="84.0" y="55.0" />
+      <point x="144.24999999999997" y="55.0" />
+      <point x="-38.5" y="15.0" />
+    </edge>
+    <edge source="org.springframework.boot.actuate.audit.listener.AuditApplicationEvent" target="org.springframework.context.ApplicationEvent">
+      <point x="0.0" y="-15.0" />
+      <point x="281.5" y="55.0" />
+      <point x="221.24999999999997" y="55.0" />
+      <point x="38.5" y="15.0" />
+    </edge>
+    <edge source="org.springframework.boot.actuate.security.AbstractAuthorizationAuditListener" target="org.springframework.context.ApplicationEventPublisherAware">
+      <point x="67.25" y="-15.0" />
+      <point x="369.0" y="135.0" />
+      <point x="519.5" y="135.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.boot.actuate.security.AuthorizationAuditListener" target="org.springframework.boot.actuate.security.AbstractAuthorizationAuditListener">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.boot.actuate.audit.InMemoryAuditEventRepository" target="org.springframework.boot.actuate.audit.AuditEventRepository">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.boot.actuate.security.AbstractAuthorizationAuditListener" target="org.springframework.context.ApplicationListener">
+      <point x="-67.25" y="-15.0" />
+      <point x="234.49999999999997" y="135.0" />
+      <point x="84.0" y="135.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="479.0" y="284.0" />
+  <SelectedNodes>
+    <node>org.springframework.boot.actuate.security.AbstractAuthorizationAuditListener</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
