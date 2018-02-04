@@ -72,17 +72,20 @@ public class Consumer implements UserDetails, CredentialsContainer
         return email;
     }
 
-    @JsonIgnore
-    @Override
-    public String getName()
-    {   //method was overriden special for @JsonIgnore annotation
-        return getUsername(); // <- don't touch this!
-        // The only way.
-        // It affects the uniqueness of tokens:
-        //   OAuth2Authentication
-        //   -> AbstractAuthenticationToken
-        //   -> getName()
-    }
+//
+// deleted in org.springframework:spring-core:5.0.3.RELEASE
+//
+//    @JsonIgnore
+//    @Override
+//    public String getName()
+//    {   //method was overriden special for @JsonIgnore annotation
+//        return getUsername(); // <- don't touch this!
+//        // The only way.
+//        // It affects the uniqueness of tokens:
+//        //   OAuth2Authentication
+//        //   -> AbstractAuthenticationToken
+//        //   -> getName()
+//    }
 
     @Override
     public boolean isAccountNonExpired()

@@ -7,6 +7,7 @@ import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.stereotype.Component;
 import ru.dwfe.net.authtion.service.ConsumerService;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -22,19 +23,7 @@ public class DevNULL_AuditEventRepository implements AuditEventRepository
     }
 
     @Override
-    public List<AuditEvent> find(Date after)
-    {
-        return List.of();
-    }
-
-    @Override
-    public List<AuditEvent> find(String principal, Date after)
-    {
-        return List.of();
-    }
-
-    @Override
-    public List<AuditEvent> find(String principal, Date after, String type)
+    public List<AuditEvent> find(String principal, Instant after, String type)
     {
         return List.of();
     }
