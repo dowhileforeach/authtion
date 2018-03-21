@@ -26,7 +26,7 @@ import static ru.dwfe.net.authtion.dao.Consumer.*;
 import static ru.dwfe.net.authtion.util.Util.*;
 
 @RestController
-@RequestMapping(API_V1)
+@RequestMapping(path = API_V1, produces = "application/json;charset=UTF-8")
 public class ControllerAuthtionV1
 {
     @Autowired
@@ -222,9 +222,9 @@ public class ControllerAuthtionV1
     }
 
     @GetMapping(resource_confirmConsumerEmail)
-    public String confirmConsumerEmail(@RequestParam String key)
+    public String confirmConsumerEmail(@RequestParam(required = false) String key)
     {
-        String fieldName = "error";
+        String fieldName = "key";
         Map<String, Object> details = new HashMap<>();
 
         if (isDefaultCheckOK(key, fieldName, details))
@@ -242,7 +242,7 @@ public class ControllerAuthtionV1
                 //delete this confirmation key from database
                 mailingConfirmConsumerEmailRepository.delete(confirm);
             }
-            else details.put(fieldName, "key does not exist");
+            else details.put(fieldName, "does not exist");
         }
         return getResponse("success", details);
     }
@@ -297,10 +297,10 @@ public class ControllerAuthtionV1
     }
 
     @GetMapping(resource_confirmRestoreConsumerPass)
-    public String confirmRestoreConsumerPass(@RequestParam String key)
+    public String confirmRestoreConsumerPass(@RequestParam(required = false) String key)
     {
         boolean result = false;
-        String fieldName = "error";
+        String fieldName = "key";
         Map<String, Object> details = new HashMap<>();
 
         if (isDefaultCheckOK(key, fieldName, details))
@@ -312,7 +312,7 @@ public class ControllerAuthtionV1
                 details.put("key", key);
                 result = true;
             }
-            else details.put(fieldName, "key does not exist");
+            else details.put(fieldName, "does not exist");
         }
         return getResponse("success", result, details);
     }

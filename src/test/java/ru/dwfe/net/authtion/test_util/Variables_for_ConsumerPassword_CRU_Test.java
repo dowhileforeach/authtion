@@ -65,7 +65,7 @@ public class Variables_for_ConsumerPassword_CRU_Test
     }
 
     public static final List<Checker> checkers_for_updateConsumer = List.of(
-            Checker.of("success", false, Map.of(),                                                     200, "details", "warning", "no changes found"),
+            Checker.of("success", false, Map.of(),                                                   200, "details", "warning", "no changes found"),
             Checker.of("success", false, Map.of("nickName","user"),                                  200, "details", "warning", "no changes found"),
             Checker.of("success", false, Map.of("nickName","user", "firstName",""),                  200, "details", "warning", "no changes found"),
             Checker.of("success", true,  Map.of("nickName","Consumer", "firstName","", "lastName",""),   200, Map.of("nickName","change saved")),
@@ -105,9 +105,9 @@ public class Variables_for_ConsumerPassword_CRU_Test
     public static List<Checker> checkers_for_confirmConsumerEmail(String existedKey)
     {
         return List.of(
-                Checker.of(null,      null,  Map.of(),                  400, null,      "message", "Required String parameter 'key' is not present"),
-                Checker.of("success", false, Map.of("key", ""),         200, "details", "error",   "can't be empty"),
-                Checker.of("success", false, Map.of("key", "123"),      200, "details", "error",   "key does not exist"),
+                Checker.of(null,      null,  Map.of(),                  200, "details", "key", "required field"),
+                Checker.of("success", false, Map.of("key", ""),         200, "details", "key", "can't be empty"),
+                Checker.of("success", false, Map.of("key", "123"),      200, "details", "key", "does not exist"),
                 Checker.of("success", true,  Map.of("key", existedKey), 200)
         );
     }
@@ -147,9 +147,9 @@ public class Variables_for_ConsumerPassword_CRU_Test
     public static List<Checker> checkers_for_confirmRestoreConsumerPass(String email, String existedKey)
     {
         return List.of(
-                Checker.of(null,      null,  Map.of(),                  400, null,      "message", "Required String parameter 'key' is not present"),
-                Checker.of("success", false, Map.of("key", ""),         200, "details", "error",   "can't be empty"),
-                Checker.of("success", false, Map.of("key", "657"),      200, "details", "error",   "key does not exist"),
+                Checker.of(null,      null,  Map.of(),                  200, "details", "key", "required field"),
+                Checker.of("success", false, Map.of("key", ""),         200, "details", "key", "can't be empty"),
+                Checker.of("success", false, Map.of("key", "657"),      200, "details", "key", "does not exist"),
                 Checker.of("success", true,  Map.of("key", existedKey), 200, Map.of("email", email, "key",existedKey))
         );
     }
