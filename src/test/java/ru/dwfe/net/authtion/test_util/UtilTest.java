@@ -42,8 +42,8 @@ public class UtilTest
 
         String body = performSignIn(req, signInExpectedStatus);
 
-        String access_token = "";
-        String refresh_token = "";
+        String access_token;
+        String refresh_token;
 
         if (signInExpectedStatus == 200)
         {
@@ -144,7 +144,7 @@ public class UtilTest
         return body;
     }
 
-    public static Request GET_request(String url, String access_token, Map<String, Object> queries)
+    private static Request GET_request(String url, String access_token, Map<String, Object> queries)
     {
         Request request;
 
@@ -166,7 +166,7 @@ public class UtilTest
         return request;
     }
 
-    public static Request POST_request(String url, String access_token, Map<String, Object> prorepty_value)
+    private static Request POST_request(String url, String access_token, Map<String, Object> prorepty_value)
     {
         RequestBody body = getRequestBody(prorepty_value);
 
@@ -183,7 +183,7 @@ public class UtilTest
         return req.build();
     }
 
-    public static String performRequest(Request req, int expectedStatus)
+    private static String performRequest(Request req, int expectedStatus)
     {
         log.info("-> " + req.url().encodedPath());
 
@@ -214,7 +214,7 @@ public class UtilTest
                 .build();
     }
 
-    public static String getResponseAfterPOSTrequest(String access_token, String resource, Map<String, Object> prorepty_value, int expectedStatus)
+    private static String getResponseAfterPOSTrequest(String access_token, String resource, Map<String, Object> prorepty_value, int expectedStatus)
     {
         Request req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, prorepty_value);
 
@@ -223,7 +223,7 @@ public class UtilTest
         return performRequest(req, expectedStatus);
     }
 
-    public static String getResponseAfterGETrequest(String access_token, String resource, Map<String, Object> queries, int expectedStatus)
+    private static String getResponseAfterGETrequest(String access_token, String resource, Map<String, Object> queries, int expectedStatus)
     {
         Request req = GET_request(ALL_BEFORE_RESOURCE + resource, access_token, queries);
 
