@@ -4,6 +4,5 @@ public enum AuthorityLevel
 {
     ANY,
     USER,
-    ADMIN,
-    FRONTEND
+    ADMIN
 }

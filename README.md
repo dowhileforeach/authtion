@@ -15,8 +15,8 @@ Therefore, for all API versions is one version `/oauth/token`, which mapped to `
 See `test\java\ru.dwfe.authtion` classes.
 
 ## AuthTest
-1. Sign In as: `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru` and `some more`
-2. Try to access as `user@ya.ru`, `admin@ya.ru`, `shop@ya.ru`, `not logged user` and `some more` to resources:
+1. Sign In as: `user@ya.ru`, `admin@ya.ru`, and `some more`
+2. Try to access as `user@ya.ru`, `admin@ya.ru`, `not logged user` and `some more` to resources:
    * `/public/consumer/{id}`
    * `/get-consumer-data`
    * `/list-of-consumers`
@@ -36,11 +36,6 @@ curl Trusted:trPass@localhost:8080/v1/sign-in -d grant_type=password -d username
 Sign In as `admin@ya.ru`:
 ```
 curl Untrusted:untrPass@localhost:8080/v1/sign-in -d grant_type=password -d username=admin@ya.ru -d password=passAdmin
-```
-
-Sign In as `shop@ya.ru`:
-```
-curl Frontend:frntndPass@localhost:8080/v1/sign-in -d grant_type=password -d username=shop@ya.ru -d password=passFrontend
 ```
 
 Templates for accessing to resources:

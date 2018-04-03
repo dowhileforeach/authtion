@@ -261,7 +261,7 @@ public class Consumer implements UserDetails, CredentialsContainer
         boolean result = false;
         String fieldName = "email";
 
-        if (isDefaultEmailCheckOK(email, details))
+        if (isEmailCheckOK(email, details))
         {
             if (!consumerService.existsByEmail(email))
             {
@@ -272,7 +272,7 @@ public class Consumer implements UserDetails, CredentialsContainer
         return result;
     }
 
-    public static boolean isDefaultEmailCheckOK(String email, Map<String, Object> details)
+    public static boolean isEmailCheckOK(String email, Map<String, Object> details)
     {
         boolean result = false;
         String fieldName = "email";
@@ -280,7 +280,7 @@ public class Consumer implements UserDetails, CredentialsContainer
 
         if (isDefaultCheckOK(email, fieldName, details))
         {
-            if (email.length() < maxLength)
+            if (email.length() <= maxLength)
             {
                 if (EMAIL_PATTERN.matcher(email).matches())
                 {
@@ -288,7 +288,7 @@ public class Consumer implements UserDetails, CredentialsContainer
                 }
                 else details.put(fieldName, "must be valid e-mail address");
             }
-            else details.put(fieldName, "length must be less than " + maxLength + " characters");
+            else details.put(fieldName, "length must be less than or equal to " + maxLength);
         }
         return result;
     }

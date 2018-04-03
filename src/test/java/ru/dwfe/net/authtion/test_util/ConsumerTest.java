@@ -29,7 +29,7 @@ public class ConsumerTest
         return consumerTest;
     }
 
-    public static ConsumerTest getAnonymous()
+    static ConsumerTest getAnonymous()
     {
         ConsumerTest consumerTest = new ConsumerTest();
         consumerTest.level = AuthorityLevel.ANY;

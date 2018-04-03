@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static ru.dwfe.net.authtion.test_util.ResourceAccessingType.BAD_ACCESS_TOKEN;
 import static ru.dwfe.net.authtion.test_util.ResourceAccessingType.USUAL;
@@ -30,7 +29,7 @@ import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.*;
 
 public class UtilTest
 {
-    public static void setNewTokens(ConsumerTest consumerTest, int signInExpectedStatus, SignInType signInType)
+    static void setNewTokens(ConsumerTest consumerTest, int signInExpectedStatus, SignInType signInType)
     {
         Client client = consumerTest.client;
         Request req;
@@ -106,7 +105,7 @@ public class UtilTest
         return body;
     }
 
-    public static String performSignOut(ConsumerTest consumerTest, int expectedStatus)
+    private static String performSignOut(ConsumerTest consumerTest, int expectedStatus)
     {
         log.info("Sign Out");
 
@@ -133,6 +132,7 @@ public class UtilTest
         OkHttpClient client = getHttpClient();
         try (Response response = client.newCall(req).execute())
         {
+            assertNotEquals(null, response.body());
             body = response.body().string();
             assertEquals(expectedStatus, response.code());
         }
@@ -140,7 +140,7 @@ public class UtilTest
         {
             e.printStackTrace();
         }
-        assertEquals(false, body.isEmpty());
+        assertFalse(body.isEmpty());
         return body;
     }
 
@@ -192,6 +192,7 @@ public class UtilTest
         OkHttpClient client = getHttpClient();
         try (Response resp = client.newCall(req).execute())
         {
+            assertNotEquals(null, resp.body());
             body = resp.body().string();
             actualStatusCode = resp.code();
             log.info("<- {}\n", body);
@@ -235,7 +236,7 @@ public class UtilTest
         return performRequest(req, expectedStatus);
     }
 
-    public static void performAuthTest_ResourceAccessing_ChangeToken(ConsumerTest consumerTest)
+    private static void performAuthTest_ResourceAccessing_ChangeToken(ConsumerTest consumerTest)
     {
         //1. Resource accessing
         performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
@@ -244,8 +245,8 @@ public class UtilTest
         String old_access_token = consumerTest.access_token;
         String old_refresh_token = consumerTest.refresh_token;
         setNewTokens(consumerTest, 200, Refresh);
-        assertEquals(false, old_access_token.equals(consumerTest.access_token));
-        assertEquals(true, old_refresh_token.equals(consumerTest.refresh_token));
+        assertNotEquals(old_access_token, consumerTest.access_token);
+        assertEquals(old_refresh_token, consumerTest.refresh_token);
 
         //3. Resource accessing: old/new token
         performResourceAccessing(old_access_token, consumerTest.level, BAD_ACCESS_TOKEN);

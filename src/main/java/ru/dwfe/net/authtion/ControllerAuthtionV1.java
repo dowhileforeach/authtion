@@ -44,7 +44,6 @@ public class ControllerAuthtionV1
 
 
     @PostMapping(resource_checkConsumerEmail)
-    @PreAuthorize("hasAuthority('FRONTEND')")
     public String checkConsumerEmail(@RequestBody String body)
     {
         Map<String, Object> details = new HashMap<>();
@@ -56,7 +55,6 @@ public class ControllerAuthtionV1
     }
 
     @PostMapping(resource_checkConsumerPass)
-    @PreAuthorize("hasAuthority('FRONTEND')")
     public String checkConsumerPass(@RequestBody String body)
     {
         Map<String, Object> details = new HashMap<>();
@@ -68,7 +66,6 @@ public class ControllerAuthtionV1
     }
 
     @PostMapping(resource_createConsumer)
-    @PreAuthorize("hasAuthority('FRONTEND')")
     public String createConsumer(@RequestBody Consumer consumer)
     {
         Map<String, Object> details = new HashMap<>();
@@ -275,14 +272,13 @@ public class ControllerAuthtionV1
     }
 
     @PostMapping(resource_reqRestoreConsumerPass)
-    @PreAuthorize("hasAuthority('FRONTEND')")
     public String reqRestoreConsumerPass(@RequestBody String body)
     {
         Map<String, Object> details = new HashMap<>();
 
         String email = (String) getValueFromJSON(body, "email");
 
-        if (isDefaultEmailCheckOK(email, details))
+        if (isEmailCheckOK(email, details))
         {
             if (consumerService.existsByEmail(email))
             {
@@ -318,7 +314,6 @@ public class ControllerAuthtionV1
     }
 
     @PostMapping(resource_restoreConsumerPass)
-    @PreAuthorize("hasAuthority('FRONTEND')")
     public String restoreConsumerPass(@RequestBody String body)
     {
         String fieldName = "error";
@@ -331,7 +326,7 @@ public class ControllerAuthtionV1
 
         if (canUsePassword(newpass, "newpass", details)
                 && isDefaultCheckOK(key, "key", details)
-                && isDefaultEmailCheckOK(email, details))
+                && isEmailCheckOK(email, details))
         {
             Optional<MailingRestoreConsumerPassword> confirmByKey = mailingRestoreConsumerPasswordRepository.findByConfirmKey(key);
             if (confirmByKey.isPresent())

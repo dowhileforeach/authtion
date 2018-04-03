@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static ru.dwfe.net.authtion.test_util.ResourceAccessingType.USUAL;
-import static ru.dwfe.net.authtion.test_util.UtilTest.*;
+import static ru.dwfe.net.authtion.test_util.UtilTest.performFullAuthTest;
+import static ru.dwfe.net.authtion.test_util.UtilTest.performResourceAccessing;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.TOTAL_ACCESS_TOKEN_COUNT;
 
@@ -45,27 +46,16 @@ public class AuthTest
     }
 
     @Test
-    public void _03_FRONTEND()
+    public void _03_ANY()
     {
-        logHead("FRONTEND");
+        logHead("ANY");
 
-        ConsumerTest consumerTest = FRONTEND_consumer;
-        access_tokens.add(consumerTest.access_token);
-
-        performAuthTest_ResourceAccessing_ChangeToken(consumerTest);
-    }
-
-    @Test
-    public void _04_ANONYMOUS()
-    {
-        logHead("ANONYMOUS");
-
-        ConsumerTest consumerTest = ANONYMOUS_consumer;
+        ConsumerTest consumerTest = ANY_consumer;
         performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
     }
 
     @Test
-    public void _05_different_access_tokens()
+    public void _04_different_access_tokens()
     {
         logHead("list of Access Tokens");
         log.info("\n\n{}", access_tokens.stream().collect(Collectors.joining("\n")));

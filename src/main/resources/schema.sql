@@ -21,13 +21,14 @@ CREATE TABLE `consumers` (
   `enabled`                 TINYINT(1)                              NOT NULL   DEFAULT '1',
   `email_confirmed`         TINYINT(1)                              NOT NULL   DEFAULT '0',
   `created`                 DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
-  `updated`                 DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated`                 DATETIME                                           DEFAULT CURRENT_TIMESTAMP
+  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `consumers_id_uindex` (`id`),
   UNIQUE KEY `consumers_email_uindex` (`email`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT=1000
+  AUTO_INCREMENT = 1000
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
@@ -71,7 +72,8 @@ CREATE TABLE `mailing_new_consumer_password` (
              COLLATE utf8mb4_unicode_ci             NOT NULL,
   `password` VARCHAR(60) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created`  DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated`  DATETIME                                        DEFAULT CURRENT_TIMESTAMP
+  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`consumer`),
   UNIQUE KEY `mailing_new_consumer_password_consumer_uindex` (`consumer`),
   CONSTRAINT `mailing_new_consumer_password_consumers_id_fk` FOREIGN KEY (`consumer`) REFERENCES `consumers` (`email`)
@@ -89,7 +91,8 @@ CREATE TABLE `mailing_confirm_consumer_email` (
   `confirm_key`  VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `already_sent` TINYINT(1)                             NOT NULL DEFAULT '0',
   `created`      DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated`      DATETIME                                        DEFAULT CURRENT_TIMESTAMP
+  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`consumer`),
   UNIQUE KEY `mailing_confirm_consumer_email_consumer_uindex` (`consumer`),
   CONSTRAINT `mailing_confirm_consumer_email_consumers_id_fk` FOREIGN KEY (`consumer`) REFERENCES `consumers` (`email`)
@@ -107,7 +110,8 @@ CREATE TABLE `mailing_restore_consumer_password` (
   `confirm_key`  VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `already_sent` TINYINT(1)                             NOT NULL DEFAULT '0',
   `created`      DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated`      DATETIME                                        DEFAULT CURRENT_TIMESTAMP
+  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`consumer`),
   UNIQUE KEY `mailing_restore_consumer_password_consumer_uindex` (`consumer`),
   CONSTRAINT `mailing_restore_consumer_password_consumers_id_fk` FOREIGN KEY (`consumer`) REFERENCES `consumers` (`email`)

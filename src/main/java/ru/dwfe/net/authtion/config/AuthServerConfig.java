@@ -66,14 +66,6 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
                 .scopes("all")
                 .authorizedGrantTypes("password", "refresh_token")
                 .accessTokenValiditySeconds(60 * 3) // 3 minutes
-
-                .and()
-
-                .withClient("Frontend")
-                .secret("frntndPass")
-                .scopes("all")
-                .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(60 * 60 * 24 * 20) // 20 days
         ;
 
         //Здесь Клиентом является Фронтэнд.
