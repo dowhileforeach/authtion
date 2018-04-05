@@ -43,7 +43,8 @@ Templates for accessing to resources:
 curl http://localhost:8080/v1/public/consumer/1
 curl http://localhost:8080/v1/get-consumer-data -H "Authorization: Bearer ACCESS_TOKEN"
 curl http://localhost:8080/v1/list-of-consumers -H "Authorization: Bearer ACCESS_TOKEN"
-curl http://localhost:8080/v1/create-consumer -H "Authorization: Bearer ACCESS_TOKEN" -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"id": "user"}'
+curl http://localhost:8080/v1/check-consumer-email -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"email": "admin@ya.ru"}'
+curl http://localhost:8080/v1/create-consumer -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"id": "user"}'
 ...
 ```
 
