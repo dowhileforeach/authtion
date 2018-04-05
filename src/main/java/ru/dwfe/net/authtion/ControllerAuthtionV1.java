@@ -42,7 +42,7 @@ public class ControllerAuthtionV1
     @Autowired
     ConsumerTokenServices tokenServices;
 
-
+    @CrossOrigin
     @PostMapping(resource_checkConsumerEmail)
     public String checkConsumerEmail(@RequestBody String body)
     {
@@ -51,7 +51,7 @@ public class ControllerAuthtionV1
         String email = (String) getValueFromJSON(body, "email");
         canUseEmail(email, consumerService, details);
 
-        return getResponse("canUse", details);
+        return getResponse("success", details);
     }
 
     @PostMapping(resource_checkConsumerPass)
@@ -62,7 +62,7 @@ public class ControllerAuthtionV1
         String password = (String) getValueFromJSON(body, "password");
         canUsePassword(password, "password", details);
 
-        return getResponse("canUse", details);
+        return getResponse("success", details);
     }
 
     @PostMapping(resource_createConsumer)

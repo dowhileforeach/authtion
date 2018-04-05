@@ -25,21 +25,21 @@ public class Variables_for_ConsumerPassword_CRU_Test
     /* BODIES */
 
     public static final List<Checker> checkers_for_checkConsumerEmail = List.of(
-            Checker.of("canUse", false, Map.of(), 200, "details", "email", "required field"),
-            Checker.of("canUse", false, Map.of("email", ""), 200, "details", "email", "can't be empty"),
-            Checker.of("canUse", false, Map.of("email", "123456789012345678901234567890kkklkklklklkklklklklklklklk"), 200, "details", "email", "length must be less than or equal to 50"),
-            Checker.of("canUse", false, Map.of("email", "user"), 200, "details", "email", "must be valid e-mail address"),
-            Checker.of("canUse", false, Map.of("email", ".uuqu@mail.ru"), 200, "details", "email", "must be valid e-mail address"),
-            Checker.of("canUse", false, Map.of("email", "user@ya.ru"), 200, "details", "email", "is present"),
-            Checker.of("canUse", true, Map.of("email", EMAIL_NEW_Consumer), 200)
+            Checker.of("success", false, Map.of(), 200, "details", "email", "required field"),
+            Checker.of("success", false, Map.of("email", ""), 200, "details", "email", "can't be empty"),
+            Checker.of("success", false, Map.of("email", "123456789012345678901234567890kkklkklklklkklklklklklklklk"), 200, "details", "email", "length must be less than or equal to 50"),
+            Checker.of("success", false, Map.of("email", "user"), 200, "details", "email", "must be valid e-mail address"),
+            Checker.of("success", false, Map.of("email", ".uuqu@mail.ru"), 200, "details", "email", "must be valid e-mail address"),
+            Checker.of("success", false, Map.of("email", "user@ya.ru"), 200, "details", "email", "is present"),
+            Checker.of("success", true, Map.of("email", EMAIL_NEW_Consumer), 200)
     );
 
     public static final List<Checker> checkers_for_checkConsumerPass = List.of(
-            Checker.of("canUse", false, Map.of(), 200, "details", "password", "required field"),
-            Checker.of("canUse", false, Map.of("password", ""), 200, "details", "password", "can't be empty"),
-            Checker.of("canUse", false, Map.of("password", "12345"), 200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
-            Checker.of("canUse", false, Map.of("password", "12345678901234567890123456789012345678901234567890123456"), 200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
-            Checker.of("canUse", true, Map.of("password", "123456"), 200)
+            Checker.of("success", false, Map.of(), 200, "details", "password", "required field"),
+            Checker.of("success", false, Map.of("password", ""), 200, "details", "password", "can't be empty"),
+            Checker.of("success", false, Map.of("password", "12345"), 200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
+            Checker.of("success", false, Map.of("password", "12345678901234567890123456789012345678901234567890123456"), 200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
+            Checker.of("success", true, Map.of("password", "123456"), 200)
     );
 
     public static List<Checker> checkers_for_createConsumer()
