@@ -267,7 +267,7 @@ public class Consumer implements UserDetails, CredentialsContainer
             {
                 result = true;
             }
-            else details.put(fieldName, "is present");
+            else details.put(fieldName, "is already present in our database");
         }
         return result;
     }

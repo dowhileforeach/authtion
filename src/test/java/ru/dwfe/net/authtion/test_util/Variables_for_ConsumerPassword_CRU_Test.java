@@ -30,7 +30,7 @@ public class Variables_for_ConsumerPassword_CRU_Test
             Checker.of("success", false, Map.of("email", "123456789012345678901234567890kkklkklklklkklklklklklklklk"), 200, "details", "email", "length must be less than or equal to 50"),
             Checker.of("success", false, Map.of("email", "user"), 200, "details", "email", "must be valid e-mail address"),
             Checker.of("success", false, Map.of("email", ".uuqu@mail.ru"), 200, "details", "email", "must be valid e-mail address"),
-            Checker.of("success", false, Map.of("email", "user@ya.ru"), 200, "details", "email", "is present"),
+            Checker.of("success", false, Map.of("email", "user@ya.ru"), 200, "details", "email", "is already present in our database"),
             Checker.of("success", true, Map.of("email", EMAIL_NEW_Consumer), 200)
     );
 
@@ -50,11 +50,11 @@ public class Variables_for_ConsumerPassword_CRU_Test
                 Checker.of("success", false, Map.of("email", "ogygyg_bnmkkskslwlwllogygyg_bnmkkskslwlwll@gmail.com"), 200, "details", "email", "length must be less than or equal to 50"),
                 Checker.of("success", false, Map.of("email", "user"), 200, "details", "email", "must be valid e-mail address"),
                 Checker.of("success", false, Map.of("email", "@puqu@mail.ru"), 200, "details", "email", "must be valid e-mail address"),
-                Checker.of("success", false, Map.of("email", "admin@ya.ru"), 200, "details", "email", "is present")
+                Checker.of("success", false, Map.of("email", "admin@ya.ru"), 200, "details", "email", "is already present in our database")
         ));
         list.addAll(List.of(
                 Checker.of("success", true, Map.of("email", EMAIL_2_NEW_Consumer, "firstName", "ozon"), 200),
-                Checker.of("success", false, Map.of("email", EMAIL_2_NEW_Consumer), 200, "details", "email", "is present"),
+                Checker.of("success", false, Map.of("email", EMAIL_2_NEW_Consumer), 200, "details", "email", "is already present in our database"),
                 Checker.of("success", false, Map.of("email", EMAIL_NEW_Consumer, "password", ""), 200, "details", "password", "can't be empty"),
                 Checker.of("success", false, Map.of("email", EMAIL_NEW_Consumer, "password", "54321"), 200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
                 Checker.of("success", false, Map.of("email", EMAIL_NEW_Consumer, "password", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "details", "password", "length must be greater than or equal to 6 and less than or equal to 55"),
