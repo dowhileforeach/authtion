@@ -26,7 +26,7 @@ import static ru.dwfe.net.authtion.dao.Consumer.*;
 import static ru.dwfe.net.authtion.util.Util.*;
 
 @RestController
-@RequestMapping(path = API_V1, produces = "application/json;charset=UTF-8")
+@RequestMapping(path = API_V1, produces = "application/json; charset=utf-8")
 public class ControllerAuthtionV1
 {
     @Autowired
@@ -42,7 +42,6 @@ public class ControllerAuthtionV1
     @Autowired
     ConsumerTokenServices tokenServices;
 
-    @CrossOrigin
     @PostMapping(resource_checkConsumerEmail)
     public String checkConsumerEmail(@RequestBody String body)
     {
