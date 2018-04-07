@@ -5,8 +5,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mailing_new_consumer_password")
-public class MailingNewConsumerPassword
+@Table(name = "mailing_welcome_when_password_was_not_passed")
+public class MailingWelcomeWhenPasswordWasNotPassed
 {
     @Id
     private String consumer;
@@ -14,12 +14,12 @@ public class MailingNewConsumerPassword
     private String password;
 
 
-    public static MailingNewConsumerPassword of(String email, String password)
+    public static MailingWelcomeWhenPasswordWasNotPassed of(String email, String password)
     {
-        MailingNewConsumerPassword mailingNewConsumerPassword = new MailingNewConsumerPassword();
-        mailingNewConsumerPassword.setConsumer(email);
-        mailingNewConsumerPassword.setPassword(password);
-        return mailingNewConsumerPassword;
+        MailingWelcomeWhenPasswordWasNotPassed mailingWelcomeWhenPasswordWasNotPassed = new MailingWelcomeWhenPasswordWasNotPassed();
+        mailingWelcomeWhenPasswordWasNotPassed.setConsumer(email);
+        mailingWelcomeWhenPasswordWasNotPassed.setPassword(password);
+        return mailingWelcomeWhenPasswordWasNotPassed;
     }
 
     public String getConsumer()
@@ -48,7 +48,7 @@ public class MailingNewConsumerPassword
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MailingNewConsumerPassword that = (MailingNewConsumerPassword) o;
+        MailingWelcomeWhenPasswordWasNotPassed that = (MailingWelcomeWhenPasswordWasNotPassed) o;
 
         return consumer.equals(that.consumer);
     }

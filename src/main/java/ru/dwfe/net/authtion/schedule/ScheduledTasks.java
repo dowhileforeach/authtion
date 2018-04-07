@@ -7,7 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.dwfe.net.authtion.dao.repository.MailingNewConsumerPasswordRepository;
+import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPassedRepository;
 
 @Component
 public class ScheduledTasks
@@ -18,7 +18,7 @@ public class ScheduledTasks
     public JavaMailSender emailSender;
 
     @Autowired
-    MailingNewConsumerPasswordRepository mailingNewConsumerPasswordRepository;
+    MailingWelcomeWhenPasswordWasNotPassedRepository mailingWelcomeWhenPasswordWasNotPassedRepository;
 
     @Scheduled(fixedDelay = 30_000)
     public void mailingHighPriority()
@@ -28,10 +28,10 @@ public class ScheduledTasks
         message.setFrom("noreply@dwfe.ru");
         message.setSubject("Welcome");
         message.setText("Welcome to\nDWFE.ru");
-        emailSender.send(message);
+//        emailSender.send(message);
         log.info("sended");
 
-//        mailingNewConsumerPasswordRepository.findAll().forEach(next -> {
+//        mailingWelcomeWhenPasswordWasNotPassedRepository.findAll().forEach(next -> {
 //
 //        });
     }

@@ -7,8 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mailing_restore_consumer_password")
-public class MailingRestoreConsumerPassword
+@Table(name = "mailing_confirm_email")
+public class MailingConfirmEmail
 {
     @Id
     private String consumer;
@@ -17,9 +17,9 @@ public class MailingRestoreConsumerPassword
     private boolean alreadySent;
 
 
-    public static MailingRestoreConsumerPassword of(String email)
+    public static MailingConfirmEmail of(String email)
     {
-        MailingRestoreConsumerPassword confirm = new MailingRestoreConsumerPassword();
+        MailingConfirmEmail confirm = new MailingConfirmEmail();
         confirm.setConsumer(email);
         confirm.setConfirmKey(Util.getUniqStr(30));
         confirm.setAlreadySent(false);
@@ -62,7 +62,7 @@ public class MailingRestoreConsumerPassword
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MailingRestoreConsumerPassword that = (MailingRestoreConsumerPassword) o;
+        MailingConfirmEmail that = (MailingConfirmEmail) o;
 
         return consumer.equals(that.consumer);
     }

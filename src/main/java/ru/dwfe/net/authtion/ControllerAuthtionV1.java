@@ -8,12 +8,12 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.web.bind.annotation.*;
 import ru.dwfe.net.authtion.dao.Consumer;
-import ru.dwfe.net.authtion.dao.MailingConfirmConsumerEmail;
-import ru.dwfe.net.authtion.dao.MailingNewConsumerPassword;
-import ru.dwfe.net.authtion.dao.MailingRestoreConsumerPassword;
-import ru.dwfe.net.authtion.dao.repository.MailingConfirmConsumerEmailRepository;
-import ru.dwfe.net.authtion.dao.repository.MailingNewConsumerPasswordRepository;
-import ru.dwfe.net.authtion.dao.repository.MailingRestoreConsumerPasswordRepository;
+import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
+import ru.dwfe.net.authtion.dao.MailingWelcomeWhenPasswordWasNotPassed;
+import ru.dwfe.net.authtion.dao.MailingRestorePassword;
+import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
+import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPassedRepository;
+import ru.dwfe.net.authtion.dao.repository.MailingRestorePasswordRepository;
 import ru.dwfe.net.authtion.service.ConsumerService;
 
 import java.util.HashMap;
@@ -33,11 +33,11 @@ public class ControllerAuthtionV1
     ConsumerService consumerService;
 
     @Autowired
-    MailingNewConsumerPasswordRepository mailingNewConsumerPasswordRepository;
+    MailingWelcomeWhenPasswordWasNotPassedRepository mailingWelcomeWhenPasswordWasNotPassedRepository;
     @Autowired
-    MailingConfirmConsumerEmailRepository mailingConfirmConsumerEmailRepository;
+    MailingConfirmEmailRepository mailingConfirmEmailRepository;
     @Autowired
-    MailingRestoreConsumerPasswordRepository mailingRestoreConsumerPasswordRepository;
+    MailingRestorePasswordRepository mailingRestorePasswordRepository;
 
     @Autowired
     ConsumerTokenServices tokenServices;
@@ -96,8 +96,8 @@ public class ControllerAuthtionV1
             }
             else
             { //if the password was not passed, then it is necessary to send an automatically generated password to the new consumer
-                mailingNewConsumerPasswordRepository
-                        .save(MailingNewConsumerPassword.of(consumer.getEmail(), automaticallyGeneratedPassword));
+                mailingWelcomeWhenPasswordWasNotPassedRepository
+                        .save(MailingWelcomeWhenPasswordWasNotPassed.of(consumer.getEmail(), automaticallyGeneratedPassword));
 
                 //TODO: service alert #2
                 //      set Consumer field 'email_confirmed' to true
@@ -211,7 +211,7 @@ public class ControllerAuthtionV1
     public String requestConfirmEmail(OAuth2Authentication authentication)
     {
         String email = ((Consumer) authentication.getPrincipal()).getEmail();
-        mailingConfirmConsumerEmailRepository.save(MailingConfirmConsumerEmail.of(email));
+        mailingConfirmEmailRepository.save(MailingConfirmEmail.of(email));
 
         //TODO: service alert #3
 
@@ -226,10 +226,10 @@ public class ControllerAuthtionV1
 
         if (isDefaultCheckOK(key, fieldName, details))
         {
-            Optional<MailingConfirmConsumerEmail> confirmByKey = mailingConfirmConsumerEmailRepository.findByConfirmKey(key);
+            Optional<MailingConfirmEmail> confirmByKey = mailingConfirmEmailRepository.findByConfirmKey(key);
             if (confirmByKey.isPresent())
             {
-                MailingConfirmConsumerEmail confirm = confirmByKey.get();
+                MailingConfirmEmail confirm = confirmByKey.get();
 
                 //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
                 Consumer consumer = consumerService.findByEmail(confirm.getConsumer()).get();
@@ -237,7 +237,7 @@ public class ControllerAuthtionV1
                 consumerService.save(consumer);
 
                 //delete this confirmation key from database
-                mailingConfirmConsumerEmailRepository.delete(confirm);
+                mailingConfirmEmailRepository.delete(confirm);
             }
             else details.put(fieldName, "does not exist");
         }
@@ -282,8 +282,8 @@ public class ControllerAuthtionV1
         {
             if (consumerService.existsByEmail(email))
             {
-                MailingRestoreConsumerPassword confirm = MailingRestoreConsumerPassword.of(email);
-                mailingRestoreConsumerPasswordRepository.save(confirm);
+                MailingRestorePassword confirm = MailingRestorePassword.of(email);
+                mailingRestorePasswordRepository.save(confirm);
 
                 //TODO: service alert #5
             }
@@ -301,7 +301,7 @@ public class ControllerAuthtionV1
 
         if (isDefaultCheckOK(key, fieldName, details))
         {
-            Optional<MailingRestoreConsumerPassword> confirmByKey = mailingRestoreConsumerPasswordRepository.findByConfirmKey(key);
+            Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(key);
             if (confirmByKey.isPresent())
             {
                 details.put("email", confirmByKey.get().getConsumer());
@@ -328,10 +328,10 @@ public class ControllerAuthtionV1
                 && isDefaultCheckOK(key, "key", details)
                 && isEmailCheckOK(email, details))
         {
-            Optional<MailingRestoreConsumerPassword> confirmByKey = mailingRestoreConsumerPasswordRepository.findByConfirmKey(key);
+            Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(key);
             if (confirmByKey.isPresent())
             {
-                MailingRestoreConsumerPassword confirm = confirmByKey.get();
+                MailingRestorePassword confirm = confirmByKey.get();
                 if (email.equals(confirm.getConsumer()))
                 {
                     //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
@@ -339,7 +339,7 @@ public class ControllerAuthtionV1
                     setNewPassword(consumer, newpass);
                     consumerService.save(consumer);
 
-                    mailingRestoreConsumerPasswordRepository.delete(confirm);
+                    mailingRestorePasswordRepository.delete(confirm);
                 }
                 else details.put(fieldName, "email from request doesn't match with email associated with key");
             }

@@ -12,8 +12,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
-import static ru.dwfe.net.authtion.Global.API_CURRENT_VERSION;
-import static ru.dwfe.net.authtion.Global.resource_signIn;
+import static ru.dwfe.net.authtion.Global.*;
 
 @Configuration
 @EnableAuthorizationServer
@@ -53,16 +52,16 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
         configurer
                 .inMemory() // in Memory or in JDBC
 
-                .withClient("Trusted")
-                .secret("trPass")
+                .withClient(client_ID_TRUSTED)
+                .secret(client_PASSWORD_TRUSTED)
                 .scopes("all")
                 .authorizedGrantTypes("password", "refresh_token")
                 .accessTokenValiditySeconds(60 * 60 * 24 * 10) // 10 days
 
                 .and()
 
-                .withClient("Untrusted")
-                .secret("untrPass")
+                .withClient(client_ID_UNTRUSTED)
+                .secret(client_PASSWORD_UNTRUSTED)
                 .scopes("all")
                 .authorizedGrantTypes("password", "refresh_token")
                 .accessTokenValiditySeconds(60 * 3) // 3 minutes
