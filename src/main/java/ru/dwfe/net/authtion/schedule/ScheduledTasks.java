@@ -23,13 +23,13 @@ public class ScheduledTasks
     @Scheduled(fixedDelay = 30_000)
     public void mailingHighPriority()
     {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("pistoletik@gmail.com");
-        message.setFrom("noreply@dwfe.ru");
-        message.setSubject("Welcome");
-        message.setText("Welcome to\nDWFE.ru");
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setTo("pistoletik@gmail.com");
+//        message.setFrom("noreply@dwfe.ru");
+//        message.setSubject("Welcome");
+//        message.setText("Welcome to\nDWFE.ru");
 //        emailSender.send(message);
-        log.info("sended");
+//        log.info("sended");
 
 //        mailingWelcomeWhenPasswordWasNotPassedRepository.findAll().forEach(next -> {
 //
