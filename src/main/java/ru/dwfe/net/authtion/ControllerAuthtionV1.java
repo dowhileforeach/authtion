@@ -380,23 +380,23 @@ public class ControllerAuthtionV1
         String url = String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s",
                 captchaSecret, googleResponse);
 
-        System.out.println("url=" + url);
-
         Request req = new Request.Builder()
                 .url(url)
                 .build();
 
-        String respBody = "";
-        try (Response response = clientHttp.newCall(req).execute())
+        try (Response resp = clientHttp.newCall(req).execute())
         {
-            respBody = response.body().string();
-            System.out.println(respBody);
+            String respBody = resp.body().string();
+            Boolean success = (Boolean) getValueFromJSON(respBody, "success");
+            if (!success)
+            {
+                details.put("error", "Google thinks you're a robot");
+            }
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            details.put("error", "internal server error");
         }
-
         return getResponse("success", details);
     }
 }
