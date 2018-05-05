@@ -1,6 +1,11 @@
 package ru.dwfe.net.authtion;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -9,17 +14,18 @@ import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.web.bind.annotation.*;
 import ru.dwfe.net.authtion.dao.Consumer;
 import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
-import ru.dwfe.net.authtion.dao.MailingWelcomeWhenPasswordWasNotPassed;
 import ru.dwfe.net.authtion.dao.MailingRestorePassword;
+import ru.dwfe.net.authtion.dao.MailingWelcomeWhenPasswordWasNotPassed;
 import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
-import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPassedRepository;
 import ru.dwfe.net.authtion.dao.repository.MailingRestorePasswordRepository;
+import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPassedRepository;
 import ru.dwfe.net.authtion.service.ConsumerService;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.dao.Consumer.*;
@@ -27,6 +33,7 @@ import static ru.dwfe.net.authtion.util.Util.*;
 
 @RestController
 @RequestMapping(path = API_V1, produces = "application/json; charset=utf-8")
+@PropertySource("classpath:application.properties")
 public class ControllerAuthtionV1
 {
     @Autowired
@@ -41,6 +48,9 @@ public class ControllerAuthtionV1
 
     @Autowired
     ConsumerTokenServices tokenServices;
+
+    @Autowired
+    private Environment env;
 
     @PostMapping(resource_checkConsumerEmail)
     public String checkConsumerEmail(@RequestBody String body)
@@ -356,6 +366,41 @@ public class ControllerAuthtionV1
 
         return getResponse("success", Map.of());
     }
-}
 
+    @PostMapping(resource_googleCaptchaValidate)
+    public String googleCaptchaValidate(@RequestBody String body)
+    {
+        Map<String, Object> details = new HashMap<>();
+
+        String captchaSecret = env.getProperty("google.captcha.secret-key");
+        String googleResponse = (String) getValueFromJSON(body, "googleResponse");
+
+        String url = String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s",
+                captchaSecret, googleResponse);
+
+        OkHttpClient client = new OkHttpClient
+                .Builder()
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .build();
+
+        Request req = new Request.Builder()
+                .url(url)
+                .build();
+
+        String respBody = "";
+        try (Response response = client.newCall(req).execute())
+        {
+            respBody = response.body().string();
+            System.out.println(respBody);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return getResponse("success", details);
+    }
+}
 

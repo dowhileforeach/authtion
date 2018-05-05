@@ -21,6 +21,7 @@ public class Global
 
     public static final String resource_signIn = "/sign-in";
     public static final String resource_signOut = "/sign-out";
+    public static final String resource_googleCaptchaValidate = "/google-captcha-validate";
 
     public static final String resource_checkConsumerEmail = "/check-consumer-email";
     public static final String resource_checkConsumerPass = "/check-consumer-pass";
