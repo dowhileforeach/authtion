@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.dao.Consumer.*;
@@ -48,6 +47,9 @@ public class ControllerAuthtionV1
 
     @Autowired
     ConsumerTokenServices tokenServices;
+
+    @Autowired
+    OkHttpClient clientHttp;
 
     @Autowired
     private Environment env;
@@ -378,19 +380,14 @@ public class ControllerAuthtionV1
         String url = String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s",
                 captchaSecret, googleResponse);
 
-        OkHttpClient client = new OkHttpClient
-                .Builder()
-                .connectTimeout(120, TimeUnit.SECONDS)
-                .writeTimeout(120, TimeUnit.SECONDS)
-                .readTimeout(120, TimeUnit.SECONDS)
-                .build();
+        System.out.println("url=" + url);
 
         Request req = new Request.Builder()
                 .url(url)
                 .build();
 
         String respBody = "";
-        try (Response response = client.newCall(req).execute())
+        try (Response response = clientHttp.newCall(req).execute())
         {
             respBody = response.body().string();
             System.out.println(respBody);
