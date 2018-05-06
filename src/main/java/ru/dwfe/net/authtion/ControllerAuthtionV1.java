@@ -22,6 +22,7 @@ import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPasse
 import ru.dwfe.net.authtion.service.ConsumerService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.dao.Consumer.*;
@@ -191,21 +192,29 @@ public class ControllerAuthtionV1
 
     @GetMapping(resource_listOfConsumers)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Consumer> users()
+    public String users()
     {
-        return consumerService.findAll();
+        List<String> errorCodes = new ArrayList<>();
+
+        String jsonListOfUsers = consumerService.findAll().stream()
+                .map(Consumer::toString)
+                .collect(Collectors.joining(","));
+
+        return getResponse(errorCodes, "[" + jsonListOfUsers + "]");
     }
 
     @GetMapping(resource_reqConfirmConsumerEmail)
     @PreAuthorize("hasAuthority('USER')")
     public String requestConfirmEmail(OAuth2Authentication authentication)
     {
+        List<String> errorCodes = new ArrayList<>();
+
         String email = ((Consumer) authentication.getPrincipal()).getEmail();
         mailingConfirmEmailRepository.save(MailingConfirmEmail.of(email));
 
         //TODO: service alert #3
 
-        return getResponse(List.of());
+        return getResponse(errorCodes);
     }
 
     @GetMapping(resource_confirmConsumerEmail)
