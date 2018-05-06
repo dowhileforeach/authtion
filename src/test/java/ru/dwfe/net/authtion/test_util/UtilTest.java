@@ -310,16 +310,11 @@ public class UtilTest
 
             Map<String, Object> map = parse(body);
 
-            if (checker.resultFieldName != null)
-                assertEquals(checker.expectedResult, getValueFromResponse(map, checker.resultFieldName));
+            assertEquals(checker.expectedResult, getValueFromResponse(map, "success"));
 
             if (checker.expectedError != null)
             {
-                String expectedErrorContainer = checker.expectedErrorContainer;
-                if (expectedErrorContainer == null) //нет вложенного контейнера
-                    assertEquals(checker.expectedError, getValueFromResponse(map, checker.expectedErrorFieldName));
-                else
-                    assertEquals(checker.expectedError, getValueFromValueFromResponse(map, expectedErrorContainer, checker.expectedErrorFieldName));
+                assertEquals(checker.expectedError, getErrorFromResponse(map));
             }
 
             if (checker.expectedResponseMap != null)
@@ -349,20 +344,15 @@ public class UtilTest
         return jsonParser.parseMap(body);
     }
 
-    private static Object getValueFromResponse(String body, String key)
-    {
-        return parse(body).get(key);
-    }
-
     public static Object getValueFromResponse(Map<String, Object> map, String key)
     {
         return map.get(key);
     }
 
-    private static Object getValueFromValueFromResponse(Map<String, Object> map, String fromKey, String key)
+    private static Object getErrorFromResponse(Map<String, Object> map)
     {
-        Map<String, Object> next = (Map<String, Object>) getValueFromResponse(map, fromKey);
-        return next.get(key);
+        List<String> next = (List<String>) getValueFromResponse(map, "error-codes");
+        return next.get(0);
     }
 
     private UtilTest()

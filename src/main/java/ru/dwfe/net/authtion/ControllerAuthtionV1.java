@@ -313,6 +313,7 @@ public class ControllerAuthtionV1
 
         String emailField = "email";
         String keyField = "key";
+        String keyFieldFullName = "confirm-key";
         String newpassField = "newpass";
 
         String emailValue = (String) getValue(map, emailField);
@@ -320,7 +321,7 @@ public class ControllerAuthtionV1
         String newpassValue = (String) getValue(map, newpassField);
 
         if (canUsePassword(newpassValue, newpassField, errorCodes)
-                && isDefaultCheckOK(keyValue, keyField, errorCodes)
+                && isDefaultCheckOK(keyValue, keyFieldFullName, errorCodes)
                 && isEmailCheckOK(emailValue, errorCodes))
         {
             Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(keyValue);
@@ -336,9 +337,9 @@ public class ControllerAuthtionV1
 
                     mailingRestorePasswordRepository.delete(confirm);
                 }
-                else errorCodes.add("confirm-key-for-another-email");
+                else errorCodes.add(keyFieldFullName + "-for-another-email");
             }
-            else errorCodes.add("confirm-key-not-exist");
+            else errorCodes.add(keyFieldFullName + "-not-exist");
         }
         return getResponse(errorCodes);
     }

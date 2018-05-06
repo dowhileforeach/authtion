@@ -309,7 +309,7 @@ public class Consumer implements UserDetails, CredentialsContainer
             {
                 result = true;
             }
-            else errorCodes.add(String.format("exceeded-min%s-or-max%s-password-length", minLenght, maxLenght));
+            else errorCodes.add(String.format("exceeded-min%s-or-max%s-%s-length", minLenght, maxLenght, fieldName));
         }
         return result;
     }
