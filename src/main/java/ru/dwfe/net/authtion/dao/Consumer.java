@@ -12,7 +12,7 @@ import ru.dwfe.net.authtion.service.ConsumerService;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -256,29 +256,27 @@ public class Consumer implements UserDetails, CredentialsContainer
         UTILs
     */
 
-    public static boolean canUseEmail(String email, ConsumerService consumerService, Map<String, Object> details)
+    public static boolean canUseEmail(String email, ConsumerService consumerService, List<String> errorCodes)
     {
         boolean result = false;
-        String fieldName = "email";
 
-        if (isEmailCheckOK(email, details))
+        if (isEmailCheckOK(email, errorCodes))
         {
             if (!consumerService.existsByEmail(email))
             {
                 result = true;
             }
-            else details.put(fieldName, "is already present in our database");
+            else errorCodes.add("email-present-in-database");
         }
         return result;
     }
 
-    public static boolean isEmailCheckOK(String email, Map<String, Object> details)
+    public static boolean isEmailCheckOK(String email, List<String> errorCodes)
     {
         boolean result = false;
-        String fieldName = "email";
         int maxLength = 50;
 
-        if (isDefaultCheckOK(email, fieldName, details))
+        if (isDefaultCheckOK(email, "email", errorCodes))
         {
             if (email.length() <= maxLength)
             {
@@ -286,9 +284,9 @@ public class Consumer implements UserDetails, CredentialsContainer
                 {
                     result = true;
                 }
-                else details.put(fieldName, "must be valid e-mail address");
+                else errorCodes.add("invalid-email");
             }
-            else details.put(fieldName, "length must be less than or equal to " + maxLength);
+            else errorCodes.add(String.format("exceeded-max%s-email-length", maxLength));
         }
         return result;
     }
@@ -298,21 +296,20 @@ public class Consumer implements UserDetails, CredentialsContainer
         return BCRYPT_PATTERN.matcher(password).matches();
     }
 
-    public static boolean canUsePassword(String password, String fieldName, Map<String, Object> details)
+    public static boolean canUsePassword(String password, String fieldName, List<String> errorCodes)
     {
         boolean result = false;
         int minLenght = 6;
         int maxLenght = 55;
 
-        if (isDefaultCheckOK(password, fieldName, details))
+        if (isDefaultCheckOK(password, fieldName, errorCodes))
         {
             if (isPasswordBcrypted(password)
                     || password.length() >= minLenght && password.length() <= maxLenght)
             {
                 result = true;
             }
-            else details.put(fieldName, "length must be greater than or equal to "
-                    + minLenght + " and less than or equal to " + maxLenght);
+            else errorCodes.add(String.format("exceeded-min%s-or-max%s-password-length", minLenght, maxLenght));
         }
         return result;
     }

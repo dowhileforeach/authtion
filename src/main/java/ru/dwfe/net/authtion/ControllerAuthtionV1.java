@@ -21,10 +21,7 @@ import ru.dwfe.net.authtion.dao.repository.MailingRestorePasswordRepository;
 import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPassedRepository;
 import ru.dwfe.net.authtion.service.ConsumerService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.dao.Consumer.*;
@@ -57,43 +54,43 @@ public class ControllerAuthtionV1
     @PostMapping(resource_checkConsumerEmail)
     public String checkConsumerEmail(@RequestBody String body)
     {
-        Map<String, Object> details = new HashMap<>();
+        List<String> errorCodes = new ArrayList<>();
 
         String email = (String) getValueFromJSON(body, "email");
-        canUseEmail(email, consumerService, details);
+        canUseEmail(email, consumerService, errorCodes);
 
-        return getResponse("success", details);
+        return getResponse(errorCodes);
     }
 
     @PostMapping(resource_checkConsumerPass)
     public String checkConsumerPass(@RequestBody String body)
     {
-        Map<String, Object> details = new HashMap<>();
+        List<String> errorCodes = new ArrayList<>();
 
         String password = (String) getValueFromJSON(body, "password");
-        canUsePassword(password, "password", details);
+        canUsePassword(password, "password", errorCodes);
 
-        return getResponse("success", details);
+        return getResponse(errorCodes);
     }
 
     @PostMapping(resource_createConsumer)
     public String createConsumer(@RequestBody Consumer consumer)
     {
-        Map<String, Object> details = new HashMap<>();
+        List<String> errorCodes = new ArrayList<>();
 
         String password = consumer.getPassword();
         String automaticallyGeneratedPassword = "";
 
-        if (canUseEmail(consumer.getEmail(), consumerService, details))
+        if (canUseEmail(consumer.getEmail(), consumerService, errorCodes))
             if (password == null)
             { //if password wasn't passed
                 automaticallyGeneratedPassword = getUniqStr(10);
                 password = automaticallyGeneratedPassword;
             }
             else //if password was passed
-                canUsePassword(password, "password", details);
+                canUsePassword(password, "password", errorCodes);
 
-        if (details.size() == 0)
+        if (errorCodes.size() == 0)
         {   //prepare
             setNewPassword(consumer, password);
             prepareNewConsumer(consumer);
@@ -114,32 +111,23 @@ public class ControllerAuthtionV1
                 //      set Consumer field 'email_confirmed' to true
             }
         }
-        return getResponse("success", details);
+        return getResponse(errorCodes);
     }
 
     @PostMapping(resource_updateConsumer)
     @PreAuthorize("hasAuthority('USER')")
     public String updateConsumer(@RequestBody String body, OAuth2Authentication authentication)
     {
-        boolean result = false;
-        Map<String, Object> details = new HashMap<>();
+        List<String> errorCodes = new ArrayList<>();
         Map<String, Object> map = parse(body);
-
-        final String WARNING = "warning";
-        final String NO_CHANGES_FOUND = "no changes found";
-        final String CHANGE_SAVED = "change saved";
-
-        final String NICKNAME_FIELD = "nickName";
-        final String FIRSTNAME_FIELD = "firstName";
-        final String LASTNAME_FIELD = "lastName";
 
         if (map.size() > 0)
         {
             Consumer consumerAuth = (Consumer) authentication.getPrincipal();
 
-            String nickName = (String) getValue(map, NICKNAME_FIELD);
-            String firstName = (String) getValue(map, FIRSTNAME_FIELD);
-            String lastName = (String) getValue(map, LASTNAME_FIELD);
+            String nickName = (String) getValue(map, "nickName");
+            String firstName = (String) getValue(map, "firstName");
+            String lastName = (String) getValue(map, "lastName");
 
             boolean isNickName = nickName != null;
             boolean isFirstName = firstName != null;
@@ -153,61 +141,52 @@ public class ControllerAuthtionV1
                 if (isNickName && !nickName.equals(consumer.getNickName()))
                 {
                     consumer.setNickName(nickName);
-                    details.put(NICKNAME_FIELD, CHANGE_SAVED);
                     wasModified = true;
                 }
                 if (isFirstName && !firstName.equals(consumer.getFirstName()))
                 {
                     consumer.setFirstName(firstName);
-                    details.put(FIRSTNAME_FIELD, CHANGE_SAVED);
                     wasModified = true;
                 }
                 if (isLastName && !lastName.equals(consumer.getLastName()))
                 {
                     consumer.setLastName(lastName);
-                    details.put(LASTNAME_FIELD, CHANGE_SAVED);
                     wasModified = true;
                 }
 
                 if (wasModified)
                 {
                     consumerService.save(consumer);
-                    result = true;
                 }
-                else
-                    details.put(WARNING, NO_CHANGES_FOUND);
             }
-            else details.put(WARNING, NO_CHANGES_FOUND);
         }
-        else details.put(WARNING, NO_CHANGES_FOUND);
-
-        return getResponse("success", result, details);
+        return getResponse(errorCodes);
     }
 
     @GetMapping(resource_getConsumerData)
     @PreAuthorize("hasAuthority('USER')")
     public String getConsumerData(OAuth2Authentication authentication)
     {
-        return getResponse("success", true, authentication.getPrincipal().toString());
+        List<String> errorCodes = new ArrayList<>();
+        return getResponse(errorCodes, authentication.getPrincipal().toString());
     }
 
     @GetMapping(resource_publicConsumer + "/{id}")
     public String publicConsumer(@PathVariable Long id)
     {
-        boolean result = false;
-        Map<String, Object> details = new HashMap<>();
+        List<String> errorCodes = new ArrayList<>();
+        Map<String, Object> data = new HashMap<>();
 
         Optional<Consumer> consumerById = consumerService.findById(id);
         if (consumerById.isPresent())
         {
             Consumer consumer = consumerById.get();
-            details.put("id", consumer.getId());
-            details.put("nickName", consumer.getNickName());
-            result = true;
+            data.put("id", consumer.getId());
+            data.put("nickName", consumer.getNickName());
         }
-        else details.put("error", "not exist");
+        else errorCodes.add("id-not-exist");
 
-        return getResponse("success", result, details);
+        return getResponse(errorCodes, data);
     }
 
     @GetMapping(resource_listOfConsumers)
@@ -226,16 +205,16 @@ public class ControllerAuthtionV1
 
         //TODO: service alert #3
 
-        return getResponse("success", Map.of());
+        return getResponse(List.of());
     }
 
     @GetMapping(resource_confirmConsumerEmail)
     public String confirmConsumerEmail(@RequestParam(required = false) String key)
     {
-        String fieldName = "key";
-        Map<String, Object> details = new HashMap<>();
+        String fieldName = "confirm-key";
+        List<String> errorCodes = new ArrayList<>();
 
-        if (isDefaultCheckOK(key, fieldName, details))
+        if (isDefaultCheckOK(key, fieldName, errorCodes))
         {
             Optional<MailingConfirmEmail> confirmByKey = mailingConfirmEmailRepository.findByConfirmKey(key);
             if (confirmByKey.isPresent())
@@ -250,46 +229,49 @@ public class ControllerAuthtionV1
                 //delete this confirmation key from database
                 mailingConfirmEmailRepository.delete(confirm);
             }
-            else details.put(fieldName, "does not exist");
+            else errorCodes.add(fieldName + "-not-exist");
         }
-        return getResponse("success", details);
+        return getResponse(errorCodes);
     }
 
     @PostMapping(resource_changeConsumerPass)
     @PreAuthorize("hasAuthority('USER')")
     public String changeConsumerPass(@RequestBody String body, OAuth2Authentication authentication)
     {
-        Map<String, Object> details = new HashMap<>();
+        List<String> errorCodes = new ArrayList<>();
         Map<String, Object> map = parse(body);
 
-        String oldpass = (String) getValue(map, "oldpass");
-        String newpass = (String) getValue(map, "newpass");
+        String oldpassField = "oldpass";
+        String newpassField = "newpass";
 
-        if (isDefaultCheckOK(oldpass, "oldpass", details)
-                && canUsePassword(newpass, "newpass", details))
+        String oldpassValue = (String) getValue(map, oldpassField);
+        String newpassValue = (String) getValue(map, newpassField);
+
+        if (isDefaultCheckOK(oldpassValue, oldpassField, errorCodes)
+                && canUsePassword(newpassValue, newpassField, errorCodes))
         {
             Long id = ((Consumer) authentication.getPrincipal()).getId();
             Consumer consumer = consumerService.findById(id).get();
-            if (matchPassword(oldpass, consumer.getPassword()))
+            if (matchPassword(oldpassValue, consumer.getPassword()))
             {
-                setNewPassword(consumer, newpass);
+                setNewPassword(consumer, newpassValue);
                 consumerService.save(consumer);
 
                 //TODO: service alert #4
             }
-            else details.put("oldpass", "wrong");
+            else errorCodes.add("wrong-" + oldpassField);
         }
-        return getResponse("success", details);
+        return getResponse(errorCodes);
     }
 
     @PostMapping(resource_reqRestoreConsumerPass)
     public String reqRestoreConsumerPass(@RequestBody String body)
     {
-        Map<String, Object> details = new HashMap<>();
+        List<String> errorCodes = new ArrayList<>();
 
         String email = (String) getValueFromJSON(body, "email");
 
-        if (isEmailCheckOK(email, details))
+        if (isEmailCheckOK(email, errorCodes))
         {
             if (consumerService.existsByEmail(email))
             {
@@ -298,81 +280,85 @@ public class ControllerAuthtionV1
 
                 //TODO: service alert #5
             }
-            else details.put("error", "not exist");
+            else errorCodes.add("email-not-exist");
         }
-        return getResponse("success", details);
+        return getResponse(errorCodes);
     }
 
     @GetMapping(resource_confirmRestoreConsumerPass)
     public String confirmRestoreConsumerPass(@RequestParam(required = false) String key)
     {
-        boolean result = false;
-        String fieldName = "key";
-        Map<String, Object> details = new HashMap<>();
+        String fieldName = "confirm-key";
+        List<String> errorCodes = new ArrayList<>();
+        Map<String, Object> data = new HashMap<>();
 
-        if (isDefaultCheckOK(key, fieldName, details))
+        if (isDefaultCheckOK(key, fieldName, errorCodes))
         {
             Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(key);
             if (confirmByKey.isPresent())
             {
-                details.put("email", confirmByKey.get().getConsumer());
-                details.put("key", key);
-                result = true;
+                data.put("email", confirmByKey.get().getConsumer());
+                data.put("key", key);
             }
-            else details.put(fieldName, "does not exist");
+            else errorCodes.add(fieldName + "-not-exist");
         }
-        return getResponse("success", result, details);
+        return getResponse(errorCodes, data);
     }
 
     @PostMapping(resource_restoreConsumerPass)
     public String restoreConsumerPass(@RequestBody String body)
     {
-        String fieldName = "error";
-        Map<String, Object> details = new HashMap<>();
+        List<String> errorCodes = new ArrayList<>();
         Map<String, Object> map = parse(body);
 
-        String email = (String) getValue(map, "email");
-        String key = (String) getValue(map, "key");
-        String newpass = (String) getValue(map, "newpass");
+        String emailField = "email";
+        String keyField = "key";
+        String newpassField = "newpass";
 
-        if (canUsePassword(newpass, "newpass", details)
-                && isDefaultCheckOK(key, "key", details)
-                && isEmailCheckOK(email, details))
+        String emailValue = (String) getValue(map, emailField);
+        String keyValue = (String) getValue(map, keyField);
+        String newpassValue = (String) getValue(map, newpassField);
+
+        if (canUsePassword(newpassValue, newpassField, errorCodes)
+                && isDefaultCheckOK(keyValue, keyField, errorCodes)
+                && isEmailCheckOK(emailValue, errorCodes))
         {
-            Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(key);
+            Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(keyValue);
             if (confirmByKey.isPresent())
             {
                 MailingRestorePassword confirm = confirmByKey.get();
-                if (email.equals(confirm.getConsumer()))
+                if (emailValue.equals(confirm.getConsumer()))
                 {
                     //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
-                    Consumer consumer = consumerService.findByEmail(email).get();
-                    setNewPassword(consumer, newpass);
+                    Consumer consumer = consumerService.findByEmail(emailValue).get();
+                    setNewPassword(consumer, newpassValue);
                     consumerService.save(consumer);
 
                     mailingRestorePasswordRepository.delete(confirm);
                 }
-                else details.put(fieldName, "email from request doesn't match with email associated with key");
+                else errorCodes.add("confirm-key-for-another-email");
             }
-            else details.put(fieldName, "key does not exist");
+            else errorCodes.add("confirm-key-not-exist");
         }
-        return getResponse("success", details);
+        return getResponse(errorCodes);
     }
 
     @GetMapping(resource_signOut)
     @PreAuthorize("hasAuthority('USER')")
     public String signOut(OAuth2Authentication authentication)
     {
+        List<String> errorCodes = new ArrayList<>();
+
         OAuth2AccessToken accessToken = ((AuthorizationServerTokenServices) tokenServices).getAccessToken(authentication);
         tokenServices.revokeToken(accessToken.getValue());
 
-        return getResponse("success", Map.of());
+        return getResponse(errorCodes);
     }
 
     @PostMapping(resource_googleCaptchaValidate)
     public String googleCaptchaValidate(@RequestBody String body)
     {
-        Map<String, Object> details = new HashMap<>();
+        List<String> errorCodes = new ArrayList<>();
 
         String captchaSecret = env.getProperty("google.captcha.secret-key");
         String googleResponse = (String) getValueFromJSON(body, "googleResponse");
@@ -390,14 +376,14 @@ public class ControllerAuthtionV1
             Boolean success = (Boolean) getValueFromJSON(respBody, "success");
             if (!success)
             {
-                details.put("error", "Google thinks you're a robot");
+                errorCodes.add("robot-detected");
             }
         }
         catch (Exception e)
         {
-            details.put("error", "internal server error");
+            errorCodes.add("no-connection-with-google");
         }
-        return getResponse("success", details);
+        return getResponse(errorCodes);
     }
 }
 

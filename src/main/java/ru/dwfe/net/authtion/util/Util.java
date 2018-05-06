@@ -6,6 +6,7 @@ import org.springframework.boot.json.JsonParserFactory;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Map;
 
 public class Util
@@ -25,7 +26,7 @@ public class Util
         return map.get(key);
     }
 
-    public static boolean isDefaultCheckOK(String value, String fieldName, Map<String, Object> details)
+    public static boolean isDefaultCheckOK(String value, String fieldName, List<String> errorCodes)
     {
         boolean result = false;
 
@@ -35,9 +36,9 @@ public class Util
             {
                 result = true;
             }
-            else details.put(fieldName, "can't be empty");
+            else errorCodes.add("empty-" + fieldName);
         }
-        else details.put(fieldName, "required field");
+        else errorCodes.add("missing-" + fieldName);
 
         return result;
     }
@@ -47,33 +48,24 @@ public class Util
         return value != null && !value.isEmpty();
     }
 
-    public static String getResponse(String resultFieldName, Map<String, Object> details)
+    public static String getResponse(List<String> errorCodes)
     {
-        return getResponse(resultFieldName, details.size() == 0, details);
-    }
-
-    public static String getResponse(String resultFieldName, boolean responseResult, Map<String, Object> details)
-    {
-        if (details == null || details.size() == 0)
-
-            return String.format("{" +
-                    "\"%s\": %s" +
-                    "}", resultFieldName, responseResult);
-
+        if (errorCodes.size() == 0)
+            return "{\"success\": true}";
         else
-
-            return String.format("{" +
-                    "\"%s\": %s, " +
-                    "\"details\": %s" +
-                    "}", resultFieldName, responseResult, getJSONfromObject(details));
+            return String.format("{\"success\": false, \"error-codes\": %s}", getJSONfromObject(errorCodes));
     }
 
-    public static String getResponse(String resultFieldName, boolean responseResult, String details)
+    public static String getResponse(List<String> errorCodes, String data)
     {
-        return String.format("{" +
-                "\"%s\": %s, " +
-                "\"details\": %s" +
-                "}", resultFieldName, responseResult, details);
+        return String.format("{\"success\": %s, \"error-codes\": %s, \"data\": %s}",
+                errorCodes.size() == 0, getJSONfromObject(errorCodes), data);
+    }
+
+    public static String getResponse(List<String> errorCodes, Map<String, Object> data)
+    {
+        return String.format("{\"success\": %s, \"error-codes\": %s, \"data\": %s}",
+                errorCodes.size() == 0, getJSONfromObject(errorCodes), getJSONfromObject(data));
     }
 
     public static String getJSONfromObject(Object value)
