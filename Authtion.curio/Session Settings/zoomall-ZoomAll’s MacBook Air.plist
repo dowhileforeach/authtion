@@ -516,7 +516,7 @@
 	<key>309B12B0-381D-44B0-A1E1-A17552251F5E</key>
 	<dict>
 		<key>Visible Rect</key>
-		<string>{{0, 0}, {1100, 660}}</string>
+		<string>{{0, 40}, {1100, 660}}</string>
 		<key>Zoom Factor</key>
 		<real>1</real>
 	</dict>
@@ -2202,6 +2202,13 @@
 		<key>Zoom Factor</key>
 		<real>1</real>
 	</dict>
+	<key>C84BAFCC-F04A-41F0-ADF0-D29C5059420D</key>
+	<dict>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1100, 660}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
 	<key>C8566324-E5E4-44E3-90D8-0CB512DADEC0</key>
 	<dict>
 		<key>Visible Rect</key>
@@ -2520,14 +2527,14 @@
 	<key>E440DC55-CCA4-41E1-A634-1F0EBA0783DB</key>
 	<dict>
 		<key>Visible Rect</key>
-		<string>{{0, 0}, {1100, 660}}</string>
+		<string>{{0, 28}, {1100, 660}}</string>
 		<key>Zoom Factor</key>
 		<real>1</real>
 	</dict>
 	<key>E4F6789C-1F83-41F4-AB18-95C8C7801797</key>
 	<dict>
 		<key>Visible Rect</key>
-		<string>{{0, 2925}, {1366, 688}}</string>
+		<string>{{0, 2778}, {1100, 660}}</string>
 		<key>Zoom Factor</key>
 		<real>1</real>
 	</dict>
@@ -2960,7 +2967,7 @@
 	<key>Sections Height</key>
 	<integer>135</integer>
 	<key>Sections Visible</key>
-	<false/>
+	<true/>
 	<key>Toolbar Visible</key>
 	<true/>
 </dict>

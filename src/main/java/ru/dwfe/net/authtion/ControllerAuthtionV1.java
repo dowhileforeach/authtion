@@ -192,7 +192,7 @@ public class ControllerAuthtionV1
 
     @GetMapping(resource_listOfConsumers)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String users()
+    public String listOfConsumers()
     {
         List<String> errorCodes = new ArrayList<>();
 

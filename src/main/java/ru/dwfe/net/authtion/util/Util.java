@@ -53,19 +53,33 @@ public class Util
         if (errorCodes.size() == 0)
             return "{\"success\": true}";
         else
-            return String.format("{\"success\": false, \"error-codes\": %s}", getJSONfromObject(errorCodes));
+            return getResponseWithErrorCodes(errorCodes);
     }
 
     public static String getResponse(List<String> errorCodes, String data)
     {
-        return String.format("{\"success\": %s, \"error-codes\": %s, \"data\": %s}",
-                errorCodes.size() == 0, getJSONfromObject(errorCodes), data);
+        if (errorCodes.size() == 0)
+            return getResponseSuccessWithData(data);
+        else
+            return getResponseWithErrorCodes(errorCodes);
     }
 
     public static String getResponse(List<String> errorCodes, Map<String, Object> data)
     {
-        return String.format("{\"success\": %s, \"error-codes\": %s, \"data\": %s}",
-                errorCodes.size() == 0, getJSONfromObject(errorCodes), getJSONfromObject(data));
+        if (errorCodes.size() == 0)
+            return getResponseSuccessWithData(getJSONfromObject(data));
+        else
+            return getResponseWithErrorCodes(errorCodes);
+    }
+
+    private static String getResponseSuccessWithData(String data)
+    {
+        return String.format("{\"success\": true, \"data\": %s}", data);
+    }
+
+    private static String getResponseWithErrorCodes(List<String> errorCodes)
+    {
+        return String.format("{\"success\": false, \"error-codes\": %s}", getJSONfromObject(errorCodes));
     }
 
     public static String getJSONfromObject(Object value)
