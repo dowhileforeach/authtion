@@ -74,6 +74,40 @@ public class ControllerAuthtionV1
         return getResponse(errorCodes);
     }
 
+    @PostMapping(resource_googleCaptchaValidate)
+    public String googleCaptchaValidate(@RequestBody String body)
+    {
+        List<String> errorCodes = new ArrayList<>();
+
+        String captchaSecret = env.getProperty("google.captcha.secret-key");
+        String googleResponse = (String) getValueFromJSON(body, "googleResponse");
+
+        if (isDefaultCheckOK(googleResponse, "google-response", errorCodes))
+        {
+            String url = String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s",
+                    captchaSecret, googleResponse);
+
+            Request req = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            try (Response resp = clientHttp.newCall(req).execute())
+            {
+                String respBody = resp.body().string();
+                Boolean success = (Boolean) getValueFromJSON(respBody, "success");
+                if (!success)
+                {
+                    errorCodes.add("attention-robot-detected");
+                }
+            }
+            catch (Exception e)
+            {
+                errorCodes.add("no-connection-with-google");
+            }
+        }
+        return getResponse(errorCodes);
+    }
+
     @PostMapping(resource_createConsumer)
     public String createConsumer(@RequestBody Consumer consumer)
     {
@@ -362,37 +396,6 @@ public class ControllerAuthtionV1
         OAuth2AccessToken accessToken = ((AuthorizationServerTokenServices) tokenServices).getAccessToken(authentication);
         tokenServices.revokeToken(accessToken.getValue());
 
-        return getResponse(errorCodes);
-    }
-
-    @PostMapping(resource_googleCaptchaValidate)
-    public String googleCaptchaValidate(@RequestBody String body)
-    {
-        List<String> errorCodes = new ArrayList<>();
-
-        String captchaSecret = env.getProperty("google.captcha.secret-key");
-        String googleResponse = (String) getValueFromJSON(body, "googleResponse");
-
-        String url = String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s",
-                captchaSecret, googleResponse);
-
-        Request req = new Request.Builder()
-                .url(url)
-                .build();
-
-        try (Response resp = clientHttp.newCall(req).execute())
-        {
-            String respBody = resp.body().string();
-            Boolean success = (Boolean) getValueFromJSON(respBody, "success");
-            if (!success)
-            {
-                errorCodes.add("robot-detected");
-            }
-        }
-        catch (Exception e)
-        {
-            errorCodes.add("no-connection-with-google");
-        }
         return getResponse(errorCodes);
     }
 }
