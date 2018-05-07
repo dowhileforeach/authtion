@@ -55,7 +55,7 @@ curl http://localhost:8080/v1/create-consumer -H "Content-Type: application/json
 ## ConsumerPassword_CRU_Test
 
 ### Consumer: Create, Read, Update
-![ConsumerPassword_CRU_Test_Consumer](./img/ConsumerPassword_CRU_Test_Consumer.png)<br><br><br><br><br>
+![ConsumerPassword_CRU_Test_Consumer](./img/ConsumerPassword_CRU_Test_Consumer.png)<br><br><br>
 ![ConsumerPassword_CRU_Test_Consumer_error-codes](./img/ConsumerPassword_CRU_Test_Consumer_error-codes.png)<br>
 
 ### Password management
