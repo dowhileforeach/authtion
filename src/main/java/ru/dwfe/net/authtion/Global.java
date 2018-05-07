@@ -1,10 +1,6 @@
 package ru.dwfe.net.authtion;
 
-import okhttp3.OkHttpClient;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class Global
@@ -44,15 +40,4 @@ public class Global
     public static final String resource_reqRestoreConsumerPass = "/req-restore-consumer-pass";
     public static final String resource_confirmRestoreConsumerPass = "/confirm-restore-consumer-pass";
     public static final String resource_restoreConsumerPass = "/restore-consumer-pass";
-
-    @Bean
-    public OkHttpClient getHttpClient()
-    {
-        return new OkHttpClient
-                .Builder()
-                .connectTimeout(120, TimeUnit.SECONDS)
-                .writeTimeout(120, TimeUnit.SECONDS)
-                .readTimeout(120, TimeUnit.SECONDS)
-                .build();
-    }
 }

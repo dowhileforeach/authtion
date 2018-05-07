@@ -26,6 +26,7 @@ See `test\java\ru.dwfe.authtion` classes.
 ![AuthTest_pic](./img/AuthTest_pic.png)<br>
 <br>
 ![AuthTest_RespReq](./img/AuthTest_RespReq.png)
+<br>
 
 #### For Manual tests
 Sign In as `user@ya.ru`:
@@ -48,10 +49,14 @@ curl http://localhost:8080/v1/create-consumer -H "Content-Type: application/json
 ...
 ```
 
+## Email alerts service
+![ServiceAlerts](./img/ServiceAlerts.png)<br>
+
 ## ConsumerPassword_CRU_Test
 
 ### Consumer: Create, Read, Update
-![ConsumerPassword_CRU_Test_Consumer](./img/ConsumerPassword_CRU_Test_Consumer.png)<br>
+![ConsumerPassword_CRU_Test_Consumer](./img/ConsumerPassword_CRU_Test_Consumer.png)<br><br><br><br><br>
+![ConsumerPassword_CRU_Test_Consumer_error-codes](./img/ConsumerPassword_CRU_Test_Consumer_error-codes.png)<br>
 
 ### Password management
 ![ConsumerPassword_CRU_Test_Password](./img/ConsumerPassword_CRU_Test_Password.png)<br>
@@ -60,8 +65,6 @@ curl http://localhost:8080/v1/create-consumer -H "Content-Type: application/json
 ![Authtion_brypt_regexp](./img/Authtion_brypt_regexp.png)
 2. For resources: `/create-consumer`, `/change-consumer-pass`, `/restore-consumer-pass` - password and newpass can be passed in the raw form or in the form of already encoded bcrypt hash
 3. For resource: `/create-consumer` - you may not transmit the password at all. In this case the password will be generated and sent to the consumer e-mail
-<br>
+<br><br>
 
-### Service Alerts
-![ServiceAlerts](./img/ServiceAlerts.png)<br>
-
+![ConsumerPassword_CRU_Test_Password_error-codes](./img/ConsumerPassword_CRU_Test_Password_error-codes.png)

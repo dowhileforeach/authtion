@@ -1,17 +1,17 @@
 package ru.dwfe.net.authtion;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import ru.dwfe.net.authtion.dao.Consumer;
 import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
 import ru.dwfe.net.authtion.dao.MailingRestorePassword;
@@ -45,9 +45,6 @@ public class ControllerAuthtionV1
 
     @Autowired
     ConsumerTokenServices tokenServices;
-
-    @Autowired
-    OkHttpClient clientHttp;
 
     @Autowired
     private Environment env;
@@ -84,25 +81,23 @@ public class ControllerAuthtionV1
 
         if (isDefaultCheckOK(googleResponse, "google-response", errorCodes))
         {
+            // https://developers.google.com/recaptcha/docs/verify#api-request
             String url = String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s",
                     captchaSecret, googleResponse);
 
-            Request req = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            try (Response resp = clientHttp.newCall(req).execute())
+            RestTemplate rest = new RestTemplate();
+            ResponseEntity<String> resp = rest.exchange(url, HttpMethod.POST, null, String.class);
+            if (resp.getStatusCodeValue() == 200)
             {
-                String respBody = resp.body().string();
-                Boolean success = (Boolean) getValueFromJSON(respBody, "success");
+                Boolean success = (Boolean) getValueFromJSON(resp.getBody(), "success");
                 if (!success)
                 {
                     errorCodes.add("attention-robot-detected");
                 }
             }
-            catch (Exception e)
+            else
             {
-                errorCodes.add("no-connection-with-google");
+                errorCodes.add("failure-when-connecting-to-google-" + resp.getStatusCodeValue());
             }
         }
         return getResponse(errorCodes);
