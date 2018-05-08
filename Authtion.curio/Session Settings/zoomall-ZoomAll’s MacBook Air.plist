@@ -2534,7 +2534,7 @@
 	<key>E4F6789C-1F83-41F4-AB18-95C8C7801797</key>
 	<dict>
 		<key>Visible Rect</key>
-		<string>{{0, 2778}, {1100, 660}}</string>
+		<string>{{0, 1915}, {1100, 660}}</string>
 		<key>Zoom Factor</key>
 		<real>1</real>
 	</dict>
@@ -2921,7 +2921,7 @@
 	<key>Normal Window Layout</key>
 	<string>{{0, 0}, {1366, 745}}</string>
 	<key>Organizer Visible</key>
-	<false/>
+	<true/>
 	<key>Organizer Width</key>
 	<integer>265</integer>
 	<key>Primary Asset UUID Last Viewed</key>
@@ -2967,7 +2967,7 @@
 	<key>Sections Height</key>
 	<integer>135</integer>
 	<key>Sections Visible</key>
-	<true/>
+	<false/>
 	<key>Toolbar Visible</key>
 	<true/>
 </dict>

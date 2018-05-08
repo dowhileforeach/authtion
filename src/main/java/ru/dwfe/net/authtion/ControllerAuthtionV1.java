@@ -49,6 +49,9 @@ public class ControllerAuthtionV1
     @Autowired
     private Environment env;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     @PostMapping(resource_checkConsumerEmail)
     public String checkConsumerEmail(@RequestBody String body)
     {
@@ -85,8 +88,7 @@ public class ControllerAuthtionV1
             String url = String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s",
                     captchaSecret, googleResponse);
 
-            RestTemplate rest = new RestTemplate();
-            ResponseEntity<String> resp = rest.exchange(url, HttpMethod.POST, null, String.class);
+            ResponseEntity<String> resp = restTemplate.exchange(url, HttpMethod.POST, null, String.class);
             if (resp.getStatusCodeValue() == 200)
             {
                 Boolean success = (Boolean) getValueFromJSON(resp.getBody(), "success");
@@ -97,7 +99,7 @@ public class ControllerAuthtionV1
             }
             else
             {
-                errorCodes.add("failure-when-connecting-to-google-" + resp.getStatusCodeValue());
+                errorCodes.add("failure-when-connecting-to-google");
             }
         }
         return getResponse(errorCodes);
