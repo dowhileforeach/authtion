@@ -120,3 +120,24 @@ CREATE TABLE `mailing_restore_password` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+#
+# To persist tokens between server restarts I need:
+# 1) to configure a persistent token store (JdbcTokenStore for example, see config/TokenStoreConfig.java)
+# 2) create SQL tables: https://github.com/spring-projects/spring-security-oauth/blob/master/spring-security-oauth2/src/test/resources/schema.sql
+#    (minimum):
+# CREATE TABLE oauth_access_token (
+#   token_id VARCHAR(256),
+#   token BLOB,
+#   authentication_id VARCHAR(256) PRIMARY KEY,
+#   user_name VARCHAR(256),
+#   client_id VARCHAR(256),
+#   authentication BLOB,
+#   refresh_token VARCHAR(256)
+# );
+#
+# CREATE TABLE oauth_refresh_token (
+#   token_id VARCHAR(256),
+#   token BLOB,
+#   authentication BLOB
+# );

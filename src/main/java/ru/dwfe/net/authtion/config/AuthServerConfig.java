@@ -56,7 +56,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
                 .secret(client_PASSWORD_TRUSTED)
                 .scopes("all")
                 .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(60 * 60 * 24 * 10) // 10 days
+                .accessTokenValiditySeconds(60 * 60 * 24 * 30) // 30 days
 
                 .and()
 
@@ -69,7 +69,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
 
         //Здесь Клиентом является Фронтэнд.
         //В качестве фронтенда может быть обычная HTML страничка + JavaScript, либо фреймворк, например, Angular.
-        //Если Consumer логинится на Клиенте, то клиент должен методом POST отправить его credentials на сервер.
+        //В любом случае, чтобы залогиниться надо отправить методом POST пользовательские credentials на сервер.
         //Протестировать Sign In можно так:
         //curl withClient:secret@localhost:8080/v1/sign-in -d grant_type=password -d username=UserLogin -d password=UserPass
         //
