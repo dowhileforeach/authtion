@@ -1,7 +1,7 @@
 | Token Store          | Branch        |
 |----------------------|:-------------:|
-| JSON Web Tokens      | `JWT`         |
 | DataBase             | `master`      |
+| JSON Web Tokens      | `JWT`         |
 <br>
 Java10, Spring-Boot2, OAuth2, RESTful, MySQL<br>
 
