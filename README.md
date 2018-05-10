@@ -12,7 +12,7 @@ Unfortunately for resource authentication `/oauth/token` "out of box" spring-sec
 Therefore, for all API versions is one version `/oauth/token`, which mapped to `/{current API version}/sign-in`.
 
 # Errors
-When you interact with the Authtion server, you may encounter three types of errors:<br>
+When you interact with the Authtion server, you may encounter the following types of errors:<br>
 1. OAuth2 server error, which look like this:<br>
 ![OAuth2 server error example](./assets/img/oauth2-server-error-example.png)<br>
 The list of OAuth2 server errors and their mapping is [here](./assets/oauth2-server-errors-mapping.js) (may not include unknown errors to me).
