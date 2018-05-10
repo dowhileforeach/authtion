@@ -10,72 +10,72 @@ import javax.persistence.Table;
 @Table(name = "mailing_confirm_email")
 public class MailingConfirmEmail
 {
-    @Id
-    private String consumer;
+  @Id
+  private String consumer;
 
-    private String confirmKey;
-    private boolean alreadySent;
+  private String confirmKey;
+  private boolean alreadySent;
 
 
-    public static MailingConfirmEmail of(String email)
-    {
-        MailingConfirmEmail confirm = new MailingConfirmEmail();
-        confirm.setConsumer(email);
-        confirm.setConfirmKey(Util.getUniqStr(30));
-        confirm.setAlreadySent(false);
-        return confirm;
-    }
+  public static MailingConfirmEmail of(String email)
+  {
+    MailingConfirmEmail confirm = new MailingConfirmEmail();
+    confirm.setConsumer(email);
+    confirm.setConfirmKey(Util.getUniqStr(30));
+    confirm.setAlreadySent(false);
+    return confirm;
+  }
 
-    public String getConsumer()
-    {
-        return consumer;
-    }
+  public String getConsumer()
+  {
+    return consumer;
+  }
 
-    public void setConsumer(String email)
-    {
-        this.consumer = email;
-    }
+  public void setConsumer(String email)
+  {
+    this.consumer = email;
+  }
 
-    public String getConfirmKey()
-    {
-        return confirmKey;
-    }
+  public String getConfirmKey()
+  {
+    return confirmKey;
+  }
 
-    public void setConfirmKey(String confirmKey)
-    {
-        this.confirmKey = confirmKey;
-    }
+  public void setConfirmKey(String confirmKey)
+  {
+    this.confirmKey = confirmKey;
+  }
 
-    public boolean isAlreadySent()
-    {
-        return alreadySent;
-    }
+  public boolean isAlreadySent()
+  {
+    return alreadySent;
+  }
 
-    public void setAlreadySent(boolean alreadySent)
-    {
-        this.alreadySent = alreadySent;
-    }
+  public void setAlreadySent(boolean alreadySent)
+  {
+    this.alreadySent = alreadySent;
+  }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-        MailingConfirmEmail that = (MailingConfirmEmail) o;
+    MailingConfirmEmail that = (MailingConfirmEmail) o;
 
-        return consumer.equals(that.consumer);
-    }
+    return consumer.equals(that.consumer);
+  }
 
-    @Override
-    public int hashCode()
-    {
-        return consumer.hashCode();
-    }
+  @Override
+  public int hashCode()
+  {
+    return consumer.hashCode();
+  }
 
-    @Override
-    public String toString()
-    {
-        return Util.getJSONfromObject(this);
-    }
+  @Override
+  public String toString()
+  {
+    return Util.getJSONfromObject(this);
+  }
 }

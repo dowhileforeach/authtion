@@ -20,50 +20,50 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ConsumerService implements UserDetailsService
 {
-    private static final Logger log = LoggerFactory.getLogger(ConsumerService.class);
+  private static final Logger log = LoggerFactory.getLogger(ConsumerService.class);
 
-    @Autowired
-    private ConsumerRepository repository;
+  @Autowired
+  private ConsumerRepository repository;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException
-    {
-        return repository.findByEmail(email).orElseThrow(() -> {
-            String str = String.format("The not exist: %s", email);
-            log.error(str);
-            return new UsernameNotFoundException(str);
-        });
-    }
+  @Override
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException
+  {
+    return repository.findByEmail(email).orElseThrow(() -> {
+      String str = String.format("The not exist: %s", email);
+      log.error(str);
+      return new UsernameNotFoundException(str);
+    });
+  }
 
-    public Optional<Consumer> findById(Long id)
-    {
-        return repository.findById(id);
-    }
+  public Optional<Consumer> findById(Long id)
+  {
+    return repository.findById(id);
+  }
 
-    public Optional<Consumer> findByEmail(String email)
-    {
-        return repository.findByEmail(email);
-    }
+  public Optional<Consumer> findByEmail(String email)
+  {
+    return repository.findByEmail(email);
+  }
 
-    public boolean existsByEmail(String email)
-    {
-        return findByEmail(email).isPresent();
-    }
+  public boolean existsByEmail(String email)
+  {
+    return findByEmail(email).isPresent();
+  }
 
-    public List<Consumer> findAll()
-    {
-        return (List<Consumer>) repository.findAll();
-    }
+  public List<Consumer> findAll()
+  {
+    return (List<Consumer>) repository.findAll();
+  }
 
-    @Transactional
-    public Consumer save(Consumer consumer)
-    {
-        return repository.save(consumer);
-    }
+  @Transactional
+  public Consumer save(Consumer consumer)
+  {
+    return repository.save(consumer);
+  }
 
-    @Transactional
-    public void delete(Consumer consumer)
-    {
-        repository.delete(consumer);
-    }
+  @Transactional
+  public void delete(Consumer consumer)
+  {
+    repository.delete(consumer);
+  }
 }

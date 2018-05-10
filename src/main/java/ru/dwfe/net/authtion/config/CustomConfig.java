@@ -8,12 +8,12 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class CustomConfig
 {
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder)
-    {
-        return restTemplateBuilder
-                .setConnectTimeout(5000)
-                .setReadTimeout(5000)
-                .build();
-    }
+  @Bean
+  public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder)
+  {
+    return restTemplateBuilder
+            .setConnectTimeout(5000)
+            .setReadTimeout(5000)
+            .build();
+  }
 }

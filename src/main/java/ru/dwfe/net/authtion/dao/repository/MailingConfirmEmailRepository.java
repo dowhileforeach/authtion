@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface MailingConfirmEmailRepository extends CrudRepository<MailingConfirmEmail, String>
 {
-    Optional<MailingConfirmEmail> findByConfirmKey(String confirmKey);
+  Optional<MailingConfirmEmail> findByConfirmKey(String confirmKey);
 }

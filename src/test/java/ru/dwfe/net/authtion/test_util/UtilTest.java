@@ -29,336 +29,336 @@ import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.*;
 
 public class UtilTest
 {
-    static void setNewTokens(ConsumerTest consumerTest, int signInExpectedStatus, SignInType signInType)
+  static void setNewTokens(ConsumerTest consumerTest, int signInExpectedStatus, SignInType signInType)
+  {
+    Client client = consumerTest.client;
+    Request req;
+
+    if (Refresh == signInType)
+      req = auth_refresh_POST_Request(client.clientname, client.clientpass, consumerTest.refresh_token);
+    else
+      req = auth_signIn_POST_Request(client.clientname, client.clientpass, consumerTest.username, consumerTest.password);
+
+    String body = performSignIn(req, signInExpectedStatus);
+
+    String access_token;
+    String refresh_token;
+
+    if (signInExpectedStatus == 200)
     {
-        Client client = consumerTest.client;
-        Request req;
+      Map<String, Object> map = parse(body);
 
-        if (Refresh == signInType)
-            req = auth_refresh_POST_Request(client.clientname, client.clientpass, consumerTest.refresh_token);
-        else
-            req = auth_signIn_POST_Request(client.clientname, client.clientpass, consumerTest.username, consumerTest.password);
+      access_token = (String) getValueFromResponse(map, "access_token");
+      assertThat(access_token.length(), greaterThan(0));
 
-        String body = performSignIn(req, signInExpectedStatus);
+      refresh_token = (String) getValueFromResponse(map, "refresh_token");
+      assertThat(refresh_token.length(), greaterThan(0));
 
-        String access_token;
-        String refresh_token;
+      assertThat((int) getValueFromResponse(map, "expires_in"),
+              is(both(greaterThan(client.minTokenExpirationTime)).and(lessThanOrEqualTo(client.maxTokenExpirationTime))));
 
-        if (signInExpectedStatus == 200)
-        {
-            Map<String, Object> map = parse(body);
+      consumerTest.access_token = access_token;
+      consumerTest.refresh_token = refresh_token;
+    }
+  }
 
-            access_token = (String) getValueFromResponse(map, "access_token");
-            assertThat(access_token.length(), greaterThan(0));
+  private static Request auth_signIn_POST_Request(String clientname, String clientpass, String username, String userpass)
+  {
+    String url = String.format(ALL_BEFORE_RESOURCE + Global.resource_signIn
+                    + "?grant_type=password&username=%s&password=%s",
+            username, userpass);
 
-            refresh_token = (String) getValueFromResponse(map, "refresh_token");
-            assertThat(refresh_token.length(), greaterThan(0));
+    log.info("Client's credentials - {}:{}", clientname, clientpass);
+    log.info("Consumer's credentials - {}:{}", username, userpass);
 
-            assertThat((int) getValueFromResponse(map, "expires_in"),
-                    is(both(greaterThan(client.minTokenExpirationTime)).and(lessThanOrEqualTo(client.maxTokenExpirationTime))));
+    return new Request.Builder()
+            .url(url)
+            .addHeader("Authorization", Credentials.basic(clientname, clientpass))
+            .post(RequestBody.create(MediaType.parse("text/x-markdown; charset=utf-8"), ""))
+            .build();
+  }
 
-            consumerTest.access_token = access_token;
-            consumerTest.refresh_token = refresh_token;
-        }
+  private static Request auth_refresh_POST_Request(String clientname, String clientpass, String refresh_token)
+  {
+    String url = String.format(ALL_BEFORE_RESOURCE + Global.resource_signIn
+            + "?grant_type=refresh_token&refresh_token=%s", refresh_token);
+
+    log.info("Client's credentials - {}:{}", clientname, clientpass);
+    log.info("Refresh token: {}", refresh_token);
+
+    return new Request.Builder()
+            .url(url)
+            .addHeader("Authorization", Credentials.basic(clientname, clientpass))
+            .post(RequestBody.create(MediaType.parse("text/x-markdown; charset=utf-8"), ""))
+            .build();
+  }
+
+  private static String performSignIn(Request req, int expectedStatus)
+  {
+    log.info("get Tokens");
+    log.info("-> Authorization: {}", req.header("Authorization"));
+    log.info("-> " + req.url().toString());
+
+    String body = performSign(req, expectedStatus);
+
+    log.info("<- tokens\n{}\n", body);
+    return body;
+  }
+
+  private static String performSignOut(ConsumerTest consumerTest, int expectedStatus)
+  {
+    log.info("Sign Out");
+
+    Request req = GET_request(ALL_BEFORE_RESOURCE + Global.resource_signOut, consumerTest.access_token, Map.of());
+
+    log.info("-> Authorization: {}", req.header("Authorization"));
+    log.info("-> " + req.url().toString());
+
+    String body = performSign(req, expectedStatus);
+
+    if (expectedStatus == 200)
+    {
+      Map<String, Object> map = parse(body);
+      assertEquals(true, getValueFromResponse(map, "success"));
     }
 
-    private static Request auth_signIn_POST_Request(String clientname, String clientpass, String username, String userpass)
+    log.info("<- result of sign out\n{}\n", body);
+    return body;
+  }
+
+  private static String performSign(Request req, int expectedStatus)
+  {
+    String body = "";
+    OkHttpClient client = getHttpClient();
+    try (Response response = client.newCall(req).execute())
     {
-        String url = String.format(ALL_BEFORE_RESOURCE + Global.resource_signIn
-                        + "?grant_type=password&username=%s&password=%s",
-                username, userpass);
+      assertNotEquals(null, response.body());
+      body = response.body().string();
+      assertEquals(expectedStatus, response.code());
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    assertFalse(body.isEmpty());
+    return body;
+  }
 
-        log.info("Client's credentials - {}:{}", clientname, clientpass);
-        log.info("Consumer's credentials - {}:{}", username, userpass);
+  private static Request GET_request(String url, String access_token, Map<String, Object> queries)
+  {
+    Request request;
 
-        return new Request.Builder()
-                .url(url)
-                .addHeader("Authorization", Credentials.basic(clientname, clientpass))
-                .post(RequestBody.create(MediaType.parse("text/x-markdown; charset=utf-8"), ""))
+    if (access_token == null)
+      request = new Request.Builder().url(url).build();
+    else
+      request = new Request.Builder().url(url).addHeader("Authorization", "Bearer " + access_token).build();
+
+    if (queries.size() > 0)
+      for (Map.Entry<String, Object> next : queries.entrySet())
+      {
+        HttpUrl newUrl = request.url().newBuilder()
+                .addQueryParameter(next.getKey(), (String) next.getValue())
                 .build();
-    }
-
-    private static Request auth_refresh_POST_Request(String clientname, String clientpass, String refresh_token)
-    {
-        String url = String.format(ALL_BEFORE_RESOURCE + Global.resource_signIn
-                + "?grant_type=refresh_token&refresh_token=%s", refresh_token);
-
-        log.info("Client's credentials - {}:{}", clientname, clientpass);
-        log.info("Refresh token: {}", refresh_token);
-
-        return new Request.Builder()
-                .url(url)
-                .addHeader("Authorization", Credentials.basic(clientname, clientpass))
-                .post(RequestBody.create(MediaType.parse("text/x-markdown; charset=utf-8"), ""))
+        request = request.newBuilder()
+                .url(newUrl)
                 .build();
-    }
+      }
+    return request;
+  }
 
-    private static String performSignIn(Request req, int expectedStatus)
+  private static Request POST_request(String url, String access_token, Map<String, Object> prorepty_value)
+  {
+    RequestBody body = getRequestBody(prorepty_value);
+
+    Request.Builder req = new Request.Builder().url(url);
+
+    if (access_token != null)
+      req.addHeader("Authorization", "Bearer " + access_token);
+
+    if (body == null)
+      body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{}");
+
+    req.post(body);
+
+    return req.build();
+  }
+
+  private static String performRequest(Request req, int expectedStatus)
+  {
+    log.info("-> " + req.url().encodedPath());
+
+    String body = null;
+    int actualStatusCode = -1;
+    OkHttpClient client = getHttpClient();
+    try (Response resp = client.newCall(req).execute())
     {
-        log.info("get Tokens");
-        log.info("-> Authorization: {}", req.header("Authorization"));
-        log.info("-> " + req.url().toString());
-
-        String body = performSign(req, expectedStatus);
-
-        log.info("<- tokens\n{}\n", body);
-        return body;
+      assertNotEquals(null, resp.body());
+      body = resp.body().string();
+      actualStatusCode = resp.code();
+      log.info("<- {}\n", body);
     }
-
-    private static String performSignOut(ConsumerTest consumerTest, int expectedStatus)
+    catch (IOException e)
     {
-        log.info("Sign Out");
-
-        Request req = GET_request(ALL_BEFORE_RESOURCE + Global.resource_signOut, consumerTest.access_token, Map.of());
-
-        log.info("-> Authorization: {}", req.header("Authorization"));
-        log.info("-> " + req.url().toString());
-
-        String body = performSign(req, expectedStatus);
-
-        if (expectedStatus == 200)
-        {
-            Map<String, Object> map = parse(body);
-            assertEquals(true, getValueFromResponse(map, "success"));
-        }
-
-        log.info("<- result of sign out\n{}\n", body);
-        return body;
+      e.printStackTrace();
     }
+    assertEquals(expectedStatus, actualStatusCode);
+    return body;
+  }
 
-    private static String performSign(Request req, int expectedStatus)
+  private static OkHttpClient getHttpClient()
+  {
+    return new OkHttpClient
+            .Builder()
+            .connectTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(120, TimeUnit.SECONDS)
+            .build();
+  }
+
+  private static String getResponseAfterPOSTrequest(String access_token, String resource, Map<String, Object> prorepty_value, int expectedStatus)
+  {
+    Request req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, prorepty_value);
+
+    log.info("-> {}", prorepty_value.toString());
+
+    return performRequest(req, expectedStatus);
+  }
+
+  private static String getResponseAfterGETrequest(String access_token, String resource, Map<String, Object> queries, int expectedStatus)
+  {
+    Request req = GET_request(ALL_BEFORE_RESOURCE + resource, access_token, queries);
+
+    String query = queries.entrySet().stream()
+            .map(e -> e.getKey() + "=" + e.getValue())
+            .collect(Collectors.joining("&"));
+    log.info("-> {}", query);
+
+    return performRequest(req, expectedStatus);
+  }
+
+  private static void performAuthTest_ResourceAccessing_ChangeToken(ConsumerTest consumerTest)
+  {
+    //1. Resource accessing
+    performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
+
+    //2. Change Token
+    String old_access_token = consumerTest.access_token;
+    String old_refresh_token = consumerTest.refresh_token;
+    setNewTokens(consumerTest, 200, Refresh);
+    assertNotEquals(old_access_token, consumerTest.access_token);
+    assertEquals(old_refresh_token, consumerTest.refresh_token);
+
+    //3. Resource accessing: old/new token
+    performResourceAccessing(old_access_token, consumerTest.level, BAD_ACCESS_TOKEN);
+    performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
+  }
+
+  public static void performFullAuthTest(ConsumerTest consumerTest)
+  {
+    //1,2,3
+    performAuthTest_ResourceAccessing_ChangeToken(consumerTest);
+
+    //4. Sign Out
+    performSignOut(consumerTest, 200);
+
+    //5. Resource accessing
+    performResourceAccessing(consumerTest.access_token, consumerTest.level, BAD_ACCESS_TOKEN);
+
+    //6. Change Token
+    setNewTokens(consumerTest, 400, Refresh);
+  }
+
+  public static void performResourceAccessing(String access_token, AuthorityLevel consumerLevel, ResourceAccessingType resourceAccessingType)
+  {
+    Map<AuthorityLevel, Map<AuthorityLevel, Integer>> statusMap;
+
+    if (BAD_ACCESS_TOKEN == resourceAccessingType)
+      statusMap = AUTHORITY_to_AUTHORITY_STATUS_BAD_ACCESS_TOKEN;
+    else
+      statusMap = AUTHORITY_to_AUTHORITY_STATUS;
+
+    RESOURCE_AUTHORITY_reqDATA().forEach((resource, next) -> {
+
+      Map.Entry<AuthorityLevel, Map<RequestMethod, Map<String, Object>>> next1 = next.entrySet().iterator().next();
+      Map.Entry<RequestMethod, Map<String, Object>> next2 = next1.getValue().entrySet().iterator().next();
+
+      AuthorityLevel level = next1.getKey();
+      RequestMethod method = next2.getKey();
+      Map<String, Object> reqData = next2.getValue();
+
+      Request req;
+      if (GET == method)
+        req = GET_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
+      else
+        req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
+
+      Map<AuthorityLevel, Integer> statusList = statusMap.get(consumerLevel);
+
+      performRequest(req, statusList.get(level));
+    });
+  }
+
+  public static void check_send_data(RequestMethod method, String resource, String access_token, List<Checker> checkers)
+  {
+    String body;
+    for (Checker checker : checkers)
     {
-        String body = "";
-        OkHttpClient client = getHttpClient();
-        try (Response response = client.newCall(req).execute())
-        {
-            assertNotEquals(null, response.body());
-            body = response.body().string();
-            assertEquals(expectedStatus, response.code());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        assertFalse(body.isEmpty());
-        return body;
-    }
+      if (GET == method)
+        body = getResponseAfterGETrequest(access_token, resource, checker.req, checker.expectedStatus);
+      else
+        body = getResponseAfterPOSTrequest(access_token, resource, checker.req, checker.expectedStatus);
 
-    private static Request GET_request(String url, String access_token, Map<String, Object> queries)
+      Map<String, Object> map = parse(body);
+
+      assertEquals(checker.expectedResult, getValueFromResponse(map, "success"));
+
+      if (checker.expectedError != null)
+      {
+        assertEquals(checker.expectedError, getErrorFromResponse(map));
+      }
+
+      if (checker.expectedResponseMap != null)
+      {
+        log.info("[expected] = " + Util.getJSONfromObject(checker.expectedResponseMap));
+        checker.responseHandler(map);
+      }
+    }
+  }
+
+  private static RequestBody getRequestBody(Map<String, Object> map)
+  {
+    RequestBody result = null;
+    try
     {
-        Request request;
-
-        if (access_token == null)
-            request = new Request.Builder().url(url).build();
-        else
-            request = new Request.Builder().url(url).addHeader("Authorization", "Bearer " + access_token).build();
-
-        if (queries.size() > 0)
-            for (Map.Entry<String, Object> next : queries.entrySet())
-            {
-                HttpUrl newUrl = request.url().newBuilder()
-                        .addQueryParameter(next.getKey(), (String) next.getValue())
-                        .build();
-                request = request.newBuilder()
-                        .url(newUrl)
-                        .build();
-            }
-        return request;
+      result = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new ObjectMapper().writeValueAsString(map));
     }
-
-    private static Request POST_request(String url, String access_token, Map<String, Object> prorepty_value)
+    catch (JsonProcessingException e)
     {
-        RequestBody body = getRequestBody(prorepty_value);
-
-        Request.Builder req = new Request.Builder().url(url);
-
-        if (access_token != null)
-            req.addHeader("Authorization", "Bearer " + access_token);
-
-        if (body == null)
-            body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{}");
-
-        req.post(body);
-
-        return req.build();
+      e.printStackTrace();
     }
+    return result;
+  }
 
-    private static String performRequest(Request req, int expectedStatus)
-    {
-        log.info("-> " + req.url().encodedPath());
+  private static Map<String, Object> parse(String body)
+  {
+    return jsonParser.parseMap(body);
+  }
 
-        String body = null;
-        int actualStatusCode = -1;
-        OkHttpClient client = getHttpClient();
-        try (Response resp = client.newCall(req).execute())
-        {
-            assertNotEquals(null, resp.body());
-            body = resp.body().string();
-            actualStatusCode = resp.code();
-            log.info("<- {}\n", body);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        assertEquals(expectedStatus, actualStatusCode);
-        return body;
-    }
+  public static Object getValueFromResponse(Map<String, Object> map, String key)
+  {
+    return map.get(key);
+  }
 
-    private static OkHttpClient getHttpClient()
-    {
-        return new OkHttpClient
-                .Builder()
-                .connectTimeout(120, TimeUnit.SECONDS)
-                .writeTimeout(120, TimeUnit.SECONDS)
-                .readTimeout(120, TimeUnit.SECONDS)
-                .build();
-    }
+  private static Object getErrorFromResponse(Map<String, Object> map)
+  {
+    List<String> next = (List<String>) getValueFromResponse(map, "error-codes");
+    return next.get(0);
+  }
 
-    private static String getResponseAfterPOSTrequest(String access_token, String resource, Map<String, Object> prorepty_value, int expectedStatus)
-    {
-        Request req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, prorepty_value);
+  private UtilTest()
+  {
+  }
 
-        log.info("-> {}", prorepty_value.toString());
-
-        return performRequest(req, expectedStatus);
-    }
-
-    private static String getResponseAfterGETrequest(String access_token, String resource, Map<String, Object> queries, int expectedStatus)
-    {
-        Request req = GET_request(ALL_BEFORE_RESOURCE + resource, access_token, queries);
-
-        String query = queries.entrySet().stream()
-                .map(e -> e.getKey() + "=" + e.getValue())
-                .collect(Collectors.joining("&"));
-        log.info("-> {}", query);
-
-        return performRequest(req, expectedStatus);
-    }
-
-    private static void performAuthTest_ResourceAccessing_ChangeToken(ConsumerTest consumerTest)
-    {
-        //1. Resource accessing
-        performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
-
-        //2. Change Token
-        String old_access_token = consumerTest.access_token;
-        String old_refresh_token = consumerTest.refresh_token;
-        setNewTokens(consumerTest, 200, Refresh);
-        assertNotEquals(old_access_token, consumerTest.access_token);
-        assertEquals(old_refresh_token, consumerTest.refresh_token);
-
-        //3. Resource accessing: old/new token
-        performResourceAccessing(old_access_token, consumerTest.level, BAD_ACCESS_TOKEN);
-        performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
-    }
-
-    public static void performFullAuthTest(ConsumerTest consumerTest)
-    {
-        //1,2,3
-        performAuthTest_ResourceAccessing_ChangeToken(consumerTest);
-
-        //4. Sign Out
-        performSignOut(consumerTest, 200);
-
-        //5. Resource accessing
-        performResourceAccessing(consumerTest.access_token, consumerTest.level, BAD_ACCESS_TOKEN);
-
-        //6. Change Token
-        setNewTokens(consumerTest, 400, Refresh);
-    }
-
-    public static void performResourceAccessing(String access_token, AuthorityLevel consumerLevel, ResourceAccessingType resourceAccessingType)
-    {
-        Map<AuthorityLevel, Map<AuthorityLevel, Integer>> statusMap;
-
-        if (BAD_ACCESS_TOKEN == resourceAccessingType)
-            statusMap = AUTHORITY_to_AUTHORITY_STATUS_BAD_ACCESS_TOKEN;
-        else
-            statusMap = AUTHORITY_to_AUTHORITY_STATUS;
-
-        RESOURCE_AUTHORITY_reqDATA().forEach((resource, next) -> {
-
-            Map.Entry<AuthorityLevel, Map<RequestMethod, Map<String, Object>>> next1 = next.entrySet().iterator().next();
-            Map.Entry<RequestMethod, Map<String, Object>> next2 = next1.getValue().entrySet().iterator().next();
-
-            AuthorityLevel level = next1.getKey();
-            RequestMethod method = next2.getKey();
-            Map<String, Object> reqData = next2.getValue();
-
-            Request req;
-            if (GET == method)
-                req = GET_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
-            else
-                req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
-
-            Map<AuthorityLevel, Integer> statusList = statusMap.get(consumerLevel);
-
-            performRequest(req, statusList.get(level));
-        });
-    }
-
-    public static void check_send_data(RequestMethod method, String resource, String access_token, List<Checker> checkers)
-    {
-        String body;
-        for (Checker checker : checkers)
-        {
-            if (GET == method)
-                body = getResponseAfterGETrequest(access_token, resource, checker.req, checker.expectedStatus);
-            else
-                body = getResponseAfterPOSTrequest(access_token, resource, checker.req, checker.expectedStatus);
-
-            Map<String, Object> map = parse(body);
-
-            assertEquals(checker.expectedResult, getValueFromResponse(map, "success"));
-
-            if (checker.expectedError != null)
-            {
-                assertEquals(checker.expectedError, getErrorFromResponse(map));
-            }
-
-            if (checker.expectedResponseMap != null)
-            {
-                log.info("[expected] = " + Util.getJSONfromObject(checker.expectedResponseMap));
-                checker.responseHandler(map);
-            }
-        }
-    }
-
-    private static RequestBody getRequestBody(Map<String, Object> map)
-    {
-        RequestBody result = null;
-        try
-        {
-            result = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new ObjectMapper().writeValueAsString(map));
-        }
-        catch (JsonProcessingException e)
-        {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    private static Map<String, Object> parse(String body)
-    {
-        return jsonParser.parseMap(body);
-    }
-
-    public static Object getValueFromResponse(Map<String, Object> map, String key)
-    {
-        return map.get(key);
-    }
-
-    private static Object getErrorFromResponse(Map<String, Object> map)
-    {
-        List<String> next = (List<String>) getValueFromResponse(map, "error-codes");
-        return next.get(0);
-    }
-
-    private UtilTest()
-    {
-    }
-
-    private static final Logger log = LoggerFactory.getLogger(UtilTest.class);
-    private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
+  private static final Logger log = LoggerFactory.getLogger(UtilTest.class);
+  private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 }

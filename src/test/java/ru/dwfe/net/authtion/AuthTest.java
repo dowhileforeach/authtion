@@ -21,56 +21,56 @@ import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.TOTAL_A
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AuthTest
 {
-    private static Set<String> access_tokens = new HashSet<>();
+  private static Set<String> access_tokens = new HashSet<>();
 
-    @Test
-    public void _01_USER()
-    {
-        logHead("USER");
+  @Test
+  public void _01_USER()
+  {
+    logHead("USER");
 
-        ConsumerTest consumerTest = USER_consumer;
-        access_tokens.add(consumerTest.access_token);
+    ConsumerTest consumerTest = USER_consumer;
+    access_tokens.add(consumerTest.access_token);
 
-        performFullAuthTest(consumerTest);
-    }
+    performFullAuthTest(consumerTest);
+  }
 
-    @Test
-    public void _02_ADMIN()
-    {
-        logHead("ADMIN");
+  @Test
+  public void _02_ADMIN()
+  {
+    logHead("ADMIN");
 
-        ConsumerTest consumerTest = ADMIN_consumer;
-        access_tokens.add(consumerTest.access_token);
+    ConsumerTest consumerTest = ADMIN_consumer;
+    access_tokens.add(consumerTest.access_token);
 
-        performFullAuthTest(consumerTest);
-    }
+    performFullAuthTest(consumerTest);
+  }
 
-    @Test
-    public void _03_ANY()
-    {
-        logHead("ANY");
+  @Test
+  public void _03_ANY()
+  {
+    logHead("ANY");
 
-        ConsumerTest consumerTest = ANY_consumer;
-        performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
-    }
+    ConsumerTest consumerTest = ANY_consumer;
+    performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
+  }
 
-    @Test
-    public void _04_different_access_tokens()
-    {
-        logHead("list of Access Tokens");
-        log.info("\n\n{}", access_tokens.stream().collect(Collectors.joining("\n")));
+  @Test
+  public void _04_different_access_tokens()
+  {
+    logHead("list of Access Tokens");
+    log.info("\n\n{}", access_tokens.stream().collect(Collectors.joining("\n")));
 
-        assertEquals(TOTAL_ACCESS_TOKEN_COUNT, access_tokens.size());
-    }
+    assertEquals(TOTAL_ACCESS_TOKEN_COUNT, access_tokens.size());
+  }
 
 
-    private static void logHead(String who)
-    {
-        log.info("\n=============================="
-                + "\n  {}"
-                + "\n------------------------------", who);
+  private static void logHead(String who)
+  {
+    log.info("\n=============================="
+            + "\n  {}"
+            + "\n------------------------------", who);
 
-    }
+  }
 
-    private static final Logger log = LoggerFactory.getLogger(AuthTest.class);
+  private static final Logger log = LoggerFactory.getLogger(AuthTest.class);
 }

@@ -11,17 +11,17 @@ import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPasse
 @Component
 public class ScheduledTasks
 {
-    private final static Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+  private final static Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 
-    @Autowired
-    public JavaMailSender emailSender;
+  @Autowired
+  public JavaMailSender emailSender;
 
-    @Autowired
-    MailingWelcomeWhenPasswordWasNotPassedRepository mailingWelcomeWhenPasswordWasNotPassedRepository;
+  @Autowired
+  MailingWelcomeWhenPasswordWasNotPassedRepository mailingWelcomeWhenPasswordWasNotPassedRepository;
 
-    @Scheduled(fixedDelay = 30_000)
-    public void mailingHighPriority()
-    {
+  @Scheduled(fixedDelay = 30_000)
+  public void mailingHighPriority()
+  {
 //        SimpleMailMessage message = new SimpleMailMessage();
 //        message.setTo("pistoletik@gmail.com");
 //        message.setFrom("noreply@dwfe.ru");
@@ -33,11 +33,11 @@ public class ScheduledTasks
 //        mailingWelcomeWhenPasswordWasNotPassedRepository.findAll().forEach(next -> {
 //
 //        });
-    }
+  }
 
-    @Scheduled(fixedDelay = 35_000)
-    public void mailingStandardPriority()
-    {
+  @Scheduled(fixedDelay = 35_000)
+  public void mailingStandardPriority()
+  {
 
-    }
+  }
 }

@@ -11,62 +11,62 @@ import javax.persistence.Table;
 @Table(name = "authorities")
 public class Authority implements GrantedAuthority
 {
-    private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
+  private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
-    @Id
-    private String authority;
+  @Id
+  private String authority;
 
-    private String description;
+  private String description;
 
 
-    public static Authority of(String authorityName)
-    {
-        Authority authority = new Authority();
-        authority.setAuthority(authorityName);
-        return authority;
-    }
+  public static Authority of(String authorityName)
+  {
+    Authority authority = new Authority();
+    authority.setAuthority(authorityName);
+    return authority;
+  }
 
-    @Override
-    public String getAuthority()
-    {
-        return authority;
-    }
+  @Override
+  public String getAuthority()
+  {
+    return authority;
+  }
 
-    public void setAuthority(String authority)
-    {
-        this.authority = authority;
-    }
+  public void setAuthority(String authority)
+  {
+    this.authority = authority;
+  }
 
-    public String getDescription()
-    {
-        return description;
-    }
+  public String getDescription()
+  {
+    return description;
+  }
 
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-        Authority authority = (Authority) o;
+    Authority authority = (Authority) o;
 
-        return this.authority.equals(authority.authority);
-    }
+    return this.authority.equals(authority.authority);
+  }
 
-    @Override
-    public int hashCode()
-    {
-        return authority.hashCode();
-    }
+  @Override
+  public int hashCode()
+  {
+    return authority.hashCode();
+  }
 
-    @Override
-    public String toString()
-    {
-        return "\"" + authority + "\"";
-    }
+  @Override
+  public String toString()
+  {
+    return "\"" + authority + "\"";
+  }
 }

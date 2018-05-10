@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class DevNULL_AuthorizationAuditListener extends AbstractAuthorizationAuditListener
 {
-    @Override
-    public void onApplicationEvent(AbstractAuthorizationEvent event)
-    {
+  @Override
+  public void onApplicationEvent(AbstractAuthorizationEvent event)
+  {
 
-    }
+  }
 }

@@ -13,17 +13,17 @@ import java.util.List;
 @Component
 public class DevNULL_AuditEventRepository implements AuditEventRepository
 {
-    private static final Logger log = LoggerFactory.getLogger(ConsumerService.class);
+  private static final Logger log = LoggerFactory.getLogger(ConsumerService.class);
 
-    @Override
-    public void add(AuditEvent event)
-    {
-        log.error("rised Audit event ==>> {}", event);
-    }
+  @Override
+  public void add(AuditEvent event)
+  {
+    log.error("rised Audit event ==>> {}", event);
+  }
 
-    @Override
-    public List<AuditEvent> find(String principal, Instant after, String type)
-    {
-        return List.of();
-    }
+  @Override
+  public List<AuditEvent> find(String principal, Instant after, String type)
+  {
+    return List.of();
+  }
 }

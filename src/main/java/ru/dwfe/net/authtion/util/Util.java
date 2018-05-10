@@ -11,98 +11,98 @@ import java.util.Map;
 
 public class Util
 {
-    public static Map<String, Object> parse(String body)
+  public static Map<String, Object> parse(String body)
+  {
+    return JsonParserFactory.getJsonParser().parseMap(body);
+  }
+
+  public static Object getValueFromJSON(String body, String fieldName)
+  {
+    return JsonParserFactory.getJsonParser().parseMap(body).get(fieldName);
+  }
+
+  public static Object getValue(Map<String, Object> map, String key)
+  {
+    return map.get(key);
+  }
+
+  public static boolean isDefaultCheckOK(String value, String fieldName, List<String> errorCodes)
+  {
+    boolean result = false;
+
+    if (value != null)
     {
-        return JsonParserFactory.getJsonParser().parseMap(body);
+      if (!value.isEmpty())
+      {
+        result = true;
+      }
+      else errorCodes.add("empty-" + fieldName);
     }
+    else errorCodes.add("missing-" + fieldName);
 
-    public static Object getValueFromJSON(String body, String fieldName)
+    return result;
+  }
+
+  public static boolean isDefaultCheckOK(String value)
+  {
+    return value != null && !value.isEmpty();
+  }
+
+  public static String getResponse(List<String> errorCodes)
+  {
+    if (errorCodes.size() == 0)
+      return "{\"success\": true}";
+    else
+      return getResponseWithErrorCodes(errorCodes);
+  }
+
+  public static String getResponse(List<String> errorCodes, String data)
+  {
+    if (errorCodes.size() == 0)
+      return getResponseSuccessWithData(data);
+    else
+      return getResponseWithErrorCodes(errorCodes);
+  }
+
+  public static String getResponse(List<String> errorCodes, Map<String, Object> data)
+  {
+    if (errorCodes.size() == 0)
+      return getResponseSuccessWithData(getJSONfromObject(data));
+    else
+      return getResponseWithErrorCodes(errorCodes);
+  }
+
+  private static String getResponseSuccessWithData(String data)
+  {
+    return String.format("{\"success\": true, \"data\": %s}", data);
+  }
+
+  private static String getResponseWithErrorCodes(List<String> errorCodes)
+  {
+    return String.format("{\"success\": false, \"error-codes\": %s}", getJSONfromObject(errorCodes));
+  }
+
+  public static String getJSONfromObject(Object value)
+  {
+    String result = "{}";
+    ObjectMapper mapper = new ObjectMapper();
+    try
     {
-        return JsonParserFactory.getJsonParser().parseMap(body).get(fieldName);
+      result = mapper.writeValueAsString(value);
     }
-
-    public static Object getValue(Map<String, Object> map, String key)
+    catch (JsonProcessingException e)
     {
-        return map.get(key);
+      e.printStackTrace();
     }
+    return result;
+  }
 
-    public static boolean isDefaultCheckOK(String value, String fieldName, List<String> errorCodes)
-    {
-        boolean result = false;
+  public static String getUniqStr(int requiredLength)
+  {
+    return new BigInteger(requiredLength * 5, new SecureRandom()).toString(36);
+  }
 
-        if (value != null)
-        {
-            if (!value.isEmpty())
-            {
-                result = true;
-            }
-            else errorCodes.add("empty-" + fieldName);
-        }
-        else errorCodes.add("missing-" + fieldName);
-
-        return result;
-    }
-
-    public static boolean isDefaultCheckOK(String value)
-    {
-        return value != null && !value.isEmpty();
-    }
-
-    public static String getResponse(List<String> errorCodes)
-    {
-        if (errorCodes.size() == 0)
-            return "{\"success\": true}";
-        else
-            return getResponseWithErrorCodes(errorCodes);
-    }
-
-    public static String getResponse(List<String> errorCodes, String data)
-    {
-        if (errorCodes.size() == 0)
-            return getResponseSuccessWithData(data);
-        else
-            return getResponseWithErrorCodes(errorCodes);
-    }
-
-    public static String getResponse(List<String> errorCodes, Map<String, Object> data)
-    {
-        if (errorCodes.size() == 0)
-            return getResponseSuccessWithData(getJSONfromObject(data));
-        else
-            return getResponseWithErrorCodes(errorCodes);
-    }
-
-    private static String getResponseSuccessWithData(String data)
-    {
-        return String.format("{\"success\": true, \"data\": %s}", data);
-    }
-
-    private static String getResponseWithErrorCodes(List<String> errorCodes)
-    {
-        return String.format("{\"success\": false, \"error-codes\": %s}", getJSONfromObject(errorCodes));
-    }
-
-    public static String getJSONfromObject(Object value)
-    {
-        String result = "{}";
-        ObjectMapper mapper = new ObjectMapper();
-        try
-        {
-            result = mapper.writeValueAsString(value);
-        }
-        catch (JsonProcessingException e)
-        {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public static String getUniqStr(int requiredLength)
-    {
-        return new BigInteger(requiredLength * 5, new SecureRandom()).toString(36);
-    }
-
-    private Util()
-    {
-    }
+  private Util()
+  {
+  }
 }
