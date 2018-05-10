@@ -11,15 +11,17 @@ When developing a new API should create a new controller class, e.g. "Controller
 Unfortunately for resource authentication `/oauth/token` "out of box" spring-security-oauth2 does not provide for versioning.<br>
 Therefore, for all API versions is one version `/oauth/token`, which mapped to `/{current API version}/sign-in`.
 
-# Error management
-When you interact with the Authtion server, you may encounter three types of errors:
-1. Real Http error
-2. OAuth2 server error, which look like this:<br>
+# Errors
+When you interact with the Authtion server, you may encounter three types of errors:<br>
+1. OAuth2 server error, which look like this:<br>
 ![OAuth2 server error example](./assets/img/oauth2-server-error-example.png)<br>
 The list of OAuth2 server errors and their mapping is [here](./assets/oauth2-server-errors-mapping.js) (may not include unknown errors to me).
-3. Authtion server error, which look like this:<br>
+2. Authtion server error, which look like this:<br>
 ![Authtion server error example](./assets/img/authtion-server-error-example.png)<br>
 The list of all Authtion server errors and their mapping is [here](./assets/authtion-server-errors-mapping.js).
+
+# Email alerts
+![ServiceAlerts](./assets/img/ServiceAlerts.png)<br>
 
 # Automated TESTs
 See `test\java\ru.dwfe.authtion` classes.
@@ -58,9 +60,6 @@ curl http://localhost:8080/v1/check-consumer-email -H "Content-Type: application
 curl http://localhost:8080/v1/create-consumer -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"id": "user"}'
 ...
 ```
-
-## Email alerts service
-![ServiceAlerts](./assets/img/ServiceAlerts.png)<br>
 
 ## ConsumerPassword_CRU_Test
 

@@ -1,7 +1,6 @@
 authtionServerErrorCodesMap = {
     'confirm-key-for-another-email': 'Confirm key for another email',
     'confirm-key-not-exist': 'Confirm key does not exist',
-    'error-google-captcha-gateway': 'Captcha-check gateway error. Try again later',
     'email-not-exist': 'Email does not exist',
     'email-present-in-database': 'Email is present in database',
     'empty-confirm-key': 'Confirm key is empty',
@@ -10,6 +9,7 @@ authtionServerErrorCodesMap = {
     'empty-newpass': 'New password is empty',
     'empty-oldpass': 'Old password is empty',
     'empty-password': 'Password is empty',
+    'error-google-captcha-gateway': 'Captcha-check gateway error. Try again later',
     'exceeded-max50-email-length': 'Email length must be <= 50',
     'exceeded-min6-or-max55-newpass-length': 'New password length >=6 and <=55',
     'exceeded-min6-or-max55-password-length': 'Password length >=6 and <=55',
