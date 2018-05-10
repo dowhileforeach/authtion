@@ -22,6 +22,10 @@ import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPasse
 import ru.dwfe.net.authtion.service.ConsumerService;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import static ru.dwfe.net.authtion.Global.*;
@@ -88,18 +92,29 @@ public class ControllerAuthtionV1
             String url = String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s",
                     captchaSecret, googleResponse);
 
-            ResponseEntity<String> resp = restTemplate.exchange(url, HttpMethod.POST, null, String.class);
-            if (resp.getStatusCodeValue() == 200)
+            FutureTask<ResponseEntity<String>> taskForExchangeWithGoogle =
+                    new FutureTask<>(() -> restTemplate.exchange(url, HttpMethod.POST, null, String.class));
+            new Thread(taskForExchangeWithGoogle).start();
+
+            try
             {
-                Boolean success = (Boolean) getValueFromJSON(resp.getBody(), "success");
-                if (!success)
+                ResponseEntity<String> response = taskForExchangeWithGoogle.get(7, TimeUnit.SECONDS);
+                if (response.getStatusCodeValue() == 200)
                 {
-                    errorCodes.add("attention-robot-detected");
+                    Boolean success = (Boolean) getValueFromJSON(response.getBody(), "success");
+                    if (!success)
+                    {
+                        errorCodes.add("attention-robot-detected");
+                    }
+                }
+                else
+                {
+                    errorCodes.add("failure-when-connecting-to-google");
                 }
             }
-            else
+            catch (InterruptedException | ExecutionException | TimeoutException e)
             {
-                errorCodes.add("failure-when-connecting-to-google");
+                errorCodes.add("google-captcha-gateway-timeout");
             }
         }
         return getResponse(errorCodes);
