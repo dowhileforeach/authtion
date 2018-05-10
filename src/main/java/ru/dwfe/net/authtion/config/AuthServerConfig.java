@@ -56,7 +56,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
                 .secret(client_PASSWORD_TRUSTED)
                 .scopes("all")
                 .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(60 * 60 * 24 * 30) // 30 days
+                .accessTokenValiditySeconds(60 * 60 * 24 * 20) // 20 days
 
                 .and()
 
