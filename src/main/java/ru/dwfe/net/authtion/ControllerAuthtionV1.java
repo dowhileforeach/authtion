@@ -103,18 +103,14 @@ public class ControllerAuthtionV1
                 {
                     Boolean success = (Boolean) getValueFromJSON(response.getBody(), "success");
                     if (!success)
-                    {
-                        errorCodes.add("attention-robot-detected");
-                    }
+                        errorCodes.add("google-captcha-detected-robot");
                 }
                 else
-                {
-                    errorCodes.add("failure-when-connecting-to-google");
-                }
+                    errorCodes.add("error-google-captcha-gateway");
             }
             catch (InterruptedException | ExecutionException | TimeoutException e)
             {
-                errorCodes.add("google-captcha-gateway-timeout");
+                errorCodes.add("timeout-google-captcha-gateway");
             }
         }
         return getResponse(errorCodes);
