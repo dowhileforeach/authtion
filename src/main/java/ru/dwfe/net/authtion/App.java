@@ -12,7 +12,8 @@ import java.util.TimeZone;
 public class App
 {
   @PostConstruct
-  void started() {
+  void started()
+  {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
   }
 

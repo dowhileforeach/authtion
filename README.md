@@ -20,8 +20,9 @@ The list of OAuth2 server errors and their mapping is [here](./assets/oauth2-ser
 ![Authtion server error example](./assets/img/authtion-server-error-example.png)<br>
 The list of all Authtion server errors and their mapping is [here](./assets/authtion-server-errors-mapping.js).
 
-# Time
+# Date and Time
 The Authtion server is set to time zone UTC.<br>
+![Authtion is set to UTC](./assets/img/date-time.png)<br>
 Also, some Authtion database table fields are automatically assigned directly by the database. Therefore, to work correctly with time, you must explicitly set the time zone for mysqld to UTC. This can be done in [several ways](https://stackoverflow.com/questions/930900/how-do-i-set-the-time-zone-of-mysql#19069310).
 
 # Email alerts
