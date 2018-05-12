@@ -87,7 +87,9 @@ public class Variables_for_ConsumerPassword_CRU_Test
                   " \"credentialsNonExpired\": true,\n" +
                   " \"accountNonLocked\": true,\n" +
                   " \"enabled\": true,\n" +
-                  " \"emailConfirmed\": true\n" +
+                  " \"emailConfirmed\": true,\n" +
+                  " \"createdOn\": " + "\"date\",\n" +
+                  " \"updatedOn\": " + "\"date\"\n" +
                   "}"))
   );
 

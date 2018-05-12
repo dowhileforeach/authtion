@@ -14,7 +14,12 @@ public class Checker
 
   public void responseHandler(Map<String, Object> map)
   {
-    Object details = UtilTest.getValueFromResponse(map, "data");
+    Map<String, Object> details = (Map<String, Object>) UtilTest.getValueFromResponse(map, "data");
+    if (details.containsKey("createdOn"))
+      details.put("createdOn", "date");
+    if (details.containsKey("updatedOn"))
+      details.put("updatedOn", "date");
+
     assertTrue(details.equals(expectedResponseMap));
   }
 

@@ -20,8 +20,8 @@ CREATE TABLE `consumers` (
   `account_non_locked`      TINYINT(1)                              NOT NULL   DEFAULT '1',
   `enabled`                 TINYINT(1)                              NOT NULL   DEFAULT '1',
   `email_confirmed`         TINYINT(1)                              NOT NULL   DEFAULT '0',
-  `created`                 DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
-  `updated`                 DATETIME                                           DEFAULT CURRENT_TIMESTAMP
+  `created_on`              DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
+  `updated_on`              DATETIME                                           DEFAULT CURRENT_TIMESTAMP
   ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `consumers_id_uindex` (`id`),
@@ -68,15 +68,15 @@ CREATE TABLE `consumer_authority` (
 
 DROP TABLE IF EXISTS `mailing_welcome_when_password_was_not_passed`;
 CREATE TABLE `mailing_welcome_when_password_was_not_passed` (
-  `created`  DATETIME                               NOT NULL   DEFAULT CURRENT_TIMESTAMP,
-  `consumer` VARCHAR(50)
-             COLLATE utf8mb4_unicode_ci             NOT NULL,
-  `password` VARCHAR(60) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sended`   TINYINT(1)                             NOT NULL   DEFAULT '0',
-  `updated`  DATETIME                                          DEFAULT CURRENT_TIMESTAMP
+  `created_on` DATETIME                               NOT NULL   DEFAULT CURRENT_TIMESTAMP,
+  `consumer`   VARCHAR(50)
+               COLLATE utf8mb4_unicode_ci             NOT NULL,
+  `password`   VARCHAR(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sended`     TINYINT(1)                             NOT NULL   DEFAULT '0',
+  `updated_on` DATETIME                                          DEFAULT CURRENT_TIMESTAMP
   ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`created`, `consumer`),
-  UNIQUE KEY `mailing_welcome_when_password_was_not_passed_consumer_uindex` (`created`, `consumer`),
+  PRIMARY KEY (`created_on`, `consumer`),
+  UNIQUE KEY `mailing_welcome_when_password_was_not_passed_consumer_uindex` (`created_on`, `consumer`),
   CONSTRAINT `mailing_welcome_when_password_was_not_passed_consumers_id_fk` FOREIGN KEY (`consumer`) REFERENCES `consumers` (`email`)
     ON DELETE CASCADE
 )
@@ -91,8 +91,8 @@ CREATE TABLE `mailing_confirm_email` (
                  COLLATE utf8mb4_unicode_ci             NOT NULL,
   `confirm_key`  VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `already_sent` TINYINT(1)                             NOT NULL DEFAULT '0',
-  `created`      DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`      DATETIME                                        DEFAULT CURRENT_TIMESTAMP
+  `created_on`   DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_on`   DATETIME                                        DEFAULT CURRENT_TIMESTAMP
   ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`consumer`),
   UNIQUE KEY `mailing_confirm_email_consumer_uindex` (`consumer`),
@@ -110,8 +110,8 @@ CREATE TABLE `mailing_restore_password` (
                  COLLATE utf8mb4_unicode_ci             NOT NULL,
   `confirm_key`  VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `already_sent` TINYINT(1)                             NOT NULL DEFAULT '0',
-  `created`      DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`      DATETIME                                        DEFAULT CURRENT_TIMESTAMP
+  `created_on`   DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_on`   DATETIME                                        DEFAULT CURRENT_TIMESTAMP
   ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`consumer`),
   UNIQUE KEY `mailing_restore_password_consumer_uindex` (`consumer`),

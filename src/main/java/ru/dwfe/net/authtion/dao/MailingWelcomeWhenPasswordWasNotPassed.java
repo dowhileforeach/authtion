@@ -3,6 +3,7 @@ package ru.dwfe.net.authtion.dao;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mailing_welcome_when_password_was_not_passed")

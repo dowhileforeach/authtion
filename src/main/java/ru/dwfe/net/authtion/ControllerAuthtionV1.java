@@ -211,6 +211,7 @@ public class ControllerAuthtionV1
   public String getConsumerData(OAuth2Authentication authentication)
   {
     List<String> errorCodes = new ArrayList<>();
+    System.out.println(authentication.getPrincipal().toString());
     return getResponse(errorCodes, authentication.getPrincipal().toString());
   }
 

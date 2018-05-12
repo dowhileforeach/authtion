@@ -9,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.dwfe.net.authtion.service.ConsumerService;
+import ru.dwfe.net.authtion.util.Util;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -48,6 +50,10 @@ public class Consumer implements UserDetails, CredentialsContainer
   private boolean enabled;
   private boolean emailConfirmed;
 
+  @Column(updatable = false, insertable = false)
+  private LocalDateTime createdOn;
+  @Column(updatable = false, insertable = false)
+  private LocalDateTime updatedOn;
 
     /*
         IMPLEMENTATION interfaces
@@ -211,7 +217,17 @@ public class Consumer implements UserDetails, CredentialsContainer
     this.emailConfirmed = emailConfirmed;
   }
 
-    /*
+  public LocalDateTime getCreatedOn()
+  {
+    return createdOn;
+  }
+
+  public LocalDateTime getUpdatedOn()
+  {
+    return updatedOn;
+  }
+
+  /*
         equals, hashCode, toString
     */
 
@@ -247,7 +263,9 @@ public class Consumer implements UserDetails, CredentialsContainer
             " \"credentialsNonExpired\": " + credentialsNonExpired + ",\n" +
             " \"accountNonLocked\": " + accountNonLocked + ",\n" +
             " \"enabled\": " + enabled + ",\n" +
-            " \"emailConfirmed\": " + emailConfirmed + "\n" +
+            " \"emailConfirmed\": " + emailConfirmed + ",\n" +
+            " \"createdOn\": " + "\"" + Util.formatDateTime(createdOn) + "\",\n" +
+            " \"updatedOn\": " + "\"" + Util.formatDateTime(updatedOn) + "\"\n" +
             "}";
   }
 

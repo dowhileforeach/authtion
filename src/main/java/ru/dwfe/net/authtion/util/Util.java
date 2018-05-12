@@ -6,12 +6,16 @@ import org.springframework.boot.json.JsonParserFactory;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
 public class Util
 {
+  private static final DateTimeFormatter FORMATTER_DATE_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
   public static Map<String, Object> parse(String body)
   {
     return JsonParserFactory.getJsonParser().parseMap(body);
@@ -122,6 +126,11 @@ public class Util
 
     byte[] bytes = new BigInteger((requiredLength + 2) * 5, new SecureRandom()).toByteArray();
     return new String(Base64.getEncoder().encode(bytes), 1, requiredLength);
+  }
+
+  public static String formatDateTime(LocalDateTime localDateTime)
+  {
+    return localDateTime.format(FORMATTER_DATE_TIME);
   }
 
   private Util()
