@@ -14,8 +14,6 @@ import java.util.Map;
 
 public class Util
 {
-  private static final DateTimeFormatter FORMATTER_DATE_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
   public static Map<String, Object> parse(String body)
   {
     return JsonParserFactory.getJsonParser().parseMap(body);
@@ -130,7 +128,19 @@ public class Util
 
   public static String formatDateTime(LocalDateTime localDateTime)
   {
-    return localDateTime.format(FORMATTER_DATE_TIME);
+    // ISO dates can be written with added hours, minutes, and seconds (YYYY-MM-DDTHH:MM:SSZ):
+    //   "2015-03-25T12:00:00Z"
+    // Date and time is separated with a capital T.
+    // UTC time is defined with a capital letter Z.
+    //
+    // https://docs.oracle.com/javase/10/docs/api/java/time/format/DateTimeFormatter.html#predefined
+    // I can't use ISO_INSTANT formmatter becouse LocalDateTime not contains info about time zone.
+    return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z";
+
+    // If you want to modify the time relative to UTC, remove the Z and add +HH:MM or -HH:MM instead:
+    //   "2015-03-25T12:00:00-06:30"
+    // But I strongly do not recommend doing this, otherwise you need to consider changing the time zone
+    // in other places of this project
   }
 
   private Util()

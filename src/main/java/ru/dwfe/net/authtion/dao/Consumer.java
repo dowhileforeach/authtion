@@ -52,6 +52,7 @@ public class Consumer implements UserDetails, CredentialsContainer
 
   @Column(updatable = false, insertable = false)
   private LocalDateTime createdOn;
+
   @Column(updatable = false, insertable = false)
   private LocalDateTime updatedOn;
 
