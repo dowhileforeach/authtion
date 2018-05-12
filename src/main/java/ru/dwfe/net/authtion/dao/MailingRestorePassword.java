@@ -21,7 +21,7 @@ public class MailingRestorePassword
   {
     MailingRestorePassword confirm = new MailingRestorePassword();
     confirm.setConsumer(email);
-    confirm.setConfirmKey(Util.getUniqStr(30));
+    confirm.setConfirmKey(Util.getUniqStrBase36(30));
     confirm.setAlreadySent(false);
     return confirm;
   }

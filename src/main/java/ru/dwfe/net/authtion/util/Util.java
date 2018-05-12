@@ -6,6 +6,7 @@ import org.springframework.boot.json.JsonParserFactory;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -97,9 +98,30 @@ public class Util
     return result;
   }
 
-  public static String getUniqStr(int requiredLength)
+  public static String getUniqStrBase36(int requiredLength)
   {
     return new BigInteger(requiredLength * 5, new SecureRandom()).toString(36);
+  }
+
+  public static String getUniqStrBase64(int requiredLength)
+  {
+    // (requiredLength + 2) and new String(..., 1,...)
+    // becouse first letter repeated:
+    //    AfhFTjpSSg==
+    //    AfhFTjpSSg==
+    //    Aj3ibDty2g==
+    //    AqXQoW3d1w==
+    //    A42HUbmWPw==
+    //    At0DXvTA/Q==
+    //
+    // new String(..., ..., requiredLength)
+    // becouse encoder adds postfix "=="
+    //
+    // SUMMARY:
+    // X requiredLength ==
+
+    byte[] bytes = new BigInteger((requiredLength + 2) * 5, new SecureRandom()).toByteArray();
+    return new String(Base64.getEncoder().encode(bytes), 1, requiredLength);
   }
 
   private Util()

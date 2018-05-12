@@ -13,7 +13,7 @@ public class Variables_Global
   /*
       Clents to get access to resource: /sign-in - for operations 'Sign In' and 'Token refreshing'
   */
-  public static final Client client_TRUSTED = Client.of(Global.client_ID_TRUSTED, Global.client_PASSWORD_TRUSTED, 864_000, 180);
+  public static final Client client_TRUSTED = Client.of(Global.client_ID_TRUSTED, Global.client_PASSWORD_TRUSTED, 1_728_000, 180);
   public static final Client client_UNTRUSTED = Client.of(Global.client_ID_UNTRUSTED, Global.client_PASSWORD_UNTRUSTED, 180, 0);
 
   /*

@@ -75,8 +75,8 @@ CREATE TABLE `mailing_welcome_when_password_was_not_passed` (
   `sended`   TINYINT(1)                             NOT NULL   DEFAULT '0',
   `updated`  DATETIME                                          DEFAULT CURRENT_TIMESTAMP
   ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`consumer`, `created`),
-  UNIQUE KEY `mailing_welcome_when_password_was_not_passed_consumer_uindex` (`consumer`, `created`),
+  PRIMARY KEY (`created`, `consumer`),
+  UNIQUE KEY `mailing_welcome_when_password_was_not_passed_consumer_uindex` (`created`, `consumer`),
   CONSTRAINT `mailing_welcome_when_password_was_not_passed_consumers_id_fk` FOREIGN KEY (`consumer`) REFERENCES `consumers` (`email`)
     ON DELETE CASCADE
 )

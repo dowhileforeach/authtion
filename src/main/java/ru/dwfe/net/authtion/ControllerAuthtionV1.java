@@ -127,7 +127,7 @@ public class ControllerAuthtionV1
     if (canUseEmail(consumer.getEmail(), consumerService, errorCodes))
       if (password == null)
       { //if password wasn't passed
-        automaticallyGeneratedPassword = getUniqStr(10);
+        automaticallyGeneratedPassword = getUniqStrBase64(10);
         password = automaticallyGeneratedPassword;
       }
       else //if password was passed
