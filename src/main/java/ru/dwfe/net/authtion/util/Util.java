@@ -140,7 +140,8 @@ public class Util
     // If you want to modify the time relative to UTC, remove the Z and add +HH:MM or -HH:MM instead:
     //   "2015-03-25T12:00:00-06:30"
     // But I strongly do not recommend doing this, otherwise you need to consider changing the time zone
-    // in other places of this project
+    // in other places of this project: https://github.com/dowhileforeach/authtion#date-and-time
+    // and don't forget about the time zone of MySQL
   }
 
   private Util()
