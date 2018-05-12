@@ -68,14 +68,15 @@ CREATE TABLE `consumer_authority` (
 
 DROP TABLE IF EXISTS `mailing_welcome_when_password_was_not_passed`;
 CREATE TABLE `mailing_welcome_when_password_was_not_passed` (
+  `created`  DATETIME                               NOT NULL   DEFAULT CURRENT_TIMESTAMP,
   `consumer` VARCHAR(50)
              COLLATE utf8mb4_unicode_ci             NOT NULL,
   `password` VARCHAR(60) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created`  DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated`  DATETIME                                        DEFAULT CURRENT_TIMESTAMP
+  `sended`   TINYINT(1)                             NOT NULL   DEFAULT '0',
+  `updated`  DATETIME                                          DEFAULT CURRENT_TIMESTAMP
   ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`consumer`),
-  UNIQUE KEY `mailing_welcome_when_password_was_not_passed_consumer_uindex` (`consumer`),
+  PRIMARY KEY (`consumer`, `created`),
+  UNIQUE KEY `mailing_welcome_when_password_was_not_passed_consumer_uindex` (`consumer`, `created`),
   CONSTRAINT `mailing_welcome_when_password_was_not_passed_consumers_id_fk` FOREIGN KEY (`consumer`) REFERENCES `consumers` (`email`)
     ON DELETE CASCADE
 )

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPassedRepository;
 
 @Component
-public class ScheduledTasks
+public class ScheduleTasks
 {
-  private final static Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+  private final static Logger log = LoggerFactory.getLogger(ScheduleTasks.class);
 
   @Autowired
   public JavaMailSender emailSender;

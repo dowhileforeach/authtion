@@ -138,7 +138,7 @@ public class ControllerAuthtionV1
       setNewPassword(consumer, password);
       prepareNewConsumer(consumer);
 
-      //put consumer to the database
+      //put consumer into the database
       consumerService.save(consumer);
 
       if (automaticallyGeneratedPassword.isEmpty())
