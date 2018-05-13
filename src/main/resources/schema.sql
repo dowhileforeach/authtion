@@ -68,16 +68,17 @@ CREATE TABLE `consumer_authority` (
 
 DROP TABLE IF EXISTS `mailing_welcome_when_password_was_not_passed`;
 CREATE TABLE `mailing_welcome_when_password_was_not_passed` (
-  `created_on` DATETIME                               NOT NULL   DEFAULT CURRENT_TIMESTAMP,
-  `consumer`   VARCHAR(50)
-               COLLATE utf8mb4_unicode_ci             NOT NULL,
-  `password`   VARCHAR(60) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sended`     TINYINT(1)                             NOT NULL   DEFAULT '0',
-  `updated_on` DATETIME                                          DEFAULT CURRENT_TIMESTAMP
+  `created_on`           DATETIME                               NOT NULL   DEFAULT CURRENT_TIMESTAMP,
+  `email`                VARCHAR(50)
+                         COLLATE utf8mb4_unicode_ci             NOT NULL,
+  `password`             VARCHAR(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sended`               TINYINT(1)                             NOT NULL   DEFAULT '0',
+  `max_attempts_reached` TINYINT(1)                             NOT NULL   DEFAULT '0',
+  `updated_on`           DATETIME                                          DEFAULT CURRENT_TIMESTAMP
   ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`created_on`, `consumer`),
-  UNIQUE KEY `mailing_welcome_when_password_was_not_passed_consumer_uindex` (`created_on`, `consumer`),
-  CONSTRAINT `mailing_welcome_when_password_was_not_passed_consumers_id_fk` FOREIGN KEY (`consumer`) REFERENCES `consumers` (`email`)
+  PRIMARY KEY (`email`),
+  UNIQUE KEY `mailing_welcome_when_password_was_not_passed_consumer_uindex` (`email`),
+  CONSTRAINT `mailing_welcome_when_password_was_not_passed_consumers_id_fk` FOREIGN KEY (`email`) REFERENCES `consumers` (`email`)
     ON DELETE CASCADE
 )
   ENGINE = InnoDB
