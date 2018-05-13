@@ -27,7 +27,7 @@ public class ScheduleTasks
   private static final ConcurrentSkipListSet<MailingWelcomeWhenPasswordWasNotPassed> poolOfMailingWelcomeWhenPasswordWasNotPassed = new ConcurrentSkipListSet<>();
   private static final ConcurrentSkipListSet<MailingWelcomeWhenPasswordWasNotPassed> mailingWelcomeWhenPasswordWasNotPassedToDB = new ConcurrentSkipListSet<>();
 
-  @Scheduled(fixedDelay = 60_000)
+  @Scheduled(fixedRate = 60_000, initialDelay = 60_000)
   public void collectMailingTasksFromDatabase()
   {
     poolOfMailingWelcomeWhenPasswordWasNotPassed.addAll(mailingWelcomeWhenPasswordWasNotPassedRepository.searchByNotSended());
@@ -42,7 +42,7 @@ public class ScheduleTasks
 
   }
 
-  @Scheduled(fixedDelay = 45_000)
+  @Scheduled(fixedDelay = 45_000, initialDelay = 60_000)
   public void mailingWelcomeWhenPasswordWasNotPassed()
   {
     List<MailingWelcomeWhenPasswordWasNotPassed> toDB = new ArrayList<>();
