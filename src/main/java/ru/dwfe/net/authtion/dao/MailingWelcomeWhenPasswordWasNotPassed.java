@@ -83,6 +83,16 @@ public class MailingWelcomeWhenPasswordWasNotPassed implements Comparable<Mailin
     return updatedOn;
   }
 
+  public AtomicInteger getAttempt()
+  {
+    return attempt;
+  }
+
+  public void clearPassword()
+  {
+    password = "";
+  }
+
   @Override
   public boolean equals(Object o)
   {

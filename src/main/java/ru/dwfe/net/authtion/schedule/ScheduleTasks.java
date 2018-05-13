@@ -55,15 +55,13 @@ public class ScheduleTasks
         {
           //      сформировать текст
           //         отправить письмо
-          //         удалить пароль
-          //         пометить, sended = true
+          next.clearPassword();
+          next.setSended(true);
         }
         catch (Throwable e)
         {
-          //         инкрементировать попытку
-          //         ЕСЛИ количество попыток >= max попыток
-          //            пометить, maxAttemptsReached = true
-          //         КонецЕсли
+          if (next.getAttempt().incrementAndGet() >= 3)
+            next.setMaxAttemptsReached(true);
         }
     });
 
