@@ -48,27 +48,29 @@ public class ScheduleTasks
     List<MailingWelcomeWhenPasswordWasNotPassed> toDB = new ArrayList<>();
     poolOfMailingWelcomeWhenPasswordWasNotPassed.forEach(next -> {
 
-      // ЦИКЛ начало
-      //   ЕСЛИ maxAttemptsReached = false И sended = false
-      //      сформировать текст
-      //      ПОПЫТКА
-      //         отправить письмо
-      //         удалить пароль
-      //         пометить, sended = true
-      //      ИСКЛЮЧЕНИЕ
-      //         инкрементировать попытку
-      //         ЕСЛИ количество попыток >= max попыток
-      //            пометить, maxAttemptsReached = true
-      //         КонецЕсли
-      //      КонецПопытки
-      //   ИНАЧЕ
-      //      удалить next из пула отправки
-      //      добавить next в список для обновления
-      //   КонецЕсли
-      // КонецЦикла
+      if (next.isMaxAttemptsReached() || next.isSended())
+        toDB.add(next);
+      else
+        try
+        {
+          //      сформировать текст
+          //         отправить письмо
+          //         удалить пароль
+          //         пометить, sended = true
+        }
+        catch (Throwable e)
+        {
+          //         инкрементировать попытку
+          //         ЕСЛИ количество попыток >= max попыток
+          //            пометить, maxAttemptsReached = true
+          //         КонецЕсли
+        }
     });
 
     if (toDB.size() > 0)
+    {
       mailingWelcomeWhenPasswordWasNotPassedRepository.saveAll(toDB);
+      poolOfMailingWelcomeWhenPasswordWasNotPassed.removeAll(toDB);
+    }
   }
 }
