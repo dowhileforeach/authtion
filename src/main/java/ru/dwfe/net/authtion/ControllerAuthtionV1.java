@@ -119,19 +119,21 @@ public class ControllerAuthtionV1
 
     if (canUseEmail(consumer.getEmail(), consumerService, errorCodes))
       if (password == null)
-      { //if password wasn't passed
+      { // if password wasn't passed
         automaticallyGeneratedPassword = getUniqStrBase64(10);
         password = automaticallyGeneratedPassword;
       }
-      else //if password was passed
+      else // if password was passed
         canUsePassword(password, "password", errorCodes);
 
     if (errorCodes.size() == 0)
-    {   //prepare
+    {   // prepare
       setNewPassword(consumer, password);
       prepareNewConsumer(consumer);
 
-      //put consumer into the database
+      consumer.setEmailConfirmed(!automaticallyGeneratedPassword.isEmpty());
+
+      // put consumer into the DataBase
       consumerService.save(consumer);
 
       if (automaticallyGeneratedPassword.isEmpty())
@@ -139,10 +141,8 @@ public class ControllerAuthtionV1
         mailingRepository.save(Mailing.of(1, consumer.getEmail()));
       }
       else
-      { //if the password was not passed, then it is necessary to send an automatically generated password to the new consumer
+      { // if the password was not passed, then it is necessary to send an automatically generated password to the new consumer
         mailingRepository.save(Mailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
-
-        //TODO: set Consumer field 'email_confirmed' to true
       }
     }
     return getResponse(errorCodes);
@@ -261,9 +261,9 @@ public class ControllerAuthtionV1
       {
         Mailing confirm = confirmByKey.get();
 
-        //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
+        // the Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
         Consumer consumer = consumerService.findByEmail(confirm.getEmail()).get();
-        consumer.setEmailConfirmed(true); //Now email is confirmed
+        consumer.setEmailConfirmed(true); // email now confirmed
         consumerService.save(consumer);
 
         confirm.clear();
@@ -367,7 +367,7 @@ public class ControllerAuthtionV1
         Mailing confirm = confirmByKey.get();
         if (emailValue.equals(confirm.getEmail()))
         {
-          //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
+          // the Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
           Consumer consumer = consumerService.findByEmail(emailValue).get();
           setNewPassword(consumer, newpassValue);
           consumerService.save(consumer);

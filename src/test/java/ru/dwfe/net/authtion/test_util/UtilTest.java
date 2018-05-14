@@ -279,7 +279,6 @@ public class UtilTest
 
     RESOURCE_AUTHORITY_reqDATA().forEach((resource, next) -> {
 
-
       try
       {
         TimeUnit.MILLISECONDS.sleep(30);
