@@ -20,6 +20,7 @@ import ru.dwfe.net.authtion.test_util.ConsumerTest;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -248,23 +249,37 @@ public class ConsumerPassword_CRU_Test
     assertFalse(mailing.isSended());
     assertFalse(mailing.isMaxAttemptsReached());
     assertTrue(mailing.getData().length() >= 28);
+
+    try
+    {
+      TimeUnit.SECONDS.sleep(15);
+      log.info("Please wait 15 seconds...");
+    }
+    catch (InterruptedException ignored)
+    {
+    }
+
+    confirmByEmail = mailingRepository.findByEmail(consumer.username);
+    mailing = confirmByEmail.get(0);
+    assertTrue(mailing.isSended());
+    assertFalse(mailing.isMaxAttemptsReached());
   }
 
   @Test
   public void _08_confirmConsumerEmail()
   {
-//    logHead("Confirm Email");
-//
-//    List<Mailing> confirmByEmail = mailingRepository.findByEmail(EMAIL_NEW_Consumer);
-//    assertEquals(1, confirmByEmail.size());
-//    String confirmKey = confirmByEmail.get(0).getData();
-//
-//    assertFalse(getConsumerByEmail(EMAIL_NEW_Consumer).get().isEmailConfirmed());
-//
-//    check_send_data(GET, resource_confirmConsumerEmail, null, checkers_for_confirmConsumerEmail(confirmKey));
-//
-//    assertEquals(0, mailingRepository.findByEmail(EMAIL_NEW_Consumer).size());
-//    assertTrue(getConsumerByEmail(EMAIL_NEW_Consumer).get().isEmailConfirmed());
+    logHead("Confirm Email");
+
+    List<Mailing> confirmByEmail = mailingRepository.findByEmail(EMAIL_NEW_Consumer);
+    assertEquals(1, confirmByEmail.size());
+    String confirmKey = confirmByEmail.get(0).getData();
+
+    assertFalse(getConsumerByEmail(EMAIL_NEW_Consumer).get().isEmailConfirmed());
+
+    check_send_data(GET, resource_confirmConsumerEmail, null, checkers_for_confirmConsumerEmail(confirmKey));
+
+    assertEquals(0, mailingRepository.findByEmail(EMAIL_NEW_Consumer).size());
+    assertTrue(getConsumerByEmail(EMAIL_NEW_Consumer).get().isEmailConfirmed());
   }
 
   @Test
