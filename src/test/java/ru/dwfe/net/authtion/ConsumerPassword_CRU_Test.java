@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.test_util.AuthorityLevel.USER;
@@ -210,38 +211,43 @@ public class ConsumerPassword_CRU_Test
   @Test
   public void _05_getConsumerData()
   {
-//    logHead("Consumer Data");
-//    check_send_data(GET, resource_getConsumerData, USER_consumer.access_token, checkers_for_getConsumerData);
+    logHead("Consumer Data");
+    check_send_data(GET, resource_getConsumerData, USER_consumer.access_token, checkers_for_getConsumerData);
   }
 
   @Test
   public void _06_publicConsumer()
   {
-//    logHead("Public Consumer");
-//    check_send_data(GET, resource_publicConsumer + "/9", ANY_consumer.access_token, checkers_for_publicConsumer_9);
-//    check_send_data(GET, resource_publicConsumer + "/9", USER_consumer.access_token, checkers_for_publicConsumer_9);
-//    check_send_data(GET, resource_publicConsumer + "/9", ADMIN_consumer.access_token, checkers_for_publicConsumer_9);
-//    check_send_data(GET, resource_publicConsumer + "/1", ANY_consumer.access_token, checkers_for_publicConsumer_1);
-//    check_send_data(GET, resource_publicConsumer + "/1", USER_consumer.access_token, checkers_for_publicConsumer_1);
-//    check_send_data(GET, resource_publicConsumer + "/1", ADMIN_consumer.access_token, checkers_for_publicConsumer_1);
+    logHead("Public Consumer");
+    check_send_data(GET, resource_publicConsumer + "/9", ANY_consumer.access_token, checkers_for_publicConsumer_9);
+    check_send_data(GET, resource_publicConsumer + "/9", USER_consumer.access_token, checkers_for_publicConsumer_9);
+    check_send_data(GET, resource_publicConsumer + "/9", ADMIN_consumer.access_token, checkers_for_publicConsumer_9);
+    check_send_data(GET, resource_publicConsumer + "/1", ANY_consumer.access_token, checkers_for_publicConsumer_1);
+    check_send_data(GET, resource_publicConsumer + "/1", USER_consumer.access_token, checkers_for_publicConsumer_1);
+    check_send_data(GET, resource_publicConsumer + "/1", ADMIN_consumer.access_token, checkers_for_publicConsumer_1);
   }
 
   @Test
   public void _07_requestConfirmConsumerEmail()
   {
-//    logHead("Request Confirm Email");
-//
-//    ConsumerTest consumerTest = ConsumerTest.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED, 200);
-//
-//    List<Mailing> confirmByEmail = mailingRepository.findByEmail(consumerTest.username);
-//    assertEquals(0, confirmByEmail.size());
-//
-//    check_send_data(GET, resource_reqConfirmConsumerEmail, consumerTest.access_token, checkers_for_reqConfirmConsumerEmail);
-//
-//    confirmByEmail = mailingRepository.findByEmail(consumerTest.username);
-//    assertEquals(1, confirmByEmail.size());
-//    assertFalse(confirmByEmail.get(0).isSended());
-//    assertTrue(confirmByEmail.get(0).getData().length() >= 28);
+    logHead("Request Confirm Email");
+
+    mailingRepository.deleteAll();
+    ConsumerTest consumer = ConsumerTest.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED, 200);
+
+    List<Mailing> confirmByEmail = mailingRepository.findByEmail(consumer.username);
+    assertEquals(0, confirmByEmail.size());
+
+    check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token, checkers_for_reqConfirmConsumerEmail);
+
+    confirmByEmail = mailingRepository.findByEmail(consumer.username);
+    assertEquals(1, confirmByEmail.size());
+
+    Mailing mailing = confirmByEmail.get(0);
+    assertEquals(3, mailing.getType());
+    assertFalse(mailing.isSended());
+    assertFalse(mailing.isMaxAttemptsReached());
+    assertTrue(mailing.getData().length() >= 28);
   }
 
   @Test

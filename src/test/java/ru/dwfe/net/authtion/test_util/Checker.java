@@ -2,6 +2,7 @@ package ru.dwfe.net.authtion.test_util;
 
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class Checker
@@ -20,7 +21,7 @@ public class Checker
     if (details.containsKey("updatedOn"))
       details.put("updatedOn", "date");
 
-    assertTrue(details.equals(expectedResponseMap));
+    assertEquals(details, expectedResponseMap);
   }
 
   public static Checker of(Boolean expectedResult,
