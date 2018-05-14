@@ -252,8 +252,8 @@ public class ConsumerPassword_CRU_Test
 
     try
     {
-      TimeUnit.SECONDS.sleep(15);
       log.info("Please wait 15 seconds...");
+      TimeUnit.SECONDS.sleep(15);
     }
     catch (InterruptedException ignored)
     {
