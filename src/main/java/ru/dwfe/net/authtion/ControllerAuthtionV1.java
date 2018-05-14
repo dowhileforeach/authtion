@@ -33,20 +33,21 @@ import static ru.dwfe.net.authtion.util.Util.*;
 @PropertySource("classpath:application.properties")
 public class ControllerAuthtionV1
 {
-  @Autowired
-  ConsumerService consumerService;
+  private final ConsumerService consumerService;
+  private final MailingRepository mailingRepository;
+  private final ConsumerTokenServices tokenServices;
+  private final Environment env;
+  private final RestTemplate restTemplate;
 
   @Autowired
-  MailingRepository mailingRepository;
-
-  @Autowired
-  ConsumerTokenServices tokenServices;
-
-  @Autowired
-  private Environment env;
-
-  @Autowired
-  private RestTemplate restTemplate;
+  public ControllerAuthtionV1(ConsumerService consumerService, MailingRepository mailingRepository, ConsumerTokenServices tokenServices, Environment env, RestTemplate restTemplate)
+  {
+    this.consumerService = consumerService;
+    this.mailingRepository = mailingRepository;
+    this.tokenServices = tokenServices;
+    this.env = env;
+    this.restTemplate = restTemplate;
+  }
 
   @PostMapping(resource_checkConsumerEmail)
   public String checkConsumerEmail(@RequestBody String body)
