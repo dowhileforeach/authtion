@@ -279,6 +279,15 @@ public class UtilTest
 
     RESOURCE_AUTHORITY_reqDATA().forEach((resource, next) -> {
 
+
+      try
+      {
+        TimeUnit.MILLISECONDS.sleep(30);
+      }
+      catch (InterruptedException ignored)
+      {
+      }
+
       Map.Entry<AuthorityLevel, Map<RequestMethod, Map<String, Object>>> next1 = next.entrySet().iterator().next();
       Map.Entry<RequestMethod, Map<String, Object>> next2 = next1.getValue().entrySet().iterator().next();
 

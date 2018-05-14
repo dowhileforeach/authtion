@@ -13,10 +13,10 @@ public class Global
   public static final String API_CURRENT_VERSION = API_V1;
 
   public static final String client_ID_TRUSTED = "Trusted";
-  public static final String client_PASSWORD_TRUSTED = "YWPV#YGiGLW4Whnr3Q5vuz!d8i";
+  public static final String client_PASSWORD_TRUSTED = "YWPVYGiGLW4Whnr3Q5vuzd8i";
 
   public static final String client_ID_UNTRUSTED = "Untrusted";
-  public static final String client_PASSWORD_UNTRUSTED = "4rZi5(yEhcv5Jb*3jSzGPfFFDK";
+  public static final String client_PASSWORD_UNTRUSTED = "4rZi5yEhcv5Jb3jSzGPfFFDK";
 
     /*
         Authtion RESOURCES

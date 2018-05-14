@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.dwfe.net.authtion.dao.MailingWelcomeWhenPasswordWasNotPassed;
-import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPassedRepository;
+import ru.dwfe.net.authtion.dao.Mailing;
+import ru.dwfe.net.authtion.dao.repository.MailingRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 @Component
@@ -22,15 +20,18 @@ public class ScheduleTasks
   public JavaMailSender emailSender;
 
   @Autowired
-  MailingWelcomeWhenPasswordWasNotPassedRepository mailingWelcomeWhenPasswordWasNotPassedRepository;
+  MailingRepository mailingRepository;
 
-  private static final ConcurrentSkipListSet<MailingWelcomeWhenPasswordWasNotPassed> poolOfMailingWelcomeWhenPasswordWasNotPassed = new ConcurrentSkipListSet<>();
-  private static final ConcurrentSkipListSet<MailingWelcomeWhenPasswordWasNotPassed> mailingWelcomeWhenPasswordWasNotPassedToDB = new ConcurrentSkipListSet<>();
+  private static final ConcurrentSkipListSet<Mailing> poolOfMailing = new ConcurrentSkipListSet<>();
+  private static final ConcurrentSkipListSet<Mailing> mailingToDataBase = new ConcurrentSkipListSet<>();
 
   @Scheduled(fixedRate = 60_000, initialDelay = 60_000)
   public void collectMailingTasksFromDatabase()
   {
-    poolOfMailingWelcomeWhenPasswordWasNotPassed.addAll(mailingWelcomeWhenPasswordWasNotPassedRepository.searchByNotSended());
+
+//    log.warn("before collect mailing tasks from Database");
+//    poolOfMailing.addAll(mailingRepository.getNewJob());
+//    log.warn("collected = {}", poolOfMailing.size());
 
 //    SimpleMailMessage message = new SimpleMailMessage();
 //    message.setTo("pistoletik@gmail.com");
@@ -45,30 +46,36 @@ public class ScheduleTasks
   @Scheduled(fixedDelay = 45_000, initialDelay = 60_000)
   public void mailingWelcomeWhenPasswordWasNotPassed()
   {
-    List<MailingWelcomeWhenPasswordWasNotPassed> toDB = new ArrayList<>();
-    poolOfMailingWelcomeWhenPasswordWasNotPassed.forEach(next -> {
-
-      if (next.isMaxAttemptsReached() || next.isSended())
-        toDB.add(next);
-      else
-        try
-        {
-          //      сформировать текст
-          //         отправить письмо
-          next.clearPassword();
-          next.setSended(true);
-        }
-        catch (Throwable e)
-        {
-          if (next.getAttempt().incrementAndGet() >= 3)
-            next.setMaxAttemptsReached(true);
-        }
-    });
-
-    if (toDB.size() > 0)
-    {
-      mailingWelcomeWhenPasswordWasNotPassedRepository.saveAll(toDB);
-      poolOfMailingWelcomeWhenPasswordWasNotPassed.removeAll(toDB);
-    }
+//    log.warn("mailing before perform");
+//    List<Mailing> toDataBase = new ArrayList<>();
+//    poolOfMailing.forEach(next -> {
+//      try
+//      {
+//        // next.getMessageText();
+//        // отправить письмо
+//        next.clear();
+//        next.setSended(true);
+//        toDataBase.add(next);
+//        log.warn("sended");
+//      }
+//      catch (Throwable e)
+//      {
+//        if (next.getAttempt().incrementAndGet() >= 3)
+//        {
+//          next.clear();
+//          next.setMaxAttemptsReached(true);
+//          toDataBase.add(next);
+//        }
+//        log.warn("to next attempt, after error");
+//      }
+//    });
+//
+//    log.warn("mailing before toDataBase.size() > 0");
+//    if (toDataBase.size() > 0)
+//    {
+//      log.warn("store to DB = {}", toDataBase.size());
+//      mailingRepository.saveAll(toDataBase);
+//      poolOfMailing.removeAll(toDataBase);
+//    }
   }
 }

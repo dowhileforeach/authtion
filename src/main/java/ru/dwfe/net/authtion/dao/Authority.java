@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "authorities")
+@Table(name = "authtion_authorities")
 public class Authority implements GrantedAuthority
 {
   private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;

@@ -2,7 +2,7 @@
 
     <include resource="./logback/console.xml"/>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="CONSOLE"/>
     </root>
 

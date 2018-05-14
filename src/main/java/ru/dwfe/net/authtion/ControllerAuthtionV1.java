@@ -13,12 +13,8 @@ import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ru.dwfe.net.authtion.dao.Consumer;
-import ru.dwfe.net.authtion.dao.MailingConfirmEmail;
-import ru.dwfe.net.authtion.dao.MailingRestorePassword;
-import ru.dwfe.net.authtion.dao.MailingWelcomeWhenPasswordWasNotPassed;
-import ru.dwfe.net.authtion.dao.repository.MailingConfirmEmailRepository;
-import ru.dwfe.net.authtion.dao.repository.MailingRestorePasswordRepository;
-import ru.dwfe.net.authtion.dao.repository.MailingWelcomeWhenPasswordWasNotPassedRepository;
+import ru.dwfe.net.authtion.dao.Mailing;
+import ru.dwfe.net.authtion.dao.repository.MailingRepository;
 import ru.dwfe.net.authtion.service.ConsumerService;
 
 import java.util.*;
@@ -41,11 +37,7 @@ public class ControllerAuthtionV1
   ConsumerService consumerService;
 
   @Autowired
-  MailingWelcomeWhenPasswordWasNotPassedRepository mailingWelcomeWhenPasswordWasNotPassedRepository;
-  @Autowired
-  MailingConfirmEmailRepository mailingConfirmEmailRepository;
-  @Autowired
-  MailingRestorePasswordRepository mailingRestorePasswordRepository;
+  MailingRepository mailingRepository;
 
   @Autowired
   ConsumerTokenServices tokenServices;
@@ -143,15 +135,13 @@ public class ControllerAuthtionV1
 
       if (automaticallyGeneratedPassword.isEmpty())
       {
-        //TODO: service alert #1
+        mailingRepository.save(Mailing.of(1, consumer.getEmail()));
       }
       else
       { //if the password was not passed, then it is necessary to send an automatically generated password to the new consumer
-        mailingWelcomeWhenPasswordWasNotPassedRepository
-                .save(MailingWelcomeWhenPasswordWasNotPassed.of(consumer.getEmail(), automaticallyGeneratedPassword));
+        mailingRepository.save(Mailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
 
-        //TODO: service alert #2
-        //      set Consumer field 'email_confirmed' to true
+        //TODO: set Consumer field 'email_confirmed' to true
       }
     }
     return getResponse(errorCodes);
@@ -252,9 +242,7 @@ public class ControllerAuthtionV1
     List<String> errorCodes = new ArrayList<>();
 
     String email = ((Consumer) authentication.getPrincipal()).getEmail();
-    mailingConfirmEmailRepository.save(MailingConfirmEmail.of(email));
-
-    //TODO: service alert #3
+    mailingRepository.save(Mailing.of(3, email, getUniqStrBase36(30)));
 
     return getResponse(errorCodes);
   }
@@ -267,18 +255,18 @@ public class ControllerAuthtionV1
 
     if (isDefaultCheckOK(key, fieldName, errorCodes))
     {
-      Optional<MailingConfirmEmail> confirmByKey = mailingConfirmEmailRepository.findByConfirmKey(key);
+      Optional<Mailing> confirmByKey = mailingRepository.findByData(key);
       if (confirmByKey.isPresent())
       {
-        MailingConfirmEmail confirm = confirmByKey.get();
+        Mailing confirm = confirmByKey.get();
 
         //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
-        Consumer consumer = consumerService.findByEmail(confirm.getConsumer()).get();
+        Consumer consumer = consumerService.findByEmail(confirm.getEmail()).get();
         consumer.setEmailConfirmed(true); //Now email is confirmed
         consumerService.save(consumer);
 
-        //delete this confirmation key from database
-        mailingConfirmEmailRepository.delete(confirm);
+        confirm.clear();
+        mailingRepository.save(confirm);
       }
       else errorCodes.add(fieldName + "-not-exist");
     }
@@ -308,7 +296,7 @@ public class ControllerAuthtionV1
         setNewPassword(consumer, newpassValue);
         consumerService.save(consumer);
 
-        //TODO: service alert #4
+        mailingRepository.save(Mailing.of(4, consumer.getEmail()));
       }
       else errorCodes.add("wrong-" + oldpassField);
     }
@@ -326,10 +314,7 @@ public class ControllerAuthtionV1
     {
       if (consumerService.existsByEmail(email))
       {
-        MailingRestorePassword confirm = MailingRestorePassword.of(email);
-        mailingRestorePasswordRepository.save(confirm);
-
-        //TODO: service alert #5
+        mailingRepository.save(Mailing.of(5, email, getUniqStrBase36(30)));
       }
       else errorCodes.add("email-not-exist");
     }
@@ -345,10 +330,10 @@ public class ControllerAuthtionV1
 
     if (isDefaultCheckOK(key, fieldName, errorCodes))
     {
-      Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(key);
+      Optional<Mailing> confirmByKey = mailingRepository.findByData(key);
       if (confirmByKey.isPresent())
       {
-        data.put("email", confirmByKey.get().getConsumer());
+        data.put("email", confirmByKey.get().getEmail());
         data.put("key", key);
       }
       else errorCodes.add(fieldName + "-not-exist");
@@ -375,18 +360,19 @@ public class ControllerAuthtionV1
             && isDefaultCheckOK(keyValue, keyFieldFullName, errorCodes)
             && isEmailCheckOK(emailValue, errorCodes))
     {
-      Optional<MailingRestorePassword> confirmByKey = mailingRestorePasswordRepository.findByConfirmKey(keyValue);
+      Optional<Mailing> confirmByKey = mailingRepository.findByData(keyValue);
       if (confirmByKey.isPresent())
       {
-        MailingRestorePassword confirm = confirmByKey.get();
-        if (emailValue.equals(confirm.getConsumer()))
+        Mailing confirm = confirmByKey.get();
+        if (emailValue.equals(confirm.getEmail()))
         {
           //The Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
           Consumer consumer = consumerService.findByEmail(emailValue).get();
           setNewPassword(consumer, newpassValue);
           consumerService.save(consumer);
 
-          mailingRestorePasswordRepository.delete(confirm);
+          confirm.clear();
+          mailingRepository.save(confirm);
         }
         else errorCodes.add(keyFieldFullName + "-for-another-email");
       }

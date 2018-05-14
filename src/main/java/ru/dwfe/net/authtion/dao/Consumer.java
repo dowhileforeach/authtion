@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import static ru.dwfe.net.authtion.util.Util.isDefaultCheckOK;
 
 @Entity
-@Table(name = "consumers")
+@Table(name = "authtion_consumers")
 public class Consumer implements UserDetails, CredentialsContainer
 {
   private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
@@ -35,7 +35,7 @@ public class Consumer implements UserDetails, CredentialsContainer
   private String password;
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "consumer_authority",
+  @JoinTable(name = "authtion_consumer_authority",
           joinColumns = @JoinColumn(name = "consumer", referencedColumnName = "id"),
           inverseJoinColumns = @JoinColumn(name = "authority", referencedColumnName = "authority"))
   private Set<Authority> authorities;
@@ -56,9 +56,10 @@ public class Consumer implements UserDetails, CredentialsContainer
   @Column(updatable = false, insertable = false)
   private LocalDateTime updatedOn;
 
-    /*
-        IMPLEMENTATION interfaces
-    */
+
+  //
+  //  IMPLEMENTATION of interfaces
+  //
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities()
@@ -79,20 +80,20 @@ public class Consumer implements UserDetails, CredentialsContainer
     return email;
   }
 
-//
-// deleted in org.springframework:spring-core:5.0.3.RELEASE
-//
-//    @JsonIgnore
-//    @Override
-//    public String getName()
-//    {   //method was overriden special for @JsonIgnore annotation
-//        return getUsername(); // <- don't touch this!
-//        // The only way.
-//        // It affects the uniqueness of tokens:
-//        //   OAuth2Authentication
-//        //   -> AbstractAuthenticationToken
-//        //   -> getName()
-//    }
+  //
+  // deleted in org.springframework:spring-core:5.0.3.RELEASE
+  //
+  //    @JsonIgnore
+  //    @Override
+  //    public String getName()
+  //    {   //method was overriden special for @JsonIgnore annotation
+  //        return getUsername(); // <- don't touch this!
+  //        // The only way.
+  //        // It affects the uniqueness of tokens:
+  //        //   OAuth2Authentication
+  //        //   -> AbstractAuthenticationToken
+  //        //   -> getName()
+  //    }
 
   @Override
   public boolean isAccountNonExpired()
@@ -124,9 +125,10 @@ public class Consumer implements UserDetails, CredentialsContainer
     password = "";
   }
 
-    /*
-        GETTERs and SETTERs
-    */
+
+  //
+  //  GETTERs and SETTERs
+  //
 
   public Long getId()
   {
@@ -228,9 +230,10 @@ public class Consumer implements UserDetails, CredentialsContainer
     return updatedOn;
   }
 
-  /*
-        equals, hashCode, toString
-    */
+
+  //
+  //  equals, hashCode, toString
+  //
 
   @Override
   public boolean equals(Object o)
@@ -271,9 +274,9 @@ public class Consumer implements UserDetails, CredentialsContainer
   }
 
 
-    /*
-        UTILs
-    */
+  //
+  //  UTILs
+  //
 
   public static boolean canUseEmail(String email, ConsumerService consumerService, List<String> errorCodes)
   {

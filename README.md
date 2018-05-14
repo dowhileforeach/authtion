@@ -48,12 +48,12 @@ See `test\java\ru.dwfe.authtion` classes.
 #### For Manual tests
 Sign In as `user@ya.ru`:
 ```
-curl Trusted:trPass@localhost:8080/v1/sign-in -d grant_type=password -d username=user@ya.ru -d password=passUser
+curl Trusted:YWPVYGiGLW4Whnr3Q5vuzd8i@localhost:8080/v1/sign-in -d grant_type=password -d username=user@ya.ru -d password=passUser
 ```
 
 Sign In as `admin@ya.ru`:
 ```
-curl Untrusted:untrPass@localhost:8080/v1/sign-in -d grant_type=password -d username=admin@ya.ru -d password=passAdmin
+curl Untrusted:4rZi5yEhcv5Jb3jSzGPfFFDK@localhost:8080/v1/sign-in -d grant_type=password -d username=admin@ya.ru -d password=passAdmin
 ```
 
 Templates for accessing to resources:
