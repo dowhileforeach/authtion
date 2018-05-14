@@ -27,8 +27,7 @@ import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.test_util.AuthorityLevel.USER;
 import static ru.dwfe.net.authtion.test_util.UtilTest.check_send_data;
 import static ru.dwfe.net.authtion.test_util.UtilTest.performFullAuthTest;
-import static ru.dwfe.net.authtion.test_util.Variables_Global.ANY_consumer;
-import static ru.dwfe.net.authtion.test_util.Variables_Global.client_TRUSTED;
+import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
 import static ru.dwfe.net.authtion.test_util.Variables_for_ConsumerPassword_CRU_Test.*;
 
 //
@@ -87,7 +86,7 @@ public class ConsumerPassword_CRU_Test
 
     assertEquals("nobody", consumer1.getNickName());
     assertTrue(consumer1.getFirstName().isEmpty());
-    assertTrue(consumer1.getLastName().isEmpty());
+    assertEquals("sunshine", consumer1.getLastName());
     assertTrue(consumer1.isAccountNonExpired());
     assertTrue(consumer1.isAccountNonLocked());
     assertTrue(consumer1.isCredentialsNonExpired());
@@ -162,8 +161,50 @@ public class ConsumerPassword_CRU_Test
   @Test
   public void _04_updateConsumer()
   {
-//    logHead("Consumer Update");
-//    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer);
+    logHead("Consumer Update");
+
+    Optional<Consumer> consumerByEmail = getConsumerByEmail(USER_consumer.username);
+    assertTrue(consumerByEmail.isPresent());
+
+    Consumer consumer = consumerByEmail.get();
+    assertEquals("user", consumer.getNickName());
+    assertEquals("", consumer.getFirstName());
+    assertEquals("", consumer.getLastName());
+
+    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer1);
+    consumerByEmail = getConsumerByEmail(USER_consumer.username);
+    consumer = consumerByEmail.get();
+    assertEquals("user", consumer.getNickName());
+    assertEquals("", consumer.getFirstName());
+    assertEquals("", consumer.getLastName());
+
+    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer2);
+    consumerByEmail = getConsumerByEmail(USER_consumer.username);
+    consumer = consumerByEmail.get();
+    assertEquals("Consumer", consumer.getNickName());
+    assertEquals("", consumer.getFirstName());
+    assertEquals("", consumer.getLastName());
+
+    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer3);
+    consumerByEmail = getConsumerByEmail(USER_consumer.username);
+    consumer = consumerByEmail.get();
+    assertEquals("Consumer1", consumer.getNickName());
+    assertEquals("1", consumer.getFirstName());
+    assertEquals("", consumer.getLastName());
+
+    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer4);
+    consumerByEmail = getConsumerByEmail(USER_consumer.username);
+    consumer = consumerByEmail.get();
+    assertEquals("Consumer1", consumer.getNickName());
+    assertEquals("1", consumer.getFirstName());
+    assertEquals("2", consumer.getLastName());
+
+    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer5);
+    consumerByEmail = getConsumerByEmail(USER_consumer.username);
+    consumer = consumerByEmail.get();
+    assertEquals("user", consumer.getNickName());
+    assertEquals("alto", consumer.getFirstName());
+    assertEquals("smith", consumer.getLastName());
   }
 
   @Test

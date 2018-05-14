@@ -281,7 +281,7 @@ public class UtilTest
 
       try
       {
-        TimeUnit.MILLISECONDS.sleep(30);
+        TimeUnit.MILLISECONDS.sleep(50);
       }
       catch (InterruptedException ignored)
       {

@@ -58,20 +58,30 @@ public class Variables_for_ConsumerPassword_CRU_Test
             Checker.of(false, Map.of("email", EMAIL_NEW_Consumer, "password", ""), 200, "empty-password"),
             Checker.of(false, Map.of("email", EMAIL_NEW_Consumer, "password", "54321"), 200, "exceeded-min6-or-max55-password-length"),
             Checker.of(false, Map.of("email", EMAIL_NEW_Consumer, "password", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "exceeded-min6-or-max55-password-length"),
-            Checker.of(true, Map.of("email", EMAIL_NEW_Consumer, "password", PASS_NEW_Consumer, "nickName", "nobody"), 200),
+            Checker.of(true, Map.of("email", EMAIL_NEW_Consumer, "password", PASS_NEW_Consumer, "nickName", "nobody", "lastName", "sunshine"), 200),
             Checker.of(true, Map.of("email", EMAIL_3_NEW_Consumer, "password", PASS_FOR_EMAIL_3_Consumer_Encoded, "nickName", "hello world"), 200)
     ));
     return list;
   }
 
-  public static final List<Checker> checkers_for_updateConsumer = List.of(
-//            Checker.of(false, Map.of(), 200, "details", "warning", "no changes found"),
-//            Checker.of(false, Map.of("nickName", "user"), 200, "details", "warning", "no changes found"),
-//            Checker.of(false, Map.of("nickName", "user", "firstName", ""), 200, "details", "warning", "no changes found"),
-//            Checker.of(true, Map.of("nickName", "Consumer", "firstName", "", "lastName", ""), 200, Map.of("nickName", "change saved")),
-//            Checker.of(true, Map.of("nickName", "Consumer", "firstName", "1", "lastName", ""), 200, Map.of("firstName", "change saved")),
-//            Checker.of(true, Map.of("nickName", "Consumer", "firstName", "1", "lastName", "2"), 200, Map.of("lastName", "change saved")),
-//            Checker.of(true, Map.of("nickName", "user", "firstName", "", "lastName", ""), 200, Map.of("lastName", "change saved", "nickName", "change saved", "firstName", "change saved"))
+  public static final List<Checker> checkers_for_updateConsumer1 = List.of(
+          Checker.of(true, Map.of(), 200)
+  );
+
+  public static final List<Checker> checkers_for_updateConsumer2 = List.of(
+          Checker.of(true, Map.of("nickName", "Consumer"), 200)
+  );
+
+  public static final List<Checker> checkers_for_updateConsumer3 = List.of(
+          Checker.of(true, Map.of("nickName", "Consumer1", "firstName", "1"), 200)
+  );
+
+  public static final List<Checker> checkers_for_updateConsumer4 = List.of(
+          Checker.of(true, Map.of("lastName", "2"), 200)
+  );
+
+  public static final List<Checker> checkers_for_updateConsumer5 = List.of(
+          Checker.of(true, Map.of("nickName", "user", "firstName", "alto", "lastName", "smith"), 200)
   );
 
   public static final List<Checker> checkers_for_getConsumerData = List.of(
