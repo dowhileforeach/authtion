@@ -18,10 +18,8 @@ import ru.dwfe.net.authtion.dao.repository.MailingRepository;
 import ru.dwfe.net.authtion.service.ConsumerService;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import static ru.dwfe.net.authtion.Global.*;
@@ -101,7 +99,7 @@ public class ControllerAuthtionV1
         else
           errorCodes.add("error-google-captcha-gateway");
       }
-      catch (InterruptedException | ExecutionException | TimeoutException e)
+      catch (Throwable e)
       {
         errorCodes.add("timeout-google-captcha-gateway");
       }
