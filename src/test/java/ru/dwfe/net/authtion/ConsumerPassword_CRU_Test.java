@@ -56,7 +56,6 @@ public class ConsumerPassword_CRU_Test
   {
     logHead("Check Consumer Pass");
     check_send_data(POST, resource_checkConsumerPass, ANY_consumer.access_token, checkers_for_checkConsumerPass);
-
   }
 
   @Test

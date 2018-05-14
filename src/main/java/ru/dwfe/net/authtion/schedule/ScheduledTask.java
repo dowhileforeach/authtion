@@ -12,9 +12,9 @@ import ru.dwfe.net.authtion.dao.repository.MailingRepository;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 @Component
-public class ScheduleTasks
+public class ScheduledTask
 {
-  private final static Logger log = LoggerFactory.getLogger(ScheduleTasks.class);
+  private final static Logger log = LoggerFactory.getLogger(ScheduledTask.class);
 
   @Autowired
   public JavaMailSender emailSender;
@@ -22,16 +22,15 @@ public class ScheduleTasks
   @Autowired
   MailingRepository mailingRepository;
 
-  private static final ConcurrentSkipListSet<Mailing> poolOfMailing = new ConcurrentSkipListSet<>();
-  private static final ConcurrentSkipListSet<Mailing> mailingToDataBase = new ConcurrentSkipListSet<>();
+  private static final ConcurrentSkipListSet<Mailing> MAILING_POOL = new ConcurrentSkipListSet<>();
 
   @Scheduled(fixedRate = 60_000, initialDelay = 60_000)
   public void collectMailingTasksFromDatabase()
   {
 
 //    log.warn("before collect mailing tasks from Database");
-//    poolOfMailing.addAll(mailingRepository.getNewJob());
-//    log.warn("collected = {}", poolOfMailing.size());
+//    MAILING_POOL.addAll(mailingRepository.getNewJob());
+//    log.warn("collected = {}", MAILING_POOL.size());
 
 //    SimpleMailMessage message = new SimpleMailMessage();
 //    message.setTo("pistoletik@gmail.com");
@@ -48,7 +47,7 @@ public class ScheduleTasks
   {
 //    log.warn("mailing before perform");
 //    List<Mailing> toDataBase = new ArrayList<>();
-//    poolOfMailing.forEach(next -> {
+//    MAILING_POOL.forEach(next -> {
 //      try
 //      {
 //        // next.getMessageText();
@@ -75,7 +74,7 @@ public class ScheduleTasks
 //    {
 //      log.warn("store to DB = {}", toDataBase.size());
 //      mailingRepository.saveAll(toDataBase);
-//      poolOfMailing.removeAll(toDataBase);
+//      MAILING_POOL.removeAll(toDataBase);
 //    }
   }
 }

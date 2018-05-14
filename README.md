@@ -5,7 +5,7 @@
 <br>
 Java10, Spring-Boot2, OAuth2, RESTful, MySQL<br>
 
-# API versioning
+# API version
 In this project, the version of the API = "v1", the controller class is called "ControllerAuthtionV1".<br>
 When developing a new API should create a new controller class, e.g. "ControllerAuthtionV2", "ControllerAuthtionV3" etc.<br><br>
 Unfortunately for resource authentication `/oauth/token` "out of box" spring-security-oauth2 does not provide for versioning.<br>
@@ -23,7 +23,7 @@ The list of all Authtion server errors and their mapping is [here](./assets/auth
 # Date and Time
 The Authtion server is set to time zone UTC.<br>
 ![Authtion is set to UTC](./assets/img/date-time.png)<br>
-Also, some Authtion database table fields are automatically assigned directly by the database. Therefore, to work correctly with time, you must explicitly set the time zone for mysqld to UTC. This can be done in [several ways](https://stackoverflow.com/questions/930900/how-do-i-set-the-time-zone-of-mysql#19069310).
+Also, some Authtion database table fields are automatically assigned directly by the database. Therefore, to work correctly with date and time, you must explicitly set the time zone for mysqld to UTC. This can be done in [several ways](https://stackoverflow.com/questions/930900/how-do-i-set-the-time-zone-of-mysql#19069310).
 
 # Email alerts
 ![ServiceAlerts](./assets/img/ServiceAlerts.png)<br>
