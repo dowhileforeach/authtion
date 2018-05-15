@@ -30,7 +30,7 @@ public class Variables_for_ConsumerPassword_CRU_Test
           Checker.of(false, Map.of("email", "123456789012345678901234567890kkklkklklklkklklklklklklklk"), 200, "exceeded-max50-email-length"),
           Checker.of(false, Map.of("email", "user"), 200, "invalid-email"),
           Checker.of(false, Map.of("email", ".uuqu@mail.ru"), 200, "invalid-email"),
-          Checker.of(false, Map.of("email", "user@ya.ru"), 200, "email-present-in-database"),
+          Checker.of(false, Map.of("email", "test2@dwfe.ru"), 200, "email-present-in-database"),
           Checker.of(true, Map.of("email", EMAIL_NEW_Consumer), 200)
   );
 
@@ -50,7 +50,7 @@ public class Variables_for_ConsumerPassword_CRU_Test
             Checker.of(false, Map.of("email", "ogygyg_bnmkkskslwlwllogygyg_bnmkkskslwlwll@gmail.com"), 200, "exceeded-max50-email-length"),
             Checker.of(false, Map.of("email", "user"), 200, "invalid-email"),
             Checker.of(false, Map.of("email", "@puqu@mail.ru"), 200, "invalid-email"),
-            Checker.of(false, Map.of("email", "admin@ya.ru"), 200, "email-present-in-database")
+            Checker.of(false, Map.of("email", "test1@dwfe.ru"), 200, "email-present-in-database")
     ));
     list.addAll(List.of(
             Checker.of(true, Map.of("email", EMAIL_2_NEW_Consumer, "firstName", "ozon"), 200),
@@ -87,7 +87,7 @@ public class Variables_for_ConsumerPassword_CRU_Test
   public static final List<Checker> checkers_for_getConsumerData = List.of(
           Checker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap("{\n" +
                   " \"id\": 555,\n" +
-                  " \"email\": \"user@ya.ru\",\n" +
+                  " \"email\": \"test2@dwfe.ru\",\n" +
                   " \"password\": \"****\",\n" +
                   " \"authorities\": [\"USER\"],\n" +
                   " \"nickName\": \"user\",\n" +

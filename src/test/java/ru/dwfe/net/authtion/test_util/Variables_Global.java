@@ -19,7 +19,7 @@ public class Variables_Global
   /*
       Consumers from backend database
   */
-  public static final ConsumerTest USER_consumer = ConsumerTest.of(USER, "user@ya.ru", "passUser", client_TRUSTED, 200);
-  public static final ConsumerTest ADMIN_consumer = ConsumerTest.of(ADMIN, "admin@ya.ru", "passAdmin", client_UNTRUSTED, 200);
+  public static final ConsumerTest USER_consumer = ConsumerTest.of(USER, "test2@dwfe.ru", "test22", client_TRUSTED, 200);
+  public static final ConsumerTest ADMIN_consumer = ConsumerTest.of(ADMIN, "test1@dwfe.ru", "test11", client_UNTRUSTED, 200);
   public static final ConsumerTest ANY_consumer = ConsumerTest.getAnonymous();
 }

@@ -32,8 +32,8 @@ Also, some Authtion database table fields are automatically assigned directly by
 See `test\java\ru.dwfe.authtion` classes.
 
 ## AuthTest
-1. Sign In as: `user@ya.ru`, `admin@ya.ru`, and `some more`
-2. Try to access as `user@ya.ru`, `admin@ya.ru`, `not logged user` and `some more` to resources:
+1. Sign In as: `test2@dwfe.ru`, `test1@dwfe.ru`, and `some more`
+2. Try to access as `test2@dwfe.ru`, `test1@dwfe.ru`, `not logged user` and `some more` to resources:
    * `/public/consumer/{id}`
    * `/get-consumer-data`
    * `/list-of-consumers`
@@ -46,14 +46,14 @@ See `test\java\ru.dwfe.authtion` classes.
 <br>
 
 #### For Manual tests
-Sign In as `user@ya.ru`:
+Sign In as `test2@dwfe.ru`:
 ```
-curl Trusted:YWPVYGiGLW4Whnr3Q5vuzd8i@localhost:8080/v1/sign-in -d grant_type=password -d username=user@ya.ru -d password=passUser
+curl Trusted:YWPVYGiGLW4Whnr3Q5vuzd8i@localhost:8080/v1/sign-in -d grant_type=password -d username=test2@dwfe.ru -d password=test22
 ```
 
-Sign In as `admin@ya.ru`:
+Sign In as `test1@dwfe.ru`:
 ```
-curl Untrusted:4rZi5yEhcv5Jb3jSzGPfFFDK@localhost:8080/v1/sign-in -d grant_type=password -d username=admin@ya.ru -d password=passAdmin
+curl Untrusted:4rZi5yEhcv5Jb3jSzGPfFFDK@localhost:8080/v1/sign-in -d grant_type=password -d username=test1@dwfe.ru -d password=test11
 ```
 
 Templates for accessing to resources:
@@ -61,8 +61,8 @@ Templates for accessing to resources:
 curl http://localhost:8080/v1/public/consumer/1
 curl http://localhost:8080/v1/get-consumer-data -H "Authorization: Bearer ACCESS_TOKEN"
 curl http://localhost:8080/v1/list-of-consumers -H "Authorization: Bearer ACCESS_TOKEN"
-curl http://localhost:8080/v1/check-consumer-email -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"email": "admin@ya.ru"}'
-curl http://localhost:8080/v1/create-consumer -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"id": "user"}'
+curl http://localhost:8080/v1/check-consumer-email -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"email": "some@email.com"}'
+curl http://localhost:8080/v1/create-consumer -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"email": "some@email.com", "password": "somepass"}'
 ...
 ```
 

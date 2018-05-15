@@ -1,4 +1,4 @@
-USE authtion_dev;
+USE authtion_test;
 
 # Password for consumer test1@dwfe.ru = test11
 # Password for consumer test2@dwfe.ru = test22
