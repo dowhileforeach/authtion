@@ -3,8 +3,8 @@
 -->
 <configuration scan="true" scanPeriod="30 seconds">
 
-    <include resource="./logback/console.xml"/>
-    <include resource="./logback/file-prod.xml"/>
+    <include resource="log/console.xml"/>
+    <include resource="log/file-prod.xml"/>
 
     <root level="WARN">
         <appender-ref ref="CONSOLE"/>

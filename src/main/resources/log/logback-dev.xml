@@ -1,6 +1,6 @@
 <configuration scan="true" scanPeriod="5 seconds">
 
-    <include resource="./logback/console.xml"/>
+    <include resource="log/console.xml"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

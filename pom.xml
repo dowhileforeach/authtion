@@ -180,6 +180,10 @@
                 <app.env>dev</app.env>
             </properties>
 
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
             <dependencies>
 
                 <dependency>
