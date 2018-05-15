@@ -3,7 +3,6 @@ package ru.dwfe.net.authtion.schedule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,7 @@ public class ScheduledTask
 
   private static final ConcurrentSkipListSet<Mailing> MAILING_POOL = new ConcurrentSkipListSet<>();
 
-  @Scheduled(fixedRate = 10_000, initialDelay = 0)
+  @Scheduled(fixedRateString = "${scheduled.task.mailing.collect}", initialDelayString = "${scheduled.task.mailing.initial-delay}")
   public void collectMailingTasksFromDatabase()
   {
 
@@ -45,7 +44,7 @@ public class ScheduledTask
 
   }
 
-  @Scheduled(fixedDelay = 5_000, initialDelay = 0)
+  @Scheduled(fixedDelayString = "${scheduled.task.mailing.send}", initialDelayString = "${scheduled.task.mailing.initial-delay}")
   public void mailingWelcomeWhenPasswordWasNotPassed()
   {
     log.warn("mailing before perform");

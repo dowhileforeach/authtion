@@ -75,6 +75,7 @@ public class ControllerAuthtionV1
     List<String> errorCodes = new ArrayList<>();
 
     String captchaSecret = env.getProperty("google.captcha.secret-key");
+    System.out.println("captchaSecret=" + captchaSecret);
     String googleResponse = (String) getValueFromJSON(body, "googleResponse");
 
     if (isDefaultCheckOK(googleResponse, "google-response", errorCodes))

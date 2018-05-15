@@ -185,5 +185,27 @@ public class Mailing implements Comparable<Mailing>
     private LocalDateTime createdOn;
     private int type;
     private String email;
+
+    @Override
+    public boolean equals(Object o)
+    {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      MailingId mailingId = (MailingId) o;
+
+      if (type != mailingId.type) return false;
+      if (!createdOn.equals(mailingId.createdOn)) return false;
+      return email.equals(mailingId.email);
+    }
+
+    @Override
+    public int hashCode()
+    {
+      int result = createdOn.hashCode();
+      result = 31 * result + type;
+      result = 31 * result + email.hashCode();
+      return result;
+    }
   }
 }
