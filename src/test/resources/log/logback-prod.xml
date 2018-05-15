@@ -1,0 +1,14 @@
+<!--
+    https://logback.qos.ch/manual/configuration.html
+-->
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <include resource="log/console.xml"/>
+    <include resource="log/file-prod.xml"/>
+
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

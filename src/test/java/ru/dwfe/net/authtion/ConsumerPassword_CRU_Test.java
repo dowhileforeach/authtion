@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.dwfe.net.authtion.dao.Consumer;
 import ru.dwfe.net.authtion.dao.Mailing;
@@ -37,7 +38,10 @@ import static ru.dwfe.net.authtion.test_util.Variables_for_ConsumerPassword_CRU_
 //
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+
+// https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html#boot-features-testing-spring-boot-applications
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConsumerPassword_CRU_Test
 {
