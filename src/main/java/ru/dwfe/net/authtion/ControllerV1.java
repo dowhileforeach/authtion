@@ -29,7 +29,7 @@ import static ru.dwfe.net.authtion.util.Util.*;
 @RestController
 @RequestMapping(path = API_V1, produces = "application/json; charset=utf-8")
 @PropertySource("classpath:application.properties")
-public class ControllerAuthtionV1
+public class ControllerV1
 {
   private final ConsumerService consumerService;
   private final MailingRepository mailingRepository;
@@ -38,7 +38,7 @@ public class ControllerAuthtionV1
   private final RestTemplate restTemplate;
 
   @Autowired
-  public ControllerAuthtionV1(ConsumerService consumerService, MailingRepository mailingRepository, ConsumerTokenServices tokenServices, Environment env, RestTemplate restTemplate)
+  public ControllerV1(ConsumerService consumerService, MailingRepository mailingRepository, ConsumerTokenServices tokenServices, Environment env, RestTemplate restTemplate)
   {
     this.consumerService = consumerService;
     this.mailingRepository = mailingRepository;
