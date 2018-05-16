@@ -59,7 +59,8 @@ public class AuthtionScheduler
         // next.getMessageText();
         // ВНИМАНИЕ!!! Сначала изменить почтовые ящики на dwfe домен для тестового окружения
         // отправить письмо
-        next.clear();
+        if (next.getType() != 3 && next.getType() != 5)
+          next.clear();
         next.setSended(true);
         toDataBase.add(next);
         log.warn("sended");

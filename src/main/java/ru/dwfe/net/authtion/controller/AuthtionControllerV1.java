@@ -199,7 +199,8 @@ public class AuthtionControllerV1
   public String getConsumerData(OAuth2Authentication authentication)
   {
     List<String> errorCodes = new ArrayList<>();
-    return getResponse(errorCodes, authentication.getPrincipal().toString());
+    Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
+    return getResponse(errorCodes, consumerService.findById(id).get().toString());
   }
 
   @GetMapping(resource_publicConsumer + "/{id}")
@@ -331,8 +332,13 @@ public class AuthtionControllerV1
       Optional<AuthtionMailing> confirmByKey = mailingRepository.findByData(key);
       if (confirmByKey.isPresent())
       {
-        data.put("email", confirmByKey.get().getEmail());
-        data.put("key", key);
+        AuthtionMailing confirm = confirmByKey.get();
+
+        data.put("email", confirm.getEmail());
+        data.put("key", confirm.getData());
+
+        confirm.clear();
+        mailingRepository.save(confirm);
       }
       else errorCodes.add(fieldName + "-not-exist");
     }

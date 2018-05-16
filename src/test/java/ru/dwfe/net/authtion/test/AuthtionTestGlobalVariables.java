@@ -19,7 +19,7 @@ public class AuthtionTestGlobalVariables
   /*
       Consumers from backend database
   */
-  public static final AuthtionTestConsumer USER_consumer = AuthtionTestConsumer.of(USER, "test2@dwfe.ru", "test22", client_TRUSTED, 200);
-  public static final AuthtionTestConsumer ADMIN_consumer = AuthtionTestConsumer.of(ADMIN, "test1@dwfe.ru", "test11", client_UNTRUSTED, 200);
-  public static final AuthtionTestConsumer ANY_consumer = AuthtionTestConsumer.getAnonymous();
+  public static AuthtionTestConsumer USER_consumer = AuthtionTestConsumer.of(USER, "test2@dwfe.ru", "test22", client_TRUSTED, 200);
+  public static AuthtionTestConsumer ADMIN_consumer = AuthtionTestConsumer.of(ADMIN, "test1@dwfe.ru", "test11", client_UNTRUSTED, 200);
+  public static AuthtionTestConsumer ANY_consumer = AuthtionTestConsumer.getAnonymous();
 }

@@ -2,6 +2,7 @@ package ru.dwfe.net.authtion.dao.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.dwfe.net.authtion.dao.AuthtionMailing;
 
@@ -17,4 +18,9 @@ public interface AuthtionMailingRepository extends CrudRepository<AuthtionMailin
   List<AuthtionMailing> findByEmail(String email);
 
   Optional<AuthtionMailing> findByData(String data);
+
+  List<AuthtionMailing> findByTypeAndEmail(int type, String email);
+
+  @Query("FROM AuthtionMailing WHERE type = :type AND email = :email AND sended = true AND data<>''")
+  List<AuthtionMailing> findSendedNotEmptyData(@Param("type") int type, @Param("email") String email);
 }

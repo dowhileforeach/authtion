@@ -69,11 +69,11 @@ public class AuthtionTestVariablesForConsumerTest
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateConsumer2 = List.of(
-          AuthtionTestChecker.of(true, Map.of("nickName", "AuthtionConsumer"), 200)
+          AuthtionTestChecker.of(true, Map.of("nickName", "user", "firstName", "", "lastName", ""), 200)
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateConsumer3 = List.of(
-          AuthtionTestChecker.of(true, Map.of("nickName", "Consumer1", "firstName", "1"), 200)
+          AuthtionTestChecker.of(true, Map.of("nickName", "hello", "firstName", "1"), 200)
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateConsumer4 = List.of(
@@ -81,12 +81,12 @@ public class AuthtionTestVariablesForConsumerTest
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateConsumer5 = List.of(
-          AuthtionTestChecker.of(true, Map.of("nickName", "user", "firstName", "alto", "lastName", "smith"), 200)
+          AuthtionTestChecker.of(true, Map.of("nickName", "good", "firstName", "alto", "lastName", "smith"), 200)
   );
 
   public static final List<AuthtionTestChecker> checkers_for_getConsumerData = List.of(
           AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap("{\n" +
-                  " \"id\": 555,\n" +
+                  " \"id\": 1001,\n" +
                   " \"email\": \"test2@dwfe.ru\",\n" +
                   " \"password\": \"****\",\n" +
                   " \"authorities\": [\"USER\"],\n" +
@@ -107,7 +107,7 @@ public class AuthtionTestVariablesForConsumerTest
           AuthtionTestChecker.of(false, Map.of(), 200, "id-not-exist")
   );
   public static final List<AuthtionTestChecker> checkers_for_publicConsumer_1 = List.of(
-          AuthtionTestChecker.of(true, Map.of(), 200, Map.of("id", 1, "nickName", "admin"))
+          AuthtionTestChecker.of(true, Map.of(), 200, Map.of("id", 1000, "nickName", "test1"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_reqConfirmConsumerEmail = List.of(

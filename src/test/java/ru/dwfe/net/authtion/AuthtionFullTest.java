@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.AuthtionGlobal.*;
+import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.ADMIN;
 import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.USER;
 import static ru.dwfe.net.authtion.test.AuthtionTestGlobalVariables.*;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.USUAL;
@@ -110,7 +111,6 @@ public class AuthtionFullTest
   {
     logHead("Create AuthtionConsumer");
 
-    mailingRepository.deleteAll();
     check_send_data(POST, resource_createConsumer, ANY_consumer.access_token, checkers_for_createConsumer());
     //
     // Was created 3 new consumers:
@@ -209,48 +209,51 @@ public class AuthtionFullTest
   {
     logHead("AuthtionConsumer Update");
 
+    USER_consumer = AuthtionTestConsumer.of(USER, "test2@dwfe.ru", "test22", client_TRUSTED, 200);
+    ADMIN_consumer = AuthtionTestConsumer.of(ADMIN, "test1@dwfe.ru", "test11", client_UNTRUSTED, 200);
+
     Optional<AuthtionConsumer> consumerByEmail = getConsumerByEmail(USER_consumer.username);
     assertTrue(consumerByEmail.isPresent());
 
     AuthtionConsumer consumer = consumerByEmail.get();
-    assertEquals("user", consumer.getNickName());
+    assertEquals("test2", consumer.getNickName());
     assertEquals("", consumer.getFirstName());
     assertEquals("", consumer.getLastName());
 
     check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer1);
     consumerByEmail = getConsumerByEmail(USER_consumer.username);
     consumer = consumerByEmail.get();
-    assertEquals("user", consumer.getNickName());
+    assertEquals("test2", consumer.getNickName());
     assertEquals("", consumer.getFirstName());
     assertEquals("", consumer.getLastName());
-
-    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer2);
-    consumerByEmail = getConsumerByEmail(USER_consumer.username);
-    consumer = consumerByEmail.get();
-    assertEquals("AuthtionConsumer", consumer.getNickName());
-    assertEquals("", consumer.getFirstName());
-    assertEquals("", consumer.getLastName());
-
-    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer3);
-    consumerByEmail = getConsumerByEmail(USER_consumer.username);
-    consumer = consumerByEmail.get();
-    assertEquals("Consumer1", consumer.getNickName());
-    assertEquals("1", consumer.getFirstName());
-    assertEquals("", consumer.getLastName());
-
-    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer4);
-    consumerByEmail = getConsumerByEmail(USER_consumer.username);
-    consumer = consumerByEmail.get();
-    assertEquals("Consumer1", consumer.getNickName());
-    assertEquals("1", consumer.getFirstName());
-    assertEquals("2", consumer.getLastName());
 
     check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer5);
     consumerByEmail = getConsumerByEmail(USER_consumer.username);
     consumer = consumerByEmail.get();
-    assertEquals("user", consumer.getNickName());
+    assertEquals("good", consumer.getNickName());
     assertEquals("alto", consumer.getFirstName());
     assertEquals("smith", consumer.getLastName());
+
+    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer3);
+    consumerByEmail = getConsumerByEmail(USER_consumer.username);
+    consumer = consumerByEmail.get();
+    assertEquals("hello", consumer.getNickName());
+    assertEquals("1", consumer.getFirstName());
+    assertEquals("smith", consumer.getLastName());
+
+    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer4);
+    consumerByEmail = getConsumerByEmail(USER_consumer.username);
+    consumer = consumerByEmail.get();
+    assertEquals("hello", consumer.getNickName());
+    assertEquals("1", consumer.getFirstName());
+    assertEquals("2", consumer.getLastName());
+
+    check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer2);
+    consumerByEmail = getConsumerByEmail(USER_consumer.username);
+    consumer = consumerByEmail.get();
+    assertEquals("user", consumer.getNickName());
+    assertEquals("", consumer.getFirstName());
+    assertEquals("", consumer.getLastName());
   }
 
   @Test
@@ -267,9 +270,9 @@ public class AuthtionFullTest
     check_send_data(GET, resource_publicConsumer + "/9", ANY_consumer.access_token, checkers_for_publicConsumer_9);
     check_send_data(GET, resource_publicConsumer + "/9", USER_consumer.access_token, checkers_for_publicConsumer_9);
     check_send_data(GET, resource_publicConsumer + "/9", ADMIN_consumer.access_token, checkers_for_publicConsumer_9);
-    check_send_data(GET, resource_publicConsumer + "/1", ANY_consumer.access_token, checkers_for_publicConsumer_1);
-    check_send_data(GET, resource_publicConsumer + "/1", USER_consumer.access_token, checkers_for_publicConsumer_1);
-    check_send_data(GET, resource_publicConsumer + "/1", ADMIN_consumer.access_token, checkers_for_publicConsumer_1);
+    check_send_data(GET, resource_publicConsumer + "/1000", ANY_consumer.access_token, checkers_for_publicConsumer_1);
+    check_send_data(GET, resource_publicConsumer + "/1000", USER_consumer.access_token, checkers_for_publicConsumer_1);
+    check_send_data(GET, resource_publicConsumer + "/1000", ADMIN_consumer.access_token, checkers_for_publicConsumer_1);
   }
 
   @Test
@@ -280,33 +283,58 @@ public class AuthtionFullTest
     mailingRepository.deleteAll();
     AuthtionTestConsumer consumer = AuthtionTestConsumer.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED, 200);
 
-    List<AuthtionMailing> confirmByEmail = mailingRepository.findByEmail(consumer.username);
+    // TODO Где-то здесь надо проверить на учетке, у которой уже подтвержден Email
+    //      реквест не должен создать подтверждение
+
+
+    List<AuthtionMailing> confirmByEmail = mailingRepository.findByTypeAndEmail(3, consumer.username);
     assertEquals(0, confirmByEmail.size());
 
     check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token, checkers_for_reqConfirmConsumerEmail);
 
-    confirmByEmail = mailingRepository.findByEmail(consumer.username);
+    confirmByEmail = mailingRepository.findByTypeAndEmail(3, consumer.username);
     assertEquals(1, confirmByEmail.size());
 
     AuthtionMailing mailing = confirmByEmail.get(0);
-    assertEquals(3, mailing.getType());
     assertFalse(mailing.isSended());
     assertFalse(mailing.isMaxAttemptsReached());
     assertTrue(mailing.getData().length() >= 28);
 
     try
     {
-      log.info("Please wait 15 seconds...");
-      TimeUnit.SECONDS.sleep(15);
+      log.info("Please wait 8 seconds...");
+      TimeUnit.SECONDS.sleep(8);
     }
     catch (InterruptedException ignored)
     {
     }
 
-    confirmByEmail = mailingRepository.findByEmail(consumer.username);
+    confirmByEmail = mailingRepository.findSendedNotEmptyData(3, consumer.username);
+    assertEquals(1, confirmByEmail.size());
     mailing = confirmByEmail.get(0);
-    assertTrue(mailing.isSended());
     assertFalse(mailing.isMaxAttemptsReached());
+
+    // Ok. At the moment we have 1 key, which wait for confirmation
+    // Let's try add one more key
+    check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token, checkers_for_reqConfirmConsumerEmail);
+
+    // TODO здесь запись не должна добавиться, т.к. в базе уже есть ключ, который ждет подтверждения
+    //      ждать в течении timeout-for-add-request
+
+    try
+    {
+      log.info("Please wait 5 seconds...");
+      TimeUnit.SECONDS.sleep(5);
+    }
+    catch (InterruptedException ignored)
+    {
+    }
+
+    check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token, checkers_for_reqConfirmConsumerEmail);
+
+    // новая запись добавилась И в выборке 1 запись, так как в предыдущей data должны почиститься
+
+
   }
 
   @Test
@@ -322,7 +350,12 @@ public class AuthtionFullTest
 
     check_send_data(GET, resource_confirmConsumerEmail, null, checkers_for_confirmConsumerEmail(confirmKey));
 
-    assertEquals(0, mailingRepository.findByEmail(EMAIL_NEW_Consumer).size());
+    confirmByEmail = mailingRepository.findByEmail(EMAIL_NEW_Consumer);
+    assertEquals(1, confirmByEmail.size());
+    AuthtionMailing mailing = confirmByEmail.get(0);
+    assertTrue(mailing.isSended());
+    assertFalse(mailing.isMaxAttemptsReached());
+    assertTrue(mailing.getData().isEmpty());
     assertTrue(getConsumerByEmail(EMAIL_NEW_Consumer).get().isEmailConfirmed());
   }
 
