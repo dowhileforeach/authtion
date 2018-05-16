@@ -114,6 +114,14 @@ public class AuthtionTestVariablesForConsumerTest
           AuthtionTestChecker.of(true, Map.of(), 200)
   );
 
+  public static final List<AuthtionTestChecker> checkers_for_reqConfirmConsumerEmail_isConfirmed = List.of(
+          AuthtionTestChecker.of(false, Map.of(), 200, "email-is-already-confirmed")
+  );
+
+  public static final List<AuthtionTestChecker> checkers_for_reqConfirmConsumerEmail_duplicateDelay = List.of(
+          AuthtionTestChecker.of(false, Map.of(), 200, "delay-between-duplicate-requests11")
+  );
+
   public static List<AuthtionTestChecker> checkers_for_confirmConsumerEmail(String existedKey)
   {
     return List.of(

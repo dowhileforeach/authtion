@@ -72,7 +72,7 @@ CREATE TABLE authtion_mailing (
   `type`               INT                                      NOT NULL,
   email                VARCHAR(50)
                        COLLATE utf8mb4_unicode_ci               NOT NULL,
-  sended               TINYINT(1)                               NOT NULL,
+  sent               TINYINT(1)                               NOT NULL,
   max_attempts_reached TINYINT(1)                               NOT NULL,
   data                 VARCHAR(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
   updated_on           DATETIME                                             DEFAULT CURRENT_TIMESTAMP

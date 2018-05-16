@@ -2,16 +2,26 @@ package ru.dwfe.net.authtion.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+import ru.dwfe.net.authtion.dao.AuthtionMailing;
+import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+@Component
+@PropertySource("classpath:application.properties")
 public class AuthtionUtil
 {
   public static Map<String, Object> parse(String body)
@@ -144,7 +154,52 @@ public class AuthtionUtil
     // and don't forget about the time zone of MySQL
   }
 
-  private AuthtionUtil()
+  public String getGoogleCaptchaSecretKey()
   {
+    String secretKey = env.getProperty("dwfe.authtion.google.captcha.secret-key");
+    return secretKey == null ? "" : secretKey;
+  }
+
+  public int getTimeoutForDuplicateRequest()
+  {
+    int minTimeout = 5000; // millisecond
+
+    String sendIntervalStr = env.getProperty("dwfe.authtion.scheduled.task.mailing.send-interval");
+    String maxAttemptsStr = env.getProperty("dwfe.authtion.scheduled.task.mailing.max-attempts-to-send-if-error");
+
+    int sendInterval = sendIntervalStr == null ? 0 : Integer.parseInt(sendIntervalStr);
+    int maxAttempts = maxAttemptsStr == null ? 0 : Integer.parseInt(maxAttemptsStr);
+    int timeout = sendInterval * maxAttempts;
+
+    return timeout < minTimeout ? minTimeout : timeout;
+  }
+
+  public boolean isAllowedNewRequestForMailing(int type, String email, List<String> errorCodes)
+  {
+    boolean result = true;
+
+    Optional<AuthtionMailing> lastPending = mailingRepository.findLastNotEmptyData(type, email);
+    if (lastPending.isPresent())
+    {
+      LocalDateTime whenNewIsAllowed = lastPending.get()
+              .getCreatedOn()
+              .plus(getTimeoutForDuplicateRequest(), ChronoUnit.MILLIS);
+      if (whenNewIsAllowed.isAfter(LocalDateTime.now()))
+      {
+        result = false;
+        errorCodes.add("delay-between-duplicate-requests");
+      }
+    }
+    return result;
+  }
+
+  private final Environment env;
+  private final AuthtionMailingRepository mailingRepository;
+
+  @Autowired
+  private AuthtionUtil(Environment env, AuthtionMailingRepository mailingRepository)
+  {
+    this.env = env;
+    this.mailingRepository = mailingRepository;
   }
 }

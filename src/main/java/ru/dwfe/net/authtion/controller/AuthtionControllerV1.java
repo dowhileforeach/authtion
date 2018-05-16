@@ -1,8 +1,6 @@
 package ru.dwfe.net.authtion.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +14,7 @@ import ru.dwfe.net.authtion.dao.AuthtionConsumer;
 import ru.dwfe.net.authtion.dao.AuthtionMailing;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 import ru.dwfe.net.authtion.service.AuthtionConsumerService;
+import ru.dwfe.net.authtion.util.AuthtionUtil;
 
 import java.util.*;
 import java.util.concurrent.FutureTask;
@@ -28,23 +27,22 @@ import static ru.dwfe.net.authtion.util.AuthtionUtil.*;
 
 @RestController
 @RequestMapping(path = API_V1, produces = "application/json; charset=utf-8")
-@PropertySource("classpath:application.properties")
 public class AuthtionControllerV1
 {
   private final AuthtionConsumerService consumerService;
   private final AuthtionMailingRepository mailingRepository;
   private final ConsumerTokenServices tokenServices;
-  private final Environment env;
   private final RestTemplate restTemplate;
+  private final AuthtionUtil authtionUtil;
 
   @Autowired
-  public AuthtionControllerV1(AuthtionConsumerService consumerService, AuthtionMailingRepository mailingRepository, ConsumerTokenServices tokenServices, Environment env, RestTemplate restTemplate)
+  public AuthtionControllerV1(AuthtionConsumerService consumerService, AuthtionMailingRepository mailingRepository, ConsumerTokenServices tokenServices, RestTemplate restTemplate, AuthtionUtil authtionUtil)
   {
     this.consumerService = consumerService;
     this.mailingRepository = mailingRepository;
     this.tokenServices = tokenServices;
-    this.env = env;
     this.restTemplate = restTemplate;
+    this.authtionUtil = authtionUtil;
   }
 
   @PostMapping(resource_checkConsumerEmail)
@@ -74,15 +72,13 @@ public class AuthtionControllerV1
   {
     List<String> errorCodes = new ArrayList<>();
 
-    String captchaSecret = env.getProperty("dwfe.authtion.google.captcha.secret-key");
-    System.out.println("captchaSecret=" + captchaSecret);
     String googleResponse = (String) getValueFromJSON(body, "googleResponse");
 
     if (isDefaultCheckOK(googleResponse, "google-response", errorCodes))
     {
       // https://developers.google.com/recaptcha/docs/verify#api-request
       String url = String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s",
-              captchaSecret, googleResponse);
+              authtionUtil.getGoogleCaptchaSecretKey(), googleResponse);
 
       FutureTask<ResponseEntity<String>> taskForExchangeWithGoogle =
               new FutureTask<>(() -> restTemplate.exchange(url, HttpMethod.POST, null, String.class));
@@ -240,8 +236,19 @@ public class AuthtionControllerV1
   {
     List<String> errorCodes = new ArrayList<>();
 
-    String email = ((AuthtionConsumer) authentication.getPrincipal()).getEmail();
-    mailingRepository.save(AuthtionMailing.of(3, email, getUniqStrBase36(30)));
+    Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
+    AuthtionConsumer consumer = consumerService.findById(id).get();
+    String email = consumer.getEmail();
+    int type = 3;
+
+    if (consumer.isEmailConfirmed())
+    {
+      errorCodes.add("email-is-already-confirmed");
+    }
+    else if (authtionUtil.isAllowedNewRequestForMailing(type, email, errorCodes))
+    {
+      mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase36(30)));
+    }
 
     return getResponse(errorCodes);
   }

@@ -23,7 +23,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
   private String email;
 
   private String data;
-  private volatile boolean sended;
+  private volatile boolean sent;
   private volatile boolean maxAttemptsReached;
 
   @Column(updatable = false, insertable = false)
@@ -39,7 +39,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
     mailing.setType(type);
     mailing.setEmail(email);
     mailing.setData(data);
-    mailing.setSended(false);
+    mailing.setSent(false);
     mailing.setMaxAttemptsReached(false);
     return mailing;
   }
@@ -98,14 +98,14 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
     this.data = data;
   }
 
-  public boolean isSended()
+  public boolean isSent()
   {
-    return sended;
+    return sent;
   }
 
-  public void setSended(boolean sended)
+  public void setSent(boolean sent)
   {
-    this.sended = sended;
+    this.sent = sent;
   }
 
   public boolean isMaxAttemptsReached()
@@ -173,7 +173,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
             " \"type\": " + type + ",\n" +
             " \"email\": " + email + ",\n" +
             " \"data\": \"****\",\n" +
-            " \"sended\": " + sended + ",\n" +
+            " \"sent\": " + sent + ",\n" +
             " \"maxAttemptsReached\": " + maxAttemptsReached + ",\n" +
             " \"attempt\": " + attempt + ",\n" +
             " \"updatedOn\": " + "\"" + AuthtionUtil.formatDateTime(updatedOn) + "\"\n" +

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface AuthtionMailingRepository extends CrudRepository<AuthtionMailing, AuthtionMailing.AuthtionMailingId>
 {
-  @Query("FROM AuthtionMailing WHERE sended = false AND maxAttemptsReached = false")
+  @Query("FROM AuthtionMailing WHERE sent = false AND maxAttemptsReached = false")
   List<AuthtionMailing> getNewJob();
 
   List<AuthtionMailing> findByEmail(String email);
@@ -21,6 +21,11 @@ public interface AuthtionMailingRepository extends CrudRepository<AuthtionMailin
 
   List<AuthtionMailing> findByTypeAndEmail(int type, String email);
 
-  @Query("FROM AuthtionMailing WHERE type = :type AND email = :email AND sended = true AND data<>''")
-  List<AuthtionMailing> findSendedNotEmptyData(@Param("type") int type, @Param("email") String email);
+  @Query(nativeQuery = true,
+          value = "SELECT * FROM authtion_mailing WHERE type=:type AND email=:email AND data<>'' ORDER BY created_on DESC LIMIT 1")
+  Optional<AuthtionMailing> findLastNotEmptyData(@Param("type") int type, @Param("email") String email);
+
+  @Query(nativeQuery = true,
+          value = "SELECT * FROM authtion_mailing WHERE type=:type AND email=:email AND sent=true AND data<>'' ORDER BY created_on DESC LIMIT 1")
+  Optional<AuthtionMailing> findSentLastNotEmptyData(@Param("type") int type, @Param("email") String email);
 }

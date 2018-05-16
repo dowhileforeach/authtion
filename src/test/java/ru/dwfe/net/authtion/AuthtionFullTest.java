@@ -281,24 +281,35 @@ public class AuthtionFullTest
     logHead("Request Confirm Email");
 
     mailingRepository.deleteAll();
+
+    // сheck for 'email-is-already-confirmed' error
+    Optional<AuthtionConsumer> consumerFromDBOpt = consumerService.findByEmail(USER_consumer.username);
+    assertTrue(consumerFromDBOpt.isPresent());
+    AuthtionConsumer consumerFromDB = consumerFromDBOpt.get();
+    assertTrue(consumerFromDB.isEmailConfirmed());
+    check_send_data(GET, resource_reqConfirmConsumerEmail, USER_consumer.access_token,
+            checkers_for_reqConfirmConsumerEmail_isConfirmed);
+
+    // add new request
     AuthtionTestConsumer consumer = AuthtionTestConsumer.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED, 200);
-
-    // TODO Где-то здесь надо проверить на учетке, у которой уже подтвержден Email
-    //      реквест не должен создать подтверждение
-
-
     List<AuthtionMailing> confirmByEmail = mailingRepository.findByTypeAndEmail(3, consumer.username);
     assertEquals(0, confirmByEmail.size());
+    check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
+            checkers_for_reqConfirmConsumerEmail);
 
-    check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token, checkers_for_reqConfirmConsumerEmail);
-
+    // check that the request was success added
     confirmByEmail = mailingRepository.findByTypeAndEmail(3, consumer.username);
     assertEquals(1, confirmByEmail.size());
 
     AuthtionMailing mailing = confirmByEmail.get(0);
-    assertFalse(mailing.isSended());
+    assertFalse(mailing.isSent());
     assertFalse(mailing.isMaxAttemptsReached());
     assertTrue(mailing.getData().length() >= 28);
+
+    // Ok. At the moment we have 1 key and it is not yet time to send a duplicate request
+    // Let's try to add one more key ==> сheck for 'delay-between-duplicate-requests' error
+    check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
+            checkers_for_reqConfirmConsumerEmail_duplicateDelay);
 
     try
     {
@@ -309,32 +320,35 @@ public class AuthtionFullTest
     {
     }
 
-    confirmByEmail = mailingRepository.findSendedNotEmptyData(3, consumer.username);
-    assertEquals(1, confirmByEmail.size());
-    mailing = confirmByEmail.get(0);
+    Optional<AuthtionMailing> confirmByEmailOpt = mailingRepository.findSentLastNotEmptyData(3, consumer.username);
+    assertTrue(confirmByEmailOpt.isPresent()); // new key was success added and sent
+    mailing = confirmByEmailOpt.get();
     assertFalse(mailing.isMaxAttemptsReached());
+    String alreadySentKeyOld = mailing.getData();
 
-    // Ok. At the moment we have 1 key, which wait for confirmation
-    // Let's try add one more key
-    check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token, checkers_for_reqConfirmConsumerEmail);
-
-    // TODO здесь запись не должна добавиться, т.к. в базе уже есть ключ, который ждет подтверждения
-    //      ждать в течении timeout-for-add-request
+    // At the moment we have a key that has already been sent and is waiting for confirmation
+    // Try to add one more key, because duplicate delay should already expire
+    check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
+            checkers_for_reqConfirmConsumerEmail);
 
     try
     {
-      log.info("Please wait 5 seconds...");
-      TimeUnit.SECONDS.sleep(5);
+      log.info("Please wait 8 seconds...");
+      TimeUnit.SECONDS.sleep(8);
     }
     catch (InterruptedException ignored)
     {
     }
 
-    check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token, checkers_for_reqConfirmConsumerEmail);
+    confirmByEmailOpt = mailingRepository.findSentLastNotEmptyData(3, consumer.username);
+    assertTrue(confirmByEmailOpt.isPresent());
+    mailing = confirmByEmailOpt.get();
+    assertFalse(mailing.isMaxAttemptsReached());
+    assertNotEquals(alreadySentKeyOld, mailing.getData());  // another new key was success added and sent
 
-    // новая запись добавилась И в выборке 1 запись, так как в предыдущей data должны почиститься
-
-
+    consumerFromDBOpt = consumerService.findByEmail(consumer.username);
+    assertTrue(consumerFromDBOpt.isPresent());
+    assertFalse(consumerFromDBOpt.get().isEmailConfirmed());
   }
 
   @Test
@@ -353,7 +367,7 @@ public class AuthtionFullTest
     confirmByEmail = mailingRepository.findByEmail(EMAIL_NEW_Consumer);
     assertEquals(1, confirmByEmail.size());
     AuthtionMailing mailing = confirmByEmail.get(0);
-    assertTrue(mailing.isSended());
+    assertTrue(mailing.isSent());
     assertFalse(mailing.isMaxAttemptsReached());
     assertTrue(mailing.getData().isEmpty());
     assertTrue(getConsumerByEmail(EMAIL_NEW_Consumer).get().isEmailConfirmed());
@@ -413,7 +427,7 @@ public class AuthtionFullTest
 //
 //    List<AuthtionMailing> confirmByEmail = mailingRepository.findByEmail(email);
 //    assertEquals(1, confirmByEmail.size());
-//    assertFalse(confirmByEmail.get(0).isSended());
+//    assertFalse(confirmByEmail.get(0).isSent());
   }
 
   private void confirmRestoreConsumerPass(String email)
