@@ -24,20 +24,20 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static ru.dwfe.net.authtion.test_util.ResourceAccessingType.BAD_ACCESS_TOKEN;
 import static ru.dwfe.net.authtion.test_util.ResourceAccessingType.USUAL;
 import static ru.dwfe.net.authtion.test_util.SignInType.Refresh;
-import static ru.dwfe.net.authtion.test_util.Variables_Global.ALL_BEFORE_RESOURCE;
-import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.*;
+import static ru.dwfe.net.authtion.test_util.VariablesForAuthTest.*;
+import static ru.dwfe.net.authtion.test_util.VariablesGlobal.ALL_BEFORE_RESOURCE;
 
-public class UtilTest
+public class UtilForTest
 {
-  static void setNewTokens(ConsumerTest consumerTest, int signInExpectedStatus, SignInType signInType)
+  static void setNewTokens(ConsumerForTest consumerForTest, int signInExpectedStatus, SignInType signInType)
   {
-    Client client = consumerTest.client;
+    Client client = consumerForTest.client;
     Request req;
 
     if (Refresh == signInType)
-      req = auth_refresh_POST_Request(client.clientname, client.clientpass, consumerTest.refresh_token);
+      req = auth_refresh_POST_Request(client.clientname, client.clientpass, consumerForTest.refresh_token);
     else
-      req = auth_signIn_POST_Request(client.clientname, client.clientpass, consumerTest.username, consumerTest.password);
+      req = auth_signIn_POST_Request(client.clientname, client.clientpass, consumerForTest.username, consumerForTest.password);
 
     String body = performSignIn(req, signInExpectedStatus);
 
@@ -57,8 +57,8 @@ public class UtilTest
       assertThat((int) getValueFromResponse(map, "expires_in"),
               is(both(greaterThan(client.minTokenExpirationTime)).and(lessThanOrEqualTo(client.maxTokenExpirationTime))));
 
-      consumerTest.access_token = access_token;
-      consumerTest.refresh_token = refresh_token;
+      consumerForTest.access_token = access_token;
+      consumerForTest.refresh_token = refresh_token;
     }
   }
 
@@ -105,11 +105,11 @@ public class UtilTest
     return body;
   }
 
-  private static String performSignOut(ConsumerTest consumerTest, int expectedStatus)
+  private static String performSignOut(ConsumerForTest consumerForTest, int expectedStatus)
   {
     log.info("Sign Out");
 
-    Request req = GET_request(ALL_BEFORE_RESOURCE + Global.resource_signOut, consumerTest.access_token, Map.of());
+    Request req = GET_request(ALL_BEFORE_RESOURCE + Global.resource_signOut, consumerForTest.access_token, Map.of());
 
     log.info("-> Authorization: {}", req.header("Authorization"));
     log.info("-> " + req.url().toString());
@@ -236,36 +236,36 @@ public class UtilTest
     return performRequest(req, expectedStatus);
   }
 
-  private static void performAuthTest_ResourceAccessing_ChangeToken(ConsumerTest consumerTest)
+  private static void performAuthTest_ResourceAccessing_ChangeToken(ConsumerForTest consumerForTest)
   {
     //1. Resource accessing
-    performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
+    performResourceAccessing(consumerForTest.access_token, consumerForTest.level, USUAL);
 
     //2. Change Token
-    String old_access_token = consumerTest.access_token;
-    String old_refresh_token = consumerTest.refresh_token;
-    setNewTokens(consumerTest, 200, Refresh);
-    assertNotEquals(old_access_token, consumerTest.access_token);
-    assertEquals(old_refresh_token, consumerTest.refresh_token);
+    String old_access_token = consumerForTest.access_token;
+    String old_refresh_token = consumerForTest.refresh_token;
+    setNewTokens(consumerForTest, 200, Refresh);
+    assertNotEquals(old_access_token, consumerForTest.access_token);
+    assertEquals(old_refresh_token, consumerForTest.refresh_token);
 
     //3. Resource accessing: old/new token
-    performResourceAccessing(old_access_token, consumerTest.level, BAD_ACCESS_TOKEN);
-    performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
+    performResourceAccessing(old_access_token, consumerForTest.level, BAD_ACCESS_TOKEN);
+    performResourceAccessing(consumerForTest.access_token, consumerForTest.level, USUAL);
   }
 
-  public static void performFullAuthTest(ConsumerTest consumerTest)
+  public static void performFullAuthTest(ConsumerForTest consumerForTest)
   {
     //1,2,3
-    performAuthTest_ResourceAccessing_ChangeToken(consumerTest);
+    performAuthTest_ResourceAccessing_ChangeToken(consumerForTest);
 
     //4. Sign Out
-    performSignOut(consumerTest, 200);
+    performSignOut(consumerForTest, 200);
 
     //5. Resource accessing
-    performResourceAccessing(consumerTest.access_token, consumerTest.level, BAD_ACCESS_TOKEN);
+    performResourceAccessing(consumerForTest.access_token, consumerForTest.level, BAD_ACCESS_TOKEN);
 
     //6. Change Token
-    setNewTokens(consumerTest, 400, Refresh);
+    setNewTokens(consumerForTest, 400, Refresh);
   }
 
   public static void performResourceAccessing(String access_token, AuthorityLevel consumerLevel, ResourceAccessingType resourceAccessingType)
@@ -363,10 +363,10 @@ public class UtilTest
     return next.get(0);
   }
 
-  private UtilTest()
+  private UtilForTest()
   {
   }
 
-  private static final Logger log = LoggerFactory.getLogger(UtilTest.class);
+  private static final Logger log = LoggerFactory.getLogger(UtilForTest.class);
   private static JsonParser jsonParser = JsonParserFactory.getJsonParser();
 }

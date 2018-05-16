@@ -15,7 +15,7 @@ import ru.dwfe.net.authtion.dao.Mailing;
 import ru.dwfe.net.authtion.dao.repository.MailingRepository;
 import ru.dwfe.net.authtion.service.ConsumerService;
 import ru.dwfe.net.authtion.test_util.Checker;
-import ru.dwfe.net.authtion.test_util.ConsumerTest;
+import ru.dwfe.net.authtion.test_util.ConsumerForTest;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -27,10 +27,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.test_util.AuthorityLevel.USER;
 import static ru.dwfe.net.authtion.test_util.ResourceAccessingType.USUAL;
-import static ru.dwfe.net.authtion.test_util.UtilTest.*;
-import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
-import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.TOTAL_ACCESS_TOKEN_COUNT;
-import static ru.dwfe.net.authtion.test_util.Variables_for_ConsumerPassword_CRU_Test.*;
+import static ru.dwfe.net.authtion.test_util.UtilForTest.*;
+import static ru.dwfe.net.authtion.test_util.VariablesForAuthTest.TOTAL_ACCESS_TOKEN_COUNT;
+import static ru.dwfe.net.authtion.test_util.VariablesForConsumerTest.*;
+import static ru.dwfe.net.authtion.test_util.VariablesGlobal.*;
 
 //
 // == https://spring.io/guides/gs/testing-web/
@@ -56,10 +56,10 @@ public class FullTest
   {
     logHead("USER");
 
-    ConsumerTest consumerTest = USER_consumer;
-    auth_test_access_tokens.add(consumerTest.access_token);
+    ConsumerForTest consumerForTest = USER_consumer;
+    auth_test_access_tokens.add(consumerForTest.access_token);
 
-    fullAuthTest(consumerTest);
+    fullAuthTest(consumerForTest);
   }
 
   @Test
@@ -67,10 +67,10 @@ public class FullTest
   {
     logHead("ADMIN");
 
-    ConsumerTest consumerTest = ADMIN_consumer;
-    auth_test_access_tokens.add(consumerTest.access_token);
+    ConsumerForTest consumerForTest = ADMIN_consumer;
+    auth_test_access_tokens.add(consumerForTest.access_token);
 
-    fullAuthTest(consumerTest);
+    fullAuthTest(consumerForTest);
   }
 
   @Test
@@ -78,8 +78,8 @@ public class FullTest
   {
     logHead("ANY");
 
-    ConsumerTest consumerTest = ANY_consumer;
-    performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
+    ConsumerForTest consumerForTest = ANY_consumer;
+    performResourceAccessing(consumerForTest.access_token, consumerForTest.level, USUAL);
   }
 
   @Test
@@ -199,9 +199,9 @@ public class FullTest
 
 
     // Perform full auth test for New Consumer
-    fullAuthTest(ConsumerTest.of(USER, consumer1.getEmail(), PASS_NEW_Consumer, client_TRUSTED, 200));
-    fullAuthTest(ConsumerTest.of(USER, consumer2.getEmail(), mailing_password_consumer2, client_TRUSTED, 200));
-    fullAuthTest(ConsumerTest.of(USER, consumer3.getEmail(), PASS_FOR_EMAIL_3_Consumer_Decoded, client_TRUSTED, 200));
+    fullAuthTest(ConsumerForTest.of(USER, consumer1.getEmail(), PASS_NEW_Consumer, client_TRUSTED, 200));
+    fullAuthTest(ConsumerForTest.of(USER, consumer2.getEmail(), mailing_password_consumer2, client_TRUSTED, 200));
+    fullAuthTest(ConsumerForTest.of(USER, consumer3.getEmail(), PASS_FOR_EMAIL_3_Consumer_Decoded, client_TRUSTED, 200));
   }
 
   @Test
@@ -278,7 +278,7 @@ public class FullTest
     logHead("Request Confirm Email");
 
     mailingRepository.deleteAll();
-    ConsumerTest consumer = ConsumerTest.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED, 200);
+    ConsumerForTest consumer = ConsumerForTest.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED, 200);
 
     List<Mailing> confirmByEmail = mailingRepository.findByEmail(consumer.username);
     assertEquals(0, confirmByEmail.size());
@@ -339,19 +339,19 @@ public class FullTest
 //    logHead("Change Consumer Pass = " + email);
 //
 //    //newpass
-//    //ConsumerTest.of(USER, email, newpass, client_TRUSTED, 400);
+//    //ConsumerForTest.of(USER, email, newpass, client_TRUSTED, 400);
 //
 //    //oldpass
-//    ConsumerTest consumerTest = ConsumerTest.of(USER, email, oldpass, client_TRUSTED, 200);
+//    ConsumerForTest consumerTest = ConsumerForTest.of(USER, email, oldpass, client_TRUSTED, 200);
 //
 //    //change oldpass
 //    check_send_data(POST, resource_changeConsumerPass, consumerTest.access_token, checkers);
 //
 //    //oldpass
-//    //ConsumerTest.of(USER, email, oldpass, client_TRUSTED, 400);
+//    //ConsumerForTest.of(USER, email, oldpass, client_TRUSTED, 400);
 //
 //    //newpass
-//    consumerTest = ConsumerTest.of(USER, email, newpass, client_TRUSTED, 200);
+//    consumerTest = ConsumerForTest.of(USER, email, newpass, client_TRUSTED, 200);
 //    fullAuthTest(consumerTest);
   }
 
@@ -404,9 +404,9 @@ public class FullTest
 //    assertEquals(1, confirmByEmail.size());
 //
 //    //oldpass
-//    //ConsumerTest.of(USER, email, oldpassDecoded, client_TRUSTED, 200);
+//    //ConsumerForTest.of(USER, email, oldpassDecoded, client_TRUSTED, 200);
 //    //newpass
-//    //ConsumerTest.of(USER, email, newpassDecoded, client_TRUSTED, 400);
+//    //ConsumerForTest.of(USER, email, newpassDecoded, client_TRUSTED, 400);
 //
 //    //change password
 //    check_send_data(POST, resource_restoreConsumerPass, ANY_consumer.access_token,
@@ -415,16 +415,16 @@ public class FullTest
 //    assertEquals(0, mailingRepository.findByEmail(email).size());
 //
 //    //oldpass
-//    //ConsumerTest.of(USER, email, oldpassDecoded, client_TRUSTED, 400);
+//    //ConsumerForTest.of(USER, email, oldpassDecoded, client_TRUSTED, 400);
 //
 //    //newpass
-//    ConsumerTest consumerTest = ConsumerTest.of(USER, email, newpassDecoded, client_TRUSTED, 200);
+//    ConsumerForTest consumerTest = ConsumerForTest.of(USER, email, newpassDecoded, client_TRUSTED, 200);
 //    fullAuthTest(consumerTest);
   }
 
-  private void fullAuthTest(ConsumerTest consumerTest)
+  private void fullAuthTest(ConsumerForTest consumerForTest)
   {
-    performFullAuthTest(consumerTest);
+    performFullAuthTest(consumerForTest);
     mailingRepository.deleteAll();
   }
 

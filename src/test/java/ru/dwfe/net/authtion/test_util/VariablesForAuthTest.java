@@ -10,7 +10,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.test_util.AuthorityLevel.*;
 
-public class Variables_for_AuthorityTest
+public class VariablesForAuthTest
 {
   /*
       RESOURCES

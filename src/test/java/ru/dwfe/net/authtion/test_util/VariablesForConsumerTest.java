@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Variables_for_ConsumerPassword_CRU_Test
+public class VariablesForConsumerTest
 {
   public static final String EMAIL_NEW_Consumer = "notExistedConsumer@ya.ru";
   public static final String EMAIL_2_NEW_Consumer = "not_02_ExistedConsumer@ya.ru";

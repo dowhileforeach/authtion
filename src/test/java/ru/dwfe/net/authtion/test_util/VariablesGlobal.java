@@ -5,7 +5,7 @@ import ru.dwfe.net.authtion.Global;
 import static ru.dwfe.net.authtion.test_util.AuthorityLevel.ADMIN;
 import static ru.dwfe.net.authtion.test_util.AuthorityLevel.USER;
 
-public class Variables_Global
+public class VariablesGlobal
 {
   public static final String PROTOCOL_HOST_PORT = "http://localhost:8080";
   public static final String ALL_BEFORE_RESOURCE = PROTOCOL_HOST_PORT + Global.API_CURRENT_VERSION;
@@ -19,7 +19,7 @@ public class Variables_Global
   /*
       Consumers from backend database
   */
-  public static final ConsumerTest USER_consumer = ConsumerTest.of(USER, "test2@dwfe.ru", "test22", client_TRUSTED, 200);
-  public static final ConsumerTest ADMIN_consumer = ConsumerTest.of(ADMIN, "test1@dwfe.ru", "test11", client_UNTRUSTED, 200);
-  public static final ConsumerTest ANY_consumer = ConsumerTest.getAnonymous();
+  public static final ConsumerForTest USER_consumer = ConsumerForTest.of(USER, "test2@dwfe.ru", "test22", client_TRUSTED, 200);
+  public static final ConsumerForTest ADMIN_consumer = ConsumerForTest.of(ADMIN, "test1@dwfe.ru", "test11", client_UNTRUSTED, 200);
+  public static final ConsumerForTest ANY_consumer = ConsumerForTest.getAnonymous();
 }
