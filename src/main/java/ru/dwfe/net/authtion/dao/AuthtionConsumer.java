@@ -8,8 +8,8 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.dwfe.net.authtion.service.ConsumerService;
-import ru.dwfe.net.authtion.util.Util;
+import ru.dwfe.net.authtion.service.AuthtionConsumerService;
+import ru.dwfe.net.authtion.util.AuthtionUtil;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static ru.dwfe.net.authtion.util.Util.isDefaultCheckOK;
+import static ru.dwfe.net.authtion.util.AuthtionUtil.isDefaultCheckOK;
 
 @Entity
 @Table(name = "authtion_consumers")
-public class Consumer implements UserDetails, CredentialsContainer
+public class AuthtionConsumer implements UserDetails, CredentialsContainer
 {
   private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
@@ -38,7 +38,7 @@ public class Consumer implements UserDetails, CredentialsContainer
   @JoinTable(name = "authtion_consumer_authority",
           joinColumns = @JoinColumn(name = "consumer", referencedColumnName = "id"),
           inverseJoinColumns = @JoinColumn(name = "authority", referencedColumnName = "authority"))
-  private Set<Authority> authorities;
+  private Set<AuthtionAuthority> authorities;
 
   private String nickName;
   private String firstName;
@@ -155,7 +155,7 @@ public class Consumer implements UserDetails, CredentialsContainer
     this.password = password;
   }
 
-  public void setAuthorities(Set<Authority> authorities)
+  public void setAuthorities(Set<AuthtionAuthority> authorities)
   {
     this.authorities = authorities;
   }
@@ -241,7 +241,7 @@ public class Consumer implements UserDetails, CredentialsContainer
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    Consumer consumer = (Consumer) o;
+    AuthtionConsumer consumer = (AuthtionConsumer) o;
 
     return id.equals(consumer.id);
   }
@@ -268,8 +268,8 @@ public class Consumer implements UserDetails, CredentialsContainer
             " \"accountNonLocked\": " + accountNonLocked + ",\n" +
             " \"enabled\": " + enabled + ",\n" +
             " \"emailConfirmed\": " + emailConfirmed + ",\n" +
-            " \"createdOn\": " + "\"" + Util.formatDateTime(createdOn) + "\",\n" +
-            " \"updatedOn\": " + "\"" + Util.formatDateTime(updatedOn) + "\"\n" +
+            " \"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(createdOn) + "\",\n" +
+            " \"updatedOn\": " + "\"" + AuthtionUtil.formatDateTime(updatedOn) + "\"\n" +
             "}";
   }
 
@@ -278,7 +278,7 @@ public class Consumer implements UserDetails, CredentialsContainer
   //  UTILs
   //
 
-  public static boolean canUseEmail(String email, ConsumerService consumerService, List<String> errorCodes)
+  public static boolean canUseEmail(String email, AuthtionConsumerService consumerService, List<String> errorCodes)
   {
     boolean result = false;
 
@@ -336,7 +336,7 @@ public class Consumer implements UserDetails, CredentialsContainer
     return result;
   }
 
-  public static void setNewPassword(Consumer consumer, String password)
+  public static void setNewPassword(AuthtionConsumer consumer, String password)
   {
     if (isPasswordBcrypted(password))
       consumer.setPassword("{bcrypt}" + password);
@@ -350,7 +350,7 @@ public class Consumer implements UserDetails, CredentialsContainer
     return BCrypt.checkpw(rawPassword, encodedPassword);
   }
 
-  public static void prepareNewConsumer(Consumer consumer)
+  public static void prepareNewConsumer(AuthtionConsumer consumer)
   {
     consumer.setAccountNonExpired(true);
     consumer.setCredentialsNonExpired(true);
@@ -358,7 +358,7 @@ public class Consumer implements UserDetails, CredentialsContainer
     consumer.setEnabled(true);
     consumer.setEmailConfirmed(false);
 
-    consumer.setAuthorities(Set.of(Authority.of("USER")));
+    consumer.setAuthorities(Set.of(AuthtionAuthority.of("USER")));
 
 
     consumer.setFirstName(prepareStringField(consumer.getFirstName(), 20));

@@ -6,27 +6,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.dwfe.net.authtion.dao.Mailing;
-import ru.dwfe.net.authtion.dao.repository.MailingRepository;
+import ru.dwfe.net.authtion.dao.AuthtionMailing;
+import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 @Component
-public class ScheduledTask
+public class AuthtionScheduler
 {
-  private final static Logger log = LoggerFactory.getLogger(ScheduledTask.class);
+  private final static Logger log = LoggerFactory.getLogger(AuthtionScheduler.class);
 
   @Autowired
   public JavaMailSender emailSender;
 
   @Autowired
-  MailingRepository mailingRepository;
+  AuthtionMailingRepository mailingRepository;
 
-  private static final ConcurrentSkipListSet<Mailing> MAILING_POOL = new ConcurrentSkipListSet<>();
+  private static final ConcurrentSkipListSet<AuthtionMailing> MAILING_POOL = new ConcurrentSkipListSet<>();
 
-  @Scheduled(fixedRateString = "${scheduled.task.mailing.collect}", initialDelayString = "${scheduled.task.mailing.initial-delay}")
+  @Scheduled(
+          initialDelayString = "${dwfe.authtion.scheduled.task.mailing.initial-delay}",
+          fixedRateString = "${dwfe.authtion.scheduled.task.mailing.collect}")
   public void collectMailingTasksFromDatabase()
   {
 
@@ -44,11 +46,13 @@ public class ScheduledTask
 
   }
 
-  @Scheduled(fixedDelayString = "${scheduled.task.mailing.send}", initialDelayString = "${scheduled.task.mailing.initial-delay}")
+  @Scheduled(
+          initialDelayString = "${dwfe.authtion.scheduled.task.mailing.initial-delay}",
+          fixedDelayString = "${dwfe.authtion.scheduled.task.mailing.send}")
   public void mailingWelcomeWhenPasswordWasNotPassed()
   {
     log.warn("mailing before perform");
-    List<Mailing> toDataBase = new ArrayList<>();
+    List<AuthtionMailing> toDataBase = new ArrayList<>();
     MAILING_POOL.forEach(next -> {
       try
       {

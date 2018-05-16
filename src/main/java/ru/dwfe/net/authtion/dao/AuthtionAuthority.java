@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "authtion_authorities")
-public class Authority implements GrantedAuthority
+public class AuthtionAuthority implements GrantedAuthority
 {
   private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
@@ -19,9 +19,9 @@ public class Authority implements GrantedAuthority
   private String description;
 
 
-  public static Authority of(String authorityName)
+  public static AuthtionAuthority of(String authorityName)
   {
-    Authority authority = new Authority();
+    AuthtionAuthority authority = new AuthtionAuthority();
     authority.setAuthority(authorityName);
     return authority;
   }
@@ -53,7 +53,7 @@ public class Authority implements GrantedAuthority
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    Authority authority = (Authority) o;
+    AuthtionAuthority authority = (AuthtionAuthority) o;
 
     return this.authority.equals(authority.authority);
   }

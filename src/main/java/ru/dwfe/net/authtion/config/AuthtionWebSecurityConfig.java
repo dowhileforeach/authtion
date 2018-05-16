@@ -20,7 +20,7 @@ import java.util.Map;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter
+public class AuthtionWebSecurityConfig extends WebSecurityConfigurerAdapter
 {
   @Autowired
   private UserDetailsService userDetailsService;

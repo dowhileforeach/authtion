@@ -12,7 +12,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-public class Util
+public class AuthtionUtil
 {
   public static Map<String, Object> parse(String body)
   {
@@ -144,7 +144,7 @@ public class Util
     // and don't forget about the time zone of MySQL
   }
 
-  private Util()
+  private AuthtionUtil()
   {
   }
 }

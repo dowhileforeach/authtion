@@ -1,4 +1,4 @@
-package ru.dwfe.net.authtion.test_util;
+package ru.dwfe.net.authtion.test;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -7,17 +7,17 @@ import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.Global.*;
-import static ru.dwfe.net.authtion.test_util.AuthorityLevel.*;
+import static ru.dwfe.net.authtion.AuthtionGlobal.*;
+import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.*;
 
-public class VariablesForAuthTest
+public class AuthtionTestVariablesForAuthTest
 {
   /*
       RESOURCES
   */
-  public static final Map<String, Map<AuthorityLevel, Map<RequestMethod, Map<String, Object>>>> RESOURCE_AUTHORITY_reqDATA()
+  public static final Map<String, Map<AuthtionTestAuthorityLevel, Map<RequestMethod, Map<String, Object>>>> RESOURCE_AUTHORITY_reqDATA()
   {
-    Map<String, Map<AuthorityLevel, Map<RequestMethod, Map<String, Object>>>> result = new HashMap<>();
+    Map<String, Map<AuthtionTestAuthorityLevel, Map<RequestMethod, Map<String, Object>>>> result = new HashMap<>();
 
     result.put(resource_checkConsumerEmail, Map.of(ANY, Map.of(POST, Map.of("email", "user"))));
     result.put(resource_checkConsumerPass, Map.of(ANY, Map.of(POST, Map.of("password", "some password"))));
@@ -43,7 +43,7 @@ public class VariablesForAuthTest
       401 = Unauthorized
       403 = Forbidden, access_denied
   */
-  public static final Map<AuthorityLevel, Map<AuthorityLevel, Integer>> AUTHORITY_to_AUTHORITY_STATUS = Map.of(
+  public static final Map<AuthtionTestAuthorityLevel, Map<AuthtionTestAuthorityLevel, Integer>> AUTHORITY_to_AUTHORITY_STATUS = Map.of(
           ANY, Map.of(
                   ANY, 200,
                   USER, 401,
@@ -58,7 +58,7 @@ public class VariablesForAuthTest
                   ADMIN, 200)
   );
 
-  public static final Map<AuthorityLevel, Map<AuthorityLevel, Integer>> AUTHORITY_to_AUTHORITY_STATUS_BAD_ACCESS_TOKEN = Map.of(
+  public static final Map<AuthtionTestAuthorityLevel, Map<AuthtionTestAuthorityLevel, Integer>> AUTHORITY_to_AUTHORITY_STATUS_BAD_ACCESS_TOKEN = Map.of(
           USER, Map.of(
                   ANY, 401,
                   USER, 401,

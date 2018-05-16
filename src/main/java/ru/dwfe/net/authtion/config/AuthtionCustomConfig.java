@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class CustomConfig
+public class AuthtionCustomConfig
 {
   @Bean
   public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder)

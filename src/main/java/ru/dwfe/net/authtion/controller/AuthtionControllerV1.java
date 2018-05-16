@@ -1,4 +1,4 @@
-package ru.dwfe.net.authtion;
+package ru.dwfe.net.authtion.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -12,33 +12,33 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import ru.dwfe.net.authtion.dao.Consumer;
-import ru.dwfe.net.authtion.dao.Mailing;
-import ru.dwfe.net.authtion.dao.repository.MailingRepository;
-import ru.dwfe.net.authtion.service.ConsumerService;
+import ru.dwfe.net.authtion.dao.AuthtionConsumer;
+import ru.dwfe.net.authtion.dao.AuthtionMailing;
+import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
+import ru.dwfe.net.authtion.service.AuthtionConsumerService;
 
 import java.util.*;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static ru.dwfe.net.authtion.Global.*;
-import static ru.dwfe.net.authtion.dao.Consumer.*;
-import static ru.dwfe.net.authtion.util.Util.*;
+import static ru.dwfe.net.authtion.AuthtionGlobal.*;
+import static ru.dwfe.net.authtion.dao.AuthtionConsumer.*;
+import static ru.dwfe.net.authtion.util.AuthtionUtil.*;
 
 @RestController
 @RequestMapping(path = API_V1, produces = "application/json; charset=utf-8")
 @PropertySource("classpath:application.properties")
-public class ControllerV1
+public class AuthtionControllerV1
 {
-  private final ConsumerService consumerService;
-  private final MailingRepository mailingRepository;
+  private final AuthtionConsumerService consumerService;
+  private final AuthtionMailingRepository mailingRepository;
   private final ConsumerTokenServices tokenServices;
   private final Environment env;
   private final RestTemplate restTemplate;
 
   @Autowired
-  public ControllerV1(ConsumerService consumerService, MailingRepository mailingRepository, ConsumerTokenServices tokenServices, Environment env, RestTemplate restTemplate)
+  public AuthtionControllerV1(AuthtionConsumerService consumerService, AuthtionMailingRepository mailingRepository, ConsumerTokenServices tokenServices, Environment env, RestTemplate restTemplate)
   {
     this.consumerService = consumerService;
     this.mailingRepository = mailingRepository;
@@ -74,7 +74,7 @@ public class ControllerV1
   {
     List<String> errorCodes = new ArrayList<>();
 
-    String captchaSecret = env.getProperty("google.captcha.secret-key");
+    String captchaSecret = env.getProperty("dwfe.authtion.google.captcha.secret-key");
     System.out.println("captchaSecret=" + captchaSecret);
     String googleResponse = (String) getValueFromJSON(body, "googleResponse");
 
@@ -109,7 +109,7 @@ public class ControllerV1
   }
 
   @PostMapping(resource_createConsumer)
-  public String createConsumer(@RequestBody Consumer consumer)
+  public String createConsumer(@RequestBody AuthtionConsumer consumer)
   {
     List<String> errorCodes = new ArrayList<>();
 
@@ -137,11 +137,11 @@ public class ControllerV1
 
       if (automaticallyGeneratedPassword.isEmpty())
       {
-        mailingRepository.save(Mailing.of(1, consumer.getEmail()));
+        mailingRepository.save(AuthtionMailing.of(1, consumer.getEmail()));
       }
       else
       { // if the password was not passed, then it is necessary to send an automatically generated password to the new consumer
-        mailingRepository.save(Mailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
+        mailingRepository.save(AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
       }
     }
     return getResponse(errorCodes);
@@ -156,7 +156,7 @@ public class ControllerV1
 
     if (map.size() > 0)
     {
-      Consumer consumerAuth = (Consumer) authentication.getPrincipal();
+      AuthtionConsumer consumerOAuth2 = (AuthtionConsumer) authentication.getPrincipal();
 
       String nickName = (String) getValue(map, "nickName");
       String firstName = (String) getValue(map, "firstName");
@@ -169,7 +169,7 @@ public class ControllerV1
       if (isNickName || isFirstName || isLastName)
       {
         boolean wasModified = false;
-        Consumer consumer = consumerService.findByEmail(consumerAuth.getEmail()).get();
+        AuthtionConsumer consumer = consumerService.findByEmail(consumerOAuth2.getEmail()).get();
 
         if (isNickName && !nickName.equals(consumer.getNickName()))
         {
@@ -188,9 +188,7 @@ public class ControllerV1
         }
 
         if (wasModified)
-        {
           consumerService.save(consumer);
-        }
       }
     }
     return getResponse(errorCodes);
@@ -210,10 +208,10 @@ public class ControllerV1
     List<String> errorCodes = new ArrayList<>();
     Map<String, Object> data = new HashMap<>();
 
-    Optional<Consumer> consumerById = consumerService.findById(id);
+    Optional<AuthtionConsumer> consumerById = consumerService.findById(id);
     if (consumerById.isPresent())
     {
-      Consumer consumer = consumerById.get();
+      AuthtionConsumer consumer = consumerById.get();
       data.put("id", consumer.getId());
       data.put("nickName", consumer.getNickName());
     }
@@ -229,7 +227,7 @@ public class ControllerV1
     List<String> errorCodes = new ArrayList<>();
 
     String jsonListOfUsers = consumerService.findAll().stream()
-            .map(Consumer::toString)
+            .map(AuthtionConsumer::toString)
             .collect(Collectors.joining(","));
 
     return getResponse(errorCodes, "[" + jsonListOfUsers + "]");
@@ -241,8 +239,8 @@ public class ControllerV1
   {
     List<String> errorCodes = new ArrayList<>();
 
-    String email = ((Consumer) authentication.getPrincipal()).getEmail();
-    mailingRepository.save(Mailing.of(3, email, getUniqStrBase36(30)));
+    String email = ((AuthtionConsumer) authentication.getPrincipal()).getEmail();
+    mailingRepository.save(AuthtionMailing.of(3, email, getUniqStrBase36(30)));
 
     return getResponse(errorCodes);
   }
@@ -255,13 +253,13 @@ public class ControllerV1
 
     if (isDefaultCheckOK(key, fieldName, errorCodes))
     {
-      Optional<Mailing> confirmByKey = mailingRepository.findByData(key);
+      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByData(key);
       if (confirmByKey.isPresent())
       {
-        Mailing confirm = confirmByKey.get();
+        AuthtionMailing confirm = confirmByKey.get();
 
-        // the Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
-        Consumer consumer = consumerService.findByEmail(confirm.getEmail()).get();
+        // the AuthtionConsumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
+        AuthtionConsumer consumer = consumerService.findByEmail(confirm.getEmail()).get();
         consumer.setEmailConfirmed(true); // email now confirmed
         consumerService.save(consumer);
 
@@ -289,14 +287,14 @@ public class ControllerV1
     if (isDefaultCheckOK(oldpassValue, oldpassField, errorCodes)
             && canUsePassword(newpassValue, newpassField, errorCodes))
     {
-      Long id = ((Consumer) authentication.getPrincipal()).getId();
-      Consumer consumer = consumerService.findById(id).get();
+      Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
+      AuthtionConsumer consumer = consumerService.findById(id).get();
       if (matchPassword(oldpassValue, consumer.getPassword()))
       {
         setNewPassword(consumer, newpassValue);
         consumerService.save(consumer);
 
-        mailingRepository.save(Mailing.of(4, consumer.getEmail()));
+        mailingRepository.save(AuthtionMailing.of(4, consumer.getEmail()));
       }
       else errorCodes.add("wrong-" + oldpassField);
     }
@@ -314,7 +312,7 @@ public class ControllerV1
     {
       if (consumerService.existsByEmail(email))
       {
-        mailingRepository.save(Mailing.of(5, email, getUniqStrBase36(30)));
+        mailingRepository.save(AuthtionMailing.of(5, email, getUniqStrBase36(30)));
       }
       else errorCodes.add("email-not-exist");
     }
@@ -330,7 +328,7 @@ public class ControllerV1
 
     if (isDefaultCheckOK(key, fieldName, errorCodes))
     {
-      Optional<Mailing> confirmByKey = mailingRepository.findByData(key);
+      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByData(key);
       if (confirmByKey.isPresent())
       {
         data.put("email", confirmByKey.get().getEmail());
@@ -360,14 +358,14 @@ public class ControllerV1
             && isDefaultCheckOK(keyValue, keyFieldFullName, errorCodes)
             && isEmailCheckOK(emailValue, errorCodes))
     {
-      Optional<Mailing> confirmByKey = mailingRepository.findByData(keyValue);
+      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByData(keyValue);
       if (confirmByKey.isPresent())
       {
-        Mailing confirm = confirmByKey.get();
+        AuthtionMailing confirm = confirmByKey.get();
         if (emailValue.equals(confirm.getEmail()))
         {
-          // the Consumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
-          Consumer consumer = consumerService.findByEmail(emailValue).get();
+          // the AuthtionConsumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
+          AuthtionConsumer consumer = consumerService.findByEmail(emailValue).get();
           setNewPassword(consumer, newpassValue);
           consumerService.save(consumer);
 

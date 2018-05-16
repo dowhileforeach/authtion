@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.stereotype.Component;
-import ru.dwfe.net.authtion.service.ConsumerService;
+import ru.dwfe.net.authtion.service.AuthtionConsumerService;
 
 import java.time.Instant;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 public class DevNULL_AuditEventRepository implements AuditEventRepository
 {
-  private static final Logger log = LoggerFactory.getLogger(ConsumerService.class);
+  private static final Logger log = LoggerFactory.getLogger(AuthtionConsumerService.class);
 
   @Override
   public void add(AuditEvent event)

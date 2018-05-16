@@ -1,6 +1,6 @@
 package ru.dwfe.net.authtion.dao;
 
-import ru.dwfe.net.authtion.util.Util;
+import ru.dwfe.net.authtion.util.AuthtionUtil;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
-@IdClass(Mailing.MailingId.class)
+@IdClass(AuthtionMailing.AuthtionMailingId.class)
 @Table(name = "authtion_mailing")
-public class Mailing implements Comparable<Mailing>
+public class AuthtionMailing implements Comparable<AuthtionMailing>
 {
   @Id
   @Column(updatable = false, insertable = false)
@@ -32,9 +32,9 @@ public class Mailing implements Comparable<Mailing>
   @Transient
   private AtomicInteger attempt = new AtomicInteger(0);
 
-  public static Mailing of(int type, String email, String data)
+  public static AuthtionMailing of(int type, String email, String data)
   {
-    Mailing mailing = new Mailing();
+    AuthtionMailing mailing = new AuthtionMailing();
     mailing.setCreatedOn(LocalDateTime.now());
     mailing.setType(type);
     mailing.setEmail(email);
@@ -44,7 +44,7 @@ public class Mailing implements Comparable<Mailing>
     return mailing;
   }
 
-  public static Mailing of(int type, String email)
+  public static AuthtionMailing of(int type, String email)
   {
     return of(type, email, "");
   }
@@ -139,7 +139,7 @@ public class Mailing implements Comparable<Mailing>
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    Mailing mailing = (Mailing) o;
+    AuthtionMailing mailing = (AuthtionMailing) o;
 
     if (type != mailing.type) return false;
     if (!createdOn.equals(mailing.createdOn)) return false;
@@ -156,7 +156,7 @@ public class Mailing implements Comparable<Mailing>
   }
 
   @Override
-  public int compareTo(Mailing o)
+  public int compareTo(AuthtionMailing o)
   {
     int result;
     if ((result = createdOn.compareTo(o.createdOn)) == 0)
@@ -169,18 +169,18 @@ public class Mailing implements Comparable<Mailing>
   public String toString()
   {
     return "{\n" +
-            " \"createdOn\": " + "\"" + Util.formatDateTime(createdOn) + "\",\n" +
+            " \"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(createdOn) + "\",\n" +
             " \"type\": " + type + ",\n" +
             " \"email\": " + email + ",\n" +
             " \"data\": \"****\",\n" +
             " \"sended\": " + sended + ",\n" +
             " \"maxAttemptsReached\": " + maxAttemptsReached + ",\n" +
             " \"attempt\": " + attempt + ",\n" +
-            " \"updatedOn\": " + "\"" + Util.formatDateTime(updatedOn) + "\"\n" +
+            " \"updatedOn\": " + "\"" + AuthtionUtil.formatDateTime(updatedOn) + "\"\n" +
             "}";
   }
 
-  public static class MailingId implements Serializable
+  public static class AuthtionMailingId implements Serializable
   {
     private LocalDateTime createdOn;
     private int type;
@@ -192,7 +192,7 @@ public class Mailing implements Comparable<Mailing>
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
 
-      MailingId mailingId = (MailingId) o;
+      AuthtionMailingId mailingId = (AuthtionMailingId) o;
 
       if (type != mailingId.type) return false;
       if (!createdOn.equals(mailingId.createdOn)) return false;

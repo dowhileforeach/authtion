@@ -9,7 +9,7 @@ import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableScheduling
-public class App
+public class AuthtionApplication
 {
   @PostConstruct
   void started()
@@ -19,6 +19,6 @@ public class App
 
   public static void main(String[] args)
   {
-    SpringApplication.run(App.class, args);
+    SpringApplication.run(AuthtionApplication.class, args);
   }
 }

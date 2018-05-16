@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dwfe.net.authtion.dao.Consumer;
-import ru.dwfe.net.authtion.dao.repository.ConsumerRepository;
+import ru.dwfe.net.authtion.dao.AuthtionConsumer;
+import ru.dwfe.net.authtion.dao.repository.AuthtionConsumerRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,12 +18,12 @@ import java.util.Optional;
 @Service
 @Primary
 @Transactional(readOnly = true)
-public class ConsumerService implements UserDetailsService
+public class AuthtionConsumerService implements UserDetailsService
 {
-  private static final Logger log = LoggerFactory.getLogger(ConsumerService.class);
+  private static final Logger log = LoggerFactory.getLogger(AuthtionConsumerService.class);
 
   @Autowired
-  private ConsumerRepository repository;
+  private AuthtionConsumerRepository repository;
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException
@@ -35,12 +35,12 @@ public class ConsumerService implements UserDetailsService
     });
   }
 
-  public Optional<Consumer> findById(Long id)
+  public Optional<AuthtionConsumer> findById(Long id)
   {
     return repository.findById(id);
   }
 
-  public Optional<Consumer> findByEmail(String email)
+  public Optional<AuthtionConsumer> findByEmail(String email)
   {
     return repository.findByEmail(email);
   }
@@ -50,19 +50,19 @@ public class ConsumerService implements UserDetailsService
     return findByEmail(email).isPresent();
   }
 
-  public List<Consumer> findAll()
+  public List<AuthtionConsumer> findAll()
   {
-    return (List<Consumer>) repository.findAll();
+    return (List<AuthtionConsumer>) repository.findAll();
   }
 
   @Transactional
-  public Consumer save(Consumer consumer)
+  public AuthtionConsumer save(AuthtionConsumer consumer)
   {
     return repository.save(consumer);
   }
 
   @Transactional
-  public void delete(Consumer consumer)
+  public void delete(AuthtionConsumer consumer)
   {
     repository.delete(consumer);
   }

@@ -1,15 +1,15 @@
-package ru.dwfe.net.authtion.test_util;
+package ru.dwfe.net.authtion.test;
 
-public class Client
+public class AuthtionTestClient
 {
   String clientname;
   String clientpass;
   int maxTokenExpirationTime;
   int minTokenExpirationTime;
 
-  public static Client of(String clientname, String clientpass, int maxTokenExpirationTime, int minTokenExpirationTime)
+  public static AuthtionTestClient of(String clientname, String clientpass, int maxTokenExpirationTime, int minTokenExpirationTime)
   {
-    Client client = new Client();
+    AuthtionTestClient client = new AuthtionTestClient();
     client.clientname = clientname;
     client.clientpass = clientpass;
     client.maxTokenExpirationTime = maxTokenExpirationTime;
