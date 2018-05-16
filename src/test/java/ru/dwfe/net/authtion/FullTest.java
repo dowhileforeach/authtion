@@ -17,33 +17,34 @@ import ru.dwfe.net.authtion.service.ConsumerService;
 import ru.dwfe.net.authtion.test_util.Checker;
 import ru.dwfe.net.authtion.test_util.ConsumerTest;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.Global.*;
 import static ru.dwfe.net.authtion.test_util.AuthorityLevel.USER;
-import static ru.dwfe.net.authtion.test_util.UtilTest.check_send_data;
-import static ru.dwfe.net.authtion.test_util.UtilTest.performFullAuthTest;
+import static ru.dwfe.net.authtion.test_util.ResourceAccessingType.USUAL;
+import static ru.dwfe.net.authtion.test_util.UtilTest.*;
 import static ru.dwfe.net.authtion.test_util.Variables_Global.*;
+import static ru.dwfe.net.authtion.test_util.Variables_for_AuthorityTest.TOTAL_ACCESS_TOKEN_COUNT;
 import static ru.dwfe.net.authtion.test_util.Variables_for_ConsumerPassword_CRU_Test.*;
 
 //
-//  https://spring.io/guides/gs/testing-web/
+// == https://spring.io/guides/gs/testing-web/
 //
 
 @RunWith(SpringRunner.class)
-
-// https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html#boot-features-testing-spring-boot-applications
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT  // == https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html#boot-features-testing-spring-boot-applications
+)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ConsumerPassword_CRU_Test
+public class FullTest
 {
+  private static Set<String> auth_test_access_tokens = new HashSet<>();
+
   @Autowired
   ConsumerService consumerService;
 
@@ -51,21 +52,61 @@ public class ConsumerPassword_CRU_Test
   MailingRepository mailingRepository;
 
   @Test
-  public void _01_checkConsumerEmail()
+  public void _001_auth_USER()
+  {
+    logHead("USER");
+
+    ConsumerTest consumerTest = USER_consumer;
+    auth_test_access_tokens.add(consumerTest.access_token);
+
+    fullAuthTest(consumerTest);
+  }
+
+  @Test
+  public void _002_auth_ADMIN()
+  {
+    logHead("ADMIN");
+
+    ConsumerTest consumerTest = ADMIN_consumer;
+    auth_test_access_tokens.add(consumerTest.access_token);
+
+    fullAuthTest(consumerTest);
+  }
+
+  @Test
+  public void _003_auth_ANY()
+  {
+    logHead("ANY");
+
+    ConsumerTest consumerTest = ANY_consumer;
+    performResourceAccessing(consumerTest.access_token, consumerTest.level, USUAL);
+  }
+
+  @Test
+  public void _004_auth_different_access_tokens()
+  {
+    logHead("list of Access Tokens");
+    log.info("\n\n{}", auth_test_access_tokens.stream().collect(Collectors.joining("\n")));
+
+    assertEquals(TOTAL_ACCESS_TOKEN_COUNT, auth_test_access_tokens.size());
+  }
+
+  @Test
+  public void _005_consumer_checkConsumerEmail()
   {
     logHead("Check Consumer E-mail");
     check_send_data(POST, resource_checkConsumerEmail, ANY_consumer.access_token, checkers_for_checkConsumerEmail);
   }
 
   @Test
-  public void _02_checkConsumerPass()
+  public void _006_consumer_checkConsumerPass()
   {
     logHead("Check Consumer Pass");
     check_send_data(POST, resource_checkConsumerPass, ANY_consumer.access_token, checkers_for_checkConsumerPass);
   }
 
   @Test
-  public void _03_createConsumer()
+  public void _007_consumer_createConsumer()
   {
     logHead("Create Consumer");
 
@@ -164,7 +205,7 @@ public class ConsumerPassword_CRU_Test
   }
 
   @Test
-  public void _04_updateConsumer()
+  public void _008_consumer_updateConsumer()
   {
     logHead("Consumer Update");
 
@@ -213,14 +254,14 @@ public class ConsumerPassword_CRU_Test
   }
 
   @Test
-  public void _05_getConsumerData()
+  public void _009_consumer_getConsumerData()
   {
     logHead("Consumer Data");
     check_send_data(GET, resource_getConsumerData, USER_consumer.access_token, checkers_for_getConsumerData);
   }
 
   @Test
-  public void _06_publicConsumer()
+  public void _010_consumer_publicConsumer()
   {
     logHead("Public Consumer");
     check_send_data(GET, resource_publicConsumer + "/9", ANY_consumer.access_token, checkers_for_publicConsumer_9);
@@ -232,7 +273,7 @@ public class ConsumerPassword_CRU_Test
   }
 
   @Test
-  public void _07_requestConfirmConsumerEmail()
+  public void _011_consumer_requestConfirmConsumerEmail()
   {
     logHead("Request Confirm Email");
 
@@ -269,7 +310,7 @@ public class ConsumerPassword_CRU_Test
   }
 
   @Test
-  public void _08_confirmConsumerEmail()
+  public void _012_consumer_confirmConsumerEmail()
   {
     logHead("Confirm Email");
 
@@ -286,7 +327,7 @@ public class ConsumerPassword_CRU_Test
   }
 
   @Test
-  public void _09_changeConsumerPass()
+  public void _013_consumer_changeConsumerPass()
   {
 //    changeConsumerPass(EMAIL_NEW_Consumer, PASS_NEW_Consumer, NEWPASS_NEW_Consumer, checkers_for_changeConsumerPass);
 //
@@ -315,7 +356,7 @@ public class ConsumerPassword_CRU_Test
   }
 
   @Test
-  public void _10_restorePassword()
+  public void _014_consumer_restorePassword()
   {
 //    restorePassword(EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, PASS_NEW_Consumer, PASS_NEW_Consumer);
 //
@@ -384,7 +425,7 @@ public class ConsumerPassword_CRU_Test
   private void fullAuthTest(ConsumerTest consumerTest)
   {
     performFullAuthTest(consumerTest);
-//    mailingRepository.delete(mailingRepository.findById(consumerTest.username).get());
+    mailingRepository.deleteAll();
   }
 
   private Optional<Consumer> getConsumerByEmail(String email)
@@ -399,5 +440,5 @@ public class ConsumerPassword_CRU_Test
             + "\n------------------------------", who);
   }
 
-  private static final Logger log = LoggerFactory.getLogger(ConsumerPassword_CRU_Test.class);
+  private static final Logger log = LoggerFactory.getLogger(FullTest.class);
 }
