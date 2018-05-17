@@ -133,7 +133,8 @@ public class AuthtionUtil
     // X requiredLength ==
 
     byte[] bytes = new BigInteger((requiredLength + 2) * 5, new SecureRandom()).toByteArray();
-    return new String(Base64.getEncoder().encode(bytes), 1, requiredLength);
+    String result = new String(Base64.getEncoder().encode(bytes), 1, requiredLength);
+    return result.replaceAll("[^a-zA-Z0-9]", ""); // becouse oauth2 incorrect work with some symbols, e.g.: "+fAhjktzuw", "6k+xfc6ZRw"
   }
 
   public static String formatDateTime(LocalDateTime localDateTime)
