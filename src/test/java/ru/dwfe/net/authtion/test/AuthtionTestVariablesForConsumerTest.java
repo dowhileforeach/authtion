@@ -9,12 +9,12 @@ import java.util.Map;
 
 public class AuthtionTestVariablesForConsumerTest
 {
-  public static final String EMAIL_NEW_Consumer = "notExistedConsumer@ya.ru";
-  public static final String EMAIL_2_NEW_Consumer = "not_02_ExistedConsumer@ya.ru";
+  public static final String EMAIL_NEW_Consumer = "test3@dwfe.ru";
+  public static final String EMAIL_2_NEW_Consumer = "test4@dwfe.ru";
   public static final String PASS_NEW_Consumer = "123456";
   public static final String NEWPASS_NEW_Consumer = "1234567890";
 
-  public static final String EMAIL_3_NEW_Consumer = "not_3_ExistedConsumer@ya.ru";
+  public static final String EMAIL_3_NEW_Consumer = "test5@dwfe.ru";
   public static final String PASS_FOR_EMAIL_3_Consumer_Encoded = "$2a$10$AvHrvvqQNOyUZxg7XMfDleDLjR3AV5C1KEwsa29EC4Eo7CYIe0eoy"; //hello123world
   public static final String PASS_FOR_EMAIL_3_Consumer_Decoded = "hello123world";
   public static final String NEWPASS_FOR_EMAIL_3_Consumer_Encoded = "$2a$10$EGQlh6wWYUFrVbnZJzMvwOnGSxlS65Oap.6l92nA3PLskkipat7Di"; //56789900aloha
