@@ -261,7 +261,7 @@ public class AuthtionControllerV1
 
     if (isDefaultCheckOK(key, fieldName, errorCodes))
     {
-      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByData(key);
+      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByTypeAndData(3, key);
       if (confirmByKey.isPresent())
       {
         AuthtionMailing confirm = confirmByKey.get();
@@ -336,7 +336,7 @@ public class AuthtionControllerV1
 
     if (isDefaultCheckOK(key, fieldName, errorCodes))
     {
-      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByData(key);
+      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByTypeAndData(5, key);
       if (confirmByKey.isPresent())
       {
         AuthtionMailing confirm = confirmByKey.get();
@@ -371,7 +371,7 @@ public class AuthtionControllerV1
             && isDefaultCheckOK(keyValue, keyFieldFullName, errorCodes)
             && isEmailCheckOK(emailValue, errorCodes))
     {
-      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByData(keyValue);
+      Optional<AuthtionMailing> confirmByKey = mailingRepository.findData(5, emailValue, keyValue);
       if (confirmByKey.isPresent())
       {
         AuthtionMailing confirm = confirmByKey.get();

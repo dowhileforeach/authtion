@@ -160,7 +160,7 @@ public class AuthtionUtil
     return secretKey == null ? "" : secretKey;
   }
 
-  public int getTimeoutForDuplicateRequest()
+  private int getTimeoutForDuplicateRequest()
   {
     int minTimeout = 5000; // millisecond
 

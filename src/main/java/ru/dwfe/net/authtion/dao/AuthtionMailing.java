@@ -26,6 +26,8 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
   private volatile boolean sent;
   private volatile boolean maxAttemptsReached;
 
+  private String causeOfLastFailure;
+
   @Column(updatable = false, insertable = false)
   private LocalDateTime updatedOn;
 
@@ -41,6 +43,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
     mailing.setData(data);
     mailing.setSent(false);
     mailing.setMaxAttemptsReached(false);
+    mailing.setCauseOfLastFailure("");
     return mailing;
   }
 
@@ -118,6 +121,16 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
     this.maxAttemptsReached = maxAttemptsReached;
   }
 
+  public String getCauseOfLastFailure()
+  {
+    return causeOfLastFailure;
+  }
+
+  public void setCauseOfLastFailure(String causeOfLastFailure)
+  {
+    this.causeOfLastFailure = causeOfLastFailure;
+  }
+
   public LocalDateTime getUpdatedOn()
   {
     return updatedOn;
@@ -175,6 +188,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
             " \"data\": \"****\",\n" +
             " \"sent\": " + sent + ",\n" +
             " \"maxAttemptsReached\": " + maxAttemptsReached + ",\n" +
+            " \"causeOfLastFailure\": \"" + causeOfLastFailure + "\",\n" +
             " \"attempt\": " + attempt + ",\n" +
             " \"updatedOn\": " + "\"" + AuthtionUtil.formatDateTime(updatedOn) + "\"\n" +
             "}";

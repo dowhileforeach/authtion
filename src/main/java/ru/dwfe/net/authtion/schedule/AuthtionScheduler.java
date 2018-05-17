@@ -82,6 +82,7 @@ public class AuthtionScheduler
         {
           next.clear();
           next.setMaxAttemptsReached(true);
+          next.setCauseOfLastFailure(e.toString());
           toDataBase.add(next);
         }
         log.warn("to next attempt, after error");

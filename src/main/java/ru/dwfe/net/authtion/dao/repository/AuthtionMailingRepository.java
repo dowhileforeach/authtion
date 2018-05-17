@@ -15,11 +15,13 @@ public interface AuthtionMailingRepository extends CrudRepository<AuthtionMailin
   @Query("FROM AuthtionMailing WHERE sent = false AND maxAttemptsReached = false")
   List<AuthtionMailing> getNewJob();
 
-  List<AuthtionMailing> findByEmail(String email);
-
-  Optional<AuthtionMailing> findByData(String data);
+  @Query(nativeQuery = true,
+          value = "SELECT * FROM authtion_mailing WHERE type=:type AND email=:email AND data=:data")
+  Optional<AuthtionMailing> findData(@Param("type") int type, @Param("email") String email, @Param("data") String data);
 
   List<AuthtionMailing> findByTypeAndEmail(int type, String email);
+
+  Optional<AuthtionMailing> findByTypeAndData(int type, String data);
 
   @Query(nativeQuery = true,
           value = "SELECT * FROM authtion_mailing WHERE type=:type AND email=:email AND data<>'' ORDER BY created_on DESC LIMIT 1")
@@ -27,5 +29,10 @@ public interface AuthtionMailingRepository extends CrudRepository<AuthtionMailin
 
   @Query(nativeQuery = true,
           value = "SELECT * FROM authtion_mailing WHERE type=:type AND email=:email AND sent=true AND data<>'' ORDER BY created_on DESC LIMIT 1")
-  Optional<AuthtionMailing> findSentLastNotEmptyData(@Param("type") int type, @Param("email") String email);
+  Optional<AuthtionMailing> findLastSentNotEmptyData(@Param("type") int type, @Param("email") String email);
+
+  @Query(nativeQuery = true,
+          value = "SELECT * FROM authtion_mailing WHERE type=:type AND email=:email AND sent=true AND data<>''")
+  List<AuthtionMailing> findSentNotEmptyData(@Param("type") int type, @Param("email") String email);
+
 }

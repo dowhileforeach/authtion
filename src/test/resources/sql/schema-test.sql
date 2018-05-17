@@ -68,14 +68,15 @@ CREATE TABLE authtion_consumer_authority (
 
 DROP TABLE IF EXISTS authtion_mailing;
 CREATE TABLE authtion_mailing (
-  created_on           DATETIME                                 NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-  `type`               INT                                      NOT NULL,
-  email                VARCHAR(50)
-                       COLLATE utf8mb4_unicode_ci               NOT NULL,
-  sent               TINYINT(1)                               NOT NULL,
-  max_attempts_reached TINYINT(1)                               NOT NULL,
-  data                 VARCHAR(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
-  updated_on           DATETIME                                             DEFAULT CURRENT_TIMESTAMP
+  created_on            DATETIME                                 NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+  `type`                INT                                      NOT NULL,
+  email                 VARCHAR(50)
+                        COLLATE utf8mb4_unicode_ci               NOT NULL,
+  sent                  TINYINT(1)                               NOT NULL,
+  max_attempts_reached  TINYINT(1)                               NOT NULL,
+  data                  VARCHAR(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  cause_of_last_failure VARCHAR(1000) COLLATE utf8mb4_unicode_ci  NOT NULL    DEFAULT '',
+  updated_on            DATETIME                                             DEFAULT CURRENT_TIMESTAMP
   ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (created_on, `type`, email),
   CONSTRAINT authtion_mailing_id_fk FOREIGN KEY (email) REFERENCES authtion_consumers (email)

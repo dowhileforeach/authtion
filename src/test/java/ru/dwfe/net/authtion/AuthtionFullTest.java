@@ -120,10 +120,7 @@ public class AuthtionFullTest
 
 
     // EMAIL_NEW_Consumer
-    Optional<AuthtionConsumer> consumer1ByEmail = getConsumerByEmail(EMAIL_NEW_Consumer);
-    assertTrue(consumer1ByEmail.isPresent());
-
-    AuthtionConsumer consumer1 = consumer1ByEmail.get();
+    AuthtionConsumer consumer1 = getConsumerByEmail(EMAIL_NEW_Consumer);
     assertTrue(consumer1.getId() > 999);
 
     Collection<? extends GrantedAuthority> authorities_consumer1 = consumer1.getAuthorities();
@@ -139,16 +136,11 @@ public class AuthtionFullTest
     assertTrue(consumer1.isEnabled());
     assertFalse(consumer1.isEmailConfirmed());
 
-    List<AuthtionMailing> mailing_consumer1 = mailingRepository.findByEmail(consumer1.getEmail());
+    List<AuthtionMailing> mailing_consumer1 = mailingRepository.findByTypeAndEmail(1, consumer1.getEmail());
     assertEquals(1, mailing_consumer1.size());
-    assertEquals(1, mailing_consumer1.get(0).getType());
-
 
     // EMAIL_2_NEW_Consumer
-    Optional<AuthtionConsumer> consumer2ByEmail = getConsumerByEmail(EMAIL_2_NEW_Consumer);
-    assertTrue(consumer2ByEmail.isPresent());
-
-    AuthtionConsumer consumer2 = consumer2ByEmail.get();
+    AuthtionConsumer consumer2 = getConsumerByEmail(EMAIL_2_NEW_Consumer);
     assertTrue(consumer2.getId() > 999);
 
     Collection<? extends GrantedAuthority> authorities_consumer2 = consumer2.getAuthorities();
@@ -164,19 +156,15 @@ public class AuthtionFullTest
     assertTrue(consumer2.isEnabled());
     assertTrue(consumer2.isEmailConfirmed());
 
-    List<AuthtionMailing> mailing_consumer2 = mailingRepository.findByEmail(consumer2.getEmail());
+    List<AuthtionMailing> mailing_consumer2 = mailingRepository.findByTypeAndEmail(2, consumer2.getEmail());
     assertEquals(1, mailing_consumer2.size());
-    assertEquals(2, mailing_consumer2.get(0).getType());
 
     String mailing_password_consumer2 = mailing_consumer2.get(0).getData();
     assertTrue(mailing_password_consumer2.length() >= 9);
 
 
     // EMAIL_3_NEW_Consumer
-    Optional<AuthtionConsumer> consumer3ByEmail = getConsumerByEmail(EMAIL_3_NEW_Consumer);
-    assertTrue(consumer3ByEmail.isPresent());
-
-    AuthtionConsumer consumer3 = consumer3ByEmail.get();
+    AuthtionConsumer consumer3 = getConsumerByEmail(EMAIL_3_NEW_Consumer);
     assertTrue(consumer3.getId() > 999);
     assertEquals(consumer3.getPassword(), "{bcrypt}" + PASS_FOR_EMAIL_3_Consumer_Encoded);
 
@@ -193,10 +181,8 @@ public class AuthtionFullTest
     assertTrue(consumer3.isEnabled());
     assertFalse(consumer3.isEmailConfirmed());
 
-    List<AuthtionMailing> mailing_consumer3 = mailingRepository.findByEmail(consumer3.getEmail());
+    List<AuthtionMailing> mailing_consumer3 = mailingRepository.findByTypeAndEmail(1, consumer3.getEmail());
     assertEquals(1, mailing_consumer3.size());
-    assertEquals(1, mailing_consumer3.get(0).getType());
-
 
     // Perform full auth test for New AuthtionConsumer
     fullAuthTest(AuthtionTestConsumer.of(USER, consumer1.getEmail(), PASS_NEW_Consumer, client_TRUSTED, 200));
@@ -212,45 +198,37 @@ public class AuthtionFullTest
     USER_consumer = AuthtionTestConsumer.of(USER, "test2@dwfe.ru", "test22", client_TRUSTED, 200);
     ADMIN_consumer = AuthtionTestConsumer.of(ADMIN, "test1@dwfe.ru", "test11", client_UNTRUSTED, 200);
 
-    Optional<AuthtionConsumer> consumerByEmail = getConsumerByEmail(USER_consumer.username);
-    assertTrue(consumerByEmail.isPresent());
-
-    AuthtionConsumer consumer = consumerByEmail.get();
+    AuthtionConsumer consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("test2", consumer.getNickName());
     assertEquals("", consumer.getFirstName());
     assertEquals("", consumer.getLastName());
 
     check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer1);
-    consumerByEmail = getConsumerByEmail(USER_consumer.username);
-    consumer = consumerByEmail.get();
+    consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("test2", consumer.getNickName());
     assertEquals("", consumer.getFirstName());
     assertEquals("", consumer.getLastName());
 
     check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer5);
-    consumerByEmail = getConsumerByEmail(USER_consumer.username);
-    consumer = consumerByEmail.get();
+    consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("good", consumer.getNickName());
     assertEquals("alto", consumer.getFirstName());
     assertEquals("smith", consumer.getLastName());
 
     check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer3);
-    consumerByEmail = getConsumerByEmail(USER_consumer.username);
-    consumer = consumerByEmail.get();
+    consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("hello", consumer.getNickName());
     assertEquals("1", consumer.getFirstName());
     assertEquals("smith", consumer.getLastName());
 
     check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer4);
-    consumerByEmail = getConsumerByEmail(USER_consumer.username);
-    consumer = consumerByEmail.get();
+    consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("hello", consumer.getNickName());
     assertEquals("1", consumer.getFirstName());
     assertEquals("2", consumer.getLastName());
 
     check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer2);
-    consumerByEmail = getConsumerByEmail(USER_consumer.username);
-    consumer = consumerByEmail.get();
+    consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("user", consumer.getNickName());
     assertEquals("", consumer.getFirstName());
     assertEquals("", consumer.getLastName());
@@ -280,25 +258,25 @@ public class AuthtionFullTest
   {
     logHead("Request Confirm Email");
 
+    int type = 3;
+
     mailingRepository.deleteAll();
 
     // сheck for 'email-is-already-confirmed' error
-    Optional<AuthtionConsumer> consumerFromDBOpt = consumerService.findByEmail(USER_consumer.username);
-    assertTrue(consumerFromDBOpt.isPresent());
-    AuthtionConsumer consumerFromDB = consumerFromDBOpt.get();
+    AuthtionConsumer consumerFromDB = getConsumerByEmail(USER_consumer.username);
     assertTrue(consumerFromDB.isEmailConfirmed());
     check_send_data(GET, resource_reqConfirmConsumerEmail, USER_consumer.access_token,
             checkers_for_reqConfirmConsumerEmail_isConfirmed);
 
     // add new request
     AuthtionTestConsumer consumer = AuthtionTestConsumer.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED, 200);
-    List<AuthtionMailing> confirmByEmail = mailingRepository.findByTypeAndEmail(3, consumer.username);
+    List<AuthtionMailing> confirmByEmail = mailingRepository.findByTypeAndEmail(type, consumer.username);
     assertEquals(0, confirmByEmail.size());
     check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
             checkers_for_reqConfirmConsumerEmail);
 
     // check that the request was success added
-    confirmByEmail = mailingRepository.findByTypeAndEmail(3, consumer.username);
+    confirmByEmail = mailingRepository.findByTypeAndEmail(type, consumer.username);
     assertEquals(1, confirmByEmail.size());
 
     AuthtionMailing mailing = confirmByEmail.get(0);
@@ -320,7 +298,7 @@ public class AuthtionFullTest
     {
     }
 
-    Optional<AuthtionMailing> confirmByEmailOpt = mailingRepository.findSentLastNotEmptyData(3, consumer.username);
+    Optional<AuthtionMailing> confirmByEmailOpt = mailingRepository.findLastSentNotEmptyData(type, consumer.username);
     assertTrue(confirmByEmailOpt.isPresent()); // new key was success added and sent
     mailing = confirmByEmailOpt.get();
     assertFalse(mailing.isMaxAttemptsReached());
@@ -340,15 +318,14 @@ public class AuthtionFullTest
     {
     }
 
-    confirmByEmailOpt = mailingRepository.findSentLastNotEmptyData(3, consumer.username);
+    confirmByEmailOpt = mailingRepository.findLastSentNotEmptyData(type, consumer.username);
     assertTrue(confirmByEmailOpt.isPresent());
     mailing = confirmByEmailOpt.get();
     assertFalse(mailing.isMaxAttemptsReached());
     assertNotEquals(alreadySentKeyOld, mailing.getData());  // another new key was success added and sent
 
-    consumerFromDBOpt = consumerService.findByEmail(consumer.username);
-    assertTrue(consumerFromDBOpt.isPresent());
-    assertFalse(consumerFromDBOpt.get().isEmailConfirmed());
+    consumerFromDB = getConsumerByEmail(consumer.username);
+    assertFalse(consumerFromDB.isEmailConfirmed());
   }
 
   @Test
@@ -356,21 +333,18 @@ public class AuthtionFullTest
   {
     logHead("Confirm Email");
 
-    List<AuthtionMailing> confirmByEmail = mailingRepository.findByEmail(EMAIL_NEW_Consumer);
-    assertEquals(1, confirmByEmail.size());
-    String confirmKey = confirmByEmail.get(0).getData();
+    int type = 3;
 
-    assertFalse(getConsumerByEmail(EMAIL_NEW_Consumer).get().isEmailConfirmed());
+    assertFalse(getConsumerByEmail(EMAIL_NEW_Consumer).isEmailConfirmed());
 
+    List<AuthtionMailing> confirmList = mailingRepository.findSentNotEmptyData(type, EMAIL_NEW_Consumer);
+    assertEquals(2, confirmList.size());
+    String confirmKey = confirmList.get(0).getData();
     check_send_data(GET, resource_confirmConsumerEmail, null, checkers_for_confirmConsumerEmail(confirmKey));
 
-    confirmByEmail = mailingRepository.findByEmail(EMAIL_NEW_Consumer);
-    assertEquals(1, confirmByEmail.size());
-    AuthtionMailing mailing = confirmByEmail.get(0);
-    assertTrue(mailing.isSent());
-    assertFalse(mailing.isMaxAttemptsReached());
-    assertTrue(mailing.getData().isEmpty());
-    assertTrue(getConsumerByEmail(EMAIL_NEW_Consumer).get().isEmailConfirmed());
+    confirmList = mailingRepository.findSentNotEmptyData(type, EMAIL_NEW_Consumer);
+    assertEquals(1, confirmList.size());
+    assertTrue(getConsumerByEmail(EMAIL_NEW_Consumer).isEmailConfirmed());
   }
 
   @Test
@@ -475,9 +449,11 @@ public class AuthtionFullTest
     mailingRepository.deleteAll();
   }
 
-  private Optional<AuthtionConsumer> getConsumerByEmail(String email)
+  private AuthtionConsumer getConsumerByEmail(String email)
   {
-    return consumerService.findByEmail(email);
+    Optional<AuthtionConsumer> consumerFromDBOpt = consumerService.findByEmail(email);
+    assertTrue(consumerFromDBOpt.isPresent());
+    return consumerFromDBOpt.get();
   }
 
   private static void logHead(String who)

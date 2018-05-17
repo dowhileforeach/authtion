@@ -281,7 +281,7 @@ public class AuthtionTestUtil
 
       try
       {
-        TimeUnit.MILLISECONDS.sleep(50);
+        TimeUnit.MILLISECONDS.sleep(70);
       }
       catch (InterruptedException ignored)
       {
