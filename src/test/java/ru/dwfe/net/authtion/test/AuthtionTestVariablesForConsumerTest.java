@@ -138,6 +138,7 @@ public class AuthtionTestVariablesForConsumerTest
           AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer), 200, "missing-newpass"),
           AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer, "newpass", ""), 200, "empty-newpass"),
           AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer, "newpass", "12345"), 200, "exceeded-min6-or-max55-newpass-length"),
+          AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer, "newpass", "12345678901234567890123456789012345678901234567890123456"), 200, "exceeded-min6-or-max55-newpass-length"),
           AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer + "1", "newpass", "1234567"), 200, "wrong-oldpass"),
           AuthtionTestChecker.of(true, Map.of("oldpass", PASS_NEW_Consumer, "newpass", NEWPASS_NEW_Consumer), 200)
   );
