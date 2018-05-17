@@ -68,14 +68,15 @@ CREATE TABLE authtion_consumer_authority (
 
 DROP TABLE IF EXISTS authtion_mailing;
 CREATE TABLE authtion_mailing (
-  created_on           DATETIME                                 NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-  `type`               INT                                      NOT NULL,
-  email                VARCHAR(50)
-                       COLLATE utf8mb4_unicode_ci               NOT NULL,
-  sent                 TINYINT(1)                               NOT NULL,
-  max_attempts_reached TINYINT(1)                               NOT NULL,
-  data                 VARCHAR(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
-  updated_on           DATETIME                                             DEFAULT CURRENT_TIMESTAMP
+  created_on            DATETIME                                 NOT NULL     DEFAULT CURRENT_TIMESTAMP,
+  `type`                INT                                      NOT NULL,
+  email                 VARCHAR(50)
+                        COLLATE utf8mb4_unicode_ci               NOT NULL,
+  sent                  TINYINT(1)                               NOT NULL,
+  max_attempts_reached  TINYINT(1)                               NOT NULL,
+  data                  VARCHAR(1000) COLLATE utf8mb4_unicode_ci NOT NULL     DEFAULT '',
+  cause_of_last_failure VARCHAR(1000) COLLATE utf8mb4_unicode_ci NOT NULL     DEFAULT '',
+  updated_on            DATETIME                                              DEFAULT CURRENT_TIMESTAMP
   ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (created_on, `type`, email),
   CONSTRAINT authtion_mailing_id_fk FOREIGN KEY (email) REFERENCES authtion_consumers (email)
@@ -88,7 +89,7 @@ CREATE TABLE authtion_mailing (
 #
 # To persist tokens between server restarts I need:
 # 1) to configure a persistent token store (JdbcTokenStore for example, see config/TokenStoreConfig.java)
-# 2) create SQL tables == https://github.com/spring-projects/spring-security-oauth/blob/master/spring-security-oauth2/src/test/resources/schema.sql
+# 2) create SQL tables: https://github.com/spring-projects/spring-security-oauth/blob/master/spring-security-oauth2/src/test/resources/schema.sql
 #    (minimum):
 CREATE TABLE IF NOT EXISTS oauth_access_token (
   token_id          VARCHAR(256),

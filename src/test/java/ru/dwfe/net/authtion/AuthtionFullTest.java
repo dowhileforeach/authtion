@@ -309,6 +309,9 @@ public class AuthtionFullTest
     check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
             checkers_for_reqConfirmConsumerEmail);
 
+    check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
+            checkers_for_reqConfirmConsumerEmail_duplicateDelay);
+
     try
     {
       log.info("Please wait 8 seconds...");
@@ -350,97 +353,132 @@ public class AuthtionFullTest
   @Test
   public void _013_consumer_changeConsumerPass()
   {
-//    changeConsumerPass(EMAIL_NEW_Consumer, PASS_NEW_Consumer, NEWPASS_NEW_Consumer, checkers_for_changeConsumerPass);
-//
-//    changeConsumerPass(EMAIL_3_NEW_Consumer, PASS_FOR_EMAIL_3_Consumer_Decoded, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, checkers_for_changeConsumerPass_3);
+    changeConsumerPass(EMAIL_NEW_Consumer, PASS_NEW_Consumer, NEWPASS_NEW_Consumer, checkers_for_changeConsumerPass);
+
+    changeConsumerPass(EMAIL_3_NEW_Consumer, PASS_FOR_EMAIL_3_Consumer_Decoded, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, checkers_for_changeConsumerPass_3);
   }
 
   private void changeConsumerPass(String email, String oldpass, String newpass, List<AuthtionTestChecker> checkers)
   {
-//    logHead("Change AuthtionConsumer Pass = " + email);
-//
-//    //newpass
-//    //AuthtionTestConsumer.of(USER, email, newpass, client_TRUSTED, 400);
-//
-//    //oldpass
-//    AuthtionTestConsumer consumerTest = AuthtionTestConsumer.of(USER, email, oldpass, client_TRUSTED, 200);
-//
-//    //change oldpass
-//    check_send_data(POST, resource_changeConsumerPass, consumerTest.access_token, checkers);
-//
-//    //oldpass
-//    //AuthtionTestConsumer.of(USER, email, oldpass, client_TRUSTED, 400);
-//
-//    //newpass
-//    consumerTest = AuthtionTestConsumer.of(USER, email, newpass, client_TRUSTED, 200);
-//    fullAuthTest(consumerTest);
+    logHead("Change AuthtionConsumer Pass = " + email);
+
+    //newpass
+    //AuthtionTestConsumer.of(USER, email, newpass, client_TRUSTED, 400);
+
+    //oldpass
+    AuthtionTestConsumer consumerTest = AuthtionTestConsumer.of(USER, email, oldpass, client_TRUSTED, 200);
+
+    //change oldpass
+    check_send_data(POST, resource_changeConsumerPass, consumerTest.access_token, checkers);
+
+    //oldpass
+    //AuthtionTestConsumer.of(USER, email, oldpass, client_TRUSTED, 400);
+
+    //newpass
+    consumerTest = AuthtionTestConsumer.of(USER, email, newpass, client_TRUSTED, 200);
+    fullAuthTest(consumerTest);
   }
 
   @Test
   public void _014_consumer_restorePassword()
   {
-//    restorePassword(EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, PASS_NEW_Consumer, PASS_NEW_Consumer);
-//
-//    restorePassword(EMAIL_3_NEW_Consumer, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Encoded);
+    restorePassword(EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, PASS_NEW_Consumer, PASS_NEW_Consumer);
+
+    restorePassword(EMAIL_3_NEW_Consumer, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Encoded);
   }
 
   private void restorePassword(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
   {
-//    reqRestoreConsumerPass(email);
-//    confirmRestoreConsumerPass(email);
-//    restoreConsumerPass(email, oldpassDecoded, newpassDecoded, newpassForCheckers);
+    reqRestoreConsumerPass(email);
+    confirmRestoreConsumerPass(email);
+    restoreConsumerPass(email, oldpassDecoded, newpassDecoded, newpassForCheckers);
   }
 
   private void reqRestoreConsumerPass(String email)
   {
-//    logHead("Request Restore AuthtionConsumer Password = " + email);
-//
-//    assertEquals(0, mailingRepository.findByEmail(email).size());
-//
-//    check_send_data(POST, resource_reqRestoreConsumerPass, ANY_consumer.access_token, checkers_for_reqRestoreConsumerPass(email));
-//
-//    List<AuthtionMailing> confirmByEmail = mailingRepository.findByEmail(email);
-//    assertEquals(1, confirmByEmail.size());
-//    assertFalse(confirmByEmail.get(0).isSent());
+    logHead("Request Restore AuthtionConsumer Password = " + email);
+
+    int type = 5;
+
+    assertEquals(0, mailingRepository.findByTypeAndEmail(type, email).size());
+
+    check_send_data(POST, resource_reqRestoreConsumerPass, ANY_consumer.access_token,
+            checkers_for_reqRestoreConsumerPass(email));
+
+    check_send_data(POST, resource_reqRestoreConsumerPass, ANY_consumer.access_token,
+            checkers_for_reqRestoreConsumerPass_duplicateDelay(email));
+
+    try
+    {
+      log.info("Please wait 8 seconds...");
+      TimeUnit.SECONDS.sleep(8);
+    }
+    catch (InterruptedException ignored)
+    {
+    }
+
+    List<AuthtionMailing> confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
+    assertEquals(1, confirmByEmail.size());
+    assertFalse(confirmByEmail.get(0).isMaxAttemptsReached());
+    assertTrue(confirmByEmail.get(0).getData().length() >= 28);
+
+    check_send_data(POST, resource_reqRestoreConsumerPass, ANY_consumer.access_token,
+            checkers_for_reqRestoreConsumerPass(email));
+
+    try
+    {
+      log.info("Please wait 8 seconds...");
+      TimeUnit.SECONDS.sleep(8);
+    }
+    catch (InterruptedException ignored)
+    {
+    }
+
+    confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
+    assertEquals(2, confirmByEmail.size());
   }
 
   private void confirmRestoreConsumerPass(String email)
   {
-//    logHead("Confirm Restore AuthtionConsumer Password = " + email);
-//
-//    List<AuthtionMailing> confirmByEmail = mailingRepository.findByEmail(email);
-//    assertEquals(1, confirmByEmail.size());
-//
-//    check_send_data(GET, resource_confirmRestoreConsumerPass, ANY_consumer.access_token, checkers_for_confirmRestoreConsumerPass(email, confirmByEmail.get(0).getData()));
-//
-//    confirmByEmail = mailingRepository.findByEmail(email);
-//    assertEquals(1, confirmByEmail.size());
+    logHead("Confirm Restore AuthtionConsumer Password = " + email);
+
+    int type = 5;
+
+    List<AuthtionMailing> confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
+    assertEquals(2, confirmByEmail.size());
+
+    check_send_data(GET, resource_confirmRestoreConsumerPass, ANY_consumer.access_token, checkers_for_confirmRestoreConsumerPass(email, confirmByEmail.get(0).getData()));
+
+    confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
+    assertEquals(2, confirmByEmail.size());
   }
 
   private void restoreConsumerPass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
   {
-//    logHead("Restore AuthtionConsumer Password = " + email);
-//
-//    List<AuthtionMailing> confirmByEmail = mailingRepository.findByEmail(email);
-//    assertEquals(1, confirmByEmail.size());
-//
-//    //oldpass
-//    //AuthtionTestConsumer.of(USER, email, oldpassDecoded, client_TRUSTED, 200);
-//    //newpass
-//    //AuthtionTestConsumer.of(USER, email, newpassDecoded, client_TRUSTED, 400);
-//
-//    //change password
-//    check_send_data(POST, resource_restoreConsumerPass, ANY_consumer.access_token,
-//            checkers_for_restoreConsumerPass(email, newpassForCheckers, confirmByEmail.get(0).getData()));
-//
-//    assertEquals(0, mailingRepository.findByEmail(email).size());
-//
-//    //oldpass
-//    //AuthtionTestConsumer.of(USER, email, oldpassDecoded, client_TRUSTED, 400);
-//
-//    //newpass
-//    AuthtionTestConsumer consumerTest = AuthtionTestConsumer.of(USER, email, newpassDecoded, client_TRUSTED, 200);
-//    fullAuthTest(consumerTest);
+    logHead("Restore AuthtionConsumer Password = " + email);
+
+    int type = 5;
+
+    List<AuthtionMailing> confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
+    assertEquals(2, confirmByEmail.size());
+
+    //oldpass
+    //AuthtionTestConsumer.of(USER, email, oldpassDecoded, client_TRUSTED, 200);
+    //newpass
+    //AuthtionTestConsumer.of(USER, email, newpassDecoded, client_TRUSTED, 400);
+
+    //change password
+    check_send_data(POST, resource_restoreConsumerPass, ANY_consumer.access_token,
+            checkers_for_restoreConsumerPass(email, newpassForCheckers, confirmByEmail.get(0).getData()));
+
+    assertEquals(1, mailingRepository.findSentNotEmptyData(type, email).size());
+
+    //oldpass
+    //AuthtionTestConsumer.of(USER, email, oldpassDecoded, client_TRUSTED, 400);
+
+    //newpass
+    AuthtionTestConsumer consumerTest = AuthtionTestConsumer.of(USER, email, newpassDecoded, client_TRUSTED, 200);
+    fullAuthTest(consumerTest);
   }
 
   private void fullAuthTest(AuthtionTestConsumer testConsumer)

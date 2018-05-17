@@ -164,6 +164,13 @@ public class AuthtionTestVariablesForConsumerTest
     );
   }
 
+  public static List<AuthtionTestChecker> checkers_for_reqRestoreConsumerPass_duplicateDelay(String email)
+  {
+    return List.of(
+            AuthtionTestChecker.of(false, Map.of("email", email), 200, "delay-between-duplicate-requests")
+    );
+  }
+
   public static List<AuthtionTestChecker> checkers_for_confirmRestoreConsumerPass(String email, String existedKey)
   {
     return List.of(
@@ -199,7 +206,7 @@ public class AuthtionTestVariablesForConsumerTest
             AuthtionTestChecker.of(false, Map.of("newpass", newpass, "key", "123", "email", "shop"), 200, "invalid-email"),
             AuthtionTestChecker.of(false, Map.of("newpass", newpass, "key", "123", "email", "..puqu@mail.ru"), 200, "invalid-email"),
             AuthtionTestChecker.of(false, Map.of("newpass", newpass, "key", "123", "email", "ehlo@mail.ru"), 200, "confirm-key-not-exist"),
-            AuthtionTestChecker.of(false, Map.of("newpass", newpass, "key", existedKey, "email", "ehlo@mail.ru"), 200, "confirm-key-for-another-email"),
+            AuthtionTestChecker.of(false, Map.of("newpass", newpass, "key", existedKey, "email", "ehlo@mail.ru"), 200, "confirm-key-not-exist"),
             AuthtionTestChecker.of(true, Map.of("newpass", newpass, "key", existedKey, "email", email), 200)
     ));
     return list;

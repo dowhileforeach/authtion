@@ -162,16 +162,13 @@ public class AuthtionUtil
 
   private int getTimeoutForDuplicateRequest()
   {
-    int minTimeout = 5000; // millisecond
-
     String sendIntervalStr = env.getProperty("dwfe.authtion.scheduled.task.mailing.send-interval");
     String maxAttemptsStr = env.getProperty("dwfe.authtion.scheduled.task.mailing.max-attempts-to-send-if-error");
 
-    int sendInterval = sendIntervalStr == null ? 0 : Integer.parseInt(sendIntervalStr);
-    int maxAttempts = maxAttemptsStr == null ? 0 : Integer.parseInt(maxAttemptsStr);
-    int timeout = sendInterval * maxAttempts;
+    int sendInterval = sendIntervalStr == null ? 30000 : Integer.parseInt(sendIntervalStr);
+    int maxAttempts = maxAttemptsStr == null ? 3 : Integer.parseInt(maxAttemptsStr);
 
-    return timeout < minTimeout ? minTimeout : timeout;
+    return sendInterval * maxAttempts;
   }
 
   public boolean isAllowedNewRequestForMailing(int type, String email, List<String> errorCodes)

@@ -1,5 +1,4 @@
 authtionServerErrorCodesMap = {
-    'confirm-key-for-another-email': 'Confirm key for another email',
     'confirm-key-not-exist': 'Confirm key does not exist',
     'delay-between-duplicate-requests': 'You\'ve already sent a request. Check your email',
     'email-is-already-confirmed': 'Email is already confirmed',

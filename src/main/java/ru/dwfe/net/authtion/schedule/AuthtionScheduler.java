@@ -28,6 +28,7 @@ public class AuthtionScheduler
   private final Environment env;
 
   private static final ConcurrentSkipListSet<AuthtionMailing> MAILING_POOL = new ConcurrentSkipListSet<>();
+  private final int maxAttemptsMailing;
 
   @Autowired
   public AuthtionScheduler(JavaMailSender emailSender, AuthtionMailingRepository mailingRepository, Environment env)
@@ -35,6 +36,9 @@ public class AuthtionScheduler
     this.emailSender = emailSender;
     this.mailingRepository = mailingRepository;
     this.env = env;
+
+    String maxAttemptsMailingStr = env.getProperty("dwfe.authtion.scheduled.task.mailing.max-attempts-to-send-if-error");
+    this.maxAttemptsMailing = maxAttemptsMailingStr == null ? 3 : Integer.parseInt(maxAttemptsMailingStr);
   }
 
   @Scheduled(
@@ -78,7 +82,7 @@ public class AuthtionScheduler
       }
       catch (Throwable e)
       {
-        if (next.getAttempt().incrementAndGet() >= 3)
+        if (next.getAttempt().incrementAndGet() >= maxAttemptsMailing)
         {
           next.clear();
           next.setMaxAttemptsReached(true);

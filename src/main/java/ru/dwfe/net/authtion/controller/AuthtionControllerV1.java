@@ -247,7 +247,7 @@ public class AuthtionControllerV1
     }
     else if (authtionUtil.isAllowedNewRequestForMailing(type, email, errorCodes))
     {
-      mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase36(30)));
+      mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase36(40)));
     }
 
     return getResponse(errorCodes);
@@ -315,12 +315,13 @@ public class AuthtionControllerV1
     List<String> errorCodes = new ArrayList<>();
 
     String email = (String) getValueFromJSON(body, "email");
+    int type = 5;
 
-    if (isEmailCheckOK(email, errorCodes))
+    if (isEmailCheckOK(email, errorCodes) && authtionUtil.isAllowedNewRequestForMailing(type, email, errorCodes))
     {
       if (consumerService.existsByEmail(email))
       {
-        mailingRepository.save(AuthtionMailing.of(5, email, getUniqStrBase36(30)));
+        mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase36(40)));
       }
       else errorCodes.add("email-not-exist");
     }
@@ -333,10 +334,11 @@ public class AuthtionControllerV1
     String fieldName = "confirm-key";
     List<String> errorCodes = new ArrayList<>();
     Map<String, Object> data = new HashMap<>();
+    int type = 5;
 
     if (isDefaultCheckOK(key, fieldName, errorCodes))
     {
-      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByTypeAndData(5, key);
+      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByTypeAndData(type, key);
       if (confirmByKey.isPresent())
       {
         AuthtionMailing confirm = confirmByKey.get();
@@ -344,7 +346,6 @@ public class AuthtionControllerV1
         data.put("email", confirm.getEmail());
         data.put("key", confirm.getData());
 
-        confirm.clear();
         mailingRepository.save(confirm);
       }
       else errorCodes.add(fieldName + "-not-exist");
@@ -357,6 +358,7 @@ public class AuthtionControllerV1
   {
     List<String> errorCodes = new ArrayList<>();
     Map<String, Object> map = parse(body);
+    int type = 5;
 
     String emailField = "email";
     String keyField = "key";
@@ -371,21 +373,18 @@ public class AuthtionControllerV1
             && isDefaultCheckOK(keyValue, keyFieldFullName, errorCodes)
             && isEmailCheckOK(emailValue, errorCodes))
     {
-      Optional<AuthtionMailing> confirmByKey = mailingRepository.findData(5, emailValue, keyValue);
+      Optional<AuthtionMailing> confirmByKey = mailingRepository.findData(type, emailValue, keyValue);
       if (confirmByKey.isPresent())
       {
         AuthtionMailing confirm = confirmByKey.get();
-        if (emailValue.equals(confirm.getEmail()))
-        {
-          // the AuthtionConsumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
-          AuthtionConsumer consumer = consumerService.findByEmail(emailValue).get();
-          setNewPassword(consumer, newpassValue);
-          consumerService.save(consumer);
 
-          confirm.clear();
-          mailingRepository.save(confirm);
-        }
-        else errorCodes.add(keyFieldFullName + "-for-another-email");
+        // the AuthtionConsumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
+        AuthtionConsumer consumer = consumerService.findByEmail(emailValue).get();
+        setNewPassword(consumer, newpassValue);
+        consumerService.save(consumer);
+
+        confirm.clear();
+        mailingRepository.save(confirm);
       }
       else errorCodes.add(keyFieldFullName + "-not-exist");
     }
