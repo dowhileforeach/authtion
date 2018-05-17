@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ public class AuthtionScheduler
 
   private static final ConcurrentSkipListSet<AuthtionMailing> MAILING_POOL = new ConcurrentSkipListSet<>();
   private final int maxAttemptsMailing;
+  private final String sendFrom;
 
   @Autowired
   public AuthtionScheduler(JavaMailSender emailSender, AuthtionMailingRepository mailingRepository, Environment env)
@@ -39,6 +41,8 @@ public class AuthtionScheduler
 
     String maxAttemptsMailingStr = env.getProperty("dwfe.authtion.scheduled.task.mailing.max-attempts-to-send-if-error");
     this.maxAttemptsMailing = maxAttemptsMailingStr == null ? 3 : Integer.parseInt(maxAttemptsMailingStr);
+
+    this.sendFrom = env.getProperty("spring.mail.username");
   }
 
   @Scheduled(
@@ -46,19 +50,8 @@ public class AuthtionScheduler
           fixedRateString = "${dwfe.authtion.scheduled.task.mailing.collect-from-db-interval}")
   public void collectMailingTasksFromDatabase()
   {
-
-    log.warn("before collect mailing tasks from Database");
     MAILING_POOL.addAll(mailingRepository.getNewJob());
     log.warn("collected = {}", MAILING_POOL.size());
-
-//    SimpleMailMessage message = new SimpleMailMessage();
-//    message.setTo("pistoletik@gmail.com");
-//    message.setFrom("noreply@dwfe.ru");
-//    message.setSubject("Welcome");
-//    message.setText("Welcome to\nDWFE.ru");
-//    emailSender.send(message);
-//    log.info("sent");
-
   }
 
   @Scheduled(
@@ -69,12 +62,17 @@ public class AuthtionScheduler
     log.warn("mailing before perform");
     List<AuthtionMailing> toDataBase = new ArrayList<>();
     MAILING_POOL.forEach(next -> {
+      int type = next.getType();
       try
       {
-        // next.getMessageText();
-        // ВНИМАНИЕ!!! Сначала изменить почтовые ящики на dwfe домен для тестового окружения
-        // отправить письмо
-        if (next.getType() != 3 && next.getType() != 5)
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(next.getEmail());
+        message.setFrom(sendFrom);
+        message.setSubject(getSubject(type));
+        message.setText(getMessageText(type, next.getData()));
+        emailSender.send(message);
+
+        if (type != 3 && type != 5)
           next.clear();
         next.setSent(true);
         toDataBase.add(next);
@@ -101,4 +99,42 @@ public class AuthtionScheduler
       MAILING_POOL.removeAll(toDataBase);
     }
   }
+
+  private String getSubject(int type)
+  {
+    String result = "";
+
+    if (type == 1)
+      return "Welcome, when password was passed";
+    else if (type == 2)
+      return "Welcome, when password was not passed";
+    else if (type == 3)
+      return "Confirm email";
+    else if (type == 4)
+      return "Password was changed";
+    else if (type == 5)
+      return "Confirm restore password";
+
+    return result;
+  }
+
+
+  private String getMessageText(int type, String data)
+  {
+    String result = "";
+
+    if (type == 1)
+      return "Welcome.";
+    else if (type == 2)
+      return "Your password: " + data;
+    else if (type == 3)
+      return "http://localhost:8080/v1/confirm-consumer-email?key=" + data;
+    else if (type == 4)
+      return "Password was changed";
+    else if (type == 5)
+      return "http://localhost:8080/v1/confirm-restore-consumer-pass?key=" + data;
+
+    return result;
+  }
 }
+
