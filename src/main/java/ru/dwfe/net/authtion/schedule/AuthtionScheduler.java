@@ -51,7 +51,7 @@ public class AuthtionScheduler
   public void collectMailingTasksFromDatabase()
   {
     MAILING_POOL.addAll(mailingRepository.getNewJob());
-    log.warn("collected = {}", MAILING_POOL.size());
+    log.debug("mailing - collected = {}", MAILING_POOL.size());
   }
 
   @Scheduled(
@@ -59,24 +59,25 @@ public class AuthtionScheduler
           fixedDelayString = "${dwfe.authtion.scheduled.task.mailing.send-interval}")
   public void mailingWelcomeWhenPasswordWasNotPassed()
   {
-    log.warn("mailing before perform");
     List<AuthtionMailing> toDataBase = new ArrayList<>();
     MAILING_POOL.forEach(next -> {
       int type = next.getType();
+      String email = next.getEmail();
       try
       {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(next.getEmail());
-        message.setFrom(sendFrom);
         message.setSubject(getSubject(type));
+        message.setFrom(sendFrom);
+        message.setTo(email);
         message.setText(getMessageText(type, next.getData()));
         emailSender.send(message);
 
+        next.setSent(true);
         if (type != 3 && type != 5)
           next.clear();
-        next.setSent(true);
+
         toDataBase.add(next);
-        log.warn("sent");
+        log.debug("mailing - sent {}", email);
       }
       catch (Throwable e)
       {
@@ -85,18 +86,19 @@ public class AuthtionScheduler
           next.clear();
           next.setMaxAttemptsReached(true);
           next.setCauseOfLastFailure(e.toString());
+
           toDataBase.add(next);
+          log.debug("mailing - fail send, store to DB = {}", toDataBase.size());
         }
-        log.warn("to next attempt, after error");
+        log.debug("mailing - attempt({}), {}", next.getAttempt().get(), email);
       }
     });
 
-    log.warn("mailing before toDataBase.size() > 0");
     if (toDataBase.size() > 0)
     {
-      log.warn("store to DB = {}", toDataBase.size());
       mailingRepository.saveAll(toDataBase);
       MAILING_POOL.removeAll(toDataBase);
+      log.debug("mailing - correct store to DB = {}", toDataBase.size());
     }
   }
 
