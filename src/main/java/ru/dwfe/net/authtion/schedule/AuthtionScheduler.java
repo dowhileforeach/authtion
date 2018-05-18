@@ -5,10 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import ru.dwfe.net.authtion.dao.AuthtionMailing;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
@@ -23,21 +26,23 @@ public class AuthtionScheduler
 {
   private final static Logger log = LoggerFactory.getLogger(AuthtionScheduler.class);
 
-  private final JavaMailSender emailSender;
+  private final JavaMailSender mailSender;
   private final AuthtionMailingRepository mailingRepository;
 
   private static final ConcurrentSkipListSet<AuthtionMailing> MAILING_POOL = new ConcurrentSkipListSet<>();
   private final int maxAttemptsMailingIfError;
   private final String sendFrom;
+  private final TemplateEngine templateEngine; // Thymeleaf
 
   @Autowired
-  public AuthtionScheduler(JavaMailSender emailSender, AuthtionMailingRepository mailingRepository, Environment env, AuthtionConfigProperties authtionConfigProperties)
+  public AuthtionScheduler(JavaMailSender mailSender, AuthtionMailingRepository mailingRepository, Environment env, AuthtionConfigProperties authtionConfigProperties, TemplateEngine templateEngine)
   {
-    this.emailSender = emailSender;
+    this.mailSender = mailSender;
     this.mailingRepository = mailingRepository;
 
     this.maxAttemptsMailingIfError = authtionConfigProperties.getScheduledTaskMailing().getMaxAttemptsToSendIfError();
     this.sendFrom = env.getProperty("spring.mail.username");
+    this.templateEngine = templateEngine;
   }
 
   @Scheduled(
@@ -59,14 +64,17 @@ public class AuthtionScheduler
     MAILING_POOL.forEach(next -> {
       int type = next.getType();
       String email = next.getEmail();
+      String data = next.getData();
       try
       {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject(getMailSubject(type));
-        message.setFrom(sendFrom);
-        message.setTo(email);
-        message.setText(getMailMessageText(type, next.getData()));
-        emailSender.send(message);
+        MimeMessagePreparator preparator = mimeMessage -> {
+          MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED);
+          helper.setFrom(sendFrom);
+          helper.setTo(email);
+          helper.setSubject(getMailSubject(type));
+          helper.setText(getMailMessageText(type, data), true);
+        };
+        mailSender.send(preparator);
 
         next.setSent(true);
         if (type != 3 && type != 5)
@@ -120,20 +128,20 @@ public class AuthtionScheduler
 
   private String getMailMessageText(int type, String data)
   {
-    String result = "";
+    Context context = new Context();
 
     if (type == 1)
-      return "Welcome.";
+      return "";
     else if (type == 2)
-      return "Your password: " + data;
+      context.setVariable("data", data);
     else if (type == 3)
-      return "http://localhost:8080/v1/confirm-consumer-email?key=" + data;
+      context.setVariable("data", "http://localhost:8080/v1/confirm-consumer-email?key=" + data);
     else if (type == 4)
-      return "Password was changed";
+      return "";
     else if (type == 5)
-      return "http://localhost:8080/v1/confirm-restore-consumer-pass?key=" + data;
+      context.setVariable("data", "http://localhost:8080/v1/confirm-restore-consumer-pass?key=" + data);
 
-    return result;
+    return templateEngine.process("mailing" + type, context);
   }
 }
 
