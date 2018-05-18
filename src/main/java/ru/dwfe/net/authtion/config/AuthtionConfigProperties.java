@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 @ConfigurationProperties(prefix = "dwfe.authtion")
 public class AuthtionConfigProperties implements InitializingBean
 {
+  // == http://www.baeldung.com/configuration-properties-in-spring-boot
+
   @NotNull
   private GoogleCaptcha googleCaptcha;
 

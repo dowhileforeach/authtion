@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import ru.dwfe.net.authtion.dao.AuthtionMailing;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 
@@ -23,31 +24,25 @@ public class AuthtionScheduler
   private final static Logger log = LoggerFactory.getLogger(AuthtionScheduler.class);
 
   private final JavaMailSender emailSender;
-
-  final AuthtionMailingRepository mailingRepository;
-
-  private final Environment env;
+  private final AuthtionMailingRepository mailingRepository;
 
   private static final ConcurrentSkipListSet<AuthtionMailing> MAILING_POOL = new ConcurrentSkipListSet<>();
-  private final int maxAttemptsMailing;
+  private final int maxAttemptsMailingIfError;
   private final String sendFrom;
 
   @Autowired
-  public AuthtionScheduler(JavaMailSender emailSender, AuthtionMailingRepository mailingRepository, Environment env)
+  public AuthtionScheduler(JavaMailSender emailSender, AuthtionMailingRepository mailingRepository, Environment env, AuthtionConfigProperties authtionConfigProperties)
   {
     this.emailSender = emailSender;
     this.mailingRepository = mailingRepository;
-    this.env = env;
 
-    String maxAttemptsMailingStr = env.getProperty("dwfe.authtion.scheduled-task-mailing.max-attempts-to-send-if-error");
-    this.maxAttemptsMailing = maxAttemptsMailingStr == null ? 3 : Integer.parseInt(maxAttemptsMailingStr);
-
+    this.maxAttemptsMailingIfError = authtionConfigProperties.getScheduledTaskMailing().getMaxAttemptsToSendIfError();
     this.sendFrom = env.getProperty("spring.mail.username");
   }
 
   @Scheduled(
-          initialDelayString = "${dwfe.authtion.scheduled-task-mailing.initial-delay}",
-          fixedRateString = "${dwfe.authtion.scheduled-task-mailing.collect-from-db-interval}")
+          initialDelayString = "#{authtionConfigProperties.scheduledTaskMailing.initialDelay}",
+          fixedRateString = "#{authtionConfigProperties.scheduledTaskMailing.collectFromDbInterval}")
   public void collectMailingTasksFromDatabase()
   {
     MAILING_POOL.addAll(mailingRepository.getNewJob());
@@ -82,7 +77,7 @@ public class AuthtionScheduler
       }
       catch (Throwable e)
       {
-        if (next.getAttempt().incrementAndGet() >= maxAttemptsMailing)
+        if (next.getAttempt().incrementAndGet() >= maxAttemptsMailingIfError)
         {
           next.clear();
           next.setMaxAttemptsReached(true);
