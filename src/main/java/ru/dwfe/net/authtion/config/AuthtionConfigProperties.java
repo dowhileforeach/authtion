@@ -27,8 +27,6 @@ public class AuthtionConfigProperties implements InitializingBean
     scheduledTaskMailing.setTimeoutForDuplicateRequest(
             scheduledTaskMailing.getSendInterval() * scheduledTaskMailing.getMaxAttemptsToSendIfError()
     );
-
-    System.out.println("timeoutForDuplicateRequest=" + scheduledTaskMailing.getTimeoutForDuplicateRequest());
   }
 
   public static class GoogleCaptcha
@@ -57,7 +55,7 @@ public class AuthtionConfigProperties implements InitializingBean
 
     private int maxAttemptsToSendIfError = 3;
 
-    private int timeoutForDuplicateRequest;
+    private int timeoutForDuplicateRequest; // calculated field!!! See method: afterPropertiesSet()
 
     public int getInitialDelay()
     {
