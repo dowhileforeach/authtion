@@ -26,7 +26,9 @@ The Authtion server is set to time zone UTC.<br>
 Also, some Authtion database table fields are automatically assigned directly by the database. Therefore, **to work correctly with date and time, you must explicitly set the time zone for mysqld to UTC** (this can be done in [several ways](https://stackoverflow.com/questions/930900/how-do-i-set-the-time-zone-of-mysql#19069310)) or override Authtion server preferences.
 
 # Email alerts
-![ServiceAlerts](./assets/img/ServiceAlerts.png)<br>
+![ServiceAlerts](./assets/img/ServiceAlerts.png)
+<br><br>
+Preparation of email templates was made in a separate project [authtion-backend-mailing](https://github.com/dowhileforeach/authtion-backend-mailing).
 
 # Automated TESTs
 See `test\java\ru.dwfe.authtion` classes.<br>
