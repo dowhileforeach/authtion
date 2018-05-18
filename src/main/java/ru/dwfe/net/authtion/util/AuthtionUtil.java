@@ -24,6 +24,16 @@ import java.util.Optional;
 @PropertySource("classpath:application.properties")
 public class AuthtionUtil
 {
+  private final Environment env;
+  private final AuthtionMailingRepository mailingRepository;
+
+  @Autowired
+  private AuthtionUtil(Environment env, AuthtionMailingRepository mailingRepository)
+  {
+    this.env = env;
+    this.mailingRepository = mailingRepository;
+  }
+
   public static Map<String, Object> parse(String body)
   {
     return JsonParserFactory.getJsonParser().parseMap(body);
@@ -157,14 +167,14 @@ public class AuthtionUtil
 
   public String getGoogleCaptchaSecretKey()
   {
-    String secretKey = env.getProperty("dwfe.authtion.google.captcha.secret-key");
+    String secretKey = env.getProperty("dwfe.authtion.google-captcha.secret-key");
     return secretKey == null ? "" : secretKey;
   }
 
   private int getTimeoutForDuplicateRequest()
   {
-    String sendIntervalStr = env.getProperty("dwfe.authtion.scheduled.task.mailing.send-interval");
-    String maxAttemptsStr = env.getProperty("dwfe.authtion.scheduled.task.mailing.max-attempts-to-send-if-error");
+    String sendIntervalStr = env.getProperty("dwfe.authtion.scheduled-task-mailing.send-interval");
+    String maxAttemptsStr = env.getProperty("dwfe.authtion.scheduled-task-mailing.max-attempts-to-send-if-error");
 
     int sendInterval = sendIntervalStr == null ? 30000 : Integer.parseInt(sendIntervalStr);
     int maxAttempts = maxAttemptsStr == null ? 3 : Integer.parseInt(maxAttemptsStr);
@@ -189,15 +199,5 @@ public class AuthtionUtil
       }
     }
     return result;
-  }
-
-  private final Environment env;
-  private final AuthtionMailingRepository mailingRepository;
-
-  @Autowired
-  private AuthtionUtil(Environment env, AuthtionMailingRepository mailingRepository)
-  {
-    this.env = env;
-    this.mailingRepository = mailingRepository;
   }
 }

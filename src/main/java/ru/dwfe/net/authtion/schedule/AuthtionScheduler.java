@@ -39,26 +39,27 @@ public class AuthtionScheduler
     this.mailingRepository = mailingRepository;
     this.env = env;
 
-    String maxAttemptsMailingStr = env.getProperty("dwfe.authtion.scheduled.task.mailing.max-attempts-to-send-if-error");
+    String maxAttemptsMailingStr = env.getProperty("dwfe.authtion.scheduled-task-mailing.max-attempts-to-send-if-error");
     this.maxAttemptsMailing = maxAttemptsMailingStr == null ? 3 : Integer.parseInt(maxAttemptsMailingStr);
 
     this.sendFrom = env.getProperty("spring.mail.username");
   }
 
   @Scheduled(
-          initialDelayString = "${dwfe.authtion.scheduled.task.mailing.initial-delay}",
-          fixedRateString = "${dwfe.authtion.scheduled.task.mailing.collect-from-db-interval}")
+          initialDelayString = "${dwfe.authtion.scheduled-task-mailing.initial-delay}",
+          fixedRateString = "${dwfe.authtion.scheduled-task-mailing.collect-from-db-interval}")
   public void collectMailingTasksFromDatabase()
   {
     MAILING_POOL.addAll(mailingRepository.getNewJob());
-    log.debug("mailing - collected = {}", MAILING_POOL.size());
+    log.debug("mailing - collected[{}]", MAILING_POOL.size());
   }
 
   @Scheduled(
-          initialDelayString = "${dwfe.authtion.scheduled.task.mailing.initial-delay}",
-          fixedDelayString = "${dwfe.authtion.scheduled.task.mailing.send-interval}")
-  public void mailingWelcomeWhenPasswordWasNotPassed()
+          initialDelayString = "#{authtionConfigProperties.scheduledTaskMailing.initialDelay}",
+          fixedDelayString = "#{authtionConfigProperties.scheduledTaskMailing.sendInterval}")
+  public void sendingMail()
   {
+    log.debug("mailing - attempt to send[{}]...", MAILING_POOL.size());
     List<AuthtionMailing> toDataBase = new ArrayList<>();
     MAILING_POOL.forEach(next -> {
       int type = next.getType();
@@ -66,10 +67,10 @@ public class AuthtionScheduler
       try
       {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject(getSubject(type));
+        message.setSubject(getMailSubject(type));
         message.setFrom(sendFrom);
         message.setTo(email);
-        message.setText(getMessageText(type, next.getData()));
+        message.setText(getMailMessageText(type, next.getData()));
         emailSender.send(message);
 
         next.setSent(true);
@@ -77,7 +78,7 @@ public class AuthtionScheduler
           next.clear();
 
         toDataBase.add(next);
-        log.debug("mailing - sent {}", email);
+        log.debug("mailing - sent to {}", email);
       }
       catch (Throwable e)
       {
@@ -88,9 +89,10 @@ public class AuthtionScheduler
           next.setCauseOfLastFailure(e.toString());
 
           toDataBase.add(next);
-          log.debug("mailing - fail send, store to DB = {}", toDataBase.size());
+          log.debug("mailing - last fail sending to {}", email);
         }
-        log.debug("mailing - attempt({}), {}", next.getAttempt().get(), email);
+        else
+          log.debug("mailing - go to attempt({}) after fail, {}", next.getAttempt().get(), email);
       }
     });
 
@@ -102,7 +104,7 @@ public class AuthtionScheduler
     }
   }
 
-  private String getSubject(int type)
+  private String getMailSubject(int type)
   {
     String result = "";
 
@@ -121,7 +123,7 @@ public class AuthtionScheduler
   }
 
 
-  private String getMessageText(int type, String data)
+  private String getMailMessageText(int type, String data)
   {
     String result = "";
 
