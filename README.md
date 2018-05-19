@@ -28,7 +28,9 @@ Also, some Authtion database table fields are automatically assigned directly by
 # Email alerts
 ![ServiceAlerts](./assets/img/ServiceAlerts.png)
 <br><br>
-Preparation of email templates was made in a separate project [authtion-backend-mailing](https://github.com/dowhileforeach/authtion-backend-mailing).
+Preparation of mail templates was made in a separate project [authtion-backend-mailing](https://github.com/dowhileforeach/authtion-backend-mailing).
+<br>
+To fill the mail templates used [Thymeleaf](http://www.thymeleaf.org) template engine.
 
 # Automated TESTs
 See `test\java\ru.dwfe.authtion` classes.<br>

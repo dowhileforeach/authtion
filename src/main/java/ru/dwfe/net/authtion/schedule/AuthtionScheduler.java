@@ -17,7 +17,9 @@ import ru.dwfe.net.authtion.dao.AuthtionMailing;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 @Component
@@ -59,20 +61,23 @@ public class AuthtionScheduler
           fixedDelayString = "#{authtionConfigProperties.scheduledTaskMailing.sendInterval}")
   public void sendingMail()
   {
-    log.debug("mailing - attempt to send[{}]...", MAILING_POOL.size());
-    List<AuthtionMailing> toDataBase = new ArrayList<>();
+    log.debug("mailing - attempt to send[{}]", MAILING_POOL.size());
+    final List<AuthtionMailing> toDataBase = new ArrayList<>();
     MAILING_POOL.forEach(next -> {
       int type = next.getType();
       String email = next.getEmail();
       String data = next.getData();
       try
       {
+        Map<String, String> subjectMessage = getSubjectMessage(type, data);
         MimeMessagePreparator preparator = mimeMessage -> {
-          MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED);
+          MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_NO);
           helper.setFrom(sendFrom);
           helper.setTo(email);
-          helper.setSubject(getMailSubject(type));
-          helper.setText(getMailMessageText(type, data), true);
+          helper.setSubject(subjectMessage.get("subject"));
+          helper.setText(subjectMessage.get("message"), true);
+          //mimeMessage.addHeader("Content-Transfer-Encoding", "base64"); // to auto encode message to base64
+          mimeMessage.addHeader("Content-Transfer-Encoding", "quoted-printable");
         };
         mailSender.send(preparator);
 
@@ -95,7 +100,7 @@ public class AuthtionScheduler
           log.debug("mailing - last fail sending to {}", email);
         }
         else
-          log.debug("mailing - go to attempt({}) after fail, {}", next.getAttempt().get(), email);
+          log.debug("mailing - go to attempt[{}] after fail, {}", next.getAttempt().get(), email);
       }
     });
 
@@ -103,45 +108,44 @@ public class AuthtionScheduler
     {
       mailingRepository.saveAll(toDataBase);
       MAILING_POOL.removeAll(toDataBase);
-      log.debug("mailing - correct store to DB = {}", toDataBase.size());
+      log.debug("mailing - store sent[{}] to DB", toDataBase.size());
+      toDataBase.clear();
     }
   }
 
-  private String getMailSubject(int type)
+  private Map<String, String> getSubjectMessage(int type, String data)
   {
-    String result = "";
-
-    if (type == 1)
-      return "Welcome, when password was passed";
-    else if (type == 2)
-      return "Welcome, when password was not passed";
-    else if (type == 3)
-      return "Confirm email";
-    else if (type == 4)
-      return "Password was changed";
-    else if (type == 5)
-      return "Confirm restore password";
-
-    return result;
-  }
-
-
-  private String getMailMessageText(int type, String data)
-  {
+    Map<String, String> result = new HashMap<>();
+    String subjKey = "subject";
+    String messageKey = "message";
+    String dataKey = "data";
     Context context = new Context();
 
     if (type == 1)
-      return "";
+    {
+      result.put(subjKey, "Welcome, when password was passed");
+    }
     else if (type == 2)
-      context.setVariable("data", data);
+    {
+      result.put(subjKey, "Welcome, when password was not passed");
+      context.setVariable(dataKey, data);
+    }
     else if (type == 3)
-      context.setVariable("data", "http://localhost:8080/v1/confirm-consumer-email?key=" + data);
+    {
+      result.put(subjKey, "Confirm email");
+      context.setVariable(dataKey, "http://localhost:8080/v1/confirm-consumer-email?key=" + data);
+    }
     else if (type == 4)
-      return "";
+    {
+      result.put(subjKey, "Password was changed");
+    }
     else if (type == 5)
-      context.setVariable("data", "http://localhost:8080/v1/confirm-restore-consumer-pass?key=" + data);
-
-    return templateEngine.process("mailing" + type, context);
+    {
+      result.put(subjKey, "Confirm restore password");
+      context.setVariable(dataKey, "http://localhost:8080/v1/confirm-restore-consumer-pass?key=" + data);
+    }
+    result.put(messageKey, templateEngine.process("mailing" + type, context));
+    return result;
   }
 }
 
