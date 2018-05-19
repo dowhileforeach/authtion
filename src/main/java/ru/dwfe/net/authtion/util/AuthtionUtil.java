@@ -19,6 +19,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @PropertySource("classpath:application.properties")
@@ -163,6 +164,15 @@ public class AuthtionUtil
     // But I strongly do not recommend doing this, otherwise you need to consider changing the time zone
     // in other places of this project: https://github.com/dowhileforeach/authtion#date-and-time
     // and don't forget about the time zone of MySQL
+  }
+
+  public static String formatMilliseconds(long millis)
+  { // ==https://stackoverflow.com/questions/625433/how-to-convert-milliseconds-to-x-mins-x-seconds-in-java#625624
+    return String.format("%02d min, %02d sec",
+            TimeUnit.MILLISECONDS.toMinutes(millis),
+            TimeUnit.MILLISECONDS.toSeconds(millis) -
+                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+    );
   }
 
   public String getGoogleCaptchaSecretKey()

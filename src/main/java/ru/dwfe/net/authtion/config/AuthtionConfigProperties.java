@@ -1,5 +1,7 @@
 package ru.dwfe.net.authtion.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -8,12 +10,16 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import static ru.dwfe.net.authtion.util.AuthtionUtil.formatMilliseconds;
+
 @Validated
 @Configuration
 @ConfigurationProperties(prefix = "dwfe.authtion")
 public class AuthtionConfigProperties implements InitializingBean
 {
   // == http://www.baeldung.com/configuration-properties-in-spring-boot
+
+  private final static Logger log = LoggerFactory.getLogger(AuthtionConfigProperties.class);
 
   @NotNull
   private GoogleCaptcha googleCaptcha;
@@ -27,6 +33,8 @@ public class AuthtionConfigProperties implements InitializingBean
     scheduledTaskMailing.setTimeoutForDuplicateRequest(
             scheduledTaskMailing.getSendInterval() * scheduledTaskMailing.getMaxAttemptsToSendIfError()
     );
+
+    log.info(toString());
   }
 
   public static class GoogleCaptcha
@@ -126,5 +134,26 @@ public class AuthtionConfigProperties implements InitializingBean
   public void setScheduledTaskMailing(ScheduledTaskMailing scheduledTaskMailing)
   {
     this.scheduledTaskMailing = scheduledTaskMailing;
+  }
+
+  @Override
+  public String toString()
+  {
+    return String.format("%n%n" +
+                    "-====================================================-%n" +
+                    "|            ::[Authtion server]::                   |%n" +
+                    "|----------------------------------------------------|%n" +
+                    "| Scheduled Task - Mailing:                          |%n" +
+                    "|    initial delay                 %16s  |%n" +
+                    "|    collect from DB interval      %16s  |%n" +
+                    "|    send interval                 %16s  |%n" +
+                    "|    max attempts to send if error   %-16s|%n" +
+                    "|    timeout for duplicate request %16s  |%n" +
+                    "|____________________________________________________|%n",
+            formatMilliseconds(scheduledTaskMailing.initialDelay),
+            formatMilliseconds(scheduledTaskMailing.collectFromDbInterval),
+            formatMilliseconds(scheduledTaskMailing.sendInterval),
+            scheduledTaskMailing.maxAttemptsToSendIfError,
+            formatMilliseconds(scheduledTaskMailing.timeoutForDuplicateRequest));
   }
 }
