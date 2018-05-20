@@ -15,6 +15,7 @@ import ru.dwfe.net.authtion.dao.AuthtionMailing;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 import ru.dwfe.net.authtion.service.AuthtionConsumerService;
 import ru.dwfe.net.authtion.test.AuthtionTestChecker;
+import ru.dwfe.net.authtion.test.AuthtionTestClient;
 import ru.dwfe.net.authtion.test.AuthtionTestConsumer;
 import ru.dwfe.net.authtion.test.AuthtionTestUtil;
 
@@ -27,7 +28,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.AuthtionGlobal.*;
 import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.USER;
-import static ru.dwfe.net.authtion.test.AuthtionTestGlobalVariables.client_TRUSTED;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.USUAL;
 import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTest.TOTAL_ACCESS_TOKEN_COUNT;
 import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForConsumerTest.*;
@@ -47,6 +47,8 @@ public class AuthtionFullTest
 
   @Autowired
   private AuthtionTestConsumer authtionTestConsumer;
+  @Autowired
+  private AuthtionTestClient authtionTestClient;
 
   @Autowired
   private AuthtionTestUtil authtionTestUtil;
@@ -188,9 +190,9 @@ public class AuthtionFullTest
     assertEquals(1, mailing_consumer3.size());
 
     // Perform full auth test for New AuthtionConsumer
-    fullAuthTest(authtionTestConsumer.of(USER, consumer1.getEmail(), PASS_NEW_Consumer, client_TRUSTED, 200));
-    fullAuthTest(authtionTestConsumer.of(USER, consumer2.getEmail(), mailing_password_consumer2, client_TRUSTED, 200));
-    fullAuthTest(authtionTestConsumer.of(USER, consumer3.getEmail(), PASS_FOR_EMAIL_3_Consumer_Decoded, client_TRUSTED, 200));
+    fullAuthTest(authtionTestConsumer.of(USER, consumer1.getEmail(), PASS_NEW_Consumer, authtionTestClient.getClientTrusted(), 200));
+    fullAuthTest(authtionTestConsumer.of(USER, consumer2.getEmail(), mailing_password_consumer2, authtionTestClient.getClientTrusted(), 200));
+    fullAuthTest(authtionTestConsumer.of(USER, consumer3.getEmail(), PASS_FOR_EMAIL_3_Consumer_Decoded, authtionTestClient.getClientTrusted(), 200));
   }
 
   @Test
@@ -277,7 +279,7 @@ public class AuthtionFullTest
             checkers_for_reqConfirmConsumerEmail_isConfirmed);
 
     // add new request
-    AuthtionTestConsumer consumer = authtionTestConsumer.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, client_TRUSTED, 200);
+    AuthtionTestConsumer consumer = authtionTestConsumer.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, authtionTestClient.getClientTrusted(), 200);
     List<AuthtionMailing> confirmByEmail = mailingRepository.findByTypeAndEmail(type, consumer.username);
     assertEquals(0, confirmByEmail.size());
     authtionTestUtil.check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
@@ -371,19 +373,19 @@ public class AuthtionFullTest
     logHead("Change AuthtionConsumer Pass = " + email);
 
     //newpass
-    //AuthtionTestConsumer.of(USER, email, newpass, client_TRUSTED, 400);
+    //AuthtionTestConsumer.of(USER, email, newpass, authtionTestClient.getOauth2ClientTrusted(), 400);
 
     //oldpass
-    AuthtionTestConsumer consumerTest = authtionTestConsumer.of(USER, email, oldpass, client_TRUSTED, 200);
+    AuthtionTestConsumer consumerTest = authtionTestConsumer.of(USER, email, oldpass, authtionTestClient.getClientTrusted(), 200);
 
     //change oldpass
     authtionTestUtil.check_send_data(POST, resource_changeConsumerPass, consumerTest.access_token, checkers);
 
     //oldpass
-    //AuthtionTestConsumer.of(USER, email, oldpass, client_TRUSTED, 400);
+    //AuthtionTestConsumer.of(USER, email, oldpass, authtionTestClient.getOauth2ClientTrusted(), 400);
 
     //newpass
-    consumerTest = authtionTestConsumer.of(USER, email, newpass, client_TRUSTED, 200);
+    consumerTest = authtionTestConsumer.of(USER, email, newpass, authtionTestClient.getClientTrusted(), 200);
     fullAuthTest(consumerTest);
   }
 
@@ -474,9 +476,9 @@ public class AuthtionFullTest
     assertEquals(2, confirmByEmail.size());
 
     //oldpass
-    //AuthtionTestConsumer.of(USER, email, oldpassDecoded, client_TRUSTED, 200);
+    //AuthtionTestConsumer.of(USER, email, oldpassDecoded, authtionTestClient.getOauth2ClientTrusted(), 200);
     //newpass
-    //AuthtionTestConsumer.of(USER, email, newpassDecoded, client_TRUSTED, 400);
+    //AuthtionTestConsumer.of(USER, email, newpassDecoded, authtionTestClient.getOauth2ClientTrusted(), 400);
 
     //change password
     authtionTestUtil.check_send_data(POST, resource_restoreConsumerPass, ANY_consumer.access_token,
@@ -485,10 +487,10 @@ public class AuthtionFullTest
     assertEquals(1, mailingRepository.findSentNotEmptyData(type, email).size());
 
     //oldpass
-    //AuthtionTestConsumer.of(USER, email, oldpassDecoded, client_TRUSTED, 400);
+    //AuthtionTestConsumer.of(USER, email, oldpassDecoded, authtionTestClient.getOauth2ClientTrusted(), 400);
 
     //newpass
-    AuthtionTestConsumer consumerTest = authtionTestConsumer.of(USER, email, newpassDecoded, client_TRUSTED, 200);
+    AuthtionTestConsumer consumerTest = authtionTestConsumer.of(USER, email, newpassDecoded, authtionTestClient.getClientTrusted(), 200);
     fullAuthTest(consumerTest);
   }
 

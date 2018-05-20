@@ -5,8 +5,6 @@ import org.springframework.stereotype.Component;
 
 import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.ADMIN;
 import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.USER;
-import static ru.dwfe.net.authtion.test.AuthtionTestGlobalVariables.client_TRUSTED;
-import static ru.dwfe.net.authtion.test.AuthtionTestGlobalVariables.client_UNTRUSTED;
 import static ru.dwfe.net.authtion.test.AuthtionTestSignInType.SignIn;
 
 @Component
@@ -14,6 +12,9 @@ public class AuthtionTestConsumer
 {
   @Autowired
   private AuthtionTestUtil authtionTestUtil;
+
+  @Autowired
+  private AuthtionTestClient authtionTestClient;
 
   public String username;
   String password;
@@ -48,12 +49,12 @@ public class AuthtionTestConsumer
 
   public AuthtionTestConsumer getUSER()
   {
-    return of(USER, "test2@dwfe.ru", "test22", client_TRUSTED, 200);
+    return of(USER, "test2@dwfe.ru", "test22", authtionTestClient.getClientTrusted(), 200);
   }
 
   public AuthtionTestConsumer getADMIN()
   {
-    return of(ADMIN, "test1@dwfe.ru", "test11", client_UNTRUSTED, 200);
+    return of(ADMIN, "test1@dwfe.ru", "test11", authtionTestClient.getClientUntrusted(), 200);
   }
 }
 

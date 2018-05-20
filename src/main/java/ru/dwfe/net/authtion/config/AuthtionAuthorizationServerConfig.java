@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
-import static ru.dwfe.net.authtion.AuthtionGlobal.*;
+import static ru.dwfe.net.authtion.AuthtionGlobal.resource_signIn;
 
 @Configuration
 @EnableAuthorizationServer
@@ -59,27 +59,19 @@ public class AuthtionAuthorizationServerConfig extends AuthorizationServerConfig
     configurer
             .inMemory() // in Memory or in JDBC
 
-            .withClient(client_ID_TRUSTED)
-            .secret(client_PASSWORD_TRUSTED)
+            .withClient(authtionConfigProperties.getOauth2ClientTrusted().getId())
+            .secret(authtionConfigProperties.getOauth2ClientTrusted().getPassword())
             .scopes("all")
             .authorizedGrantTypes("password", "refresh_token")
-            .accessTokenValiditySeconds(60 * 60 * 24 * 20) // 20 days
+            .accessTokenValiditySeconds(authtionConfigProperties.getOauth2ClientTrusted().getTokenValiditySeconds())
 
             .and()
 
-            .withClient(client_ID_UNTRUSTED)
-            .secret(client_PASSWORD_UNTRUSTED)
+            .withClient(authtionConfigProperties.getOauth2ClientUntrusted().getId())
+            .secret(authtionConfigProperties.getOauth2ClientUntrusted().getPassword())
             .scopes("all")
             .authorizedGrantTypes("password", "refresh_token")
-            .accessTokenValiditySeconds(60 * 3) // 3 minutes
+            .accessTokenValiditySeconds(authtionConfigProperties.getOauth2ClientUntrusted().getTokenValiditySeconds())
     ;
-
-    //Здесь Клиентом является Фронтэнд.
-    //В качестве фронтенда может быть обычная HTML страничка + JavaScript, либо фреймворк, например, Angular.
-    //В любом случае, чтобы залогиниться надо отправить методом POST пользовательские credentials на сервер.
-    //Протестировать Sign In можно так:
-    //curl withClient:secret@localhost:8080/v1/sign-in -d grant_type=password -d username=UserLogin -d password=UserPass
-    //
-    //Сервер ответит токеном, либо ошибкой
   }
 }

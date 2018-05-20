@@ -5,15 +5,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthtionGlobal
 {
-  public static final String client_ID_TRUSTED = "Trusted";
-  public static final String client_PASSWORD_TRUSTED = "YWPVYGiGLW4Whnr3Q5vuzd8i";
-
-  public static final String client_ID_UNTRUSTED = "Untrusted";
-  public static final String client_PASSWORD_UNTRUSTED = "4rZi5yEhcv5Jb3jSzGPfFFDK";
-
-    /*
-        Authtion RESOURCES
-    */
 
   public static final String resource_signIn = "/sign-in";
   public static final String resource_signOut = "/sign-out";

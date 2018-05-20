@@ -24,6 +24,12 @@ public class AuthtionConfigProperties implements InitializingBean
   @NotBlank
   private String api;
 
+  @NotNull
+  private OAuth2ClientTrusted oauth2ClientTrusted;
+
+  @NotNull
+  private OAuth2ClientUntrusted oauth2ClientUntrusted;
+
   private GoogleCaptcha googleCaptcha;
 
   @NotNull
@@ -37,6 +43,88 @@ public class AuthtionConfigProperties implements InitializingBean
     );
 
     log.info(toString());
+  }
+
+  public static class OAuth2ClientTrusted
+  {
+    @NotBlank
+    private String id;
+
+    @NotBlank
+    private String password;
+
+    private int tokenValiditySeconds = 60 * 60 * 24 * 20; // 20 days
+
+    public String getId()
+    {
+      return id;
+    }
+
+    public void setId(String id)
+    {
+      this.id = id;
+    }
+
+    public String getPassword()
+    {
+      return password;
+    }
+
+    public void setPassword(String password)
+    {
+      this.password = password;
+    }
+
+    public int getTokenValiditySeconds()
+    {
+      return tokenValiditySeconds;
+    }
+
+    public void setTokenValiditySeconds(int tokenValiditySeconds)
+    {
+      this.tokenValiditySeconds = tokenValiditySeconds;
+    }
+  }
+
+  public static class OAuth2ClientUntrusted
+  {
+    @NotBlank
+    private String id;
+
+    @NotBlank
+    private String password;
+
+    private int tokenValiditySeconds = 60 * 3; // 3 minutes
+
+    public String getId()
+    {
+      return id;
+    }
+
+    public void setId(String id)
+    {
+      this.id = id;
+    }
+
+    public String getPassword()
+    {
+      return password;
+    }
+
+    public void setPassword(String password)
+    {
+      this.password = password;
+    }
+
+    public int getTokenValiditySeconds()
+    {
+      return tokenValiditySeconds;
+    }
+
+    public void setTokenValiditySeconds(int tokenValiditySeconds)
+    {
+      this.tokenValiditySeconds = tokenValiditySeconds;
+    }
   }
 
   public static class GoogleCaptcha
@@ -128,6 +216,26 @@ public class AuthtionConfigProperties implements InitializingBean
     this.api = api;
   }
 
+  public OAuth2ClientTrusted getOauth2ClientTrusted()
+  {
+    return oauth2ClientTrusted;
+  }
+
+  public void setOauth2ClientTrusted(OAuth2ClientTrusted oauth2ClientTrusted)
+  {
+    this.oauth2ClientTrusted = oauth2ClientTrusted;
+  }
+
+  public OAuth2ClientUntrusted getOauth2ClientUntrusted()
+  {
+    return oauth2ClientUntrusted;
+  }
+
+  public void setOauth2ClientUntrusted(OAuth2ClientUntrusted oauth2ClientUntrusted)
+  {
+    this.oauth2ClientUntrusted = oauth2ClientUntrusted;
+  }
+
   public GoogleCaptcha getGoogleCaptcha()
   {
     return googleCaptcha;
@@ -155,7 +263,7 @@ public class AuthtionConfigProperties implements InitializingBean
                     "-====================================================-%n" +
                     "|            ::[Authtion server]::                   |%n" +
                     "|----------------------------------------------------|%n" +
-                    "| API                              %16s  |%n" +
+                    "| API                                %-16s|%n" +
                     "| Scheduled Task - Mailing:                          |%n" +
                     "|    initial delay                 %16s  |%n" +
                     "|    collect from DB interval      %16s  |%n" +
