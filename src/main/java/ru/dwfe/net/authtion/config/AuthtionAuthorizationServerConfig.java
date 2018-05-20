@@ -12,8 +12,6 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
-import static ru.dwfe.net.authtion.AuthtionGlobal.resource_signIn;
-
 @Configuration
 @EnableAuthorizationServer
 public class AuthtionAuthorizationServerConfig extends AuthorizationServerConfigurerAdapter
@@ -36,7 +34,7 @@ public class AuthtionAuthorizationServerConfig extends AuthorizationServerConfig
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception
   {
     endpoints
-            .pathMapping("/oauth/token", authtionConfigProperties.getApi() + resource_signIn)
+            .pathMapping("/oauth/token", authtionConfigProperties.getApi() + authtionConfigProperties.getResource().getSignIn())
             .authenticationManager(authenticationManager)
             .tokenStore(tokenStore)
             .userDetailsService(userDetailsService) //needed for token refreshing

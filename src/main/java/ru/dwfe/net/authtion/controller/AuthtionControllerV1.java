@@ -21,7 +21,6 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static ru.dwfe.net.authtion.AuthtionGlobal.*;
 import static ru.dwfe.net.authtion.dao.AuthtionConsumer.*;
 import static ru.dwfe.net.authtion.util.AuthtionUtil.*;
 
@@ -45,7 +44,7 @@ public class AuthtionControllerV1
     this.authtionUtil = authtionUtil;
   }
 
-  @PostMapping(resource_checkConsumerEmail)
+  @PostMapping("#{authtionConfigProperties.resource.checkConsumerEmail}")
   public String checkConsumerEmail(@RequestBody String body)
   {
     List<String> errorCodes = new ArrayList<>();
@@ -56,7 +55,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping(resource_checkConsumerPass)
+  @PostMapping("#{authtionConfigProperties.resource.checkConsumerPass}")
   public String checkConsumerPass(@RequestBody String body)
   {
     List<String> errorCodes = new ArrayList<>();
@@ -67,7 +66,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping(resource_googleCaptchaValidate)
+  @PostMapping("#{authtionConfigProperties.resource.googleCaptchaValidate}")
   public String googleCaptchaValidate(@RequestBody String body)
   {
     List<String> errorCodes = new ArrayList<>();
@@ -104,7 +103,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping(resource_createConsumer)
+  @PostMapping("#{authtionConfigProperties.resource.createConsumer}")
   public String createConsumer(@RequestBody AuthtionConsumer consumer)
   {
     List<String> errorCodes = new ArrayList<>();
@@ -143,7 +142,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping(resource_updateConsumer)
+  @PostMapping("#{authtionConfigProperties.resource.updateConsumer}")
   @PreAuthorize("hasAuthority('USER')")
   public String updateConsumer(@RequestBody String body, OAuth2Authentication authentication)
   {
@@ -190,7 +189,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @GetMapping(resource_getConsumerData)
+  @GetMapping("#{authtionConfigProperties.resource.getConsumerData}")
   @PreAuthorize("hasAuthority('USER')")
   public String getConsumerData(OAuth2Authentication authentication)
   {
@@ -199,7 +198,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes, consumerService.findById(id).get().toString());
   }
 
-  @GetMapping(resource_publicConsumer + "/{id}")
+  @GetMapping("#{authtionConfigProperties.resource.publicConsumer}" + "/{id}")
   public String publicConsumer(@PathVariable Long id)
   {
     List<String> errorCodes = new ArrayList<>();
@@ -217,7 +216,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes, data);
   }
 
-  @GetMapping(resource_listOfConsumers)
+  @GetMapping("#{authtionConfigProperties.resource.listOfConsumers}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public String listOfConsumers()
   {
@@ -230,7 +229,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes, "[" + jsonListOfUsers + "]");
   }
 
-  @GetMapping(resource_reqConfirmConsumerEmail)
+  @GetMapping("#{authtionConfigProperties.resource.reqConfirmConsumerEmail}")
   @PreAuthorize("hasAuthority('USER')")
   public String requestConfirmEmail(OAuth2Authentication authentication)
   {
@@ -253,7 +252,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @GetMapping(resource_confirmConsumerEmail)
+  @GetMapping("#{authtionConfigProperties.resource.confirmConsumerEmail}")
   public String confirmConsumerEmail(@RequestParam(required = false) String key)
   {
     String fieldName = "confirm-key";
@@ -279,7 +278,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping(resource_changeConsumerPass)
+  @PostMapping("#{authtionConfigProperties.resource.changeConsumerPass}")
   @PreAuthorize("hasAuthority('USER')")
   public String changeConsumerPass(@RequestBody String body, OAuth2Authentication authentication)
   {
@@ -309,7 +308,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping(resource_reqRestoreConsumerPass)
+  @PostMapping("#{authtionConfigProperties.resource.reqRestoreConsumerPass}")
   public String reqRestoreConsumerPass(@RequestBody String body)
   {
     List<String> errorCodes = new ArrayList<>();
@@ -328,7 +327,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @GetMapping(resource_confirmRestoreConsumerPass)
+  @GetMapping("#{authtionConfigProperties.resource.confirmRestoreConsumerPass}")
   public String confirmRestoreConsumerPass(@RequestParam(required = false) String key)
   {
     String fieldName = "confirm-key";
@@ -353,7 +352,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes, data);
   }
 
-  @PostMapping(resource_restoreConsumerPass)
+  @PostMapping("#{authtionConfigProperties.resource.restoreConsumerPass}")
   public String restoreConsumerPass(@RequestBody String body)
   {
     List<String> errorCodes = new ArrayList<>();
@@ -391,7 +390,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @GetMapping(resource_signOut)
+  @GetMapping("#{authtionConfigProperties.resource.signOut}")
   @PreAuthorize("hasAuthority('USER')")
   public String signOut(OAuth2Authentication authentication)
   {

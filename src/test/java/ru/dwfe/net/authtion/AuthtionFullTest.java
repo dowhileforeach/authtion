@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import ru.dwfe.net.authtion.dao.AuthtionConsumer;
 import ru.dwfe.net.authtion.dao.AuthtionMailing;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
@@ -26,7 +27,6 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.AuthtionGlobal.*;
 import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.USER;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.USUAL;
 import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTest.TOTAL_ACCESS_TOKEN_COUNT;
@@ -44,6 +44,9 @@ import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForConsumerTest.*;
 public class AuthtionFullTest
 {
   private static Set<String> auth_test_access_tokens = new HashSet<>();
+
+  @Autowired
+  private AuthtionConfigProperties authtionConfigProperties;
 
   @Autowired
   private AuthtionTestConsumer authtionTestConsumer;
@@ -101,14 +104,14 @@ public class AuthtionFullTest
   public void _005_consumer_checkConsumerEmail()
   {
     logHead("Check AuthtionConsumer E-mail");
-    authtionTestUtil.check_send_data(POST, resource_checkConsumerEmail, authtionTestConsumer.getAnonymous().access_token, checkers_for_checkConsumerEmail);
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getCheckConsumerEmail(), authtionTestConsumer.getAnonymous().access_token, checkers_for_checkConsumerEmail);
   }
 
   @Test
   public void _006_consumer_checkConsumerPass()
   {
     logHead("Check AuthtionConsumer Pass");
-    authtionTestUtil.check_send_data(POST, resource_checkConsumerPass, authtionTestConsumer.getAnonymous().access_token, checkers_for_checkConsumerPass);
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getCheckConsumerPass(), authtionTestConsumer.getAnonymous().access_token, checkers_for_checkConsumerPass);
   }
 
   @Test
@@ -116,7 +119,7 @@ public class AuthtionFullTest
   {
     logHead("Create AuthtionConsumer");
 
-    authtionTestUtil.check_send_data(POST, resource_createConsumer, authtionTestConsumer.getAnonymous().access_token, checkers_for_createConsumer());
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getCreateConsumer(), authtionTestConsumer.getAnonymous().access_token, checkers_for_createConsumer());
     //
     // Was created 3 new consumers:
     //  - EMAIL_NEW_Consumer   - password was passed
@@ -207,31 +210,31 @@ public class AuthtionFullTest
     assertEquals("", consumer.getFirstName());
     assertEquals("", consumer.getLastName());
 
-    authtionTestUtil.check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer1);
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getUpdateConsumer(), USER_consumer.access_token, checkers_for_updateConsumer1);
     consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("test2", consumer.getNickName());
     assertEquals("", consumer.getFirstName());
     assertEquals("", consumer.getLastName());
 
-    authtionTestUtil.check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer5);
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getUpdateConsumer(), USER_consumer.access_token, checkers_for_updateConsumer5);
     consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("good", consumer.getNickName());
     assertEquals("alto", consumer.getFirstName());
     assertEquals("smith", consumer.getLastName());
 
-    authtionTestUtil.check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer3);
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getUpdateConsumer(), USER_consumer.access_token, checkers_for_updateConsumer3);
     consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("hello", consumer.getNickName());
     assertEquals("1", consumer.getFirstName());
     assertEquals("smith", consumer.getLastName());
 
-    authtionTestUtil.check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer4);
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getUpdateConsumer(), USER_consumer.access_token, checkers_for_updateConsumer4);
     consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("hello", consumer.getNickName());
     assertEquals("1", consumer.getFirstName());
     assertEquals("2", consumer.getLastName());
 
-    authtionTestUtil.check_send_data(POST, resource_updateConsumer, USER_consumer.access_token, checkers_for_updateConsumer2);
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getUpdateConsumer(), USER_consumer.access_token, checkers_for_updateConsumer2);
     consumer = getConsumerByEmail(USER_consumer.username);
     assertEquals("user", consumer.getNickName());
     assertEquals("", consumer.getFirstName());
@@ -242,7 +245,7 @@ public class AuthtionFullTest
   public void _009_consumer_getConsumerData()
   {
     logHead("AuthtionConsumer Data");
-    authtionTestUtil.check_send_data(GET, resource_getConsumerData, authtionTestConsumer.getUSER().access_token, checkers_for_getConsumerData);
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getGetConsumerData(), authtionTestConsumer.getUSER().access_token, checkers_for_getConsumerData);
   }
 
   @Test
@@ -254,12 +257,12 @@ public class AuthtionFullTest
     AuthtionTestConsumer USER_consumer = authtionTestConsumer.getUSER();
     AuthtionTestConsumer ADMIN_consumer = authtionTestConsumer.getADMIN();
 
-    authtionTestUtil.check_send_data(GET, resource_publicConsumer + "/9", ANY_consumer.access_token, checkers_for_publicConsumer_9);
-    authtionTestUtil.check_send_data(GET, resource_publicConsumer + "/9", USER_consumer.access_token, checkers_for_publicConsumer_9);
-    authtionTestUtil.check_send_data(GET, resource_publicConsumer + "/9", ADMIN_consumer.access_token, checkers_for_publicConsumer_9);
-    authtionTestUtil.check_send_data(GET, resource_publicConsumer + "/1000", ANY_consumer.access_token, checkers_for_publicConsumer_1);
-    authtionTestUtil.check_send_data(GET, resource_publicConsumer + "/1000", USER_consumer.access_token, checkers_for_publicConsumer_1);
-    authtionTestUtil.check_send_data(GET, resource_publicConsumer + "/1000", ADMIN_consumer.access_token, checkers_for_publicConsumer_1);
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getPublicConsumer() + "/9", ANY_consumer.access_token, checkers_for_publicConsumer_9);
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getPublicConsumer() + "/9", USER_consumer.access_token, checkers_for_publicConsumer_9);
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getPublicConsumer() + "/9", ADMIN_consumer.access_token, checkers_for_publicConsumer_9);
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getPublicConsumer() + "/1000", ANY_consumer.access_token, checkers_for_publicConsumer_1);
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getPublicConsumer() + "/1000", USER_consumer.access_token, checkers_for_publicConsumer_1);
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getPublicConsumer() + "/1000", ADMIN_consumer.access_token, checkers_for_publicConsumer_1);
   }
 
   @Test
@@ -275,14 +278,14 @@ public class AuthtionFullTest
     // сheck for 'email-is-already-confirmed' error
     AuthtionConsumer consumerFromDB = getConsumerByEmail(USER_consumer.username);
     assertTrue(consumerFromDB.isEmailConfirmed());
-    authtionTestUtil.check_send_data(GET, resource_reqConfirmConsumerEmail, USER_consumer.access_token,
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getReqConfirmConsumerEmail(), USER_consumer.access_token,
             checkers_for_reqConfirmConsumerEmail_isConfirmed);
 
     // add new request
     AuthtionTestConsumer consumer = authtionTestConsumer.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, authtionTestClient.getClientTrusted(), 200);
     List<AuthtionMailing> confirmByEmail = mailingRepository.findByTypeAndEmail(type, consumer.username);
     assertEquals(0, confirmByEmail.size());
-    authtionTestUtil.check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getReqConfirmConsumerEmail(), consumer.access_token,
             checkers_for_reqConfirmConsumerEmail);
 
     // check that the request was success added
@@ -296,7 +299,7 @@ public class AuthtionFullTest
 
     // Ok. At the moment we have 1 key and it is not yet time to send a duplicate request
     // Let's try to add one more key ==> сheck for 'delay-between-duplicate-requests' error
-    authtionTestUtil.check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getReqConfirmConsumerEmail(), consumer.access_token,
             checkers_for_reqConfirmConsumerEmail_duplicateDelay);
 
     try
@@ -316,10 +319,10 @@ public class AuthtionFullTest
 
     // At the moment we have a key that has already been sent and is waiting for confirmation
     // Try to add one more key, because duplicate delay should already expire
-    authtionTestUtil.check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getReqConfirmConsumerEmail(), consumer.access_token,
             checkers_for_reqConfirmConsumerEmail);
 
-    authtionTestUtil.check_send_data(GET, resource_reqConfirmConsumerEmail, consumer.access_token,
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getReqConfirmConsumerEmail(), consumer.access_token,
             checkers_for_reqConfirmConsumerEmail_duplicateDelay);
 
     try
@@ -353,7 +356,7 @@ public class AuthtionFullTest
     List<AuthtionMailing> confirmList = mailingRepository.findSentNotEmptyData(type, EMAIL_NEW_Consumer);
     assertEquals(2, confirmList.size());
     String confirmKey = confirmList.get(0).getData();
-    authtionTestUtil.check_send_data(GET, resource_confirmConsumerEmail, null, checkers_for_confirmConsumerEmail(confirmKey));
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getConfirmConsumerEmail(), null, checkers_for_confirmConsumerEmail(confirmKey));
 
     confirmList = mailingRepository.findSentNotEmptyData(type, EMAIL_NEW_Consumer);
     assertEquals(1, confirmList.size());
@@ -379,7 +382,7 @@ public class AuthtionFullTest
     AuthtionTestConsumer consumerTest = authtionTestConsumer.of(USER, email, oldpass, authtionTestClient.getClientTrusted(), 200);
 
     //change oldpass
-    authtionTestUtil.check_send_data(POST, resource_changeConsumerPass, consumerTest.access_token, checkers);
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getChangeConsumerPass(), consumerTest.access_token, checkers);
 
     //oldpass
     //AuthtionTestConsumer.of(USER, email, oldpass, authtionTestClient.getOauth2ClientTrusted(), 400);
@@ -413,10 +416,10 @@ public class AuthtionFullTest
 
     assertEquals(0, mailingRepository.findByTypeAndEmail(type, email).size());
 
-    authtionTestUtil.check_send_data(POST, resource_reqRestoreConsumerPass, ANY_consumer.access_token,
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getReqRestoreConsumerPass(), ANY_consumer.access_token,
             checkers_for_reqRestoreConsumerPass(email));
 
-    authtionTestUtil.check_send_data(POST, resource_reqRestoreConsumerPass, ANY_consumer.access_token,
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getReqRestoreConsumerPass(), ANY_consumer.access_token,
             checkers_for_reqRestoreConsumerPass_duplicateDelay(email));
 
     try
@@ -433,7 +436,7 @@ public class AuthtionFullTest
     assertFalse(confirmByEmail.get(0).isMaxAttemptsReached());
     assertTrue(confirmByEmail.get(0).getData().length() >= 28);
 
-    authtionTestUtil.check_send_data(POST, resource_reqRestoreConsumerPass, ANY_consumer.access_token,
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getReqRestoreConsumerPass(), ANY_consumer.access_token,
             checkers_for_reqRestoreConsumerPass(email));
 
     try
@@ -459,7 +462,7 @@ public class AuthtionFullTest
     List<AuthtionMailing> confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(2, confirmByEmail.size());
 
-    authtionTestUtil.check_send_data(GET, resource_confirmRestoreConsumerPass, ANY_consumer.access_token, checkers_for_confirmRestoreConsumerPass(email, confirmByEmail.get(0).getData()));
+    authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getConfirmRestoreConsumerPass(), ANY_consumer.access_token, checkers_for_confirmRestoreConsumerPass(email, confirmByEmail.get(0).getData()));
 
     confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(2, confirmByEmail.size());
@@ -481,7 +484,7 @@ public class AuthtionFullTest
     //AuthtionTestConsumer.of(USER, email, newpassDecoded, authtionTestClient.getOauth2ClientTrusted(), 400);
 
     //change password
-    authtionTestUtil.check_send_data(POST, resource_restoreConsumerPass, ANY_consumer.access_token,
+    authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getRestoreConsumerPass(), ANY_consumer.access_token,
             checkers_for_restoreConsumerPass(email, newpassForCheckers, confirmByEmail.get(0).getData()));
 
     assertEquals(1, mailingRepository.findSentNotEmptyData(type, email).size());

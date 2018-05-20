@@ -1,37 +1,43 @@
 package ru.dwfe.net.authtion.test;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.AuthtionGlobal.*;
 import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.*;
 
+@Configuration
 public class AuthtionTestVariablesForAuthTest
 {
+  @Autowired
+  private AuthtionConfigProperties authtionConfigProperties;
+
   /*
       RESOURCES
   */
-  public static final Map<String, Map<AuthtionTestAuthorityLevel, Map<RequestMethod, Map<String, Object>>>> RESOURCE_AUTHORITY_reqDATA()
+  public Map<String, Map<AuthtionTestAuthorityLevel, Map<RequestMethod, Map<String, Object>>>> RESOURCE_AUTHORITY_reqDATA()
   {
     Map<String, Map<AuthtionTestAuthorityLevel, Map<RequestMethod, Map<String, Object>>>> result = new HashMap<>();
 
-    result.put(resource_checkConsumerEmail, Map.of(ANY, Map.of(POST, Map.of("email", "user"))));
-    result.put(resource_checkConsumerPass, Map.of(ANY, Map.of(POST, Map.of("password", "some password"))));
-    result.put(resource_createConsumer, Map.of(ANY, Map.of(POST, Map.of("email", "user", "password", "some password", "firstName", "some first name", "lastName", ""))));
-    result.put(resource_updateConsumer, Map.of(USER, Map.of(POST, Map.of())));
-    result.put(resource_getConsumerData, Map.of(USER, Map.of(GET, Map.of())));
-    result.put(resource_publicConsumer + "/1", Map.of(ANY, Map.of(GET, Map.of())));
-    result.put(resource_listOfConsumers, Map.of(ADMIN, Map.of(GET, Map.of())));
-    result.put(resource_reqConfirmConsumerEmail, Map.of(USER, Map.of(GET, Map.of())));
-    result.put(resource_confirmConsumerEmail, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))));
-    result.put(resource_changeConsumerPass, Map.of(USER, Map.of(POST, Map.of())));
-    result.put(resource_reqRestoreConsumerPass, Map.of(ANY, Map.of(POST, Map.of())));
-    result.put(resource_confirmRestoreConsumerPass, Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))));
-    result.put(resource_restoreConsumerPass, Map.of(ANY, Map.of(POST, Map.of())));
+    result.put(authtionConfigProperties.getResource().getCheckConsumerEmail(), Map.of(ANY, Map.of(POST, Map.of("email", "user"))));
+    result.put(authtionConfigProperties.getResource().getCheckConsumerPass(), Map.of(ANY, Map.of(POST, Map.of("password", "some password"))));
+    result.put(authtionConfigProperties.getResource().getCreateConsumer(), Map.of(ANY, Map.of(POST, Map.of("email", "user", "password", "some password", "firstName", "some first name", "lastName", ""))));
+    result.put(authtionConfigProperties.getResource().getUpdateConsumer(), Map.of(USER, Map.of(POST, Map.of())));
+    result.put(authtionConfigProperties.getResource().getGetConsumerData(), Map.of(USER, Map.of(GET, Map.of())));
+    result.put(authtionConfigProperties.getResource().getPublicConsumer() + "/1", Map.of(ANY, Map.of(GET, Map.of())));
+    result.put(authtionConfigProperties.getResource().getListOfConsumers(), Map.of(ADMIN, Map.of(GET, Map.of())));
+    result.put(authtionConfigProperties.getResource().getReqConfirmConsumerEmail(), Map.of(USER, Map.of(GET, Map.of())));
+    result.put(authtionConfigProperties.getResource().getConfirmConsumerEmail(), Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))));
+    result.put(authtionConfigProperties.getResource().getChangeConsumerPass(), Map.of(USER, Map.of(POST, Map.of())));
+    result.put(authtionConfigProperties.getResource().getReqRestoreConsumerPass(), Map.of(ANY, Map.of(POST, Map.of())));
+    result.put(authtionConfigProperties.getResource().getConfirmRestoreConsumerPass(), Map.of(ANY, Map.of(GET, Map.of("key", "AnyString"))));
+    result.put(authtionConfigProperties.getResource().getRestoreConsumerPass(), Map.of(ANY, Map.of(POST, Map.of())));
 
     return result;
   }

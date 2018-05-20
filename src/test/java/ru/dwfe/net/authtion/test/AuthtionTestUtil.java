@@ -9,7 +9,6 @@ import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ru.dwfe.net.authtion.AuthtionGlobal;
 import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import ru.dwfe.net.authtion.util.AuthtionUtil;
 
@@ -26,17 +25,20 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.BAD_ACCESS_TOKEN;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.USUAL;
 import static ru.dwfe.net.authtion.test.AuthtionTestSignInType.Refresh;
-import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTest.*;
+import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTest.AUTHORITY_to_AUTHORITY_STATUS;
+import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTest.AUTHORITY_to_AUTHORITY_STATUS_BAD_ACCESS_TOKEN;
 
 @Component
 public class AuthtionTestUtil
 {
   private final AuthtionConfigProperties authtionConfigProperties;
+  private final AuthtionTestVariablesForAuthTest authtionTestVariablesForAuthTest;
   private final String ALL_BEFORE_RESOURCE;
 
-  private AuthtionTestUtil(AuthtionConfigProperties authtionConfigProperties)
+  private AuthtionTestUtil(AuthtionConfigProperties authtionConfigProperties, AuthtionTestVariablesForAuthTest authtionTestVariablesForAuthTest)
   {
     this.authtionConfigProperties = authtionConfigProperties;
+    this.authtionTestVariablesForAuthTest = authtionTestVariablesForAuthTest;
     this.ALL_BEFORE_RESOURCE = "http://localhost:8080" + authtionConfigProperties.getApi();
   }
 
@@ -75,7 +77,7 @@ public class AuthtionTestUtil
 
   private Request auth_signIn_POST_Request(String clientname, String clientpass, String username, String userpass)
   {
-    String url = String.format(ALL_BEFORE_RESOURCE + AuthtionGlobal.resource_signIn
+    String url = String.format(ALL_BEFORE_RESOURCE + authtionConfigProperties.getResource().getSignIn()
                     + "?grant_type=password&username=%s&password=%s",
             username, userpass);
 
@@ -91,7 +93,7 @@ public class AuthtionTestUtil
 
   private Request auth_refresh_POST_Request(String clientname, String clientpass, String refresh_token)
   {
-    String url = String.format(ALL_BEFORE_RESOURCE + AuthtionGlobal.resource_signIn
+    String url = String.format(ALL_BEFORE_RESOURCE + authtionConfigProperties.getResource().getSignIn()
             + "?grant_type=refresh_token&refresh_token=%s", refresh_token);
 
     log.info("AuthtionTestClient's credentials - {}:{}", clientname, clientpass);
@@ -120,7 +122,7 @@ public class AuthtionTestUtil
   {
     log.info("Sign Out");
 
-    Request req = GET_request(ALL_BEFORE_RESOURCE + AuthtionGlobal.resource_signOut, testConsumer.access_token, Map.of());
+    Request req = GET_request(ALL_BEFORE_RESOURCE + authtionConfigProperties.getResource().getSignOut(), testConsumer.access_token, Map.of());
 
     log.info("-> Authorization: {}", req.header("Authorization"));
     log.info("-> " + req.url().toString());
@@ -288,7 +290,7 @@ public class AuthtionTestUtil
     else
       statusMap = AUTHORITY_to_AUTHORITY_STATUS;
 
-    RESOURCE_AUTHORITY_reqDATA().forEach((resource, next) -> {
+    authtionTestVariablesForAuthTest.RESOURCE_AUTHORITY_reqDATA().forEach((resource, next) -> {
 
       try
       {

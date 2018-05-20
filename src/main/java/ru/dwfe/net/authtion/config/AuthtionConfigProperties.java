@@ -24,16 +24,18 @@ public class AuthtionConfigProperties implements InitializingBean
   @NotBlank
   private String api;
 
-  @NotNull
-  private OAuth2ClientTrusted oauth2ClientTrusted;
-
-  @NotNull
-  private OAuth2ClientUntrusted oauth2ClientUntrusted;
+  private Resource resource = new Resource();
 
   private GoogleCaptcha googleCaptcha;
 
   @NotNull
   private ScheduledTaskMailing scheduledTaskMailing;
+
+  @NotNull
+  private OAuth2ClientTrusted oauth2ClientTrusted;
+
+  @NotNull
+  private OAuth2ClientUntrusted oauth2ClientUntrusted;
 
   @Override
   public void afterPropertiesSet() throws Exception
@@ -43,6 +45,267 @@ public class AuthtionConfigProperties implements InitializingBean
     );
 
     log.info(toString());
+  }
+
+  public static class Resource
+  {
+    private String signIn = "/sign-in";
+    private String signOut = "/sign-out";
+    private String googleCaptchaValidate = "/google-captcha-validate";
+
+    private String checkConsumerEmail = "/check-consumer-email";
+    private String checkConsumerPass = "/check-consumer-pass";
+    private String createConsumer = "/create-consumer";
+    private String updateConsumer = "/update-consumer";
+    private String getConsumerData = "/get-consumer-data";
+    private String listOfConsumers = "/list-of-consumers";
+    private String publicConsumer = "/public/consumer";
+    private String reqConfirmConsumerEmail = "/req-confirm-consumer-email";
+    private String confirmConsumerEmail = "/confirm-consumer-email";
+
+    private String changeConsumerPass = "/change-consumer-pass";
+    private String reqRestoreConsumerPass = "/req-restore-consumer-pass";
+    private String confirmRestoreConsumerPass = "/confirm-restore-consumer-pass";
+    private String restoreConsumerPass = "/restore-consumer-pass";
+
+    public String getSignIn()
+    {
+      return signIn;
+    }
+
+    public void setSignIn(String signIn)
+    {
+      this.signIn = signIn;
+    }
+
+    public String getSignOut()
+    {
+      return signOut;
+    }
+
+    public void setSignOut(String signOut)
+    {
+      this.signOut = signOut;
+    }
+
+    public String getGoogleCaptchaValidate()
+    {
+      return googleCaptchaValidate;
+    }
+
+    public void setGoogleCaptchaValidate(String googleCaptchaValidate)
+    {
+      this.googleCaptchaValidate = googleCaptchaValidate;
+    }
+
+    public String getCheckConsumerEmail()
+    {
+      return checkConsumerEmail;
+    }
+
+    public void setCheckConsumerEmail(String checkConsumerEmail)
+    {
+      this.checkConsumerEmail = checkConsumerEmail;
+    }
+
+    public String getCheckConsumerPass()
+    {
+      return checkConsumerPass;
+    }
+
+    public void setCheckConsumerPass(String checkConsumerPass)
+    {
+      this.checkConsumerPass = checkConsumerPass;
+    }
+
+    public String getCreateConsumer()
+    {
+      return createConsumer;
+    }
+
+    public void setCreateConsumer(String createConsumer)
+    {
+      this.createConsumer = createConsumer;
+    }
+
+    public String getUpdateConsumer()
+    {
+      return updateConsumer;
+    }
+
+    public void setUpdateConsumer(String updateConsumer)
+    {
+      this.updateConsumer = updateConsumer;
+    }
+
+    public String getGetConsumerData()
+    {
+      return getConsumerData;
+    }
+
+    public void setGetConsumerData(String getConsumerData)
+    {
+      this.getConsumerData = getConsumerData;
+    }
+
+    public String getListOfConsumers()
+    {
+      return listOfConsumers;
+    }
+
+    public void setListOfConsumers(String listOfConsumers)
+    {
+      this.listOfConsumers = listOfConsumers;
+    }
+
+    public String getPublicConsumer()
+    {
+      return publicConsumer;
+    }
+
+    public void setPublicConsumer(String publicConsumer)
+    {
+      this.publicConsumer = publicConsumer;
+    }
+
+    public String getReqConfirmConsumerEmail()
+    {
+      return reqConfirmConsumerEmail;
+    }
+
+    public void setReqConfirmConsumerEmail(String reqConfirmConsumerEmail)
+    {
+      this.reqConfirmConsumerEmail = reqConfirmConsumerEmail;
+    }
+
+    public String getConfirmConsumerEmail()
+    {
+      return confirmConsumerEmail;
+    }
+
+    public void setConfirmConsumerEmail(String confirmConsumerEmail)
+    {
+      this.confirmConsumerEmail = confirmConsumerEmail;
+    }
+
+    public String getChangeConsumerPass()
+    {
+      return changeConsumerPass;
+    }
+
+    public void setChangeConsumerPass(String changeConsumerPass)
+    {
+      this.changeConsumerPass = changeConsumerPass;
+    }
+
+    public String getReqRestoreConsumerPass()
+    {
+      return reqRestoreConsumerPass;
+    }
+
+    public void setReqRestoreConsumerPass(String reqRestoreConsumerPass)
+    {
+      this.reqRestoreConsumerPass = reqRestoreConsumerPass;
+    }
+
+    public String getConfirmRestoreConsumerPass()
+    {
+      return confirmRestoreConsumerPass;
+    }
+
+    public void setConfirmRestoreConsumerPass(String confirmRestoreConsumerPass)
+    {
+      this.confirmRestoreConsumerPass = confirmRestoreConsumerPass;
+    }
+
+    public String getRestoreConsumerPass()
+    {
+      return restoreConsumerPass;
+    }
+
+    public void setRestoreConsumerPass(String restoreConsumerPass)
+    {
+      this.restoreConsumerPass = restoreConsumerPass;
+    }
+  }
+
+  public static class GoogleCaptcha
+  {
+    @NotBlank
+    private String secretKey;
+
+    public String getSecretKey()
+    {
+      return secretKey;
+    }
+
+    public void setSecretKey(String secretKey)
+    {
+      this.secretKey = secretKey;
+    }
+  }
+
+  public static class ScheduledTaskMailing
+  {
+    private int initialDelay = 0;
+
+    private int collectFromDbInterval = 60_000; // 1 minute
+
+    private int sendInterval = 30_000; // 30 seconds
+
+    private int maxAttemptsToSendIfError = 3;
+
+    private int timeoutForDuplicateRequest; // calculated field!!! See method: afterPropertiesSet()
+
+    public int getInitialDelay()
+    {
+      return initialDelay;
+    }
+
+    public void setInitialDelay(int initialDelay)
+    {
+      this.initialDelay = initialDelay;
+    }
+
+    public int getCollectFromDbInterval()
+    {
+      return collectFromDbInterval;
+    }
+
+    public void setCollectFromDbInterval(int collectFromDbInterval)
+    {
+      this.collectFromDbInterval = collectFromDbInterval;
+    }
+
+    public int getSendInterval()
+    {
+      return sendInterval;
+    }
+
+    public void setSendInterval(int sendInterval)
+    {
+      this.sendInterval = sendInterval;
+    }
+
+    public int getMaxAttemptsToSendIfError()
+    {
+      return maxAttemptsToSendIfError;
+    }
+
+    public void setMaxAttemptsToSendIfError(int maxAttemptsToSendIfError)
+    {
+      this.maxAttemptsToSendIfError = maxAttemptsToSendIfError;
+    }
+
+    public int getTimeoutForDuplicateRequest()
+    {
+      return timeoutForDuplicateRequest;
+    }
+
+    public void setTimeoutForDuplicateRequest(int timeoutForDuplicateRequest)
+    {
+      this.timeoutForDuplicateRequest = timeoutForDuplicateRequest;
+    }
   }
 
   public static class OAuth2ClientTrusted
@@ -127,85 +390,6 @@ public class AuthtionConfigProperties implements InitializingBean
     }
   }
 
-  public static class GoogleCaptcha
-  {
-    @NotBlank
-    private String secretKey;
-
-    public String getSecretKey()
-    {
-      return secretKey;
-    }
-
-    public void setSecretKey(String secretKey)
-    {
-      this.secretKey = secretKey;
-    }
-  }
-
-  public static class ScheduledTaskMailing
-  {
-    private int initialDelay = 0;
-
-    private int collectFromDbInterval = 60_000; // 1 minute
-
-    private int sendInterval = 30_000; // 30 seconds
-
-    private int maxAttemptsToSendIfError = 3;
-
-    private int timeoutForDuplicateRequest; // calculated field!!! See method: afterPropertiesSet()
-
-    public int getInitialDelay()
-    {
-      return initialDelay;
-    }
-
-    public void setInitialDelay(int initialDelay)
-    {
-      this.initialDelay = initialDelay;
-    }
-
-    public int getCollectFromDbInterval()
-    {
-      return collectFromDbInterval;
-    }
-
-    public void setCollectFromDbInterval(int collectFromDbInterval)
-    {
-      this.collectFromDbInterval = collectFromDbInterval;
-    }
-
-    public int getSendInterval()
-    {
-      return sendInterval;
-    }
-
-    public void setSendInterval(int sendInterval)
-    {
-      this.sendInterval = sendInterval;
-    }
-
-    public int getMaxAttemptsToSendIfError()
-    {
-      return maxAttemptsToSendIfError;
-    }
-
-    public void setMaxAttemptsToSendIfError(int maxAttemptsToSendIfError)
-    {
-      this.maxAttemptsToSendIfError = maxAttemptsToSendIfError;
-    }
-
-    public int getTimeoutForDuplicateRequest()
-    {
-      return timeoutForDuplicateRequest;
-    }
-
-    public void setTimeoutForDuplicateRequest(int timeoutForDuplicateRequest)
-    {
-      this.timeoutForDuplicateRequest = timeoutForDuplicateRequest;
-    }
-  }
-
   public String getApi()
   {
     return api;
@@ -214,6 +398,36 @@ public class AuthtionConfigProperties implements InitializingBean
   public void setApi(String api)
   {
     this.api = api;
+  }
+
+  public Resource getResource()
+  {
+    return resource;
+  }
+
+  public void setResource(Resource resource)
+  {
+    this.resource = resource;
+  }
+
+  public GoogleCaptcha getGoogleCaptcha()
+  {
+    return googleCaptcha;
+  }
+
+  public void setGoogleCaptcha(GoogleCaptcha googleCaptcha)
+  {
+    this.googleCaptcha = googleCaptcha;
+  }
+
+  public ScheduledTaskMailing getScheduledTaskMailing()
+  {
+    return scheduledTaskMailing;
+  }
+
+  public void setScheduledTaskMailing(ScheduledTaskMailing scheduledTaskMailing)
+  {
+    this.scheduledTaskMailing = scheduledTaskMailing;
   }
 
   public OAuth2ClientTrusted getOauth2ClientTrusted()
@@ -236,25 +450,6 @@ public class AuthtionConfigProperties implements InitializingBean
     this.oauth2ClientUntrusted = oauth2ClientUntrusted;
   }
 
-  public GoogleCaptcha getGoogleCaptcha()
-  {
-    return googleCaptcha;
-  }
-
-  public void setGoogleCaptcha(GoogleCaptcha googleCaptcha)
-  {
-    this.googleCaptcha = googleCaptcha;
-  }
-
-  public ScheduledTaskMailing getScheduledTaskMailing()
-  {
-    return scheduledTaskMailing;
-  }
-
-  public void setScheduledTaskMailing(ScheduledTaskMailing scheduledTaskMailing)
-  {
-    this.scheduledTaskMailing = scheduledTaskMailing;
-  }
 
   @Override
   public String toString()
