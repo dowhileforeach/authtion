@@ -26,7 +26,7 @@ import static ru.dwfe.net.authtion.dao.AuthtionConsumer.*;
 import static ru.dwfe.net.authtion.util.AuthtionUtil.*;
 
 @RestController
-@RequestMapping(path = API_V1, produces = "application/json; charset=utf-8")
+@RequestMapping(path = "#{authtionConfigProperties.api}", produces = "application/json; charset=utf-8")
 public class AuthtionControllerV1
 {
   private final AuthtionConsumerService consumerService;
@@ -154,9 +154,9 @@ public class AuthtionControllerV1
     {
       AuthtionConsumer consumerOAuth2 = (AuthtionConsumer) authentication.getPrincipal();
 
-      String nickName = (String) getValue(map, "nickName");
-      String firstName = (String) getValue(map, "firstName");
-      String lastName = (String) getValue(map, "lastName");
+      String nickName = getValue(map, "nickName");
+      String firstName = getValue(map, "firstName");
+      String lastName = getValue(map, "lastName");
 
       boolean isNickName = nickName != null;
       boolean isFirstName = firstName != null;
@@ -289,8 +289,8 @@ public class AuthtionControllerV1
     String oldpassField = "oldpass";
     String newpassField = "newpass";
 
-    String oldpassValue = (String) getValue(map, oldpassField);
-    String newpassValue = (String) getValue(map, newpassField);
+    String oldpassValue = getValue(map, oldpassField);
+    String newpassValue = getValue(map, newpassField);
 
     if (isDefaultCheckOK(oldpassValue, oldpassField, errorCodes)
             && canUsePassword(newpassValue, newpassField, errorCodes))
@@ -365,9 +365,9 @@ public class AuthtionControllerV1
     String keyFieldFullName = "confirm-key";
     String newpassField = "newpass";
 
-    String emailValue = (String) getValue(map, emailField);
-    String keyValue = (String) getValue(map, keyField);
-    String newpassValue = (String) getValue(map, newpassField);
+    String emailValue = getValue(map, emailField);
+    String keyValue = getValue(map, keyField);
+    String newpassValue = getValue(map, newpassField);
 
     if (canUsePassword(newpassValue, newpassField, errorCodes)
             && isDefaultCheckOK(keyValue, keyFieldFullName, errorCodes)

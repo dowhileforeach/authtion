@@ -2,14 +2,8 @@ package ru.dwfe.net.authtion.test;
 
 import ru.dwfe.net.authtion.AuthtionGlobal;
 
-import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.ADMIN;
-import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.USER;
-
 public class AuthtionTestGlobalVariables
 {
-  public static final String PROTOCOL_HOST_PORT = "http://localhost:8080";
-  public static final String ALL_BEFORE_RESOURCE = PROTOCOL_HOST_PORT + AuthtionGlobal.API_CURRENT_VERSION;
-
   /*
       Clents to get access to resource: /sign-in - for operations 'Sign In' and 'Token refreshing'
   */
@@ -19,7 +13,4 @@ public class AuthtionTestGlobalVariables
   /*
       Consumers from backend database
   */
-  public static AuthtionTestConsumer USER_consumer = AuthtionTestConsumer.of(USER, "test2@dwfe.ru", "test22", client_TRUSTED, 200);
-  public static AuthtionTestConsumer ADMIN_consumer = AuthtionTestConsumer.of(ADMIN, "test1@dwfe.ru", "test11", client_UNTRUSTED, 200);
-  public static AuthtionTestConsumer ANY_consumer = AuthtionTestConsumer.getAnonymous();
 }

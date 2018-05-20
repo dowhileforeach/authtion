@@ -5,9 +5,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthtionGlobal
 {
-  public static final String API_V1 = "/v1";
-  public static final String API_CURRENT_VERSION = API_V1;
-
   public static final String client_ID_TRUSTED = "Trusted";
   public static final String client_PASSWORD_TRUSTED = "YWPVYGiGLW4Whnr3Q5vuzd8i";
 

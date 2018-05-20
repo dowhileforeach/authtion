@@ -45,9 +45,9 @@ public class AuthtionUtil
     return JsonParserFactory.getJsonParser().parseMap(body).get(fieldName);
   }
 
-  public static Object getValue(Map<String, Object> map, String key)
+  public static String getValue(Map<String, Object> map, String key)
   {
-    return map.get(key);
+    return (String) map.get(key);
   }
 
   public static boolean isDefaultCheckOK(String value, String fieldName, List<String> errorCodes)

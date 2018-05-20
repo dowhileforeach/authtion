@@ -18,18 +18,25 @@ import static ru.dwfe.net.authtion.AuthtionGlobal.*;
 @EnableAuthorizationServer
 public class AuthtionAuthorizationServerConfig extends AuthorizationServerConfigurerAdapter
 {
+  private final AuthenticationManager authenticationManager;
+  private final TokenStore tokenStore;
+  private final UserDetailsService userDetailsService;
+  private final AuthtionConfigProperties authtionConfigProperties;
+
   @Autowired
-  private AuthenticationManager authenticationManager;
-  @Autowired
-  private TokenStore tokenStore;
-  @Autowired
-  private UserDetailsService userDetailsService;
+  public AuthtionAuthorizationServerConfig(AuthenticationManager authenticationManager, TokenStore tokenStore, UserDetailsService userDetailsService, AuthtionConfigProperties authtionConfigProperties)
+  {
+    this.authenticationManager = authenticationManager;
+    this.tokenStore = tokenStore;
+    this.userDetailsService = userDetailsService;
+    this.authtionConfigProperties = authtionConfigProperties;
+  }
 
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception
   {
     endpoints
-            .pathMapping("/oauth/token", API_CURRENT_VERSION + resource_signIn)
+            .pathMapping("/oauth/token", authtionConfigProperties.getApi() + resource_signIn)
             .authenticationManager(authenticationManager)
             .tokenStore(tokenStore)
             .userDetailsService(userDetailsService) //needed for token refreshing

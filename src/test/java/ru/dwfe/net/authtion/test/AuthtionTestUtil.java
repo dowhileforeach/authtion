@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ru.dwfe.net.authtion.AuthtionGlobal;
+import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import ru.dwfe.net.authtion.util.AuthtionUtil;
 
 import java.io.IOException;
@@ -21,15 +23,24 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static ru.dwfe.net.authtion.test.AuthtionTestGlobalVariables.ALL_BEFORE_RESOURCE;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.BAD_ACCESS_TOKEN;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.USUAL;
 import static ru.dwfe.net.authtion.test.AuthtionTestSignInType.Refresh;
 import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTest.*;
 
+@Component
 public class AuthtionTestUtil
 {
-  static void setNewTokens(AuthtionTestConsumer testConsumer, int signInExpectedStatus, AuthtionTestSignInType signInType)
+  private final AuthtionConfigProperties authtionConfigProperties;
+  private final String ALL_BEFORE_RESOURCE;
+
+  private AuthtionTestUtil(AuthtionConfigProperties authtionConfigProperties)
+  {
+    this.authtionConfigProperties = authtionConfigProperties;
+    this.ALL_BEFORE_RESOURCE = "http://localhost:8080" + authtionConfigProperties.getApi();
+  }
+
+  void setNewTokens(AuthtionTestConsumer testConsumer, int signInExpectedStatus, AuthtionTestSignInType signInType)
   {
     AuthtionTestClient client = testConsumer.client;
     Request req;
@@ -62,7 +73,7 @@ public class AuthtionTestUtil
     }
   }
 
-  private static Request auth_signIn_POST_Request(String clientname, String clientpass, String username, String userpass)
+  private Request auth_signIn_POST_Request(String clientname, String clientpass, String username, String userpass)
   {
     String url = String.format(ALL_BEFORE_RESOURCE + AuthtionGlobal.resource_signIn
                     + "?grant_type=password&username=%s&password=%s",
@@ -78,7 +89,7 @@ public class AuthtionTestUtil
             .build();
   }
 
-  private static Request auth_refresh_POST_Request(String clientname, String clientpass, String refresh_token)
+  private Request auth_refresh_POST_Request(String clientname, String clientpass, String refresh_token)
   {
     String url = String.format(ALL_BEFORE_RESOURCE + AuthtionGlobal.resource_signIn
             + "?grant_type=refresh_token&refresh_token=%s", refresh_token);
@@ -105,7 +116,7 @@ public class AuthtionTestUtil
     return body;
   }
 
-  private static String performSignOut(AuthtionTestConsumer testConsumer, int expectedStatus)
+  private String performSignOut(AuthtionTestConsumer testConsumer, int expectedStatus)
   {
     log.info("Sign Out");
 
@@ -215,7 +226,7 @@ public class AuthtionTestUtil
             .build();
   }
 
-  private static String getResponseAfterPOSTrequest(String access_token, String resource, Map<String, Object> prorepty_value, int expectedStatus)
+  private String getResponseAfterPOSTrequest(String access_token, String resource, Map<String, Object> prorepty_value, int expectedStatus)
   {
     Request req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, prorepty_value);
 
@@ -224,7 +235,7 @@ public class AuthtionTestUtil
     return performRequest(req, expectedStatus);
   }
 
-  private static String getResponseAfterGETrequest(String access_token, String resource, Map<String, Object> queries, int expectedStatus)
+  private String getResponseAfterGETrequest(String access_token, String resource, Map<String, Object> queries, int expectedStatus)
   {
     Request req = GET_request(ALL_BEFORE_RESOURCE + resource, access_token, queries);
 
@@ -236,7 +247,7 @@ public class AuthtionTestUtil
     return performRequest(req, expectedStatus);
   }
 
-  private static void performAuthTest_ResourceAccessing_ChangeToken(AuthtionTestConsumer testConsumer)
+  private void performAuthTest_ResourceAccessing_ChangeToken(AuthtionTestConsumer testConsumer)
   {
     //1. Resource accessing
     performResourceAccessing(testConsumer.access_token, testConsumer.level, USUAL);
@@ -253,7 +264,7 @@ public class AuthtionTestUtil
     performResourceAccessing(testConsumer.access_token, testConsumer.level, USUAL);
   }
 
-  public static void performFullAuthTest(AuthtionTestConsumer testConsumer)
+  public void performFullAuthTest(AuthtionTestConsumer testConsumer)
   {
     //1,2,3
     performAuthTest_ResourceAccessing_ChangeToken(testConsumer);
@@ -268,7 +279,7 @@ public class AuthtionTestUtil
     setNewTokens(testConsumer, 400, Refresh);
   }
 
-  public static void performResourceAccessing(String access_token, AuthtionTestAuthorityLevel consumerLevel, AuthtionTestResourceAccessingType resourceAccessingType)
+  public void performResourceAccessing(String access_token, AuthtionTestAuthorityLevel consumerLevel, AuthtionTestResourceAccessingType resourceAccessingType)
   {
     Map<AuthtionTestAuthorityLevel, Map<AuthtionTestAuthorityLevel, Integer>> statusMap;
 
@@ -306,7 +317,7 @@ public class AuthtionTestUtil
     });
   }
 
-  public static void check_send_data(RequestMethod method, String resource, String access_token, List<AuthtionTestChecker> checkers)
+  public void check_send_data(RequestMethod method, String resource, String access_token, List<AuthtionTestChecker> checkers)
   {
     String body;
     for (AuthtionTestChecker checker : checkers)
@@ -361,10 +372,6 @@ public class AuthtionTestUtil
   {
     List<String> next = (List<String>) getValueFromResponse(map, "error-codes");
     return next.get(0);
-  }
-
-  private AuthtionTestUtil()
-  {
   }
 
   private static final Logger log = LoggerFactory.getLogger(AuthtionTestUtil.class);

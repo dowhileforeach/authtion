@@ -21,7 +21,9 @@ public class AuthtionConfigProperties implements InitializingBean
 
   private final static Logger log = LoggerFactory.getLogger(AuthtionConfigProperties.class);
 
-  @NotNull
+  @NotBlank
+  private String api;
+
   private GoogleCaptcha googleCaptcha;
 
   @NotNull
@@ -116,6 +118,16 @@ public class AuthtionConfigProperties implements InitializingBean
     }
   }
 
+  public String getApi()
+  {
+    return api;
+  }
+
+  public void setApi(String api)
+  {
+    this.api = api;
+  }
+
   public GoogleCaptcha getGoogleCaptcha()
   {
     return googleCaptcha;
@@ -143,6 +155,7 @@ public class AuthtionConfigProperties implements InitializingBean
                     "-====================================================-%n" +
                     "|            ::[Authtion server]::                   |%n" +
                     "|----------------------------------------------------|%n" +
+                    "| API                              %16s  |%n" +
                     "| Scheduled Task - Mailing:                          |%n" +
                     "|    initial delay                 %16s  |%n" +
                     "|    collect from DB interval      %16s  |%n" +
@@ -150,6 +163,7 @@ public class AuthtionConfigProperties implements InitializingBean
                     "|    max attempts to send if error   %-16s|%n" +
                     "|    timeout for duplicate request %16s  |%n" +
                     "|____________________________________________________|%n",
+            api,
             formatMilliseconds(scheduledTaskMailing.initialDelay),
             formatMilliseconds(scheduledTaskMailing.collectFromDbInterval),
             formatMilliseconds(scheduledTaskMailing.sendInterval),
