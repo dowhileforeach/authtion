@@ -90,7 +90,7 @@ public class AuthtionScheduler
       }
       catch (Throwable e)
       {
-        if (next.getAttempt().incrementAndGet() >= maxAttemptsMailingIfError)
+        if (next.getAttempt().incrementAndGet() > maxAttemptsMailingIfError)
         {
           next.clear();
           next.setMaxAttemptsReached(true);

@@ -180,6 +180,11 @@ public class AuthtionUtil
     return authtionConfigProperties.getGoogleCaptcha().getSecretKey();
   }
 
+  public String getGoogleCaptchaSiteVerifyUrl()
+  {
+    return authtionConfigProperties.getGoogleCaptcha().getSiteVerifyUrl();
+  }
+
   public boolean isAllowedNewRequestForMailing(int type, String email, List<String> errorCodes)
   {
     boolean result = true;

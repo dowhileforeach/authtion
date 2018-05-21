@@ -234,6 +234,9 @@ public class AuthtionConfigProperties implements InitializingBean
     @NotBlank
     private String secretKey;
 
+    @NotBlank
+    private String siteVerifyUrl;
+
     public String getSecretKey()
     {
       return secretKey;
@@ -242,6 +245,16 @@ public class AuthtionConfigProperties implements InitializingBean
     public void setSecretKey(String secretKey)
     {
       this.secretKey = secretKey;
+    }
+
+    public String getSiteVerifyUrl()
+    {
+      return siteVerifyUrl;
+    }
+
+    public void setSiteVerifyUrl(String siteVerifyUrl)
+    {
+      this.siteVerifyUrl = siteVerifyUrl;
     }
   }
 
@@ -458,19 +471,57 @@ public class AuthtionConfigProperties implements InitializingBean
                     "-====================================================-%n" +
                     "|            ::[Authtion server]::                   |%n" +
                     "|----------------------------------------------------|%n" +
-                    "| API                                %-16s|%n" +
+                    "| API                               %-17s|%n" +
+                    "|                                                    |%n" +
                     "| Scheduled Task - Mailing:                          |%n" +
-                    "|    initial delay                 %16s  |%n" +
-                    "|    collect from DB interval      %16s  |%n" +
-                    "|    send interval                 %16s  |%n" +
-                    "|    max attempts to send if error   %-16s|%n" +
-                    "|    timeout for duplicate request %16s  |%n" +
+                    "|    initial delay                  %-17s|%n" +
+                    "|    collect from DB interval       %-17s|%n" +
+                    "|    send interval                  %-17s|%n" +
+                    "|    max attempts to send if error  %-17s|%n" +
+                    "|    timeout for duplicate request  %-17s|%n" +
+                    "|                                                    |%n" +
+                    "| Resources                                          |%n" +
+                    "|    Auth:                                           |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|    Consumer:                                       |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|    Password management:                            |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
                     "|____________________________________________________|%n",
             api,
             formatMilliseconds(scheduledTaskMailing.initialDelay),
             formatMilliseconds(scheduledTaskMailing.collectFromDbInterval),
             formatMilliseconds(scheduledTaskMailing.sendInterval),
             scheduledTaskMailing.maxAttemptsToSendIfError,
-            formatMilliseconds(scheduledTaskMailing.timeoutForDuplicateRequest));
+            formatMilliseconds(scheduledTaskMailing.timeoutForDuplicateRequest),
+            resource.signIn,
+            resource.signOut,
+            resource.checkConsumerEmail,
+            resource.checkConsumerPass,
+            resource.googleCaptchaValidate,
+            resource.createConsumer,
+            resource.updateConsumer,
+            resource.getConsumerData,
+            resource.publicConsumer,
+            resource.listOfConsumers,
+            resource.reqConfirmConsumerEmail,
+            resource.confirmConsumerEmail,
+            resource.changeConsumerPass,
+            resource.reqRestoreConsumerPass,
+            resource.confirmRestoreConsumerPass,
+            resource.restoreConsumerPass);
   }
 }

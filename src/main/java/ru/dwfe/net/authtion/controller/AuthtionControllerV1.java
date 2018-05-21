@@ -75,17 +75,16 @@ public class AuthtionControllerV1
 
     if (isDefaultCheckOK(googleResponse, "google-response", errorCodes))
     {
-      // https://developers.google.com/recaptcha/docs/verify#api-request
-      String url = String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s",
+      String url = String.format(authtionUtil.getGoogleCaptchaSiteVerifyUrl(),
               authtionUtil.getGoogleCaptchaSecretKey(), googleResponse);
 
-      FutureTask<ResponseEntity<String>> taskForExchangeWithGoogle =
+      FutureTask<ResponseEntity<String>> exchange =
               new FutureTask<>(() -> restTemplate.exchange(url, HttpMethod.POST, null, String.class));
-      new Thread(taskForExchangeWithGoogle).start();
+      new Thread(exchange).start();
 
       try
       {
-        ResponseEntity<String> response = taskForExchangeWithGoogle.get(7, TimeUnit.SECONDS);
+        ResponseEntity<String> response = exchange.get(7, TimeUnit.SECONDS);
         if (response.getStatusCodeValue() == 200)
         {
           Boolean success = (Boolean) getValueFromJSON(response.getBody(), "success");
