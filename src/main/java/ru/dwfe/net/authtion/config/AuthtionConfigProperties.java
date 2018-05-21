@@ -481,13 +481,10 @@ public class AuthtionConfigProperties implements InitializingBean
                     "|    timeout for duplicate request  %-17s|%n" +
                     "|                                                    |%n" +
                     "| Resources                                          |%n" +
-                    "|    Auth:                                           |%n" +
+                    "|   Auth:                                            |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
-                    "|    Consumer:                                       |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
+                    "|   Consumer:                                        |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
@@ -495,7 +492,10 @@ public class AuthtionConfigProperties implements InitializingBean
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
-                    "|    Password management:                            |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|      %-44s  |%n" +
+                    "|   Password management:                             |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
