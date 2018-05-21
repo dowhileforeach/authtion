@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static ru.dwfe.net.authtion.util.AuthtionUtil.getDBvalueToStringWithIsPublicInfo;
 import static ru.dwfe.net.authtion.util.AuthtionUtil.isDefaultCheckOK;
 
 @Entity
@@ -242,12 +243,13 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     }
     else
     {
+      list.add(getDBvalueToStringWithIsPublicInfo("email", email, emailIsPublic));
+      list.add("\"emailConfirmed\": " + emailConfirmed);
       list.add("\"authorities\": " + authorities);
       list.add("\"accountNonExpired\": " + accountNonExpired);
       list.add("\"credentialsNonExpired\": " + credentialsNonExpired);
       list.add("\"accountNonLocked\": " + accountNonLocked);
       list.add("\"enabled\": " + enabled);
-      list.add("\"emailConfirmed\": " + emailConfirmed);
       list.add("\"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(createdOn) + "\"");
     }
     return "{" + list.stream().collect(Collectors.joining(",")) + "}";

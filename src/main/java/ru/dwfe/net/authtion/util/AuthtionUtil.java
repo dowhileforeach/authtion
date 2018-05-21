@@ -49,6 +49,13 @@ public class AuthtionUtil
     return result;
   }
 
+  public static String getDBvalueToStringWithIsPublicInfo(String fieldName, Object value, boolean isPiblic)
+  {
+    if (value instanceof String)
+      value = "\"" + value + "\"";
+    return "\"" + fieldName + "\": {\"value\": " + value + ", \"isPublic\": " + isPiblic + "}";
+  }
+
   public static String getNickNameFromEmail(String email)
   {
     return email.substring(0, email.indexOf('@'));
