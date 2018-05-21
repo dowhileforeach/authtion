@@ -7,7 +7,9 @@ import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
+import ru.dwfe.net.authtion.dao.AuthtionConsumer;
 import ru.dwfe.net.authtion.dao.AuthtionMailing;
+import ru.dwfe.net.authtion.dao.AuthtionUser;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 
 import java.math.BigInteger;
@@ -120,6 +122,14 @@ public class AuthtionUtil
       return getResponseSuccessWithData(getJSONfromObject(data));
     else
       return getResponseWithErrorCodes(errorCodes);
+  }
+
+  public static String getAccountDataToStringWithPublicInfo(AuthtionConsumer consumer, AuthtionUser user, boolean isPublic)
+  {
+    return "{" +
+            "\"consumer\": " + consumer.toStringWithPublicCheck(isPublic) + ", " +
+            "\"user\": " + user.toStringWithPublicCheck(isPublic) +
+            "}";
   }
 
   private static String getResponseSuccessWithData(String data)

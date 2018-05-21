@@ -140,10 +140,7 @@ public class AuthtionControllerV1
               ? AuthtionMailing.of(1, consumer.getEmail())
               : AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
 
-      data = "{" +
-              "\"consumer\": " + consumer.toStringWithPublicCheck(false) + ", " +
-              "\"user\": " + user.toStringWithPublicCheck(false) +
-              "}";
+      data = getAccountDataToStringWithPublicInfo(consumer, user, false);
     }
     return getResponse(errorCodes, data);
   }
@@ -154,7 +151,12 @@ public class AuthtionControllerV1
   {
     List<String> errorCodes = new ArrayList<>();
     Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
-    return getResponse(errorCodes, consumerService.findById(id).get().toString());
+
+    AuthtionConsumer consumer = consumerService.findById(id).get();
+    AuthtionUser user = userRepository.findById(id).get();
+    String data = getAccountDataToStringWithPublicInfo(consumer, user, false);
+
+    return getResponse(errorCodes, data);
   }
 
   @PostMapping("#{authtionConfigProperties.resource.updateAccount}")
@@ -208,16 +210,16 @@ public class AuthtionControllerV1
   public String publicAccount(@PathVariable Long id)
   {
     List<String> errorCodes = new ArrayList<>();
-    Map<String, Object> data = new HashMap<>();
+    String data = "";
 
-//    Optional<AuthtionConsumer> consumerById = consumerService.findById(id);
-//    if (consumerById.isPresent())
-//    {
-//      AuthtionConsumer consumer = consumerById.get();
-//      data.put("id", consumer.getId());
-//      data.put("nickName", consumer.getNickName());
-//    }
-//    else errorCodes.add("id-not-exist");
+    Optional<AuthtionConsumer> consumerById = consumerService.findById(id);
+    if (consumerById.isPresent())
+    {
+      AuthtionConsumer consumer = consumerById.get();
+      AuthtionUser user = userRepository.findById(id).get();
+      data = getAccountDataToStringWithPublicInfo(consumer, user, true);
+    }
+    else errorCodes.add("id-not-exist");
 
     return getResponse(errorCodes, data);
   }
