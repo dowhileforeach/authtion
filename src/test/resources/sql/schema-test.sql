@@ -9,12 +9,6 @@ CREATE TABLE authtion_consumers (
                           COLLATE utf8mb4_unicode_ci              NOT NULL,
   password                VARCHAR(100)
                           COLLATE utf8mb4_unicode_ci              NOT NULL,
-  nick_name               VARCHAR(20)
-                          COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',
-  first_name              VARCHAR(20)
-                          COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',
-  last_name               VARCHAR(20)
-                          COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',
   account_non_expired     TINYINT(1)                              NOT NULL   DEFAULT '1',
   credentials_non_expired TINYINT(1)                              NOT NULL   DEFAULT '1',
   account_non_locked      TINYINT(1)                              NOT NULL   DEFAULT '1',

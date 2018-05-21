@@ -9,12 +9,6 @@ CREATE TABLE authtion_consumers (
                           COLLATE utf8mb4_unicode_ci              NOT NULL,
   password                VARCHAR(100)
                           COLLATE utf8mb4_unicode_ci              NOT NULL,
-  nick_name               VARCHAR(20)
-                          COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',
-  first_name              VARCHAR(20)
-                          COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',
-  last_name               VARCHAR(20)
-                          COLLATE utf8mb4_unicode_ci              NOT NULL   DEFAULT '',
   account_non_expired     TINYINT(1)                              NOT NULL   DEFAULT '1',
   credentials_non_expired TINYINT(1)                              NOT NULL   DEFAULT '1',
   account_non_locked      TINYINT(1)                              NOT NULL   DEFAULT '1',
@@ -29,6 +23,26 @@ CREATE TABLE authtion_consumers (
 )
   ENGINE = InnoDB
   AUTO_INCREMENT = 1000
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS authtion_users;
+SET FOREIGN_KEY_CHECKS = 1;
+CREATE TABLE authtion_users (
+  consumer   BIGINT(20)                 NOT NULL,
+  nick_name  VARCHAR(20)
+             COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
+  first_name VARCHAR(20)
+             COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
+  last_name  VARCHAR(20)
+             COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
+  KEY authtion_users_consumers_id_fk (consumer),
+  CONSTRAINT authtion_users_consumers_id_fk FOREIGN KEY (consumer) REFERENCES authtion_consumers (id)
+    ON DELETE CASCADE
+)
+  ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
