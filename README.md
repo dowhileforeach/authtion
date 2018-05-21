@@ -2,18 +2,17 @@
 |----------------------|:-------------:|
 | DataBase             | `master`      |
 | JSON Web Tokens      | `JWT`         |
-<br>
 Java10, Spring-Boot2, OAuth2, RESTful, MySQL
-<br>
+<br><br>
 
-  [Errors](#errors)<br>
-  [Date and Time](#date-and-time)<br>
-  [Email alerts](#email-alerts)
-  [API](#api)
-    [Auth](#auth)
-    [Consumer](#consumer)
-      [Create, Read, Update](#create-read-update)
-      [Password management](#password-management)
+  * [Errors](#errors)
+  * [Date and Time](#date-and-time)
+  * [Email alerts](#email-alerts)
+  * [API](#api)
+    * [Auth](#auth)
+    * [Consumer](#consumer)
+      + [Create, Read, Update](#create-read-update)
+      + [Password management](#password-management)
 
 # Errors
 When you interact with the Authtion server, you may encounter the following types of errors:<br>
