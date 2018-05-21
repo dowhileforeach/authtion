@@ -13,10 +13,12 @@ import ru.dwfe.net.authtion.util.AuthtionUtil;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static ru.dwfe.net.authtion.util.AuthtionUtil.isDefaultCheckOK;
 
@@ -24,8 +26,6 @@ import static ru.dwfe.net.authtion.util.AuthtionUtil.isDefaultCheckOK;
 @Table(name = "authtion_consumers")
 public class AuthtionConsumer implements UserDetails, CredentialsContainer
 {
-  private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -44,11 +44,14 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
   private boolean credentialsNonExpired;
   private boolean accountNonLocked;
   private boolean enabled;
+
   private boolean emailConfirmed;
+  private boolean emailIsPublic;
 
   @Column(updatable = false, insertable = false)
   private LocalDateTime createdOn;
 
+  private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
   //
   //  IMPLEMENTATION of interfaces
@@ -183,6 +186,16 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     this.emailConfirmed = emailConfirmed;
   }
 
+  public boolean isEmailIsPublic()
+  {
+    return emailIsPublic;
+  }
+
+  public void setEmailIsPublic(boolean emailIsPublic)
+  {
+    this.emailIsPublic = emailIsPublic;
+  }
+
   public LocalDateTime getCreatedOn()
   {
     return createdOn;
@@ -213,18 +226,31 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
   @Override
   public String toString()
   {
-    return "{\n" +
-            " \"id\": " + id + ",\n" +
-            " \"email\": \"" + email + "\",\n" +
-            " \"password\": \"****\",\n" +
-            " \"authorities\": " + authorities + ",\n" +
-            " \"accountNonExpired\": " + accountNonExpired + ",\n" +
-            " \"credentialsNonExpired\": " + credentialsNonExpired + ",\n" +
-            " \"accountNonLocked\": " + accountNonLocked + ",\n" +
-            " \"enabled\": " + enabled + ",\n" +
-            " \"emailConfirmed\": " + emailConfirmed + ",\n" +
-            " \"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(createdOn) + "\"\n" +
-            "}";
+    return toStringWithPublicCheck(true);
+  }
+
+  public String toStringWithPublicCheck(boolean onPublic)
+  {
+    ArrayList<String> list = new ArrayList<>();
+
+    list.add("\"id\": " + id);
+
+    if (onPublic)
+    {
+      if (emailIsPublic)
+        list.add("\"email\": \"" + email + "\"");
+    }
+    else
+    {
+      list.add("\"authorities\": " + authorities);
+      list.add("\"accountNonExpired\": " + accountNonExpired);
+      list.add("\"credentialsNonExpired\": " + credentialsNonExpired);
+      list.add("\"accountNonLocked\": " + accountNonLocked);
+      list.add("\"enabled\": " + enabled);
+      list.add("\"emailConfirmed\": " + emailConfirmed);
+      list.add("\"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(createdOn) + "\"");
+    }
+    return "{" + list.stream().collect(Collectors.joining(",")) + "}";
   }
 
 

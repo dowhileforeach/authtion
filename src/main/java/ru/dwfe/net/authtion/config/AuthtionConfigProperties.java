@@ -57,12 +57,10 @@ public class AuthtionConfigProperties implements InitializingBean
     private String googleCaptchaValidate = "/google-captcha-validate";
     private String createAccount = "/create-account";
     private String getAccount = "/get-account";
+    private String updateAccount = "/update-account";
+    private String publicAccount = "/public/account";
     private String reqConfirmEmail = "/req-confirm-email";
     private String confirmEmail = "/confirm-email";
-
-    private String updateUser = "/update-user";
-    private String publicUser = "/public/user";
-    private String listOfUsers = "/list-of-users";
 
     private String changePass = "/change-pass";
     private String reqRestorePass = "/req-restore-pass";
@@ -335,7 +333,6 @@ public class AuthtionConfigProperties implements InitializingBean
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
                     "|   Password management:                             |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
@@ -354,10 +351,9 @@ public class AuthtionConfigProperties implements InitializingBean
             resource.checkPass,
             resource.googleCaptchaValidate,
             resource.createAccount,
-            resource.updateUser,
             resource.getAccount,
-            resource.publicUser,
-            resource.listOfUsers,
+            resource.updateAccount,
+            resource.publicAccount,
             resource.reqConfirmEmail,
             resource.confirmEmail,
             resource.changePass,

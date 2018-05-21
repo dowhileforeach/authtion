@@ -14,6 +14,7 @@ CREATE TABLE authtion_consumers (
   account_non_locked      TINYINT(1)                              NOT NULL   DEFAULT '1',
   enabled                 TINYINT(1)                              NOT NULL   DEFAULT '1',
   email_confirmed         TINYINT(1)                              NOT NULL   DEFAULT '0',
+  email_is_public         TINYINT(1)                              NOT NULL   DEFAULT '0',
   created_on              DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY authtion_consumers_id_uindex (id),
