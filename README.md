@@ -39,8 +39,7 @@ To fill the mail templates used [Thymeleaf](http://www.thymeleaf.org) template e
 # API
 In this project, the version of the API = "v1", the controller class is called "AuthtionControllerV1".<br>
 When developing a new API should create a new controller class, e.g. "ControllerV2", "ControllerV3" etc.<br><br>
-Unfortunately for resource authentication `/oauth/token` "out of box" spring-security-oauth2 does not provide for versioning.<br>
-Therefore, for all API versions is one version `/oauth/token`, which mapped to `/{current API version}/sign-in`.
+Unfortunately for resource authentication `/oauth/token` "out of box" spring-security-oauth2 does not provide for versioning. Therefore, for all API versions is one version `/oauth/token`, which mapped to `/{current API version}/sign-in`.
 <br><br>
 See `test\java\ru.dwfe.authtion` classes.<br>
 The tests cover all API, except for the cases, when the test write is simply impossible. For example, automatic test of `/google-captcha-validate` is not possible without human intervention.
