@@ -19,7 +19,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import static ru.dwfe.net.authtion.util.AuthtionUtil.isDefaultCheckOK;
-import static ru.dwfe.net.authtion.util.AuthtionUtil.prepareStringField;
 
 @Entity
 @Table(name = "authtion_consumers")
@@ -49,9 +48,6 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
 
   @Column(updatable = false, insertable = false)
   private LocalDateTime createdOn;
-
-  @Column(updatable = false, insertable = false)
-  private LocalDateTime updatedOn;
 
 
   //
@@ -192,11 +188,6 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     return createdOn;
   }
 
-  public LocalDateTime getUpdatedOn()
-  {
-    return updatedOn;
-  }
-
 
   //
   //  equals, hashCode, toString
@@ -232,8 +223,7 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
             " \"accountNonLocked\": " + accountNonLocked + ",\n" +
             " \"enabled\": " + enabled + ",\n" +
             " \"emailConfirmed\": " + emailConfirmed + ",\n" +
-            " \"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(createdOn) + "\",\n" +
-            " \"updatedOn\": " + "\"" + AuthtionUtil.formatDateTime(updatedOn) + "\"\n" +
+            " \"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(createdOn) + "\"\n" +
             "}";
   }
 

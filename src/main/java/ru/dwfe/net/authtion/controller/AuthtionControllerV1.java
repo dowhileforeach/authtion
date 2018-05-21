@@ -14,6 +14,7 @@ import ru.dwfe.net.authtion.dao.AuthtionConsumer;
 import ru.dwfe.net.authtion.dao.AuthtionMailing;
 import ru.dwfe.net.authtion.dao.AuthtionUser;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
+import ru.dwfe.net.authtion.dao.repository.AuthtionUserRepository;
 import ru.dwfe.net.authtion.service.AuthtionConsumerService;
 import ru.dwfe.net.authtion.util.AuthtionUtil;
 
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static ru.dwfe.net.authtion.dao.AuthtionConsumer.*;
+import static ru.dwfe.net.authtion.dao.AuthtionUser.prepareNewUser;
 import static ru.dwfe.net.authtion.util.AuthtionUtil.*;
 
 @RestController
@@ -30,54 +32,53 @@ import static ru.dwfe.net.authtion.util.AuthtionUtil.*;
 public class AuthtionControllerV1
 {
   private final AuthtionConsumerService consumerService;
+  private final AuthtionUserRepository userRepository;
   private final AuthtionMailingRepository mailingRepository;
   private final ConsumerTokenServices tokenServices;
   private final RestTemplate restTemplate;
   private final AuthtionUtil authtionUtil;
 
   @Autowired
-  public AuthtionControllerV1(AuthtionConsumerService consumerService, AuthtionMailingRepository mailingRepository, ConsumerTokenServices tokenServices, RestTemplate restTemplate, AuthtionUtil authtionUtil)
+  public AuthtionControllerV1(AuthtionConsumerService consumerService, AuthtionUserRepository userRepository, AuthtionMailingRepository mailingRepository, ConsumerTokenServices tokenServices, RestTemplate restTemplate, AuthtionUtil authtionUtil)
   {
     this.consumerService = consumerService;
+    this.userRepository = userRepository;
     this.mailingRepository = mailingRepository;
     this.tokenServices = tokenServices;
     this.restTemplate = restTemplate;
     this.authtionUtil = authtionUtil;
   }
 
+
+  //
+  // Consumer & User: Create, Read, Update
+  //
+
   @PostMapping("#{authtionConfigProperties.resource.checkEmail}")
-  public String checkConsumerEmail(@RequestBody String body)
+  public String checkConsumerEmail(@RequestBody ReqCheckEmail req)
   {
     List<String> errorCodes = new ArrayList<>();
-
-    String email = (String) getValueFromJSON(body, "email");
-    canUseEmail(email, consumerService, errorCodes);
-
+    canUseEmail(req.email, consumerService, errorCodes);
     return getResponse(errorCodes);
   }
 
   @PostMapping("#{authtionConfigProperties.resource.checkPass}")
-  public String checkConsumerPass(@RequestBody String body)
+  public String checkConsumerPass(@RequestBody ReqCheckPass req)
   {
     List<String> errorCodes = new ArrayList<>();
-
-    String password = (String) getValueFromJSON(body, "password");
-    canUsePassword(password, "password", errorCodes);
-
+    canUsePassword(req.password, "password", errorCodes);
     return getResponse(errorCodes);
   }
 
   @PostMapping("#{authtionConfigProperties.resource.googleCaptchaValidate}")
-  public String googleCaptchaValidate(@RequestBody String body)
+  public String googleCaptchaValidate(@RequestBody ReqGoogleCaptchaValidate req)
   {
     List<String> errorCodes = new ArrayList<>();
 
-    String googleResponse = (String) getValueFromJSON(body, "googleResponse");
-
-    if (isDefaultCheckOK(googleResponse, "google-response", errorCodes))
+    if (isDefaultCheckOK(req.googleResponse, "google-response", errorCodes))
     {
       String url = String.format(authtionUtil.getGoogleCaptchaSiteVerifyUrl(),
-              authtionUtil.getGoogleCaptchaSecretKey(), googleResponse);
+              authtionUtil.getGoogleCaptchaSecretKey(), req.googleResponse);
 
       FutureTask<ResponseEntity<String>> exchange =
               new FutureTask<>(() -> restTemplate.exchange(url, HttpMethod.POST, null, String.class));
@@ -104,12 +105,12 @@ public class AuthtionControllerV1
   }
 
   @PostMapping("#{authtionConfigProperties.resource.createAccount}")
-  public String createAccount(@RequestBody ReqCreateAccount reqCreateAccount)
+  public String createAccount(@RequestBody ReqCreateAccount req)
   {
     List<String> errorCodes = new ArrayList<>();
 
-    AuthtionConsumer consumer = reqCreateAccount.consumer;
-    AuthtionUser user = reqCreateAccount.user;
+    AuthtionConsumer consumer = req.consumer;
+    AuthtionUser user = req.user;
 
     String password = consumer.getPassword();
     String automaticallyGeneratedPassword = "";
@@ -124,30 +125,86 @@ public class AuthtionControllerV1
         canUsePassword(password, "password", errorCodes);
 
     if (errorCodes.size() == 0)
-    {   // prepare
+    {
       setNewPassword(consumer, password);
       prepareNewConsumer(consumer);
-
       consumer.setEmailConfirmed(!automaticallyGeneratedPassword.isEmpty());
+      consumer = consumerService.save(consumer);
 
-      // put consumer into the DataBase
-      consumerService.save(consumer);
+      prepareNewUser(user, consumer);
+      userRepository.save(user);
 
+      AuthtionMailing mailing;
       if (automaticallyGeneratedPassword.isEmpty())
+        mailing = AuthtionMailing.of(1, consumer.getEmail());
+      else // if the password was not passed, then it is necessary to send an automatically generated password
+        mailing = AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword);
+      mailingRepository.save(mailing);
+    }
+    return getResponse(errorCodes);
+  }
+
+  @GetMapping("#{authtionConfigProperties.resource.getAccount}")
+  @PreAuthorize("hasAuthority('USER')")
+  public String getAccount(OAuth2Authentication authentication)
+  {
+    List<String> errorCodes = new ArrayList<>();
+    Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
+    return getResponse(errorCodes, consumerService.findById(id).get().toString());
+  }
+
+  @GetMapping("#{authtionConfigProperties.resource.reqConfirmEmail}")
+  @PreAuthorize("hasAuthority('USER')")
+  public String reqConfirmEmail(OAuth2Authentication authentication)
+  {
+    List<String> errorCodes = new ArrayList<>();
+
+    Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
+    AuthtionConsumer consumer = consumerService.findById(id).get();
+    String email = consumer.getEmail();
+    int type = 3;
+
+    if (consumer.isEmailConfirmed())
+    {
+      errorCodes.add("email-is-already-confirmed");
+    }
+    else if (authtionUtil.isAllowedNewRequestForMailing(type, email, errorCodes))
+    {
+      mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase36(40)));
+    }
+
+    return getResponse(errorCodes);
+  }
+
+  @GetMapping("#{authtionConfigProperties.resource.confirmEmail}")
+  public String confirmEmail(@RequestParam(required = false) String key)
+  {
+    String fieldName = "confirm-key";
+    List<String> errorCodes = new ArrayList<>();
+
+    if (isDefaultCheckOK(key, fieldName, errorCodes))
+    {
+      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByTypeAndData(3, key);
+      if (confirmByKey.isPresent())
       {
-        mailingRepository.save(AuthtionMailing.of(1, consumer.getEmail()));
+        AuthtionMailing confirm = confirmByKey.get();
+
+        // the AuthtionConsumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
+        AuthtionConsumer consumer = consumerService.findByEmail(confirm.getEmail()).get();
+        consumer.setEmailConfirmed(true); // email now confirmed
+        consumerService.save(consumer);
+
+        confirm.clear();
+        mailingRepository.save(confirm);
       }
-      else
-      { // if the password was not passed, then it is necessary to send an automatically generated password to the new consumer
-        mailingRepository.save(AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
-      }
+      else errorCodes.add(fieldName + "-not-exist");
     }
     return getResponse(errorCodes);
   }
 
   @PostMapping("#{authtionConfigProperties.resource.updateUser}")
   @PreAuthorize("hasAuthority('USER')")
-  public String updateConsumer(@RequestBody String body, OAuth2Authentication authentication)
+  public String updateUser(@RequestBody String body, OAuth2Authentication authentication)
   {
     List<String> errorCodes = new ArrayList<>();
     Map<String, Object> map = parse(body);
@@ -192,17 +249,8 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @GetMapping("#{authtionConfigProperties.resource.getAccount}")
-  @PreAuthorize("hasAuthority('USER')")
-  public String getConsumerData(OAuth2Authentication authentication)
-  {
-    List<String> errorCodes = new ArrayList<>();
-    Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
-    return getResponse(errorCodes, consumerService.findById(id).get().toString());
-  }
-
-  @GetMapping("#{authtionConfigProperties.resource.publicConsumer}" + "/{id}")
-  public String publicConsumer(@PathVariable Long id)
+  @GetMapping("#{authtionConfigProperties.resource.publicUser}" + "/{id}")
+  public String publicUser(@PathVariable Long id)
   {
     List<String> errorCodes = new ArrayList<>();
     Map<String, Object> data = new HashMap<>();
@@ -219,9 +267,10 @@ public class AuthtionControllerV1
     return getResponse(errorCodes, data);
   }
 
-  @GetMapping("#{authtionConfigProperties.resource.listOfConsumers}")
+
+  @GetMapping("#{authtionConfigProperties.resource.listOfUsers}")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public String listOfConsumers()
+  public String listOfUsers()
   {
     List<String> errorCodes = new ArrayList<>();
 
@@ -232,58 +281,14 @@ public class AuthtionControllerV1
     return getResponse(errorCodes, "[" + jsonListOfUsers + "]");
   }
 
-  @GetMapping("#{authtionConfigProperties.resource.reqConfirmConsumerEmail}")
+
+  //
+  // Password management
+  //
+
+  @PostMapping("#{authtionConfigProperties.resource.changePass}")
   @PreAuthorize("hasAuthority('USER')")
-  public String requestConfirmEmail(OAuth2Authentication authentication)
-  {
-    List<String> errorCodes = new ArrayList<>();
-
-    Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
-    AuthtionConsumer consumer = consumerService.findById(id).get();
-    String email = consumer.getEmail();
-    int type = 3;
-
-    if (consumer.isEmailConfirmed())
-    {
-      errorCodes.add("email-is-already-confirmed");
-    }
-    else if (authtionUtil.isAllowedNewRequestForMailing(type, email, errorCodes))
-    {
-      mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase36(40)));
-    }
-
-    return getResponse(errorCodes);
-  }
-
-  @GetMapping("#{authtionConfigProperties.resource.confirmConsumerEmail}")
-  public String confirmConsumerEmail(@RequestParam(required = false) String key)
-  {
-    String fieldName = "confirm-key";
-    List<String> errorCodes = new ArrayList<>();
-
-    if (isDefaultCheckOK(key, fieldName, errorCodes))
-    {
-      Optional<AuthtionMailing> confirmByKey = mailingRepository.findByTypeAndData(3, key);
-      if (confirmByKey.isPresent())
-      {
-        AuthtionMailing confirm = confirmByKey.get();
-
-        // the AuthtionConsumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
-        AuthtionConsumer consumer = consumerService.findByEmail(confirm.getEmail()).get();
-        consumer.setEmailConfirmed(true); // email now confirmed
-        consumerService.save(consumer);
-
-        confirm.clear();
-        mailingRepository.save(confirm);
-      }
-      else errorCodes.add(fieldName + "-not-exist");
-    }
-    return getResponse(errorCodes);
-  }
-
-  @PostMapping("#{authtionConfigProperties.resource.changeConsumerPass}")
-  @PreAuthorize("hasAuthority('USER')")
-  public String changeConsumerPass(@RequestBody String body, OAuth2Authentication authentication)
+  public String changePass(@RequestBody String body, OAuth2Authentication authentication)
   {
     List<String> errorCodes = new ArrayList<>();
     Map<String, Object> map = parse(body);
@@ -311,8 +316,8 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping("#{authtionConfigProperties.resource.reqRestoreConsumerPass}")
-  public String reqRestoreConsumerPass(@RequestBody String body)
+  @PostMapping("#{authtionConfigProperties.resource.reqRestorePass}")
+  public String reqRestorePass(@RequestBody String body)
   {
     List<String> errorCodes = new ArrayList<>();
 
@@ -330,8 +335,8 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @GetMapping("#{authtionConfigProperties.resource.confirmRestoreConsumerPass}")
-  public String confirmRestoreConsumerPass(@RequestParam(required = false) String key)
+  @GetMapping("#{authtionConfigProperties.resource.confirmRestorePass}")
+  public String confirmRestorePass(@RequestParam(required = false) String key)
   {
     String fieldName = "confirm-key";
     List<String> errorCodes = new ArrayList<>();
@@ -355,8 +360,8 @@ public class AuthtionControllerV1
     return getResponse(errorCodes, data);
   }
 
-  @PostMapping("#{authtionConfigProperties.resource.restoreConsumerPass}")
-  public String restoreConsumerPass(@RequestBody String body)
+  @PostMapping("#{authtionConfigProperties.resource.restorePass}")
+  public String restorePass(@RequestBody String body)
   {
     List<String> errorCodes = new ArrayList<>();
     Map<String, Object> map = parse(body);
@@ -406,6 +411,55 @@ public class AuthtionControllerV1
   }
 }
 
+
+//
+// Utilitarian classes for mapping requests
+//
+
+class ReqCheckEmail
+{
+  String email;
+
+  public String getEmail()
+  {
+    return email;
+  }
+
+  public void setEmail(String email)
+  {
+    this.email = email;
+  }
+}
+
+class ReqCheckPass
+{
+  String password;
+
+  public String getPassword()
+  {
+    return password;
+  }
+
+  public void setPassword(String password)
+  {
+    this.password = password;
+  }
+}
+
+class ReqGoogleCaptchaValidate
+{
+  String googleResponse;
+
+  public String getGoogleResponse()
+  {
+    return googleResponse;
+  }
+
+  public void setGoogleResponse(String googleResponse)
+  {
+    this.googleResponse = googleResponse;
+  }
+}
 
 class ReqCreateAccount
 {

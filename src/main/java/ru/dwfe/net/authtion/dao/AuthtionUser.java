@@ -1,9 +1,14 @@
 package ru.dwfe.net.authtion.dao;
 
+import ru.dwfe.net.authtion.util.AuthtionUtil;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
+import static ru.dwfe.net.authtion.util.AuthtionUtil.formatDateTime;
 import static ru.dwfe.net.authtion.util.AuthtionUtil.getNickNameFromEmail;
 import static ru.dwfe.net.authtion.util.AuthtionUtil.prepareStringField;
 
@@ -17,6 +22,9 @@ public class AuthtionUser
   private String nickName;
   private String firstName;
   private String lastName;
+
+  @Column(updatable = false, insertable = false)
+  private LocalDateTime updatedOn;
 
   public Long getConsumerId()
   {
@@ -58,6 +66,11 @@ public class AuthtionUser
     this.lastName = lastName;
   }
 
+  public LocalDateTime getUpdatedOn()
+  {
+    return updatedOn;
+  }
+
   @Override
   public boolean equals(Object o)
   {
@@ -82,18 +95,21 @@ public class AuthtionUser
             " \"id\": " + consumerId + ",\n" +
             " \"nickName\": \"" + nickName + "\",\n" +
             " \"firstName\": \"" + firstName + "\",\n" +
-            " \"lastName\": \"" + lastName + "\"\n" +
+            " \"lastName\": \"" + lastName + "\",\n" +
+            " \"updatedOn\": " + "\"" + formatDateTime(updatedOn) + "\"\n" +
             "}";
   }
 
-  public static void prepareNewConsumer(AuthtionUser user, String email)
+  public static void prepareNewUser(AuthtionUser user, AuthtionConsumer consumer)
   {
-    user.setFirstName(prepareStringField(user.getFirstName(), 20));
-    user.setLastName(prepareStringField(user.getLastName(), 20));
+    user.setConsumerId(consumer.getId());
 
     String nickName = user.getNickName();
     if (nickName == null)
-      nickName = getNickNameFromEmail(email);
+      nickName = getNickNameFromEmail(consumer.getEmail());
     user.setNickName(prepareStringField(nickName, 20));
+
+    user.setFirstName(prepareStringField(user.getFirstName(), 20));
+    user.setLastName(prepareStringField(user.getLastName(), 20));
   }
 }

@@ -15,8 +15,6 @@ CREATE TABLE authtion_consumers (
   enabled                 TINYINT(1)                              NOT NULL   DEFAULT '1',
   email_confirmed         TINYINT(1)                              NOT NULL   DEFAULT '0',
   created_on              DATETIME DEFAULT CURRENT_TIMESTAMP      NOT NULL,
-  updated_on              DATETIME                                           DEFAULT CURRENT_TIMESTAMP
-  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY authtion_consumers_id_uindex (id),
   UNIQUE KEY authtion_consumers_email_uindex (email)
@@ -38,6 +36,8 @@ CREATE TABLE authtion_users (
               COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
   last_name   VARCHAR(20)
               COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
+  updated_on  DATETIME                   NOT NULL   DEFAULT CURRENT_TIMESTAMP
+  ON UPDATE CURRENT_TIMESTAMP,
   KEY authtion_users_consumers_id_fk (consumer_id),
   CONSTRAINT authtion_users_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)
     ON DELETE CASCADE
