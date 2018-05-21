@@ -51,182 +51,23 @@ public class AuthtionConfigProperties implements InitializingBean
   {
     private String signIn = "/sign-in";
     private String signOut = "/sign-out";
+
+    private String checkEmail = "/check-email";
+    private String checkPass = "/check-pass";
     private String googleCaptchaValidate = "/google-captcha-validate";
+    private String createAccount = "/create-account";
+    private String getAccount = "/get-account";
+    private String reqConfirmEmail = "/req-confirm-email";
+    private String confirmEmail = "/confirm-email";
 
-    private String checkConsumerEmail = "/check-consumer-email";
-    private String checkConsumerPass = "/check-consumer-pass";
-    private String createConsumer = "/create-consumer";
-    private String updateConsumer = "/update-consumer";
-    private String getConsumerData = "/get-consumer-data";
-    private String listOfConsumers = "/list-of-consumers";
-    private String publicConsumer = "/public/consumer";
-    private String reqConfirmConsumerEmail = "/req-confirm-consumer-email";
-    private String confirmConsumerEmail = "/confirm-consumer-email";
+    private String updateUser = "/update-user";
+    private String publicUser = "/public/user";
+    private String listOfUsers = "/list-of-users";
 
-    private String changeConsumerPass = "/change-consumer-pass";
-    private String reqRestoreConsumerPass = "/req-restore-consumer-pass";
-    private String confirmRestoreConsumerPass = "/confirm-restore-consumer-pass";
-    private String restoreConsumerPass = "/restore-consumer-pass";
-
-    public String getSignIn()
-    {
-      return signIn;
-    }
-
-    public void setSignIn(String signIn)
-    {
-      this.signIn = signIn;
-    }
-
-    public String getSignOut()
-    {
-      return signOut;
-    }
-
-    public void setSignOut(String signOut)
-    {
-      this.signOut = signOut;
-    }
-
-    public String getGoogleCaptchaValidate()
-    {
-      return googleCaptchaValidate;
-    }
-
-    public void setGoogleCaptchaValidate(String googleCaptchaValidate)
-    {
-      this.googleCaptchaValidate = googleCaptchaValidate;
-    }
-
-    public String getCheckConsumerEmail()
-    {
-      return checkConsumerEmail;
-    }
-
-    public void setCheckConsumerEmail(String checkConsumerEmail)
-    {
-      this.checkConsumerEmail = checkConsumerEmail;
-    }
-
-    public String getCheckConsumerPass()
-    {
-      return checkConsumerPass;
-    }
-
-    public void setCheckConsumerPass(String checkConsumerPass)
-    {
-      this.checkConsumerPass = checkConsumerPass;
-    }
-
-    public String getCreateConsumer()
-    {
-      return createConsumer;
-    }
-
-    public void setCreateConsumer(String createConsumer)
-    {
-      this.createConsumer = createConsumer;
-    }
-
-    public String getUpdateConsumer()
-    {
-      return updateConsumer;
-    }
-
-    public void setUpdateConsumer(String updateConsumer)
-    {
-      this.updateConsumer = updateConsumer;
-    }
-
-    public String getGetConsumerData()
-    {
-      return getConsumerData;
-    }
-
-    public void setGetConsumerData(String getConsumerData)
-    {
-      this.getConsumerData = getConsumerData;
-    }
-
-    public String getListOfConsumers()
-    {
-      return listOfConsumers;
-    }
-
-    public void setListOfConsumers(String listOfConsumers)
-    {
-      this.listOfConsumers = listOfConsumers;
-    }
-
-    public String getPublicConsumer()
-    {
-      return publicConsumer;
-    }
-
-    public void setPublicConsumer(String publicConsumer)
-    {
-      this.publicConsumer = publicConsumer;
-    }
-
-    public String getReqConfirmConsumerEmail()
-    {
-      return reqConfirmConsumerEmail;
-    }
-
-    public void setReqConfirmConsumerEmail(String reqConfirmConsumerEmail)
-    {
-      this.reqConfirmConsumerEmail = reqConfirmConsumerEmail;
-    }
-
-    public String getConfirmConsumerEmail()
-    {
-      return confirmConsumerEmail;
-    }
-
-    public void setConfirmConsumerEmail(String confirmConsumerEmail)
-    {
-      this.confirmConsumerEmail = confirmConsumerEmail;
-    }
-
-    public String getChangeConsumerPass()
-    {
-      return changeConsumerPass;
-    }
-
-    public void setChangeConsumerPass(String changeConsumerPass)
-    {
-      this.changeConsumerPass = changeConsumerPass;
-    }
-
-    public String getReqRestoreConsumerPass()
-    {
-      return reqRestoreConsumerPass;
-    }
-
-    public void setReqRestoreConsumerPass(String reqRestoreConsumerPass)
-    {
-      this.reqRestoreConsumerPass = reqRestoreConsumerPass;
-    }
-
-    public String getConfirmRestoreConsumerPass()
-    {
-      return confirmRestoreConsumerPass;
-    }
-
-    public void setConfirmRestoreConsumerPass(String confirmRestoreConsumerPass)
-    {
-      this.confirmRestoreConsumerPass = confirmRestoreConsumerPass;
-    }
-
-    public String getRestoreConsumerPass()
-    {
-      return restoreConsumerPass;
-    }
-
-    public void setRestoreConsumerPass(String restoreConsumerPass)
-    {
-      this.restoreConsumerPass = restoreConsumerPass;
-    }
+    private String changePass = "/change-pass";
+    private String reqRestorePass = "/req-restore-pass";
+    private String confirmRestorePass = "/confirm-restore-pass";
+    private String restorePass = "/restore-pass";
   }
 
   public static class GoogleCaptcha
@@ -509,19 +350,19 @@ public class AuthtionConfigProperties implements InitializingBean
             formatMilliseconds(scheduledTaskMailing.timeoutForDuplicateRequest),
             resource.signIn,
             resource.signOut,
-            resource.checkConsumerEmail,
-            resource.checkConsumerPass,
+            resource.checkEmail,
+            resource.checkPass,
             resource.googleCaptchaValidate,
-            resource.createConsumer,
-            resource.updateConsumer,
-            resource.getConsumerData,
-            resource.publicConsumer,
-            resource.listOfConsumers,
-            resource.reqConfirmConsumerEmail,
-            resource.confirmConsumerEmail,
-            resource.changeConsumerPass,
-            resource.reqRestoreConsumerPass,
-            resource.confirmRestoreConsumerPass,
-            resource.restoreConsumerPass);
+            resource.createAccount,
+            resource.updateUser,
+            resource.getAccount,
+            resource.publicUser,
+            resource.listOfUsers,
+            resource.reqConfirmEmail,
+            resource.confirmEmail,
+            resource.changePass,
+            resource.reqRestorePass,
+            resource.confirmRestorePass,
+            resource.restorePass);
   }
 }

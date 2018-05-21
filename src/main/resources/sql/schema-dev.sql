@@ -31,15 +31,15 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS authtion_users;
 SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE authtion_users (
-  consumer   BIGINT(20)                 NOT NULL,
-  nick_name  VARCHAR(20)
-             COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
-  first_name VARCHAR(20)
-             COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
-  last_name  VARCHAR(20)
-             COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
-  KEY authtion_users_consumers_id_fk (consumer),
-  CONSTRAINT authtion_users_consumers_id_fk FOREIGN KEY (consumer) REFERENCES authtion_consumers (id)
+  consumer_id BIGINT(20)                 NOT NULL,
+  nick_name   VARCHAR(20)
+              COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
+  first_name  VARCHAR(20)
+              COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
+  last_name   VARCHAR(20)
+              COLLATE utf8mb4_unicode_ci NOT NULL   DEFAULT '',
+  KEY authtion_users_consumers_id_fk (consumer_id),
+  CONSTRAINT authtion_users_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)
     ON DELETE CASCADE
 )
   ENGINE = InnoDB
@@ -65,12 +65,12 @@ CREATE TABLE authtion_authorities (
 
 DROP TABLE IF EXISTS authtion_consumer_authority;
 CREATE TABLE authtion_consumer_authority (
-  consumer  BIGINT(20)                 NOT NULL,
-  authority VARCHAR(20)
-            COLLATE utf8mb4_unicode_ci NOT NULL,
-  KEY authtion_consumer_authority_consumers_id_fk (consumer),
+  consumer_id BIGINT(20)                 NOT NULL,
+  authority   VARCHAR(20)
+              COLLATE utf8mb4_unicode_ci NOT NULL,
+  KEY authtion_consumer_authority_consumers_id_fk (consumer_id),
   KEY authtion_consumer_authority_authorities_authority_fk (authority),
-  CONSTRAINT authtion_consumer_authority_consumers_id_fk FOREIGN KEY (consumer) REFERENCES authtion_consumers (id)
+  CONSTRAINT authtion_consumer_authority_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)
     ON DELETE CASCADE,
   CONSTRAINT authtion_consumer_authority_authorities_authority_fk FOREIGN KEY (authority) REFERENCES authtion_authorities (authority)
     ON DELETE CASCADE
@@ -99,7 +99,6 @@ CREATE TABLE authtion_mailing (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
-
 
 -- To persist tokens between server restarts I need:
 -- 1) to configure a persistent token store (JdbcTokenStore for example, see config/TokenStoreConfig.java)

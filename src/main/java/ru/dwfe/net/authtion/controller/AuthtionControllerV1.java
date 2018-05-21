@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ru.dwfe.net.authtion.dao.AuthtionConsumer;
 import ru.dwfe.net.authtion.dao.AuthtionMailing;
+import ru.dwfe.net.authtion.dao.AuthtionUser;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 import ru.dwfe.net.authtion.service.AuthtionConsumerService;
 import ru.dwfe.net.authtion.util.AuthtionUtil;
@@ -44,7 +45,7 @@ public class AuthtionControllerV1
     this.authtionUtil = authtionUtil;
   }
 
-  @PostMapping("#{authtionConfigProperties.resource.checkConsumerEmail}")
+  @PostMapping("#{authtionConfigProperties.resource.checkEmail}")
   public String checkConsumerEmail(@RequestBody String body)
   {
     List<String> errorCodes = new ArrayList<>();
@@ -55,7 +56,7 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping("#{authtionConfigProperties.resource.checkConsumerPass}")
+  @PostMapping("#{authtionConfigProperties.resource.checkPass}")
   public String checkConsumerPass(@RequestBody String body)
   {
     List<String> errorCodes = new ArrayList<>();
@@ -102,10 +103,13 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping("#{authtionConfigProperties.resource.createConsumer}")
-  public String createConsumer(@RequestBody AuthtionConsumer consumer)
+  @PostMapping("#{authtionConfigProperties.resource.createAccount}")
+  public String createAccount(@RequestBody ReqCreateAccount reqCreateAccount)
   {
     List<String> errorCodes = new ArrayList<>();
+
+    AuthtionConsumer consumer = reqCreateAccount.consumer;
+    AuthtionUser user = reqCreateAccount.user;
 
     String password = consumer.getPassword();
     String automaticallyGeneratedPassword = "";
@@ -141,54 +145,54 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping("#{authtionConfigProperties.resource.updateConsumer}")
+  @PostMapping("#{authtionConfigProperties.resource.updateUser}")
   @PreAuthorize("hasAuthority('USER')")
   public String updateConsumer(@RequestBody String body, OAuth2Authentication authentication)
   {
     List<String> errorCodes = new ArrayList<>();
     Map<String, Object> map = parse(body);
 
-    if (map.size() > 0)
-    {
-      AuthtionConsumer consumerOAuth2 = (AuthtionConsumer) authentication.getPrincipal();
-
-      String nickName = getValue(map, "nickName");
-      String firstName = getValue(map, "firstName");
-      String lastName = getValue(map, "lastName");
-
-      boolean isNickName = nickName != null;
-      boolean isFirstName = firstName != null;
-      boolean isLastName = lastName != null;
-
-      if (isNickName || isFirstName || isLastName)
-      {
-        boolean wasModified = false;
-        AuthtionConsumer consumer = consumerService.findByEmail(consumerOAuth2.getEmail()).get();
-
-        if (isNickName && !nickName.equals(consumer.getNickName()))
-        {
-          consumer.setNickName(nickName);
-          wasModified = true;
-        }
-        if (isFirstName && !firstName.equals(consumer.getFirstName()))
-        {
-          consumer.setFirstName(firstName);
-          wasModified = true;
-        }
-        if (isLastName && !lastName.equals(consumer.getLastName()))
-        {
-          consumer.setLastName(lastName);
-          wasModified = true;
-        }
-
-        if (wasModified)
-          consumerService.save(consumer);
-      }
-    }
+//    if (map.size() > 0)
+//    {
+//      AuthtionConsumer consumerOAuth2 = (AuthtionConsumer) authentication.getPrincipal();
+//
+//      String nickName = getValue(map, "nickName");
+//      String firstName = getValue(map, "firstName");
+//      String lastName = getValue(map, "lastName");
+//
+//      boolean isNickName = nickName != null;
+//      boolean isFirstName = firstName != null;
+//      boolean isLastName = lastName != null;
+//
+//      if (isNickName || isFirstName || isLastName)
+//      {
+//        boolean wasModified = false;
+//        AuthtionConsumer consumer = consumerService.findByEmail(consumerOAuth2.getEmail()).get();
+//
+//        if (isNickName && !nickName.equals(consumer.getNickName()))
+//        {
+//          consumer.setNickName(nickName);
+//          wasModified = true;
+//        }
+//        if (isFirstName && !firstName.equals(consumer.getFirstName()))
+//        {
+//          consumer.setFirstName(firstName);
+//          wasModified = true;
+//        }
+//        if (isLastName && !lastName.equals(consumer.getLastName()))
+//        {
+//          consumer.setLastName(lastName);
+//          wasModified = true;
+//        }
+//
+//        if (wasModified)
+//          consumerService.save(consumer);
+//      }
+//    }
     return getResponse(errorCodes);
   }
 
-  @GetMapping("#{authtionConfigProperties.resource.getConsumerData}")
+  @GetMapping("#{authtionConfigProperties.resource.getAccount}")
   @PreAuthorize("hasAuthority('USER')")
   public String getConsumerData(OAuth2Authentication authentication)
   {
@@ -203,14 +207,14 @@ public class AuthtionControllerV1
     List<String> errorCodes = new ArrayList<>();
     Map<String, Object> data = new HashMap<>();
 
-    Optional<AuthtionConsumer> consumerById = consumerService.findById(id);
-    if (consumerById.isPresent())
-    {
-      AuthtionConsumer consumer = consumerById.get();
-      data.put("id", consumer.getId());
-      data.put("nickName", consumer.getNickName());
-    }
-    else errorCodes.add("id-not-exist");
+//    Optional<AuthtionConsumer> consumerById = consumerService.findById(id);
+//    if (consumerById.isPresent())
+//    {
+//      AuthtionConsumer consumer = consumerById.get();
+//      data.put("id", consumer.getId());
+//      data.put("nickName", consumer.getNickName());
+//    }
+//    else errorCodes.add("id-not-exist");
 
     return getResponse(errorCodes, data);
   }
@@ -402,3 +406,29 @@ public class AuthtionControllerV1
   }
 }
 
+
+class ReqCreateAccount
+{
+  AuthtionConsumer consumer;
+  AuthtionUser user;
+
+  public AuthtionConsumer getConsumer()
+  {
+    return consumer;
+  }
+
+  public void setConsumer(AuthtionConsumer consumer)
+  {
+    this.consumer = consumer;
+  }
+
+  public AuthtionUser getUser()
+  {
+    return user;
+  }
+
+  public void setUser(AuthtionUser user)
+  {
+    this.user = user;
+  }
+}

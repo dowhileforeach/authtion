@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import static ru.dwfe.net.authtion.util.AuthtionUtil.isDefaultCheckOK;
+import static ru.dwfe.net.authtion.util.AuthtionUtil.prepareStringField;
 
 @Entity
 @Table(name = "authtion_consumers")
@@ -36,13 +37,9 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "authtion_consumer_authority",
-          joinColumns = @JoinColumn(name = "consumer", referencedColumnName = "id"),
+          joinColumns = @JoinColumn(name = "consumer_id", referencedColumnName = "id"),
           inverseJoinColumns = @JoinColumn(name = "authority", referencedColumnName = "authority"))
   private Set<AuthtionAuthority> authorities;
-
-  private String nickName;
-  private String firstName;
-  private String lastName;
 
   private boolean accountNonExpired;
   private boolean credentialsNonExpired;
@@ -160,36 +157,6 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     this.authorities = authorities;
   }
 
-  public String getNickName()
-  {
-    return nickName;
-  }
-
-  public void setNickName(String nickName)
-  {
-    this.nickName = nickName;
-  }
-
-  public String getFirstName()
-  {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName)
-  {
-    this.firstName = firstName;
-  }
-
-  public String getLastName()
-  {
-    return lastName;
-  }
-
-  public void setLastName(String lastName)
-  {
-    this.lastName = lastName;
-  }
-
   public void setAccountNonExpired(boolean accountNonExpired)
   {
     this.accountNonExpired = accountNonExpired;
@@ -260,9 +227,6 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
             " \"email\": \"" + email + "\",\n" +
             " \"password\": \"****\",\n" +
             " \"authorities\": " + authorities + ",\n" +
-            " \"nickName\": \"" + nickName + "\",\n" +
-            " \"firstName\": \"" + firstName + "\",\n" +
-            " \"lastName\": \"" + lastName + "\",\n" +
             " \"accountNonExpired\": " + accountNonExpired + ",\n" +
             " \"credentialsNonExpired\": " + credentialsNonExpired + ",\n" +
             " \"accountNonLocked\": " + accountNonLocked + ",\n" +
@@ -359,34 +323,6 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     consumer.setEmailConfirmed(false);
 
     consumer.setAuthorities(Set.of(AuthtionAuthority.of("USER")));
-
-
-    consumer.setFirstName(prepareStringField(consumer.getFirstName(), 20));
-    consumer.setLastName(prepareStringField(consumer.getLastName(), 20));
-
-    String nickName = consumer.getNickName();
-    if (nickName == null)
-      nickName = getNickNameFromEmail(consumer.getEmail());
-    consumer.setNickName(prepareStringField(nickName, 20));
-  }
-
-  public static String prepareStringField(String field, int maxLength)
-  {
-    String result;
-
-    if (field == null)
-      result = "";
-    else if (field.length() > maxLength)
-      result = field.substring(0, maxLength - 1);
-    else
-      result = field;
-
-    return result;
-  }
-
-  public static String getNickNameFromEmail(String email)
-  {
-    return email.substring(0, email.indexOf('@'));
   }
 
   // http://emailregex.com/

@@ -35,6 +35,25 @@ public class AuthtionUtil
     this.authtionConfigProperties = authtionConfigProperties;
   }
 
+  public static String prepareStringField(String field, int maxLength)
+  {
+    String result;
+
+    if (field == null)
+      result = "";
+    else if (field.length() > maxLength)
+      result = field.substring(0, maxLength - 1);
+    else
+      result = field;
+
+    return result;
+  }
+
+  public static String getNickNameFromEmail(String email)
+  {
+    return email.substring(0, email.indexOf('@'));
+  }
+
   public static Map<String, Object> parse(String body)
   {
     return JsonParserFactory.getJsonParser().parseMap(body);
