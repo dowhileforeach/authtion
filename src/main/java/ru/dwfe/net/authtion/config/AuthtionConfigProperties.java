@@ -66,6 +66,156 @@ public class AuthtionConfigProperties implements InitializingBean
     private String reqRestorePass = "/req-restore-pass";
     private String confirmRestorePass = "/confirm-restore-pass";
     private String restorePass = "/restore-pass";
+
+    public String getSignIn()
+    {
+      return signIn;
+    }
+
+    public void setSignIn(String signIn)
+    {
+      this.signIn = signIn;
+    }
+
+    public String getSignOut()
+    {
+      return signOut;
+    }
+
+    public void setSignOut(String signOut)
+    {
+      this.signOut = signOut;
+    }
+
+    public String getCheckEmail()
+    {
+      return checkEmail;
+    }
+
+    public void setCheckEmail(String checkEmail)
+    {
+      this.checkEmail = checkEmail;
+    }
+
+    public String getCheckPass()
+    {
+      return checkPass;
+    }
+
+    public void setCheckPass(String checkPass)
+    {
+      this.checkPass = checkPass;
+    }
+
+    public String getGoogleCaptchaValidate()
+    {
+      return googleCaptchaValidate;
+    }
+
+    public void setGoogleCaptchaValidate(String googleCaptchaValidate)
+    {
+      this.googleCaptchaValidate = googleCaptchaValidate;
+    }
+
+    public String getCreateAccount()
+    {
+      return createAccount;
+    }
+
+    public void setCreateAccount(String createAccount)
+    {
+      this.createAccount = createAccount;
+    }
+
+    public String getGetAccount()
+    {
+      return getAccount;
+    }
+
+    public void setGetAccount(String getAccount)
+    {
+      this.getAccount = getAccount;
+    }
+
+    public String getUpdateAccount()
+    {
+      return updateAccount;
+    }
+
+    public void setUpdateAccount(String updateAccount)
+    {
+      this.updateAccount = updateAccount;
+    }
+
+    public String getPublicAccount()
+    {
+      return publicAccount;
+    }
+
+    public void setPublicAccount(String publicAccount)
+    {
+      this.publicAccount = publicAccount;
+    }
+
+    public String getReqConfirmEmail()
+    {
+      return reqConfirmEmail;
+    }
+
+    public void setReqConfirmEmail(String reqConfirmEmail)
+    {
+      this.reqConfirmEmail = reqConfirmEmail;
+    }
+
+    public String getConfirmEmail()
+    {
+      return confirmEmail;
+    }
+
+    public void setConfirmEmail(String confirmEmail)
+    {
+      this.confirmEmail = confirmEmail;
+    }
+
+    public String getChangePass()
+    {
+      return changePass;
+    }
+
+    public void setChangePass(String changePass)
+    {
+      this.changePass = changePass;
+    }
+
+    public String getReqRestorePass()
+    {
+      return reqRestorePass;
+    }
+
+    public void setReqRestorePass(String reqRestorePass)
+    {
+      this.reqRestorePass = reqRestorePass;
+    }
+
+    public String getConfirmRestorePass()
+    {
+      return confirmRestorePass;
+    }
+
+    public void setConfirmRestorePass(String confirmRestorePass)
+    {
+      this.confirmRestorePass = confirmRestorePass;
+    }
+
+    public String getRestorePass()
+    {
+      return restorePass;
+    }
+
+    public void setRestorePass(String restorePass)
+    {
+      this.restorePass = restorePass;
+    }
   }
 
   public static class GoogleCaptcha

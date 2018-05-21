@@ -54,6 +54,7 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
 
   private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
+
   //
   //  IMPLEMENTATION of interfaces
   //

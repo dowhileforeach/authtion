@@ -21,7 +21,6 @@ import ru.dwfe.net.authtion.util.AuthtionUtil;
 import java.util.*;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static ru.dwfe.net.authtion.dao.AuthtionConsumer.*;
 import static ru.dwfe.net.authtion.dao.AuthtionUser.prepareNewUser;
@@ -108,6 +107,7 @@ public class AuthtionControllerV1
   public String createAccount(@RequestBody ReqCreateAccount req)
   {
     List<String> errorCodes = new ArrayList<>();
+    String data = "";
 
     AuthtionConsumer consumer = req.consumer;
     AuthtionUser user = req.user;
@@ -129,19 +129,23 @@ public class AuthtionControllerV1
       setNewPassword(consumer, password);
       prepareNewConsumer(consumer);
       consumer.setEmailConfirmed(!automaticallyGeneratedPassword.isEmpty());
-      consumer = consumerService.save(consumer);
+      consumerService.save(consumer);
+      consumer = consumerService.findByEmail(consumer.getEmail()).get();
 
       prepareNewUser(user, consumer);
       userRepository.save(user);
+      user = userRepository.findById(consumer.getId()).get();
 
-      AuthtionMailing mailing;
-      if (automaticallyGeneratedPassword.isEmpty())
-        mailing = AuthtionMailing.of(1, consumer.getEmail());
-      else // if the password was not passed, then it is necessary to send an automatically generated password
-        mailing = AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword);
-      mailingRepository.save(mailing);
+      mailingRepository.save(automaticallyGeneratedPassword.isEmpty()
+              ? AuthtionMailing.of(1, consumer.getEmail())
+              : AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
+
+      data = "{" +
+              "\"consumer\": " + consumer.toStringWithPublicCheck(false) + ", " +
+              "\"user\": " + user.toStringWithPublicCheck(false) +
+              "}";
     }
-    return getResponse(errorCodes);
+    return getResponse(errorCodes, data);
   }
 
   @GetMapping("#{authtionConfigProperties.resource.getAccount}")
@@ -151,6 +155,71 @@ public class AuthtionControllerV1
     List<String> errorCodes = new ArrayList<>();
     Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
     return getResponse(errorCodes, consumerService.findById(id).get().toString());
+  }
+
+  @PostMapping("#{authtionConfigProperties.resource.updateAccount}")
+  @PreAuthorize("hasAuthority('USER')")
+  public String updateAccount(@RequestBody String body, OAuth2Authentication authentication)
+  {
+    List<String> errorCodes = new ArrayList<>();
+    Map<String, Object> map = parse(body);
+
+//    if (map.size() > 0)
+//    {
+//      AuthtionConsumer consumerOAuth2 = (AuthtionConsumer) authentication.getPrincipal();
+//
+//      String nickName = getValue(map, "nickName");
+//      String firstName = getValue(map, "firstName");
+//      String lastName = getValue(map, "lastName");
+//
+//      boolean isNickName = nickName != null;
+//      boolean isFirstName = firstName != null;
+//      boolean isLastName = lastName != null;
+//
+//      if (isNickName || isFirstName || isLastName)
+//      {
+//        boolean wasModified = false;
+//        AuthtionConsumer consumer = consumerService.findByEmail(consumerOAuth2.getEmail()).get();
+//
+//        if (isNickName && !nickName.equals(consumer.getNickName()))
+//        {
+//          consumer.setNickName(nickName);
+//          wasModified = true;
+//        }
+//        if (isFirstName && !firstName.equals(consumer.getFirstName()))
+//        {
+//          consumer.setFirstName(firstName);
+//          wasModified = true;
+//        }
+//        if (isLastName && !lastName.equals(consumer.getLastName()))
+//        {
+//          consumer.setLastName(lastName);
+//          wasModified = true;
+//        }
+//
+//        if (wasModified)
+//          consumerService.save(consumer);
+//      }
+//    }
+    return getResponse(errorCodes);
+  }
+
+  @GetMapping("#{authtionConfigProperties.resource.publicAccount}" + "/{id}")
+  public String publicAccount(@PathVariable Long id)
+  {
+    List<String> errorCodes = new ArrayList<>();
+    Map<String, Object> data = new HashMap<>();
+
+//    Optional<AuthtionConsumer> consumerById = consumerService.findById(id);
+//    if (consumerById.isPresent())
+//    {
+//      AuthtionConsumer consumer = consumerById.get();
+//      data.put("id", consumer.getId());
+//      data.put("nickName", consumer.getNickName());
+//    }
+//    else errorCodes.add("id-not-exist");
+
+    return getResponse(errorCodes, data);
   }
 
   @GetMapping("#{authtionConfigProperties.resource.reqConfirmEmail}")
@@ -200,85 +269,6 @@ public class AuthtionControllerV1
       else errorCodes.add(fieldName + "-not-exist");
     }
     return getResponse(errorCodes);
-  }
-
-  @PostMapping("#{authtionConfigProperties.resource.updateUser}")
-  @PreAuthorize("hasAuthority('USER')")
-  public String updateUser(@RequestBody String body, OAuth2Authentication authentication)
-  {
-    List<String> errorCodes = new ArrayList<>();
-    Map<String, Object> map = parse(body);
-
-//    if (map.size() > 0)
-//    {
-//      AuthtionConsumer consumerOAuth2 = (AuthtionConsumer) authentication.getPrincipal();
-//
-//      String nickName = getValue(map, "nickName");
-//      String firstName = getValue(map, "firstName");
-//      String lastName = getValue(map, "lastName");
-//
-//      boolean isNickName = nickName != null;
-//      boolean isFirstName = firstName != null;
-//      boolean isLastName = lastName != null;
-//
-//      if (isNickName || isFirstName || isLastName)
-//      {
-//        boolean wasModified = false;
-//        AuthtionConsumer consumer = consumerService.findByEmail(consumerOAuth2.getEmail()).get();
-//
-//        if (isNickName && !nickName.equals(consumer.getNickName()))
-//        {
-//          consumer.setNickName(nickName);
-//          wasModified = true;
-//        }
-//        if (isFirstName && !firstName.equals(consumer.getFirstName()))
-//        {
-//          consumer.setFirstName(firstName);
-//          wasModified = true;
-//        }
-//        if (isLastName && !lastName.equals(consumer.getLastName()))
-//        {
-//          consumer.setLastName(lastName);
-//          wasModified = true;
-//        }
-//
-//        if (wasModified)
-//          consumerService.save(consumer);
-//      }
-//    }
-    return getResponse(errorCodes);
-  }
-
-  @GetMapping("#{authtionConfigProperties.resource.publicUser}" + "/{id}")
-  public String publicUser(@PathVariable Long id)
-  {
-    List<String> errorCodes = new ArrayList<>();
-    Map<String, Object> data = new HashMap<>();
-
-//    Optional<AuthtionConsumer> consumerById = consumerService.findById(id);
-//    if (consumerById.isPresent())
-//    {
-//      AuthtionConsumer consumer = consumerById.get();
-//      data.put("id", consumer.getId());
-//      data.put("nickName", consumer.getNickName());
-//    }
-//    else errorCodes.add("id-not-exist");
-
-    return getResponse(errorCodes, data);
-  }
-
-
-  @GetMapping("#{authtionConfigProperties.resource.listOfUsers}")
-  @PreAuthorize("hasAuthority('ADMIN')")
-  public String listOfUsers()
-  {
-    List<String> errorCodes = new ArrayList<>();
-
-    String jsonListOfUsers = consumerService.findAll().stream()
-            .map(AuthtionConsumer::toString)
-            .collect(Collectors.joining(","));
-
-    return getResponse(errorCodes, "[" + jsonListOfUsers + "]");
   }
 
 
@@ -397,6 +387,7 @@ public class AuthtionControllerV1
     }
     return getResponse(errorCodes);
   }
+
 
   @GetMapping("#{authtionConfigProperties.resource.signOut}")
   @PreAuthorize("hasAuthority('USER')")

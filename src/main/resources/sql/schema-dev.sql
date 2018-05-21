@@ -28,11 +28,14 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS authtion_users;
 SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE authtion_users (
-  consumer_id BIGINT(20)                           NOT NULL,
-  nick_name   VARCHAR(20)                          NOT NULL   DEFAULT '',
-  first_name  VARCHAR(20)                          NOT NULL   DEFAULT '',
-  last_name   VARCHAR(20)                          NOT NULL   DEFAULT '',
-  updated_on  DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP,
+  consumer_id          BIGINT(20)                           NOT NULL,
+  nick_name            VARCHAR(20)                          NOT NULL   DEFAULT '',
+  nick_name_is_public  TINYINT(1)                           NOT NULL   DEFAULT '0',
+  first_name           VARCHAR(20)                          NOT NULL   DEFAULT '',
+  first_name_is_public TINYINT(1)                           NOT NULL   DEFAULT '0',
+  last_name            VARCHAR(20)                          NOT NULL   DEFAULT '',
+  last_name_is_public  TINYINT(1)                           NOT NULL   DEFAULT '0',
+  updated_on           DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP,
   KEY authtion_users_consumers_id_fk (consumer_id),
   CONSTRAINT authtion_users_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)
     ON DELETE CASCADE
