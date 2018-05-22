@@ -4,16 +4,17 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS authtion_consumers;
 SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE authtion_consumers (
-  id                      BIGINT(20)                          NOT NULL   AUTO_INCREMENT,
-  email                   VARCHAR(50)                         NOT NULL,
-  email_is_public         TINYINT(1)                          NOT NULL   DEFAULT '0',
-  email_confirmed         TINYINT(1)                          NOT NULL   DEFAULT '0',
-  password                VARCHAR(100)                        NOT NULL,
-  account_non_expired     TINYINT(1)                          NOT NULL   DEFAULT '1',
-  credentials_non_expired TINYINT(1)                          NOT NULL   DEFAULT '1',
-  account_non_locked      TINYINT(1)                          NOT NULL   DEFAULT '1',
-  enabled                 TINYINT(1)                          NOT NULL   DEFAULT '1',
-  created_on              DATETIME DEFAULT CURRENT_TIMESTAMP  NOT NULL,
+  id                      BIGINT(20)                           NOT NULL   AUTO_INCREMENT,
+  email                   VARCHAR(50)                          NOT NULL,
+  email_confirmed         TINYINT(1)                           NOT NULL   DEFAULT '0',
+  email_non_public        TINYINT(1)                           NOT NULL   DEFAULT '1',
+  password                VARCHAR(100)                         NOT NULL,
+  account_non_expired     TINYINT(1)                           NOT NULL   DEFAULT '1',
+  credentials_non_expired TINYINT(1)                           NOT NULL   DEFAULT '1',
+  account_non_locked      TINYINT(1)                           NOT NULL   DEFAULT '1',
+  enabled                 TINYINT(1)                           NOT NULL   DEFAULT '1',
+  created_on              DATETIME                             NOT NULL   DEFAULT CURRENT_TIMESTAMP,
+  updated_on              DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY authtion_consumers_id_uindex (id),
   UNIQUE KEY authtion_consumers_email_uindex (email)
@@ -28,14 +29,16 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS authtion_users;
 SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE authtion_users (
-  consumer_id          BIGINT(20)                           NOT NULL,
-  nick_name            VARCHAR(20)                          NOT NULL   DEFAULT '',
-  nick_name_is_public  TINYINT(1)                           NOT NULL   DEFAULT '0',
-  first_name           VARCHAR(20)                          NOT NULL   DEFAULT '',
-  first_name_is_public TINYINT(1)                           NOT NULL   DEFAULT '0',
-  last_name            VARCHAR(20)                          NOT NULL   DEFAULT '',
-  last_name_is_public  TINYINT(1)                           NOT NULL   DEFAULT '0',
-  updated_on           DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP,
+  consumer_id            BIGINT(20)                           NOT NULL,
+  nick_name              VARCHAR(20)                          NOT NULL   DEFAULT '',
+  nick_name_non_public   TINYINT(1)                           NOT NULL   DEFAULT '1',
+  first_name             VARCHAR(20)                          NOT NULL   DEFAULT '',
+  first_name_non_public  TINYINT(1)                           NOT NULL   DEFAULT '1',
+  middle_name            VARCHAR(20)                          NOT NULL   DEFAULT '',
+  middle_name_non_public TINYINT(1)                           NOT NULL   DEFAULT '1',
+  last_name              VARCHAR(20)                          NOT NULL   DEFAULT '',
+  last_name_non_public   TINYINT(1)                           NOT NULL   DEFAULT '1',
+  updated_on             DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP,
   KEY authtion_users_consumers_id_fk (consumer_id),
   CONSTRAINT authtion_users_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)
     ON DELETE CASCADE

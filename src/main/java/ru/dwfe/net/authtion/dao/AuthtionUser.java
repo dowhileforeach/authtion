@@ -5,10 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
-import static ru.dwfe.net.authtion.util.AuthtionUtil.*;
+import static ru.dwfe.net.authtion.util.AuthtionUtil.getNickNameFromEmail;
+import static ru.dwfe.net.authtion.util.AuthtionUtil.prepareStringField;
 
 @Entity
 @Table(name = "authtion_users")
@@ -19,11 +18,13 @@ public class AuthtionUser
 
   private String nickName;
   private String firstName;
+  private String middleName;
   private String lastName;
 
-  private boolean nickNameIsPublic;
-  private boolean firstNameIsPublic;
-  private boolean lastNameIsPublic;
+  private boolean nickNameNonPublic;
+  private boolean firstNameNonPublic;
+  private boolean middleNameNonPublic;
+  private boolean lastNameNonPublic;
 
   @Column(updatable = false, insertable = false)
   private LocalDateTime updatedOn;
@@ -63,6 +64,16 @@ public class AuthtionUser
     this.firstName = firstName;
   }
 
+  public String getMiddleName()
+  {
+    return middleName;
+  }
+
+  public void setMiddleName(String middleName)
+  {
+    this.middleName = middleName;
+  }
+
   public String getLastName()
   {
     return lastName;
@@ -73,34 +84,44 @@ public class AuthtionUser
     this.lastName = lastName;
   }
 
-  public boolean isNickNameIsPublic()
+  public boolean isNickNameNonPublic()
   {
-    return nickNameIsPublic;
+    return nickNameNonPublic;
   }
 
-  public void setNickNameIsPublic(boolean nickNameIsPublic)
+  public void setNickNameNonPublic(boolean nickNameNonPublic)
   {
-    this.nickNameIsPublic = nickNameIsPublic;
+    this.nickNameNonPublic = nickNameNonPublic;
   }
 
-  public boolean isFirstNameIsPublic()
+  public boolean isFirstNameNonPublic()
   {
-    return firstNameIsPublic;
+    return firstNameNonPublic;
   }
 
-  public void setFirstNameIsPublic(boolean firstNameIsPublic)
+  public void setFirstNameNonPublic(boolean firstNameNonPublic)
   {
-    this.firstNameIsPublic = firstNameIsPublic;
+    this.firstNameNonPublic = firstNameNonPublic;
   }
 
-  public boolean isLastNameIsPublic()
+  public boolean isMiddleNameNonPublic()
   {
-    return lastNameIsPublic;
+    return middleNameNonPublic;
   }
 
-  public void setLastNameIsPublic(boolean lastNameIsPublic)
+  public void setMiddleNameNonPublic(boolean middleNameNonPublic)
   {
-    this.lastNameIsPublic = lastNameIsPublic;
+    this.middleNameNonPublic = middleNameNonPublic;
+  }
+
+  public boolean isLastNameNonPublic()
+  {
+    return lastNameNonPublic;
+  }
+
+  public void setLastNameNonPublic(boolean lastNameNonPublic)
+  {
+    this.lastNameNonPublic = lastNameNonPublic;
   }
 
   public LocalDateTime getUpdatedOn()
@@ -110,7 +131,7 @@ public class AuthtionUser
 
 
   //
-  //  equals, hashCode, toString
+  //  equals, hashCode
   //
 
   @Override
@@ -130,36 +151,10 @@ public class AuthtionUser
     return consumerId.hashCode();
   }
 
-  @Override
-  public String toString()
-  {
-    return toStringWithPublicCheck(true);
-  }
 
-  public String toStringWithPublicCheck(boolean onPublic)
-  {
-    ArrayList<String> list = new ArrayList<>();
-
-    list.add("\"id\": " + consumerId);
-
-    if (onPublic)
-    {
-      if (nickNameIsPublic)
-        list.add("\"nickName\": \"" + nickName + "\"");
-      if (firstNameIsPublic)
-        list.add("\"firstName\": \"" + firstName + "\"");
-      if (lastNameIsPublic)
-        list.add(" \"lastName\": \"" + lastName + "\"");
-    }
-    else
-    {
-      list.add(getDBvalueToStringWithIsPublicInfo("nickName", nickName, nickNameIsPublic));
-      list.add(getDBvalueToStringWithIsPublicInfo("firstName", firstName, firstNameIsPublic));
-      list.add(getDBvalueToStringWithIsPublicInfo("lastName", lastName, lastNameIsPublic));
-      list.add("\"updatedOn\": " + "\"" + formatDateTime(updatedOn) + "\"");
-    }
-    return "{" + list.stream().collect(Collectors.joining(",")) + "}";
-  }
+  //
+  //  UTILs
+  //
 
   public static void prepareNewUser(AuthtionUser user, AuthtionConsumer consumer)
   {
@@ -171,6 +166,12 @@ public class AuthtionUser
     user.setNickName(prepareStringField(nickName, 20));
 
     user.setFirstName(prepareStringField(user.getFirstName(), 20));
+    user.setMiddleName(prepareStringField(user.getMiddleName(), 20));
     user.setLastName(prepareStringField(user.getLastName(), 20));
+
+    user.setNickNameNonPublic(true);
+    user.setFirstNameNonPublic(true);
+    user.setMiddleNameNonPublic(true);
+    user.setLastNameNonPublic(true);
   }
 }

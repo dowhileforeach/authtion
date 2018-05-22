@@ -109,13 +109,10 @@ public class AuthtionControllerV1
     List<String> errorCodes = new ArrayList<>();
     String data = "";
 
-    AuthtionConsumer consumer = req.consumer;
-    AuthtionUser user = req.user;
-
-    String password = consumer.getPassword();
+    String password = req.password;
     String automaticallyGeneratedPassword = "";
 
-    if (canUseEmail(consumer.getEmail(), consumerService, errorCodes))
+    if (canUseEmail(req.email, consumerService, errorCodes))
       if (password == null)
       { // if password wasn't passed
         automaticallyGeneratedPassword = getUniqStrBase64(15);
@@ -126,12 +123,18 @@ public class AuthtionControllerV1
 
     if (errorCodes.size() == 0)
     {
-      setNewPassword(consumer, password);
-      prepareNewConsumer(consumer);
+      AuthtionConsumer consumer = new AuthtionConsumer();
+      consumer.setEmail(req.email);
       consumer.setEmailConfirmed(!automaticallyGeneratedPassword.isEmpty());
+      consumer.setNewPassword(password);
+      prepareNewConsumer(consumer);
       consumerService.save(consumer);
       consumer = consumerService.findByEmail(consumer.getEmail()).get();
 
+      AuthtionUser user = new AuthtionUser();
+      user.setNickName(req.nickName);
+      user.setFirstName(req.firstName);
+      user.setLastName(req.lastName);
       prepareNewUser(user, consumer);
       userRepository.save(user);
       user = userRepository.findById(consumer.getId()).get();
@@ -140,7 +143,7 @@ public class AuthtionControllerV1
               ? AuthtionMailing.of(1, consumer.getEmail())
               : AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
 
-      data = getAccountDataToStringWithPublicInfo(consumer, user, false);
+      data = prepareAccountInfo(consumer, user);
     }
     return getResponse(errorCodes, data);
   }
@@ -154,7 +157,7 @@ public class AuthtionControllerV1
 
     AuthtionConsumer consumer = consumerService.findById(id).get();
     AuthtionUser user = userRepository.findById(id).get();
-    String data = getAccountDataToStringWithPublicInfo(consumer, user, false);
+    String data = prepareAccountInfo(consumer, user);
 
     return getResponse(errorCodes, data);
   }
@@ -217,7 +220,7 @@ public class AuthtionControllerV1
     {
       AuthtionConsumer consumer = consumerById.get();
       AuthtionUser user = userRepository.findById(id).get();
-      data = getAccountDataToStringWithPublicInfo(consumer, user, true);
+      data = prepareAccountInfo(consumer, user);
     }
     else errorCodes.add("id-not-exist");
 
@@ -298,7 +301,7 @@ public class AuthtionControllerV1
       AuthtionConsumer consumer = consumerService.findById(id).get();
       if (matchPassword(oldpassValue, consumer.getPassword()))
       {
-        setNewPassword(consumer, newpassValue);
+        consumer.setNewPassword(newpassValue);
         consumerService.save(consumer);
 
         mailingRepository.save(AuthtionMailing.of(4, consumer.getEmail()));
@@ -379,7 +382,7 @@ public class AuthtionControllerV1
 
         // the AuthtionConsumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
         AuthtionConsumer consumer = consumerService.findByEmail(emailValue).get();
-        setNewPassword(consumer, newpassValue);
+        consumer.setNewPassword(newpassValue);
         consumerService.save(consumer);
 
         confirm.clear();
@@ -456,26 +459,60 @@ class ReqGoogleCaptchaValidate
 
 class ReqCreateAccount
 {
-  AuthtionConsumer consumer;
-  AuthtionUser user;
+  String email;
+  String password;
 
-  public AuthtionConsumer getConsumer()
+  String nickName;
+  String firstName;
+  String lastName;
+
+  public String getEmail()
   {
-    return consumer;
+    return email;
   }
 
-  public void setConsumer(AuthtionConsumer consumer)
+  public void setEmail(String email)
   {
-    this.consumer = consumer;
+    this.email = email;
   }
 
-  public AuthtionUser getUser()
+  public String getPassword()
   {
-    return user;
+    return password;
   }
 
-  public void setUser(AuthtionUser user)
+  public void setPassword(String password)
   {
-    this.user = user;
+    this.password = password;
+  }
+
+  public String getNickName()
+  {
+    return nickName;
+  }
+
+  public void setNickName(String nickName)
+  {
+    this.nickName = nickName;
+  }
+
+  public String getFirstName()
+  {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName)
+  {
+    this.firstName = firstName;
+  }
+
+  public String getLastName()
+  {
+    return lastName;
+  }
+
+  public void setLastName(String lastName)
+  {
+    this.lastName = lastName;
   }
 }

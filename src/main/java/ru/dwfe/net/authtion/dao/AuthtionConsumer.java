@@ -9,18 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.dwfe.net.authtion.service.AuthtionConsumerService;
-import ru.dwfe.net.authtion.util.AuthtionUtil;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-import static ru.dwfe.net.authtion.util.AuthtionUtil.getDBvalueToStringWithIsPublicInfo;
 import static ru.dwfe.net.authtion.util.AuthtionUtil.isDefaultCheckOK;
 
 @Entity
@@ -47,10 +43,13 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
   private boolean enabled;
 
   private boolean emailConfirmed;
-  private boolean emailIsPublic;
+  private boolean emailNonPublic;
 
   @Column(updatable = false, insertable = false)
   private LocalDateTime createdOn;
+
+  @Column(updatable = false, insertable = false)
+  private LocalDateTime updatedOn;
 
   private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
@@ -188,14 +187,14 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     this.emailConfirmed = emailConfirmed;
   }
 
-  public boolean isEmailIsPublic()
+  public boolean isEmailNonPublic()
   {
-    return emailIsPublic;
+    return emailNonPublic;
   }
 
-  public void setEmailIsPublic(boolean emailIsPublic)
+  public void setEmailNonPublic(boolean emailNonPublic)
   {
-    this.emailIsPublic = emailIsPublic;
+    this.emailNonPublic = emailNonPublic;
   }
 
   public LocalDateTime getCreatedOn()
@@ -203,9 +202,13 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     return createdOn;
   }
 
+  public LocalDateTime getUpdatedOn()
+  {
+    return updatedOn;
+  }
 
   //
-  //  equals, hashCode, toString
+  //  equals, hashCode
   //
 
   @Override
@@ -223,37 +226,6 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
   public int hashCode()
   {
     return id.hashCode();
-  }
-
-  @Override
-  public String toString()
-  {
-    return toStringWithPublicCheck(true);
-  }
-
-  public String toStringWithPublicCheck(boolean onPublic)
-  {
-    ArrayList<String> list = new ArrayList<>();
-
-    list.add("\"id\": " + id);
-
-    if (onPublic)
-    {
-      if (emailIsPublic)
-        list.add("\"email\": \"" + email + "\"");
-    }
-    else
-    {
-      list.add(getDBvalueToStringWithIsPublicInfo("email", email, emailIsPublic));
-      list.add("\"emailConfirmed\": " + emailConfirmed);
-      list.add("\"authorities\": " + authorities);
-      list.add("\"accountNonExpired\": " + accountNonExpired);
-      list.add("\"credentialsNonExpired\": " + credentialsNonExpired);
-      list.add("\"accountNonLocked\": " + accountNonLocked);
-      list.add("\"enabled\": " + enabled);
-      list.add("\"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(createdOn) + "\"");
-    }
-    return "{" + list.stream().collect(Collectors.joining(",")) + "}";
   }
 
 
@@ -319,12 +291,12 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     return result;
   }
 
-  public static void setNewPassword(AuthtionConsumer consumer, String password)
+  public void setNewPassword(String password)
   {
     if (isPasswordBcrypted(password))
-      consumer.setPassword("{bcrypt}" + password);
+      setPassword("{bcrypt}" + password);
     else
-      consumer.setPassword("{bcrypt}" + new BCryptPasswordEncoder(10).encode(password));
+      setPassword("{bcrypt}" + new BCryptPasswordEncoder(10).encode(password));
   }
 
   public static boolean matchPassword(String rawPassword, String rawEncodedPassword)
@@ -335,11 +307,11 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
 
   public static void prepareNewConsumer(AuthtionConsumer consumer)
   {
+    consumer.setEmailNonPublic(true);
     consumer.setAccountNonExpired(true);
     consumer.setCredentialsNonExpired(true);
     consumer.setAccountNonLocked(true);
     consumer.setEnabled(true);
-    consumer.setEmailConfirmed(false);
 
     consumer.setAuthorities(Set.of(AuthtionAuthority.of("USER")));
   }

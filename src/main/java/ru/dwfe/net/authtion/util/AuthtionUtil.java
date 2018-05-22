@@ -17,11 +17,9 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Component
 @PropertySource("classpath:application.properties")
@@ -35,6 +33,11 @@ public class AuthtionUtil
   {
     this.mailingRepository = mailingRepository;
     this.authtionConfigProperties = authtionConfigProperties;
+  }
+
+  public static String getNickNameFromEmail(String email)
+  {
+    return email.substring(0, email.indexOf('@'));
   }
 
   public static String prepareStringField(String field, int maxLength)
@@ -51,17 +54,30 @@ public class AuthtionUtil
     return result;
   }
 
-  public static String getDBvalueToStringWithIsPublicInfo(String fieldName, Object value, boolean isPiblic)
+  public static String prepareAccountInfo(AuthtionConsumer consumer, AuthtionUser user)
   {
-    if (value instanceof String)
-      value = "\"" + value + "\"";
-    return "\"" + fieldName + "\": {\"value\": " + value + ", \"isPublic\": " + isPiblic + "}";
+    ArrayList<String> list = new ArrayList<>();
+    LocalDateTime updatedOn = consumer.getUpdatedOn().isBefore(user.getUpdatedOn()) ? consumer.getUpdatedOn() : user.getUpdatedOn();
+
+    list.add("\"id\": " + consumer.getId());
+    list.add("\"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(consumer.getCreatedOn()) + "\"");
+    list.add("\"updatedOn\": " + "\"" + formatDateTime(updatedOn) + "\"");
+    list.add("\"authorities\": " + consumer.getAuthorities());
+    list.add("\"email\": \"" + consumer.getEmail() + "\"");
+    list.add("\"emailConfirmed\": " + consumer.isEmailConfirmed());
+    list.add("\"emailNonPublic\": " + consumer.isEmailNonPublic());
+    list.add("\"nickName\": \"" + user.getNickName() + "\"");
+    list.add("\"nickNameNonPublic\": \"" + user.isNickNameNonPublic() + "\"");
+    list.add("\"firstName\": \"" + user.getFirstName() + "\"");
+    list.add("\"firstNameNonPublic\": \"" + user.isFirstNameNonPublic() + "\"");
+    list.add("\"middleName\": \"" + user.getMiddleName() + "\"");
+    list.add("\"middleNameNonPublic\": \"" + user.isMiddleNameNonPublic() + "\"");
+    list.add("\"lastName\": \"" + user.getLastName() + "\"");
+    list.add("\"lastNameNonPublic\": \"" + user.isLastNameNonPublic() + "\"");
+
+    return "{" + list.stream().collect(Collectors.joining(",")) + "}";
   }
 
-  public static String getNickNameFromEmail(String email)
-  {
-    return email.substring(0, email.indexOf('@'));
-  }
 
   public static Map<String, Object> parse(String body)
   {
@@ -77,6 +93,22 @@ public class AuthtionUtil
   {
     return (String) map.get(key);
   }
+
+  public static String getJSONfromObject(Object value)
+  {
+    String result = "{}";
+    ObjectMapper mapper = new ObjectMapper();
+    try
+    {
+      result = mapper.writeValueAsString(value);
+    }
+    catch (JsonProcessingException e)
+    {
+      e.printStackTrace();
+    }
+    return result;
+  }
+
 
   public static boolean isDefaultCheckOK(String value, String fieldName, List<String> errorCodes)
   {
@@ -99,6 +131,7 @@ public class AuthtionUtil
   {
     return value != null && !value.isEmpty();
   }
+
 
   public static String getResponse(List<String> errorCodes)
   {
@@ -124,14 +157,6 @@ public class AuthtionUtil
       return getResponseWithErrorCodes(errorCodes);
   }
 
-  public static String getAccountDataToStringWithPublicInfo(AuthtionConsumer consumer, AuthtionUser user, boolean isPublic)
-  {
-    return "{" +
-            "\"consumer\": " + consumer.toStringWithPublicCheck(isPublic) + ", " +
-            "\"user\": " + user.toStringWithPublicCheck(isPublic) +
-            "}";
-  }
-
   private static String getResponseSuccessWithData(String data)
   {
     return String.format("{\"success\": true, \"data\": %s}", data);
@@ -142,20 +167,6 @@ public class AuthtionUtil
     return String.format("{\"success\": false, \"error-codes\": %s}", getJSONfromObject(errorCodes));
   }
 
-  public static String getJSONfromObject(Object value)
-  {
-    String result = "{}";
-    ObjectMapper mapper = new ObjectMapper();
-    try
-    {
-      result = mapper.writeValueAsString(value);
-    }
-    catch (JsonProcessingException e)
-    {
-      e.printStackTrace();
-    }
-    return result;
-  }
 
   public static String getUniqStrBase36(int requiredLength)
   {
@@ -184,6 +195,7 @@ public class AuthtionUtil
     return result.replaceAll("[^a-zA-Z0-9]", ""); // becouse oauth2 incorrect work with some symbols, e.g.: "+fAhjktzuw", "6k+xfc6ZRw"
   }
 
+
   public static String formatDateTime(LocalDateTime localDateTime)
   {
     // ISO dates can be written with added hours, minutes, and seconds (YYYY-MM-DDTHH:MM:SSZ):
@@ -211,6 +223,7 @@ public class AuthtionUtil
     );
   }
 
+
   public String getGoogleCaptchaSecretKey()
   {
     return authtionConfigProperties.getGoogleCaptcha().getSecretKey();
@@ -220,6 +233,7 @@ public class AuthtionUtil
   {
     return authtionConfigProperties.getGoogleCaptcha().getSiteVerifyUrl();
   }
+
 
   public boolean isAllowedNewRequestForMailing(int type, String email, List<String> errorCodes)
   {
