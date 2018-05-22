@@ -101,23 +101,23 @@ public class AuthtionFullTest
   }
 
   @Test
-  public void _005_consumer_checkConsumerEmail()
+  public void _005_account_checkEmail()
   {
-    logHead("Check AuthtionConsumer E-mail");
+    logHead("Check Email");
     authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getCheckEmail(), authtionTestConsumer.getAnonymous().access_token, checkers_for_checkConsumerEmail);
   }
 
   @Test
-  public void _006_consumer_checkConsumerPass()
+  public void _006_account_checkPass()
   {
-    logHead("Check AuthtionConsumer Pass");
+    logHead("Check Pass");
     authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getCheckPass(), authtionTestConsumer.getAnonymous().access_token, checkers_for_checkConsumerPass);
   }
 
   @Test
-  public void _007_consumer_createConsumer()
+  public void _007_account_createAccount()
   {
-    logHead("Create AuthtionConsumer");
+    logHead("Create Account");
 
     authtionTestUtil.check_send_data(POST, authtionConfigProperties.getResource().getCreateAccount(), authtionTestConsumer.getAnonymous().access_token, checkers_for_createConsumer());
     //
@@ -202,9 +202,9 @@ public class AuthtionFullTest
   }
 
   @Test
-  public void _008_consumer_updateConsumer()
+  public void _008_account_updateAccount()
   {
-    logHead("AuthtionConsumer Update");
+    logHead("Update Account");
 
     AuthtionTestConsumer USER_consumer = authtionTestConsumer.getUSER();
 
@@ -246,16 +246,16 @@ public class AuthtionFullTest
   }
 
   @Test
-  public void _009_consumer_getConsumerData()
+  public void _009_account_getAccount()
   {
-    logHead("AuthtionConsumer Data");
+    logHead("Get Account");
     authtionTestUtil.check_send_data(GET, authtionConfigProperties.getResource().getGetAccount(), authtionTestConsumer.getUSER().access_token, checkers_for_getConsumerData);
   }
 
   @Test
-  public void _010_consumer_publicConsumer()
+  public void _010_account_publicAccount()
   {
-    logHead("Public AuthtionConsumer");
+    logHead("Public Account");
 
     AuthtionTestConsumer ANY_consumer = authtionTestConsumer.getAnonymous();
     AuthtionTestConsumer USER_consumer = authtionTestConsumer.getUSER();
@@ -271,7 +271,7 @@ public class AuthtionFullTest
   }
 
   @Test
-  public void _011_consumer_requestConfirmConsumerEmail()
+  public void _011_account_reqConfirmEmail()
   {
     logHead("Request Confirm Email");
 
@@ -350,7 +350,7 @@ public class AuthtionFullTest
   }
 
   @Test
-  public void _012_consumer_confirmConsumerEmail()
+  public void _012_account_confirmEmail()
   {
     logHead("Confirm Email");
 
@@ -369,16 +369,18 @@ public class AuthtionFullTest
   }
 
   @Test
-  public void _013_consumer_changeConsumerPass()
+  public void _013_password_changePass()
   {
-    changeConsumerPass(EMAIL_NEW_Consumer, PASS_NEW_Consumer, NEWPASS_NEW_Consumer, checkers_for_changeConsumerPass);
+    logHead("Change Password");
 
-    changeConsumerPass(EMAIL_3_NEW_Consumer, PASS_FOR_EMAIL_3_Consumer_Decoded, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, checkers_for_changeConsumerPass_3);
+    changePass(EMAIL_NEW_Consumer, PASS_NEW_Consumer, NEWPASS_NEW_Consumer, checkers_for_changeConsumerPass);
+
+    changePass(EMAIL_3_NEW_Consumer, PASS_FOR_EMAIL_3_Consumer_Decoded, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, checkers_for_changeConsumerPass_3);
   }
 
-  private void changeConsumerPass(String email, String oldpass, String newpass, List<AuthtionTestChecker> checkers)
+  private void changePass(String email, String oldpass, String newpass, List<AuthtionTestChecker> checkers)
   {
-    logHead("Change AuthtionConsumer Pass = " + email);
+    logHead("Change Password = " + email);
 
     //newpass
     //AuthtionTestConsumer.of(USER, email, newpass, authtionTestClient.getOauth2ClientTrusted(), 400);
@@ -398,23 +400,25 @@ public class AuthtionFullTest
   }
 
   @Test
-  public void _014_consumer_restorePassword()
+  public void _014_password_restorePass()
   {
-    restorePassword(EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, PASS_NEW_Consumer, PASS_NEW_Consumer);
+    logHead("Restore Password");
 
-    restorePassword(EMAIL_3_NEW_Consumer, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Encoded);
+    performRestorePass(EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, PASS_NEW_Consumer, PASS_NEW_Consumer);
+
+    performRestorePass(EMAIL_3_NEW_Consumer, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Encoded);
   }
 
-  private void restorePassword(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
+  private void performRestorePass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
   {
-    reqRestoreConsumerPass(email);
-    confirmRestoreConsumerPass(email);
-    restoreConsumerPass(email, oldpassDecoded, newpassDecoded, newpassForCheckers);
+    reqRestorePass(email);
+    confirmRestorePass(email);
+    restorePass(email, oldpassDecoded, newpassDecoded, newpassForCheckers);
   }
 
-  private void reqRestoreConsumerPass(String email)
+  private void reqRestorePass(String email)
   {
-    logHead("Request Restore AuthtionConsumer Password = " + email);
+    logHead("Request Restore Password = " + email);
 
     AuthtionTestConsumer ANY_consumer = authtionTestConsumer.getAnonymous();
     int type = 5;
@@ -457,9 +461,9 @@ public class AuthtionFullTest
     assertEquals(2, confirmByEmail.size());
   }
 
-  private void confirmRestoreConsumerPass(String email)
+  private void confirmRestorePass(String email)
   {
-    logHead("Confirm Restore AuthtionConsumer Password = " + email);
+    logHead("Confirm Restore Password = " + email);
 
     AuthtionTestConsumer ANY_consumer = authtionTestConsumer.getAnonymous();
     int type = 5;
@@ -473,9 +477,9 @@ public class AuthtionFullTest
     assertEquals(2, confirmByEmail.size());
   }
 
-  private void restoreConsumerPass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
+  private void restorePass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
   {
-    logHead("Restore AuthtionConsumer Password = " + email);
+    logHead("Restore Password = " + email);
 
     AuthtionTestConsumer ANY_consumer = authtionTestConsumer.getAnonymous();
     int type = 5;
