@@ -73,6 +73,10 @@ public class AuthtionUtil
         list.add("\"middleName\": \"" + user.getMiddleName() + "\"");
       if (!user.isLastNameNonPublic())
         list.add("\"lastName\": \"" + user.getLastName() + "\"");
+      if (!user.isGenderNonPublic())
+        list.add("\"gender\": \"" + user.getGender() + "\"");
+      if (!user.isDateOfBirthNonPublic())
+        list.add("\"dateOfBirth\": \"" + user.getDateOfBirth() + "\"");
     }
     else
     {
@@ -90,6 +94,10 @@ public class AuthtionUtil
       list.add("\"middleNameNonPublic\": \"" + user.isMiddleNameNonPublic() + "\"");
       list.add("\"lastName\": \"" + user.getLastName() + "\"");
       list.add("\"lastNameNonPublic\": \"" + user.isLastNameNonPublic() + "\"");
+      list.add("\"gender\": \"" + user.getGender() + "\"");
+      list.add("\"genderNonPublic\": \"" + user.isGenderNonPublic() + "\"");
+      list.add("\"dateOfBirth\": \"" + user.getDateOfBirth() + "\"");
+      list.add("\"dateOfBirthNonPublic\": \"" + user.isDateOfBirthNonPublic() + "\"");
     }
 
     return "{" + list.stream().collect(Collectors.joining(",")) + "}";

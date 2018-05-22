@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static ru.dwfe.net.authtion.util.AuthtionUtil.getNickNameFromEmail;
@@ -17,14 +18,22 @@ public class AuthtionUser
   private Long consumerId;
 
   private String nickName;
-  private String firstName;
-  private String middleName;
-  private String lastName;
-
   private boolean nickNameNonPublic;
+
+  private String firstName;
   private boolean firstNameNonPublic;
+
+  private String middleName;
   private boolean middleNameNonPublic;
+
+  private String lastName;
   private boolean lastNameNonPublic;
+
+  private int gender;
+  private boolean genderNonPublic;
+
+  private LocalDate dateOfBirth;
+  private boolean dateOfBirthNonPublic;
 
   @Column(updatable = false, insertable = false)
   private LocalDateTime updatedOn;
@@ -33,6 +42,7 @@ public class AuthtionUser
   //
   //  GETTERs and SETTERs
   //
+
 
   public Long getConsumerId()
   {
@@ -54,36 +64,6 @@ public class AuthtionUser
     this.nickName = nickName;
   }
 
-  public String getFirstName()
-  {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName)
-  {
-    this.firstName = firstName;
-  }
-
-  public String getMiddleName()
-  {
-    return middleName;
-  }
-
-  public void setMiddleName(String middleName)
-  {
-    this.middleName = middleName;
-  }
-
-  public String getLastName()
-  {
-    return lastName;
-  }
-
-  public void setLastName(String lastName)
-  {
-    this.lastName = lastName;
-  }
-
   public boolean isNickNameNonPublic()
   {
     return nickNameNonPublic;
@@ -92,6 +72,16 @@ public class AuthtionUser
   public void setNickNameNonPublic(boolean nickNameNonPublic)
   {
     this.nickNameNonPublic = nickNameNonPublic;
+  }
+
+  public String getFirstName()
+  {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName)
+  {
+    this.firstName = firstName;
   }
 
   public boolean isFirstNameNonPublic()
@@ -104,6 +94,16 @@ public class AuthtionUser
     this.firstNameNonPublic = firstNameNonPublic;
   }
 
+  public String getMiddleName()
+  {
+    return middleName;
+  }
+
+  public void setMiddleName(String middleName)
+  {
+    this.middleName = middleName;
+  }
+
   public boolean isMiddleNameNonPublic()
   {
     return middleNameNonPublic;
@@ -114,6 +114,16 @@ public class AuthtionUser
     this.middleNameNonPublic = middleNameNonPublic;
   }
 
+  public String getLastName()
+  {
+    return lastName;
+  }
+
+  public void setLastName(String lastName)
+  {
+    this.lastName = lastName;
+  }
+
   public boolean isLastNameNonPublic()
   {
     return lastNameNonPublic;
@@ -122,6 +132,46 @@ public class AuthtionUser
   public void setLastNameNonPublic(boolean lastNameNonPublic)
   {
     this.lastNameNonPublic = lastNameNonPublic;
+  }
+
+  public int getGender()
+  {
+    return gender;
+  }
+
+  public void setGender(int gender)
+  {
+    this.gender = gender;
+  }
+
+  public boolean isGenderNonPublic()
+  {
+    return genderNonPublic;
+  }
+
+  public void setGenderNonPublic(boolean genderNonPublic)
+  {
+    this.genderNonPublic = genderNonPublic;
+  }
+
+  public LocalDate getDateOfBirth()
+  {
+    return dateOfBirth;
+  }
+
+  public void setDateOfBirth(LocalDate dateOfBirth)
+  {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  public boolean isDateOfBirthNonPublic()
+  {
+    return dateOfBirthNonPublic;
+  }
+
+  public void setDateOfBirthNonPublic(boolean dateOfBirthNonPublic)
+  {
+    this.dateOfBirthNonPublic = dateOfBirthNonPublic;
   }
 
   public LocalDateTime getUpdatedOn()
@@ -164,14 +214,20 @@ public class AuthtionUser
     if (nickName == null)
       nickName = getNickNameFromEmail(consumer.getEmail());
     user.setNickName(prepareStringField(nickName, 20));
+    user.setNickNameNonPublic(true);
 
     user.setFirstName(prepareStringField(user.getFirstName(), 20));
-    user.setMiddleName(prepareStringField(user.getMiddleName(), 20));
-    user.setLastName(prepareStringField(user.getLastName(), 20));
-
-    user.setNickNameNonPublic(true);
     user.setFirstNameNonPublic(true);
+
+    user.setMiddleName(prepareStringField(user.getMiddleName(), 20));
     user.setMiddleNameNonPublic(true);
+
+    user.setLastName(prepareStringField(user.getLastName(), 20));
     user.setLastNameNonPublic(true);
+
+    user.setGender(0);
+    user.setGenderNonPublic(true);
+
+    user.setDateOfBirthNonPublic(true);
   }
 }

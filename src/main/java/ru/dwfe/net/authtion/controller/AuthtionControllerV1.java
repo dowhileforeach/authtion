@@ -18,6 +18,7 @@ import ru.dwfe.net.authtion.dao.repository.AuthtionUserRepository;
 import ru.dwfe.net.authtion.service.AuthtionConsumerService;
 import ru.dwfe.net.authtion.util.AuthtionUtil;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -466,6 +467,9 @@ class ReqCreateAccount
   String firstName;
   String lastName;
 
+  int gender;
+  LocalDate dateOfBirth;
+
   public String getEmail()
   {
     return email;
@@ -514,5 +518,25 @@ class ReqCreateAccount
   public void setLastName(String lastName)
   {
     this.lastName = lastName;
+  }
+
+  public int getGender()
+  {
+    return gender;
+  }
+
+  public void setGender(int gender)
+  {
+    this.gender = gender;
+  }
+
+  public LocalDate getDateOfBirth()
+  {
+    return dateOfBirth;
+  }
+
+  public void setDateOfBirth(LocalDate dateOfBirth)
+  {
+    this.dateOfBirth = dateOfBirth;
   }
 }
