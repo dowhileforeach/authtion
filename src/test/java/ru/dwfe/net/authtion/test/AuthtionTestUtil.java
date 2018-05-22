@@ -25,17 +25,17 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.BAD_ACCESS_TOKEN;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.USUAL;
 import static ru.dwfe.net.authtion.test.AuthtionTestSignInType.Refresh;
-import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTest.AUTHORITY_to_AUTHORITY_STATUS;
-import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTest.AUTHORITY_to_AUTHORITY_STATUS_BAD_ACCESS_TOKEN;
+import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTests.AUTHORITY_to_AUTHORITY_STATUS;
+import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTests.AUTHORITY_to_AUTHORITY_STATUS_BAD_ACCESS_TOKEN;
 
 @Component
 public class AuthtionTestUtil
 {
   private final AuthtionConfigProperties authtionConfigProperties;
-  private final AuthtionTestVariablesForAuthTest authtionTestVariablesForAuthTest;
+  private final AuthtionTestVariablesForAuthTests authtionTestVariablesForAuthTest;
   private final String ALL_BEFORE_RESOURCE;
 
-  private AuthtionTestUtil(AuthtionConfigProperties authtionConfigProperties, AuthtionTestVariablesForAuthTest authtionTestVariablesForAuthTest)
+  private AuthtionTestUtil(AuthtionConfigProperties authtionConfigProperties, AuthtionTestVariablesForAuthTests authtionTestVariablesForAuthTest)
   {
     this.authtionConfigProperties = authtionConfigProperties;
     this.authtionTestVariablesForAuthTest = authtionTestVariablesForAuthTest;

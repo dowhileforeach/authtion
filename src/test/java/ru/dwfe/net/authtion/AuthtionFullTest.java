@@ -29,8 +29,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.USER;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.USUAL;
-import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTest.TOTAL_ACCESS_TOKEN_COUNT;
-import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForConsumerTest.*;
+import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAccountPasswordTests.*;
+import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAuthTests.TOTAL_ACCESS_TOKEN_COUNT;
 
 //
 // == https://spring.io/guides/gs/testing-web/
@@ -125,13 +125,13 @@ public class AuthtionFullTest
             testConsumer.getAnonymous_accessToken(), checkers_for_createAccount());
     //
     // Was created 3 new consumers:
-    //  - EMAIL_NEW_Consumer   - password was passed
-    //  - EMAIL_2_NEW_Consumer - password was not passed
-    //  - EMAIL_3_NEW_Consumer - already encoded password was passed
+    //  - Account3_Email   - password was passed
+    //  - Account4_Email - password was not passed
+    //  - Account5_Email - already encoded password was passed
 
 
-    // EMAIL_NEW_Consumer
-    AuthtionConsumer consumer1 = getConsumerByEmail(EMAIL_NEW_Consumer);
+    // Account3_Email
+    AuthtionConsumer consumer1 = getConsumerByEmail(Account3_Email);
     assertTrue(consumer1.getId() > 999);
 
     Collection<? extends GrantedAuthority> authorities_consumer1 = consumer1.getAuthorities();
@@ -151,8 +151,8 @@ public class AuthtionFullTest
     List<AuthtionMailing> mailing_consumer1 = mailingRepository.findByTypeAndEmail(1, consumer1.getEmail());
     assertEquals(1, mailing_consumer1.size());
 
-    // EMAIL_2_NEW_Consumer
-    AuthtionConsumer consumer2 = getConsumerByEmail(EMAIL_2_NEW_Consumer);
+    // Account4_Email
+    AuthtionConsumer consumer2 = getConsumerByEmail(Account4_Email);
     assertTrue(consumer2.getId() > 999);
 
     Collection<? extends GrantedAuthority> authorities_consumer2 = consumer2.getAuthorities();
@@ -176,10 +176,10 @@ public class AuthtionFullTest
     assertTrue(mailing_password_consumer2.length() >= 9);
 
 
-    // EMAIL_3_NEW_Consumer
-    AuthtionConsumer consumer3 = getConsumerByEmail(EMAIL_3_NEW_Consumer);
+    // Account5_Email
+    AuthtionConsumer consumer3 = getConsumerByEmail(Account5_Email);
     assertTrue(consumer3.getId() > 999);
-    assertEquals(consumer3.getPassword(), "{bcrypt}" + PASS_FOR_EMAIL_3_Consumer_Encoded);
+    assertEquals(consumer3.getPassword(), "{bcrypt}" + Account5_Pass_Encoded);
 
     Collection<? extends GrantedAuthority> authorities_consumer3 = consumer3.getAuthorities();
     assertEquals(1, authorities_consumer3.size());
@@ -199,9 +199,9 @@ public class AuthtionFullTest
     assertEquals(1, mailing_consumer3.size());
 
     // Perform full auth test for New AuthtionConsumer
-    fullAuthTest(testConsumer.of(USER, consumer1.getEmail(), PASS_NEW_Consumer, testClient.getClientTrusted(), 200));
+    fullAuthTest(testConsumer.of(USER, consumer1.getEmail(), Account3_Pass, testClient.getClientTrusted(), 200));
     fullAuthTest(testConsumer.of(USER, consumer2.getEmail(), mailing_password_consumer2, testClient.getClientTrusted(), 200));
-    fullAuthTest(testConsumer.of(USER, consumer3.getEmail(), PASS_FOR_EMAIL_3_Consumer_Decoded, testClient.getClientTrusted(), 200));
+    fullAuthTest(testConsumer.of(USER, consumer3.getEmail(), Account5_Pass_Decoded, testClient.getClientTrusted(), 200));
   }
 
   @Test
@@ -291,7 +291,7 @@ public class AuthtionFullTest
             USER_accessToken, checkers_for_reqConfirmEmail_isConfirmed);
 
     // add new request
-    AuthtionTestConsumer consumer = testConsumer.of(USER, EMAIL_NEW_Consumer, PASS_NEW_Consumer, testClient.getClientTrusted(), 200);
+    AuthtionTestConsumer consumer = testConsumer.of(USER, Account3_Email, Account3_Pass, testClient.getClientTrusted(), 200);
     List<AuthtionMailing> confirmByEmail = mailingRepository.findByTypeAndEmail(type, consumer.username);
     assertEquals(0, confirmByEmail.size());
     util.check_send_data(GET, prop.getResource().getReqConfirmEmail(),
@@ -360,17 +360,17 @@ public class AuthtionFullTest
 
     int type = 3;
 
-    assertFalse(getConsumerByEmail(EMAIL_NEW_Consumer).isEmailConfirmed());
+    assertFalse(getConsumerByEmail(Account3_Email).isEmailConfirmed());
 
-    List<AuthtionMailing> confirmList = mailingRepository.findSentNotEmptyData(type, EMAIL_NEW_Consumer);
+    List<AuthtionMailing> confirmList = mailingRepository.findSentNotEmptyData(type, Account3_Email);
     assertEquals(2, confirmList.size());
     String confirmKey = confirmList.get(0).getData();
     util.check_send_data(GET, prop.getResource().getConfirmEmail(),
             null, checkers_for_confirmEmail(confirmKey));
 
-    confirmList = mailingRepository.findSentNotEmptyData(type, EMAIL_NEW_Consumer);
+    confirmList = mailingRepository.findSentNotEmptyData(type, Account3_Email);
     assertEquals(1, confirmList.size());
-    assertTrue(getConsumerByEmail(EMAIL_NEW_Consumer).isEmailConfirmed());
+    assertTrue(getConsumerByEmail(Account3_Email).isEmailConfirmed());
   }
 
   @Test
@@ -378,9 +378,9 @@ public class AuthtionFullTest
   {
     logHead("Change Password");
 
-    performChangePass(EMAIL_NEW_Consumer, PASS_NEW_Consumer, NEWPASS_NEW_Consumer, checkers_for_changePass);
+    performChangePass(Account3_Email, Account3_Pass, Account3_NewPass, checkers_for_changePass);
 
-    performChangePass(EMAIL_3_NEW_Consumer, PASS_FOR_EMAIL_3_Consumer_Decoded, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, checkers_for_changePass_2);
+    performChangePass(Account5_Email, Account5_Pass_Decoded, Account5_NewPass_Decoded, checkers_for_changePass_2);
   }
 
   private void performChangePass(String email, String oldpass, String newpass, List<AuthtionTestChecker> checkers)
@@ -409,9 +409,9 @@ public class AuthtionFullTest
   {
     logHead("Restore Password");
 
-    performRestorePass(EMAIL_NEW_Consumer, NEWPASS_NEW_Consumer, PASS_NEW_Consumer, PASS_NEW_Consumer);
+    performRestorePass(Account3_Email, Account3_NewPass, Account3_Pass, Account3_Pass);
 
-    performRestorePass(EMAIL_3_NEW_Consumer, NEWPASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Decoded, PASS_FOR_EMAIL_3_Consumer_Encoded);
+    performRestorePass(Account5_Email, Account5_NewPass_Decoded, Account5_Pass_Decoded, Account5_Pass_Encoded);
   }
 
   private void performRestorePass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)

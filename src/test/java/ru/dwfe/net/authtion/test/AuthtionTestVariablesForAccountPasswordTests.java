@@ -7,18 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class AuthtionTestVariablesForConsumerTest
+public class AuthtionTestVariablesForAccountPasswordTests
 {
-  public static final String EMAIL_NEW_Consumer = "test3@dwfe.ru";
-  public static final String EMAIL_2_NEW_Consumer = "test4@dwfe.ru";
-  public static final String PASS_NEW_Consumer = "123456";
-  public static final String NEWPASS_NEW_Consumer = "1234567890";
+  public static final String Account3_Email = "test3@dwfe.ru";
+  public static final String Account3_Pass = "123456";
+  public static final String Account3_NewPass = "1234567890";
 
-  public static final String EMAIL_3_NEW_Consumer = "test5@dwfe.ru";
-  public static final String PASS_FOR_EMAIL_3_Consumer_Encoded = "$2a$10$AvHrvvqQNOyUZxg7XMfDleDLjR3AV5C1KEwsa29EC4Eo7CYIe0eoy"; //hello123world
-  public static final String PASS_FOR_EMAIL_3_Consumer_Decoded = "hello123world";
-  public static final String NEWPASS_FOR_EMAIL_3_Consumer_Encoded = "$2a$10$EGQlh6wWYUFrVbnZJzMvwOnGSxlS65Oap.6l92nA3PLskkipat7Di"; //56789900aloha
-  public static final String NEWPASS_FOR_EMAIL_3_Consumer_Decoded = "56789900aloha";
+  public static final String Account4_Email = "test4@dwfe.ru";
+
+  public static final String Account5_Email = "test5@dwfe.ru";
+  public static final String Account5_Pass_Encoded = "$2a$10$AvHrvvqQNOyUZxg7XMfDleDLjR3AV5C1KEwsa29EC4Eo7CYIe0eoy"; //hello123world
+  public static final String Account5_Pass_Decoded = "hello123world";
+  public static final String Account5_NewPass_Encoded = "$2a$10$EGQlh6wWYUFrVbnZJzMvwOnGSxlS65Oap.6l92nA3PLskkipat7Di"; //56789900aloha
+  public static final String Account5_NewPass_Decoded = "56789900aloha";
 
 
 
@@ -31,7 +32,7 @@ public class AuthtionTestVariablesForConsumerTest
           AuthtionTestChecker.of(false, Map.of("email", "user"), 200, "invalid-email"),
           AuthtionTestChecker.of(false, Map.of("email", ".uuqu@mail.ru"), 200, "invalid-email"),
           AuthtionTestChecker.of(false, Map.of("email", "test2@dwfe.ru"), 200, "email-present-in-database"),
-          AuthtionTestChecker.of(true, Map.of("email", EMAIL_NEW_Consumer), 200)
+          AuthtionTestChecker.of(true, Map.of("email", Account3_Email), 200)
   );
 
   public static final List<AuthtionTestChecker> checkers_for_checkPass = List.of(
@@ -53,13 +54,13 @@ public class AuthtionTestVariablesForConsumerTest
             AuthtionTestChecker.of(false, Map.of("email", "test1@dwfe.ru"), 200, "email-present-in-database")
     ));
     list.addAll(List.of(
-            AuthtionTestChecker.of(true, Map.of("email", EMAIL_2_NEW_Consumer, "firstName", "ozon"), 200),
-            AuthtionTestChecker.of(false, Map.of("email", EMAIL_2_NEW_Consumer), 200, "email-present-in-database"),
-            AuthtionTestChecker.of(false, Map.of("email", EMAIL_NEW_Consumer, "password", ""), 200, "empty-password"),
-            AuthtionTestChecker.of(false, Map.of("email", EMAIL_NEW_Consumer, "password", "54321"), 200, "exceeded-min6-or-max55-password-length"),
-            AuthtionTestChecker.of(false, Map.of("email", EMAIL_NEW_Consumer, "password", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "exceeded-min6-or-max55-password-length"),
-            AuthtionTestChecker.of(true, Map.of("email", EMAIL_NEW_Consumer, "password", PASS_NEW_Consumer, "nickName", "nobody", "lastName", "sunshine"), 200),
-            AuthtionTestChecker.of(true, Map.of("email", EMAIL_3_NEW_Consumer, "password", PASS_FOR_EMAIL_3_Consumer_Encoded, "nickName", "hello world"), 200)
+            AuthtionTestChecker.of(true, Map.of("email", Account4_Email, "firstName", "ozon"), 200),
+            AuthtionTestChecker.of(false, Map.of("email", Account4_Email), 200, "email-present-in-database"),
+            AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", ""), 200, "empty-password"),
+            AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", "54321"), 200, "exceeded-min6-or-max55-password-length"),
+            AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "exceeded-min6-or-max55-password-length"),
+            AuthtionTestChecker.of(true, Map.of("email", Account3_Email, "password", Account3_Pass, "nickName", "nobody", "lastName", "sunshine"), 200),
+            AuthtionTestChecker.of(true, Map.of("email", Account5_Email, "password", Account5_Pass_Encoded, "nickName", "hello world"), 200)
     ));
     return list;
   }
@@ -135,21 +136,21 @@ public class AuthtionTestVariablesForConsumerTest
   public static final List<AuthtionTestChecker> checkers_for_changePass = List.of(
           AuthtionTestChecker.of(false, Map.of(), 200, "missing-oldpass"),
           AuthtionTestChecker.of(false, Map.of("oldpass", ""), 200, "empty-oldpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer), 200, "missing-newpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer, "newpass", ""), 200, "empty-newpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer, "newpass", "12345"), 200, "exceeded-min6-or-max55-newpass-length"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer, "newpass", "12345678901234567890123456789012345678901234567890123456"), 200, "exceeded-min6-or-max55-newpass-length"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer + "1", "newpass", "1234567"), 200, "wrong-oldpass"),
-          AuthtionTestChecker.of(true, Map.of("oldpass", PASS_NEW_Consumer, "newpass", NEWPASS_NEW_Consumer), 200)
+          AuthtionTestChecker.of(false, Map.of("oldpass", Account3_Pass), 200, "missing-newpass"),
+          AuthtionTestChecker.of(false, Map.of("oldpass", Account3_Pass, "newpass", ""), 200, "empty-newpass"),
+          AuthtionTestChecker.of(false, Map.of("oldpass", Account3_Pass, "newpass", "12345"), 200, "exceeded-min6-or-max55-newpass-length"),
+          AuthtionTestChecker.of(false, Map.of("oldpass", Account3_Pass, "newpass", "12345678901234567890123456789012345678901234567890123456"), 200, "exceeded-min6-or-max55-newpass-length"),
+          AuthtionTestChecker.of(false, Map.of("oldpass", Account3_Pass + "1", "newpass", "1234567"), 200, "wrong-oldpass"),
+          AuthtionTestChecker.of(true, Map.of("oldpass", Account3_Pass, "newpass", Account3_NewPass), 200)
   );
 
   public static final List<AuthtionTestChecker> checkers_for_changePass_2 = List.of(
           AuthtionTestChecker.of(false, Map.of(), 200, "missing-oldpass"),
           AuthtionTestChecker.of(false, Map.of("oldpass", ""), 200, "empty-oldpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", PASS_FOR_EMAIL_3_Consumer_Decoded), 200, "missing-newpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", PASS_FOR_EMAIL_3_Consumer_Decoded, "newpass", ""), 200, "empty-newpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", PASS_FOR_EMAIL_3_Consumer_Decoded + "1", "newpass", "1234567"), 200, "wrong-oldpass"),
-          AuthtionTestChecker.of(true, Map.of("oldpass", PASS_FOR_EMAIL_3_Consumer_Decoded, "newpass", NEWPASS_FOR_EMAIL_3_Consumer_Encoded), 200)
+          AuthtionTestChecker.of(false, Map.of("oldpass", Account5_Pass_Decoded), 200, "missing-newpass"),
+          AuthtionTestChecker.of(false, Map.of("oldpass", Account5_Pass_Decoded, "newpass", ""), 200, "empty-newpass"),
+          AuthtionTestChecker.of(false, Map.of("oldpass", Account5_Pass_Decoded + "1", "newpass", "1234567"), 200, "wrong-oldpass"),
+          AuthtionTestChecker.of(true, Map.of("oldpass", Account5_Pass_Decoded, "newpass", Account5_NewPass_Encoded), 200)
   );
 
   public static List<AuthtionTestChecker> checkers_for_reqRestorePass(String email)
