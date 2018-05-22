@@ -40,7 +40,8 @@ public class AuthtionTestVariablesForAccountPasswordTests
           AuthtionTestChecker.of(false, Map.of("password", ""), 200, "empty-password"),
           AuthtionTestChecker.of(false, Map.of("password", "12345"), 200, "exceeded-min6-or-max55-password-length"),
           AuthtionTestChecker.of(false, Map.of("password", "12345678901234567890123456789012345678901234567890123456"), 200, "exceeded-min6-or-max55-password-length"),
-          AuthtionTestChecker.of(true, Map.of("password", "123456"), 200)
+          AuthtionTestChecker.of(true, Map.of("password", "123456"), 200),
+          AuthtionTestChecker.of(true, Map.of("password", Account5_Pass_Encoded), 200)
   );
 
   public static List<AuthtionTestChecker> checkers_for_createAccount()
