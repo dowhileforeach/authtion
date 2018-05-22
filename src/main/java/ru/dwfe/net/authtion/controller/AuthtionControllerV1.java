@@ -124,6 +124,7 @@ public class AuthtionControllerV1
 
     if (errorCodes.size() == 0)
     {
+      // consumer
       AuthtionConsumer consumer = new AuthtionConsumer();
       consumer.setEmail(req.email);
       consumer.setEmailConfirmed(!automaticallyGeneratedPassword.isEmpty());
@@ -132,6 +133,7 @@ public class AuthtionControllerV1
       consumerService.save(consumer);
       consumer = consumerService.findByEmail(consumer.getEmail()).get();
 
+      // user
       AuthtionUser user = new AuthtionUser();
       user.setNickName(req.nickName);
       user.setFirstName(req.firstName);
@@ -140,10 +142,12 @@ public class AuthtionControllerV1
       userRepository.save(user);
       user = userRepository.findById(consumer.getId()).get();
 
+      // mailing
       mailingRepository.save(automaticallyGeneratedPassword.isEmpty()
               ? AuthtionMailing.of(1, consumer.getEmail())
               : AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
 
+      // response data
       data = prepareAccountInfo(consumer, user, false);
     }
     return getResponse(errorCodes, data);
@@ -165,49 +169,114 @@ public class AuthtionControllerV1
 
   @PostMapping("#{authtionConfigProperties.resource.updateAccount}")
   @PreAuthorize("hasAuthority('USER')")
-  public String updateAccount(@RequestBody String body, OAuth2Authentication authentication)
+  public String updateAccount(@RequestBody ReqUpdateAccount req, OAuth2Authentication authentication)
   {
     List<String> errorCodes = new ArrayList<>();
-    Map<String, Object> map = parse(body);
+    Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
+    AuthtionConsumer consumer = consumerService.findById(id).get();
+    AuthtionUser user = userRepository.findById(id).get();
+    boolean consumerWasModified = false;
+    boolean userWasModified = false;
 
-//    if (map.size() > 0)
-//    {
-//      AuthtionConsumer consumerOAuth2 = (AuthtionConsumer) authentication.getPrincipal();
-//
-//      String nickName = getValue(map, "nickName");
-//      String firstName = getValue(map, "firstName");
-//      String lastName = getValue(map, "lastName");
-//
-//      boolean isNickName = nickName != null;
-//      boolean isFirstName = firstName != null;
-//      boolean isLastName = lastName != null;
-//
-//      if (isNickName || isFirstName || isLastName)
-//      {
-//        boolean wasModified = false;
-//        AuthtionConsumer consumer = consumerService.findByEmail(consumerOAuth2.getEmail()).get();
-//
-//        if (isNickName && !nickName.equals(consumer.getNickName()))
-//        {
-//          consumer.setNickName(nickName);
-//          wasModified = true;
-//        }
-//        if (isFirstName && !firstName.equals(consumer.getFirstName()))
-//        {
-//          consumer.setFirstName(firstName);
-//          wasModified = true;
-//        }
-//        if (isLastName && !lastName.equals(consumer.getLastName()))
-//        {
-//          consumer.setLastName(lastName);
-//          wasModified = true;
-//        }
-//
-//        if (wasModified)
-//          consumerService.save(consumer);
-//      }
-//    }
-    return getResponse(errorCodes);
+    if (req.email != null && !consumer.getEmail().equals(req.email))
+    {
+      consumer.setEmail(req.email);
+      consumerWasModified = true;
+    }
+
+    if (req.emailNonPublic != null && !req.emailNonPublic.equals(String.valueOf(consumer.isEmailNonPublic())))
+    {
+      consumer.setEmailNonPublic(!"false".equals(req.emailNonPublic));
+      consumerWasModified = true;
+    }
+
+    if (req.nickName != null && !user.getNickName().equals(req.nickName))
+    {
+      user.setNickName(req.nickName);
+      userWasModified = true;
+    }
+
+    if (req.nickNameNonPublic != null && !req.nickNameNonPublic.equals(String.valueOf(user.isNickNameNonPublic())))
+    {
+      user.setNickNameNonPublic(!"false".equals(req.nickNameNonPublic));
+      userWasModified = true;
+    }
+
+    if (req.firstName != null && !user.getFirstName().equals(req.firstName))
+    {
+      user.setFirstName(req.firstName);
+      userWasModified = true;
+    }
+
+    if (req.firstNameNonPublic != null && !req.firstNameNonPublic.equals(String.valueOf(user.isFirstNameNonPublic())))
+    {
+      user.setFirstNameNonPublic(!"false".equals(req.firstNameNonPublic));
+      userWasModified = true;
+    }
+
+    if (req.middleName != null && !user.getMiddleName().equals(req.middleName))
+    {
+      user.setMiddleName(req.middleName);
+      userWasModified = true;
+    }
+
+    if (req.middleNameNonPublic != null && !req.middleNameNonPublic.equals(String.valueOf(user.isMiddleNameNonPublic())))
+    {
+      user.setMiddleNameNonPublic(!"false".equals(req.middleNameNonPublic));
+      userWasModified = true;
+    }
+
+    if (req.lastName != null && !user.getLastName().equals(req.lastName))
+    {
+      user.setLastName(req.lastName);
+      userWasModified = true;
+    }
+
+    if (req.lastNameNonPublic != null && !req.lastNameNonPublic.equals(String.valueOf(user.isLastNameNonPublic())))
+    {
+      user.setLastNameNonPublic(!"false".equals(req.lastNameNonPublic));
+      userWasModified = true;
+    }
+
+    if (req.gender != null && !req.gender.equals(String.valueOf(user.getGender())))
+    {
+      user.setGender(Integer.parseInt(req.gender));
+      userWasModified = true;
+    }
+
+    if (req.genderNonPublic != null && !req.genderNonPublic.equals(String.valueOf(user.isGenderNonPublic())))
+    {
+      user.setGenderNonPublic(!"false".equals(req.genderNonPublic));
+      userWasModified = true;
+    }
+
+    if (req.dateOfBirth != null && !user.getDateOfBirth().equals(req.dateOfBirth))
+    {
+      user.setDateOfBirth(req.dateOfBirth);
+      userWasModified = true;
+    }
+
+    if (req.dateOfBirthNonPublic != null && !req.dateOfBirthNonPublic.equals(String.valueOf(user.isDateOfBirthNonPublic())))
+    {
+      user.setDateOfBirthNonPublic(!"false".equals(req.dateOfBirthNonPublic));
+      userWasModified = true;
+    }
+
+    if (consumerWasModified)
+    {
+      consumerService.save(consumer);
+      consumer = consumerService.findById(id).get();
+    }
+
+    if (userWasModified)
+    {
+      userRepository.save(user);
+      user = userRepository.findById(id).get();
+    }
+
+    String data = prepareAccountInfo(consumer, user, false);
+
+    return getResponse(errorCodes, data);
   }
 
   @GetMapping("#{authtionConfigProperties.resource.publicAccount}" + "/{id}")
@@ -410,7 +479,7 @@ public class AuthtionControllerV1
 
 
 //
-// Utilitarian classes for mapping requests
+// Util classes for mapping requests
 //
 
 class ReqCheckEmail
@@ -540,3 +609,168 @@ class ReqCreateAccount
     this.dateOfBirth = dateOfBirth;
   }
 }
+
+class ReqUpdateAccount
+{
+  String email;
+  String emailNonPublic;
+
+  String nickName;
+  String nickNameNonPublic;
+
+  String firstName;
+  String firstNameNonPublic;
+
+  String middleName;
+  String middleNameNonPublic;
+
+  String lastName;
+  String lastNameNonPublic;
+
+  String gender;
+  String genderNonPublic;
+
+  LocalDate dateOfBirth;
+  String dateOfBirthNonPublic;
+
+  public String getEmail()
+  {
+    return email;
+  }
+
+  public void setEmail(String email)
+  {
+    this.email = email;
+  }
+
+  public String getEmailNonPublic()
+  {
+    return emailNonPublic;
+  }
+
+  public void setEmailNonPublic(String emailNonPublic)
+  {
+    this.emailNonPublic = emailNonPublic;
+  }
+
+  public String getNickName()
+  {
+    return nickName;
+  }
+
+  public void setNickName(String nickName)
+  {
+    this.nickName = nickName;
+  }
+
+  public String getNickNameNonPublic()
+  {
+    return nickNameNonPublic;
+  }
+
+  public void setNickNameNonPublic(String nickNameNonPublic)
+  {
+    this.nickNameNonPublic = nickNameNonPublic;
+  }
+
+  public String getFirstName()
+  {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName)
+  {
+    this.firstName = firstName;
+  }
+
+  public String getFirstNameNonPublic()
+  {
+    return firstNameNonPublic;
+  }
+
+  public void setFirstNameNonPublic(String firstNameNonPublic)
+  {
+    this.firstNameNonPublic = firstNameNonPublic;
+  }
+
+  public String getMiddleName()
+  {
+    return middleName;
+  }
+
+  public void setMiddleName(String middleName)
+  {
+    this.middleName = middleName;
+  }
+
+  public String getMiddleNameNonPublic()
+  {
+    return middleNameNonPublic;
+  }
+
+  public void setMiddleNameNonPublic(String middleNameNonPublic)
+  {
+    this.middleNameNonPublic = middleNameNonPublic;
+  }
+
+  public String getLastName()
+  {
+    return lastName;
+  }
+
+  public void setLastName(String lastName)
+  {
+    this.lastName = lastName;
+  }
+
+  public String getLastNameNonPublic()
+  {
+    return lastNameNonPublic;
+  }
+
+  public void setLastNameNonPublic(String lastNameNonPublic)
+  {
+    this.lastNameNonPublic = lastNameNonPublic;
+  }
+
+  public String getGender()
+  {
+    return gender;
+  }
+
+  public void setGender(String gender)
+  {
+    this.gender = gender;
+  }
+
+  public String getGenderNonPublic()
+  {
+    return genderNonPublic;
+  }
+
+  public void setGenderNonPublic(String genderNonPublic)
+  {
+    this.genderNonPublic = genderNonPublic;
+  }
+
+  public LocalDate getDateOfBirth()
+  {
+    return dateOfBirth;
+  }
+
+  public void setDateOfBirth(LocalDate dateOfBirth)
+  {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  public String getDateOfBirthNonPublic()
+  {
+    return dateOfBirthNonPublic;
+  }
+
+  public void setDateOfBirthNonPublic(String dateOfBirthNonPublic)
+  {
+    this.dateOfBirthNonPublic = dateOfBirthNonPublic;
+  }
+}
+

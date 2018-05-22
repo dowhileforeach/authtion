@@ -228,6 +228,7 @@ public class AuthtionUser
     user.setGender(0);
     user.setGenderNonPublic(true);
 
+    //user.setDateOfBirth();  <-- null
     user.setDateOfBirthNonPublic(true);
   }
 }
