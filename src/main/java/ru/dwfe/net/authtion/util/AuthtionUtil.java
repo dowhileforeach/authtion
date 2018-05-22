@@ -54,26 +54,43 @@ public class AuthtionUtil
     return result;
   }
 
-  public static String prepareAccountInfo(AuthtionConsumer consumer, AuthtionUser user)
+  public static String prepareAccountInfo(AuthtionConsumer consumer, AuthtionUser user, boolean onPublic)
   {
     ArrayList<String> list = new ArrayList<>();
     LocalDateTime updatedOn = consumer.getUpdatedOn().isBefore(user.getUpdatedOn()) ? consumer.getUpdatedOn() : user.getUpdatedOn();
 
     list.add("\"id\": " + consumer.getId());
-    list.add("\"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(consumer.getCreatedOn()) + "\"");
-    list.add("\"updatedOn\": " + "\"" + formatDateTime(updatedOn) + "\"");
-    list.add("\"authorities\": " + consumer.getAuthorities());
-    list.add("\"email\": \"" + consumer.getEmail() + "\"");
-    list.add("\"emailConfirmed\": " + consumer.isEmailConfirmed());
-    list.add("\"emailNonPublic\": " + consumer.isEmailNonPublic());
-    list.add("\"nickName\": \"" + user.getNickName() + "\"");
-    list.add("\"nickNameNonPublic\": \"" + user.isNickNameNonPublic() + "\"");
-    list.add("\"firstName\": \"" + user.getFirstName() + "\"");
-    list.add("\"firstNameNonPublic\": \"" + user.isFirstNameNonPublic() + "\"");
-    list.add("\"middleName\": \"" + user.getMiddleName() + "\"");
-    list.add("\"middleNameNonPublic\": \"" + user.isMiddleNameNonPublic() + "\"");
-    list.add("\"lastName\": \"" + user.getLastName() + "\"");
-    list.add("\"lastNameNonPublic\": \"" + user.isLastNameNonPublic() + "\"");
+
+    if (onPublic)
+    {
+      if (!consumer.isEmailNonPublic())
+        list.add("\"email\": \"" + consumer.getEmail() + "\"");
+      if (!user.isNickNameNonPublic())
+        list.add("\"nickName\": \"" + user.getNickName() + "\"");
+      if (!user.isFirstNameNonPublic())
+        list.add("\"firstName\": \"" + user.getFirstName() + "\"");
+      if (!user.isMiddleNameNonPublic())
+        list.add("\"middleName\": \"" + user.getMiddleName() + "\"");
+      if (!user.isLastNameNonPublic())
+        list.add("\"lastName\": \"" + user.getLastName() + "\"");
+    }
+    else
+    {
+      list.add("\"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(consumer.getCreatedOn()) + "\"");
+      list.add("\"updatedOn\": " + "\"" + formatDateTime(updatedOn) + "\"");
+      list.add("\"authorities\": " + consumer.getAuthorities());
+      list.add("\"email\": \"" + consumer.getEmail() + "\"");
+      list.add("\"emailConfirmed\": " + consumer.isEmailConfirmed());
+      list.add("\"emailNonPublic\": " + consumer.isEmailNonPublic());
+      list.add("\"nickName\": \"" + user.getNickName() + "\"");
+      list.add("\"nickNameNonPublic\": \"" + user.isNickNameNonPublic() + "\"");
+      list.add("\"firstName\": \"" + user.getFirstName() + "\"");
+      list.add("\"firstNameNonPublic\": \"" + user.isFirstNameNonPublic() + "\"");
+      list.add("\"middleName\": \"" + user.getMiddleName() + "\"");
+      list.add("\"middleNameNonPublic\": \"" + user.isMiddleNameNonPublic() + "\"");
+      list.add("\"lastName\": \"" + user.getLastName() + "\"");
+      list.add("\"lastNameNonPublic\": \"" + user.isLastNameNonPublic() + "\"");
+    }
 
     return "{" + list.stream().collect(Collectors.joining(",")) + "}";
   }

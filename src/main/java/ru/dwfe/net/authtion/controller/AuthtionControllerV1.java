@@ -143,7 +143,7 @@ public class AuthtionControllerV1
               ? AuthtionMailing.of(1, consumer.getEmail())
               : AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
 
-      data = prepareAccountInfo(consumer, user);
+      data = prepareAccountInfo(consumer, user, false);
     }
     return getResponse(errorCodes, data);
   }
@@ -157,7 +157,7 @@ public class AuthtionControllerV1
 
     AuthtionConsumer consumer = consumerService.findById(id).get();
     AuthtionUser user = userRepository.findById(id).get();
-    String data = prepareAccountInfo(consumer, user);
+    String data = prepareAccountInfo(consumer, user, false);
 
     return getResponse(errorCodes, data);
   }
@@ -220,7 +220,7 @@ public class AuthtionControllerV1
     {
       AuthtionConsumer consumer = consumerById.get();
       AuthtionUser user = userRepository.findById(id).get();
-      data = prepareAccountInfo(consumer, user);
+      data = prepareAccountInfo(consumer, user, false);
     }
     else errorCodes.add("id-not-exist");
 
