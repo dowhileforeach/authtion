@@ -47,14 +47,29 @@ public class AuthtionTestConsumer
     return testConsumer;
   }
 
+  public String getAnonymous_accessToken()
+  {
+    return getAnonymous().access_token;
+  }
+
   public AuthtionTestConsumer getUSER()
   {
     return of(USER, "test2@dwfe.ru", "test22", authtionTestClient.getClientTrusted(), 200);
   }
 
+  public String getUSER_accessToken()
+  {
+    return getUSER().access_token;
+  }
+
   public AuthtionTestConsumer getADMIN()
   {
     return of(ADMIN, "test1@dwfe.ru", "test11", authtionTestClient.getClientUntrusted(), 200);
+  }
+
+  public String getADMIN_accessToken()
+  {
+    return getADMIN().access_token;
   }
 }
 

@@ -24,7 +24,7 @@ public class AuthtionTestVariablesForConsumerTest
 
   /* BODIES */
 
-  public static final List<AuthtionTestChecker> checkers_for_checkConsumerEmail = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_checkEmail = List.of(
           AuthtionTestChecker.of(false, Map.of(), 200, "missing-email"),
           AuthtionTestChecker.of(false, Map.of("email", ""), 200, "empty-email"),
           AuthtionTestChecker.of(false, Map.of("email", "123456789012345678901234567890kkklkklklklkklklklklklklklk"), 200, "exceeded-max50-email-length"),
@@ -34,7 +34,7 @@ public class AuthtionTestVariablesForConsumerTest
           AuthtionTestChecker.of(true, Map.of("email", EMAIL_NEW_Consumer), 200)
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_checkConsumerPass = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_checkPass = List.of(
           AuthtionTestChecker.of(false, Map.of(), 200, "missing-password"),
           AuthtionTestChecker.of(false, Map.of("password", ""), 200, "empty-password"),
           AuthtionTestChecker.of(false, Map.of("password", "12345"), 200, "exceeded-min6-or-max55-password-length"),
@@ -42,7 +42,7 @@ public class AuthtionTestVariablesForConsumerTest
           AuthtionTestChecker.of(true, Map.of("password", "123456"), 200)
   );
 
-  public static List<AuthtionTestChecker> checkers_for_createConsumer()
+  public static List<AuthtionTestChecker> checkers_for_createAccount()
   {
     List<AuthtionTestChecker> list = new ArrayList<>(List.of(
             AuthtionTestChecker.of(false, Map.of(), 200, "missing-email"),
@@ -64,27 +64,27 @@ public class AuthtionTestVariablesForConsumerTest
     return list;
   }
 
-  public static final List<AuthtionTestChecker> checkers_for_updateConsumer1 = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_updateAccount1 = List.of(
           AuthtionTestChecker.of(true, Map.of(), 200)
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_updateConsumer2 = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_updateAccount2 = List.of(
           AuthtionTestChecker.of(true, Map.of("nickName", "user", "firstName", "", "lastName", ""), 200)
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_updateConsumer3 = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_updateAccount3 = List.of(
           AuthtionTestChecker.of(true, Map.of("nickName", "hello", "firstName", "1"), 200)
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_updateConsumer4 = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_updateAccount4 = List.of(
           AuthtionTestChecker.of(true, Map.of("lastName", "2"), 200)
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_updateConsumer5 = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_updateAccount5 = List.of(
           AuthtionTestChecker.of(true, Map.of("nickName", "good", "firstName", "alto", "lastName", "smith"), 200)
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_getConsumerData = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_getAccount = List.of(
           AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap("{\n" +
                   " \"id\": 1001,\n" +
                   " \"email\": \"test2@dwfe.ru\",\n" +
@@ -103,26 +103,26 @@ public class AuthtionTestVariablesForConsumerTest
                   "}"))
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_publicConsumer_9 = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_publicAccount_9 = List.of(
           AuthtionTestChecker.of(false, Map.of(), 200, "id-not-exist")
   );
-  public static final List<AuthtionTestChecker> checkers_for_publicConsumer_1 = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_publicAccount_1000 = List.of(
           AuthtionTestChecker.of(true, Map.of(), 200, Map.of("id", 1000, "nickName", "test1"))
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_reqConfirmConsumerEmail = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_reqConfirmEmail = List.of(
           AuthtionTestChecker.of(true, Map.of(), 200)
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_reqConfirmConsumerEmail_isConfirmed = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_reqConfirmEmail_isConfirmed = List.of(
           AuthtionTestChecker.of(false, Map.of(), 200, "email-is-already-confirmed")
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_reqConfirmConsumerEmail_duplicateDelay = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_reqConfirmEmail_duplicateDelay = List.of(
           AuthtionTestChecker.of(false, Map.of(), 200, "delay-between-duplicate-requests")
   );
 
-  public static List<AuthtionTestChecker> checkers_for_confirmConsumerEmail(String existedKey)
+  public static List<AuthtionTestChecker> checkers_for_confirmEmail(String existedKey)
   {
     return List.of(
             AuthtionTestChecker.of(false, Map.of(), 200, "missing-confirm-key"),
@@ -132,7 +132,7 @@ public class AuthtionTestVariablesForConsumerTest
     );
   }
 
-  public static final List<AuthtionTestChecker> checkers_for_changeConsumerPass = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_changePass = List.of(
           AuthtionTestChecker.of(false, Map.of(), 200, "missing-oldpass"),
           AuthtionTestChecker.of(false, Map.of("oldpass", ""), 200, "empty-oldpass"),
           AuthtionTestChecker.of(false, Map.of("oldpass", PASS_NEW_Consumer), 200, "missing-newpass"),
@@ -143,7 +143,7 @@ public class AuthtionTestVariablesForConsumerTest
           AuthtionTestChecker.of(true, Map.of("oldpass", PASS_NEW_Consumer, "newpass", NEWPASS_NEW_Consumer), 200)
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_changeConsumerPass_3 = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_changePass_2 = List.of(
           AuthtionTestChecker.of(false, Map.of(), 200, "missing-oldpass"),
           AuthtionTestChecker.of(false, Map.of("oldpass", ""), 200, "empty-oldpass"),
           AuthtionTestChecker.of(false, Map.of("oldpass", PASS_FOR_EMAIL_3_Consumer_Decoded), 200, "missing-newpass"),
@@ -152,7 +152,7 @@ public class AuthtionTestVariablesForConsumerTest
           AuthtionTestChecker.of(true, Map.of("oldpass", PASS_FOR_EMAIL_3_Consumer_Decoded, "newpass", NEWPASS_FOR_EMAIL_3_Consumer_Encoded), 200)
   );
 
-  public static List<AuthtionTestChecker> checkers_for_reqRestoreConsumerPass(String email)
+  public static List<AuthtionTestChecker> checkers_for_reqRestorePass(String email)
   {
     return List.of(
             AuthtionTestChecker.of(false, Map.of(), 200, "missing-email"),
@@ -165,14 +165,14 @@ public class AuthtionTestVariablesForConsumerTest
     );
   }
 
-  public static List<AuthtionTestChecker> checkers_for_reqRestoreConsumerPass_duplicateDelay(String email)
+  public static List<AuthtionTestChecker> checkers_for_reqRestorePass_duplicateDelay(String email)
   {
     return List.of(
             AuthtionTestChecker.of(false, Map.of("email", email), 200, "delay-between-duplicate-requests")
     );
   }
 
-  public static List<AuthtionTestChecker> checkers_for_confirmRestoreConsumerPass(String email, String existedKey)
+  public static List<AuthtionTestChecker> checkers_for_confirmRestorePass(String email, String existedKey)
   {
     return List.of(
             AuthtionTestChecker.of(false, Map.of(), 200, "missing-confirm-key"),
@@ -182,7 +182,7 @@ public class AuthtionTestVariablesForConsumerTest
     );
   }
 
-  public static List<AuthtionTestChecker> checkers_for_restoreConsumerPass(String email, String newpass, String existedKey)
+  public static List<AuthtionTestChecker> checkers_for_restorePass(String email, String newpass, String existedKey)
   {
     List<AuthtionTestChecker> list = new ArrayList<>(List.of(
             AuthtionTestChecker.of(false, Map.of(), 200, "missing-newpass"),
