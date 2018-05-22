@@ -100,6 +100,7 @@ CREATE TABLE authtion_mailing (
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+
 -- To persist tokens between server restarts I need:
 -- 1) to configure a persistent token store (JdbcTokenStore for example, see config/TokenStoreConfig.java)
 -- 2) create SQL tables: https://github.com/spring-projects/spring-security-oauth/blob/master/spring-security-oauth2/src/test/resources/schema.sql

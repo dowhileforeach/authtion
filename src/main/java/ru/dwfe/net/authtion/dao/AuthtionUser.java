@@ -7,9 +7,6 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static ru.dwfe.net.authtion.util.AuthtionUtil.getNickNameFromEmail;
-import static ru.dwfe.net.authtion.util.AuthtionUtil.prepareStringField;
-
 @Entity
 @Table(name = "authtion_users")
 public class AuthtionUser
@@ -225,10 +222,29 @@ public class AuthtionUser
     user.setLastName(prepareStringField(user.getLastName(), 20));
     user.setLastNameNonPublic(true);
 
-    user.setGender(0);
+    //user.setGender(0);  <-- o, if not set, when create account
     user.setGenderNonPublic(true);
 
     //user.setDateOfBirth();  <-- null
     user.setDateOfBirthNonPublic(true);
+  }
+
+  private static String getNickNameFromEmail(String email)
+  {
+    return email.substring(0, email.indexOf('@'));
+  }
+
+  private static String prepareStringField(String field, int maxLength)
+  {
+    String result;
+
+    if (field == null)
+      result = "";
+    else if (field.length() > maxLength)
+      result = field.substring(0, maxLength - 1);
+    else
+      result = field;
+
+    return result;
   }
 }

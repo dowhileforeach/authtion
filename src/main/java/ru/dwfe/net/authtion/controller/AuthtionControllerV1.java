@@ -51,7 +51,7 @@ public class AuthtionControllerV1
 
 
   //
-  // Consumer & User: Create, Read, Update
+  // Account: Create, Read, Update
   //
 
   @PostMapping("#{authtionConfigProperties.resource.checkEmail}")
@@ -137,7 +137,10 @@ public class AuthtionControllerV1
       AuthtionUser user = new AuthtionUser();
       user.setNickName(req.nickName);
       user.setFirstName(req.firstName);
+      user.setMiddleName(req.middleName);
       user.setLastName(req.lastName);
+      user.setGender(req.gender == null ? 0 : Integer.parseInt(req.gender));
+      user.setDateOfBirth(req.dateOfBirth);
       prepareNewUser(user, consumer);
       userRepository.save(user);
       user = userRepository.findById(consumer.getId()).get();
@@ -147,7 +150,7 @@ public class AuthtionControllerV1
               ? AuthtionMailing.of(1, consumer.getEmail())
               : AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
 
-      // response data
+      // data for response
       data = prepareAccountInfo(consumer, user, false);
     }
     return getResponse(errorCodes, data);
@@ -290,7 +293,7 @@ public class AuthtionControllerV1
     {
       AuthtionConsumer consumer = consumerById.get();
       AuthtionUser user = userRepository.findById(id).get();
-      data = prepareAccountInfo(consumer, user, false);
+      data = prepareAccountInfo(consumer, user, true);
     }
     else errorCodes.add("id-not-exist");
 
@@ -353,43 +356,37 @@ public class AuthtionControllerV1
 
   @PostMapping("#{authtionConfigProperties.resource.changePass}")
   @PreAuthorize("hasAuthority('USER')")
-  public String changePass(@RequestBody String body, OAuth2Authentication authentication)
+  public String changePass(@RequestBody ReqChangePass req, OAuth2Authentication authentication)
   {
     List<String> errorCodes = new ArrayList<>();
-    Map<String, Object> map = parse(body);
 
-    String oldpassField = "oldpass";
-    String newpassField = "newpass";
-
-    String oldpassValue = getValue(map, oldpassField);
-    String newpassValue = getValue(map, newpassField);
-
-    if (isDefaultCheckOK(oldpassValue, oldpassField, errorCodes)
-            && canUsePassword(newpassValue, newpassField, errorCodes))
+    if (isDefaultCheckOK(req.oldpass, req.oldpassField, errorCodes)
+            && canUsePassword(req.newpass, req.newpassField, errorCodes))
     {
       Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
       AuthtionConsumer consumer = consumerService.findById(id).get();
-      if (matchPassword(oldpassValue, consumer.getPassword()))
+      if (matchPassword(req.oldpass, consumer.getPassword()))
       {
-        consumer.setNewPassword(newpassValue);
+        consumer.setNewPassword(req.newpass);
         consumerService.save(consumer);
 
         mailingRepository.save(AuthtionMailing.of(4, consumer.getEmail()));
       }
-      else errorCodes.add("wrong-" + oldpassField);
+      else errorCodes.add("wrong-" + req.oldpassField);
     }
     return getResponse(errorCodes);
   }
 
   @PostMapping("#{authtionConfigProperties.resource.reqRestorePass}")
-  public String reqRestorePass(@RequestBody String body)
+  public String reqRestorePass(@RequestBody ReqCheckEmail req)
   {
     List<String> errorCodes = new ArrayList<>();
 
-    String email = (String) getValueFromJSON(body, "email");
+    String email = req.email;
     int type = 5;
 
-    if (isEmailCheckOK(email, errorCodes) && authtionUtil.isAllowedNewRequestForMailing(type, email, errorCodes))
+    if (isEmailCheckOK(email, errorCodes)
+            && authtionUtil.isAllowedNewRequestForMailing(type, email, errorCodes))
     {
       if (consumerService.existsByEmail(email))
       {
@@ -426,43 +423,37 @@ public class AuthtionControllerV1
   }
 
   @PostMapping("#{authtionConfigProperties.resource.restorePass}")
-  public String restorePass(@RequestBody String body)
+  public String restorePass(@RequestBody ReqRestorePass req)
   {
     List<String> errorCodes = new ArrayList<>();
-    Map<String, Object> map = parse(body);
     int type = 5;
 
-    String emailField = "email";
-    String keyField = "key";
-    String keyFieldFullName = "confirm-key";
-    String newpassField = "newpass";
-
-    String emailValue = getValue(map, emailField);
-    String keyValue = getValue(map, keyField);
-    String newpassValue = getValue(map, newpassField);
-
-    if (canUsePassword(newpassValue, newpassField, errorCodes)
-            && isDefaultCheckOK(keyValue, keyFieldFullName, errorCodes)
-            && isEmailCheckOK(emailValue, errorCodes))
+    if (canUsePassword(req.newpass, req.newpassField, errorCodes)
+            && isDefaultCheckOK(req.key, req.keyFieldFullName, errorCodes)
+            && isEmailCheckOK(req.email, errorCodes))
     {
-      Optional<AuthtionMailing> confirmByKey = mailingRepository.findData(type, emailValue, keyValue);
+      Optional<AuthtionMailing> confirmByKey = mailingRepository.findData(type, req.email, req.key);
       if (confirmByKey.isPresent())
       {
         AuthtionMailing confirm = confirmByKey.get();
 
         // the AuthtionConsumer is guaranteed to exist because: FOREIGN KEY (`consumer`) REFERENCES `consumers` (`id`) ON DELETE CASCADE
-        AuthtionConsumer consumer = consumerService.findByEmail(emailValue).get();
-        consumer.setNewPassword(newpassValue);
+        AuthtionConsumer consumer = consumerService.findByEmail(req.email).get();
+        consumer.setNewPassword(req.newpass);
         consumerService.save(consumer);
 
         confirm.clear();
         mailingRepository.save(confirm);
       }
-      else errorCodes.add(keyFieldFullName + "-not-exist");
+      else errorCodes.add(req.keyFieldFullName + "-not-exist");
     }
     return getResponse(errorCodes);
   }
 
+
+  //
+  // Auth
+  //
 
   @GetMapping("#{authtionConfigProperties.resource.signOut}")
   @PreAuthorize("hasAuthority('USER')")
@@ -479,7 +470,7 @@ public class AuthtionControllerV1
 
 
 //
-// Util classes for mapping requests
+// Util classes for handling requests
 //
 
 class ReqCheckEmail
@@ -534,9 +525,10 @@ class ReqCreateAccount
 
   String nickName;
   String firstName;
+  String middleName;
   String lastName;
 
-  int gender;
+  String gender;
   LocalDate dateOfBirth;
 
   public String getEmail()
@@ -579,6 +571,16 @@ class ReqCreateAccount
     this.firstName = firstName;
   }
 
+  public String getMiddleName()
+  {
+    return middleName;
+  }
+
+  public void setMiddleName(String middleName)
+  {
+    this.middleName = middleName;
+  }
+
   public String getLastName()
   {
     return lastName;
@@ -589,12 +591,12 @@ class ReqCreateAccount
     this.lastName = lastName;
   }
 
-  public int getGender()
+  public String getGender()
   {
     return gender;
   }
 
-  public void setGender(int gender)
+  public void setGender(String gender)
   {
     this.gender = gender;
   }
@@ -774,3 +776,71 @@ class ReqUpdateAccount
   }
 }
 
+class ReqChangePass
+{
+  String oldpass;
+  String newpass;
+
+  String oldpassField = "oldpass";
+  String newpassField = "newpass";
+
+  public String getOldpass()
+  {
+    return oldpass;
+  }
+
+  public void setOldpass(String oldpass)
+  {
+    this.oldpass = oldpass;
+  }
+
+  public String getNewpass()
+  {
+    return newpass;
+  }
+
+  public void setNewpass(String newpass)
+  {
+    this.newpass = newpass;
+  }
+}
+
+class ReqRestorePass
+{
+  String email;
+  String key;
+  String newpass;
+
+  String keyFieldFullName = "confirm-key";
+  String newpassField = "newpass";
+
+  public String getEmail()
+  {
+    return email;
+  }
+
+  public void setEmail(String email)
+  {
+    this.email = email;
+  }
+
+  public String getKey()
+  {
+    return key;
+  }
+
+  public void setKey(String key)
+  {
+    this.key = key;
+  }
+
+  public String getNewpass()
+  {
+    return newpass;
+  }
+
+  public void setNewpass(String newpass)
+  {
+    this.newpass = newpass;
+  }
+}

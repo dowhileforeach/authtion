@@ -8,8 +8,6 @@ import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.*;
 
 @Configuration

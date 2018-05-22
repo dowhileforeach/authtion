@@ -473,7 +473,7 @@ public class AuthtionConfigProperties implements InitializingBean
                     "|   Auth:                                            |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
-                    "|   Consumer:                                        |%n" +
+                    "|   Account:                                         |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +
                     "|      %-44s  |%n" +

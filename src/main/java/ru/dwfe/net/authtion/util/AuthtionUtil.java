@@ -35,23 +35,31 @@ public class AuthtionUtil
     this.authtionConfigProperties = authtionConfigProperties;
   }
 
-  public static String getNickNameFromEmail(String email)
-  {
-    return email.substring(0, email.indexOf('@'));
-  }
 
-  public static String prepareStringField(String field, int maxLength)
-  {
-    String result;
+  //
+  // CONTROLLER
+  //
 
-    if (field == null)
-      result = "";
-    else if (field.length() > maxLength)
-      result = field.substring(0, maxLength - 1);
-    else
-      result = field;
+  public static boolean isDefaultCheckOK(String value, String fieldName, List<String> errorCodes)
+  {
+    boolean result = false;
+
+    if (value != null)
+    {
+      if (!value.isEmpty())
+      {
+        result = true;
+      }
+      else errorCodes.add("empty-" + fieldName);
+    }
+    else errorCodes.add("missing-" + fieldName);
 
     return result;
+  }
+
+  public static boolean isDefaultCheckOK(String value)
+  {
+    return value != null && !value.isEmpty();
   }
 
   public static String prepareAccountInfo(AuthtionConsumer consumer, AuthtionUser user, boolean onPublic)
@@ -103,61 +111,6 @@ public class AuthtionUtil
     return "{" + list.stream().collect(Collectors.joining(",")) + "}";
   }
 
-
-  public static Map<String, Object> parse(String body)
-  {
-    return JsonParserFactory.getJsonParser().parseMap(body);
-  }
-
-  public static Object getValueFromJSON(String body, String fieldName)
-  {
-    return JsonParserFactory.getJsonParser().parseMap(body).get(fieldName);
-  }
-
-  public static String getValue(Map<String, Object> map, String key)
-  {
-    return (String) map.get(key);
-  }
-
-  public static String getJSONfromObject(Object value)
-  {
-    String result = "{}";
-    ObjectMapper mapper = new ObjectMapper();
-    try
-    {
-      result = mapper.writeValueAsString(value);
-    }
-    catch (JsonProcessingException e)
-    {
-      e.printStackTrace();
-    }
-    return result;
-  }
-
-
-  public static boolean isDefaultCheckOK(String value, String fieldName, List<String> errorCodes)
-  {
-    boolean result = false;
-
-    if (value != null)
-    {
-      if (!value.isEmpty())
-      {
-        result = true;
-      }
-      else errorCodes.add("empty-" + fieldName);
-    }
-    else errorCodes.add("missing-" + fieldName);
-
-    return result;
-  }
-
-  public static boolean isDefaultCheckOK(String value)
-  {
-    return value != null && !value.isEmpty();
-  }
-
-
   public static String getResponse(List<String> errorCodes)
   {
     if (errorCodes.size() == 0)
@@ -192,6 +145,76 @@ public class AuthtionUtil
     return String.format("{\"success\": false, \"error-codes\": %s}", getJSONfromObject(errorCodes));
   }
 
+  public String getGoogleCaptchaSecretKey()
+  {
+    return authtionConfigProperties.getGoogleCaptcha().getSecretKey();
+  }
+
+  public String getGoogleCaptchaSiteVerifyUrl()
+  {
+    return authtionConfigProperties.getGoogleCaptcha().getSiteVerifyUrl();
+  }
+
+  public boolean isAllowedNewRequestForMailing(int type, String email, List<String> errorCodes)
+  {
+    boolean result = true;
+
+    Optional<AuthtionMailing> lastPending = mailingRepository.findLastNotEmptyData(type, email);
+    if (lastPending.isPresent())
+    {
+      LocalDateTime whenNewIsAllowed = lastPending.get()
+              .getCreatedOn()
+              .plus(authtionConfigProperties.getScheduledTaskMailing().getTimeoutForDuplicateRequest(),
+                      ChronoUnit.MILLIS);
+
+      if (whenNewIsAllowed.isAfter(LocalDateTime.now()))
+      {
+        result = false;
+        errorCodes.add("delay-between-duplicate-requests");
+      }
+    }
+    return result;
+  }
+
+
+  //
+  // JSON
+  //
+
+  public static Map<String, Object> parse(String body)
+  {
+    return JsonParserFactory.getJsonParser().parseMap(body);
+  }
+
+  public static Object getValueFromJSON(String body, String fieldName)
+  {
+    return JsonParserFactory.getJsonParser().parseMap(body).get(fieldName);
+  }
+
+  public static String getValue(Map<String, Object> map, String key)
+  {
+    return (String) map.get(key);
+  }
+
+  public static String getJSONfromObject(Object value)
+  {
+    String result = "{}";
+    ObjectMapper mapper = new ObjectMapper();
+    try
+    {
+      result = mapper.writeValueAsString(value);
+    }
+    catch (JsonProcessingException e)
+    {
+      e.printStackTrace();
+    }
+    return result;
+  }
+
+
+  //
+  // COMMON
+  //
 
   public static String getUniqStrBase36(int requiredLength)
   {
@@ -220,7 +243,6 @@ public class AuthtionUtil
     return result.replaceAll("[^a-zA-Z0-9]", ""); // becouse oauth2 incorrect work with some symbols, e.g.: "+fAhjktzuw", "6k+xfc6ZRw"
   }
 
-
   public static String formatDateTime(LocalDateTime localDateTime)
   {
     // ISO dates can be written with added hours, minutes, and seconds (YYYY-MM-DDTHH:MM:SSZ):
@@ -246,38 +268,5 @@ public class AuthtionUtil
             TimeUnit.MILLISECONDS.toSeconds(millis) -
                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
     );
-  }
-
-
-  public String getGoogleCaptchaSecretKey()
-  {
-    return authtionConfigProperties.getGoogleCaptcha().getSecretKey();
-  }
-
-  public String getGoogleCaptchaSiteVerifyUrl()
-  {
-    return authtionConfigProperties.getGoogleCaptcha().getSiteVerifyUrl();
-  }
-
-
-  public boolean isAllowedNewRequestForMailing(int type, String email, List<String> errorCodes)
-  {
-    boolean result = true;
-
-    Optional<AuthtionMailing> lastPending = mailingRepository.findLastNotEmptyData(type, email);
-    if (lastPending.isPresent())
-    {
-      LocalDateTime whenNewIsAllowed = lastPending.get()
-              .getCreatedOn()
-              .plus(authtionConfigProperties.getScheduledTaskMailing().getTimeoutForDuplicateRequest(),
-                      ChronoUnit.MILLIS);
-
-      if (whenNewIsAllowed.isAfter(LocalDateTime.now()))
-      {
-        result = false;
-        errorCodes.add("delay-between-duplicate-requests");
-      }
-    }
-    return result;
   }
 }
