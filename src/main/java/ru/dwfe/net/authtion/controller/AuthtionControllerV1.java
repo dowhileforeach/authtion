@@ -219,7 +219,7 @@ public class AuthtionControllerV1
     LocalDate newDateOfBirth = req.dateOfBirth;
     Boolean newDateOfBirthNonPublic = req.dateOfBirthNonPublic;
 
-    if (errorCodes.size() == 0 && newEmail != null && !newEmail.equals(consumer.getEmail()))
+    if (newEmail != null && !newEmail.equals(consumer.getEmail()))
     {
       if (canUseEmail(newEmail, consumerService, errorCodes))
       {
@@ -230,79 +230,79 @@ public class AuthtionControllerV1
       }
     }
 
-    if (errorCodes.size() == 0 && newEmailNonPublic != null && !newEmailNonPublic.equals(consumer.isEmailNonPublic()))
+    if (newEmailNonPublic != null && !newEmailNonPublic.equals(consumer.isEmailNonPublic()))
     {
       consumer.setEmailNonPublic(newEmailNonPublic);
       consumerWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newNickName != null && !newNickName.equals(user.getNickName()))
+    if (newNickName != null && !newNickName.equals(user.getNickName()))
     {
       user.setNickName(newNickName);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newNickNameNonPublic != null && !newNickNameNonPublic.equals(user.getNickNameNonPublic()))
+    if (newNickNameNonPublic != null && !newNickNameNonPublic.equals(user.getNickNameNonPublic()))
     {
       user.setNickNameNonPublic(newNickNameNonPublic);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newFirstName != null && !newFirstName.equals(user.getFirstName()))
+    if (newFirstName != null && !newFirstName.equals(user.getFirstName()))
     {
       user.setFirstName(newFirstName);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newFirstNameNonPublic != null && !newFirstNameNonPublic.equals(user.getFirstNameNonPublic()))
+    if (newFirstNameNonPublic != null && !newFirstNameNonPublic.equals(user.getFirstNameNonPublic()))
     {
       user.setFirstNameNonPublic(newFirstNameNonPublic);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newMiddleName != null && !newMiddleName.equals(user.getMiddleName()))
+    if (newMiddleName != null && !newMiddleName.equals(user.getMiddleName()))
     {
       user.setMiddleName(newMiddleName);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newMiddleNameNonPublic != null && !newMiddleNameNonPublic.equals(user.getMiddleNameNonPublic()))
+    if (newMiddleNameNonPublic != null && !newMiddleNameNonPublic.equals(user.getMiddleNameNonPublic()))
     {
       user.setMiddleNameNonPublic(newMiddleNameNonPublic);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newLastName != null && !newLastName.equals(user.getLastName()))
+    if (newLastName != null && !newLastName.equals(user.getLastName()))
     {
       user.setLastName(newLastName);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newLastNameNonPublic != null && !newLastNameNonPublic.equals(user.getLastNameNonPublic()))
+    if (newLastNameNonPublic != null && !newLastNameNonPublic.equals(user.getLastNameNonPublic()))
     {
       user.setLastNameNonPublic(newLastNameNonPublic);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newGender != null && !newGender.equals(user.getGender()))
+    if (newGender != null && !newGender.equals(user.getGender()))
     {
       user.setGender(newGender);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newGenderNonPublic != null && !newGenderNonPublic.equals(user.getGenderNonPublic()))
+    if (newGenderNonPublic != null && !newGenderNonPublic.equals(user.getGenderNonPublic()))
     {
       user.setGenderNonPublic(newGenderNonPublic);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newDateOfBirth != null && !newDateOfBirth.equals(user.getDateOfBirth()))
+    if (newDateOfBirth != null && !newDateOfBirth.equals(user.getDateOfBirth()))
     {
       user.setDateOfBirth(newDateOfBirth);
       userWasModified = true;
     }
 
-    if (errorCodes.size() == 0 && newDateOfBirthNonPublic != null && !newDateOfBirthNonPublic.equals(user.getDateOfBirthNonPublic()))
+    if (newDateOfBirthNonPublic != null && !newDateOfBirthNonPublic.equals(user.getDateOfBirthNonPublic()))
     {
       user.setDateOfBirthNonPublic(newDateOfBirthNonPublic);
       userWasModified = true;
