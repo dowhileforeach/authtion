@@ -1,5 +1,7 @@
 package ru.dwfe.net.authtion.dao;
 
+import ru.dwfe.net.authtion.util.AuthtionUtil.ReqCreateAccount;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -26,7 +28,7 @@ public class AuthtionUser
   private String lastName;
   private boolean lastNameNonPublic;
 
-  private int gender;
+  private Integer gender;
   private boolean genderNonPublic;
 
   private LocalDate dateOfBirth;
@@ -131,12 +133,12 @@ public class AuthtionUser
     this.lastNameNonPublic = lastNameNonPublic;
   }
 
-  public int getGender()
+  public Integer getGender()
   {
     return gender;
   }
 
-  public void setGender(int gender)
+  public void setGender(Integer gender)
   {
     this.gender = gender;
   }
@@ -203,29 +205,30 @@ public class AuthtionUser
   //  UTILs
   //
 
-  public static void prepareNewUser(AuthtionUser user, AuthtionConsumer consumer)
+  public static void prepareNewUser(AuthtionUser user, AuthtionConsumer consumer, ReqCreateAccount req)
   {
     user.setConsumerId(consumer.getId());
 
-    String nickName = user.getNickName();
+    String nickName = req.nickName;
     if (nickName == null)
       nickName = getNickNameFromEmail(consumer.getEmail());
     user.setNickName(prepareStringField(nickName, 20));
     user.setNickNameNonPublic(true);
 
-    user.setFirstName(prepareStringField(user.getFirstName(), 20));
+    user.setFirstName(prepareStringField(req.firstName, 20));
     user.setFirstNameNonPublic(true);
 
-    user.setMiddleName(prepareStringField(user.getMiddleName(), 20));
+    user.setMiddleName(prepareStringField(req.middleName, 20));
     user.setMiddleNameNonPublic(true);
 
-    user.setLastName(prepareStringField(user.getLastName(), 20));
+    user.setLastName(prepareStringField(req.lastName, 20));
     user.setLastNameNonPublic(true);
 
-    //user.setGender(0);  <-- o, if not set, when create account
+    if (req.gender == null)
+      user.setGender(0);
     user.setGenderNonPublic(true);
 
-    //user.setDateOfBirth();  <-- null
+    user.setDateOfBirth(req.dateOfBirth);
     user.setDateOfBirthNonPublic(true);
   }
 

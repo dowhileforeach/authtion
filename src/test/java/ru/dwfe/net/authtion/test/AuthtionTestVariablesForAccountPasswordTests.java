@@ -9,6 +9,11 @@ import java.util.Map;
 
 public class AuthtionTestVariablesForAccountPasswordTests
 {
+
+
+  public static final String Account1_Email = "test1@dwfe.ru";
+  public static final String Account2_Email = "test2@dwfe.ru";
+
   public static final String Account3_Email = "test3@dwfe.ru";
   public static final String Account3_Pass = "123456";
   public static final String Account3_NewPass = "1234567890";
@@ -16,10 +21,10 @@ public class AuthtionTestVariablesForAccountPasswordTests
   public static final String Account4_Email = "test4@dwfe.ru";
 
   public static final String Account5_Email = "test5@dwfe.ru";
-  public static final String Account5_Pass_Encoded = "$2a$10$AvHrvvqQNOyUZxg7XMfDleDLjR3AV5C1KEwsa29EC4Eo7CYIe0eoy"; //hello123world
   public static final String Account5_Pass_Decoded = "hello123world";
-  public static final String Account5_NewPass_Encoded = "$2a$10$EGQlh6wWYUFrVbnZJzMvwOnGSxlS65Oap.6l92nA3PLskkipat7Di"; //56789900aloha
+  public static final String Account5_Pass_Encoded = "$2a$10$AvHrvvqQNOyUZxg7XMfDleDLjR3AV5C1KEwsa29EC4Eo7CYIe0eoy"; //hello123world
   public static final String Account5_NewPass_Decoded = "56789900aloha";
+  public static final String Account5_NewPass_Encoded = "$2a$10$EGQlh6wWYUFrVbnZJzMvwOnGSxlS65Oap.6l92nA3PLskkipat7Di"; //56789900aloha
 
 
 
@@ -31,7 +36,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
           AuthtionTestChecker.of(false, Map.of("email", "123456789012345678901234567890kkklkklklklkklklklklklklklk"), 200, "exceeded-max50-email-length"),
           AuthtionTestChecker.of(false, Map.of("email", "user"), 200, "invalid-email"),
           AuthtionTestChecker.of(false, Map.of("email", ".uuqu@mail.ru"), 200, "invalid-email"),
-          AuthtionTestChecker.of(false, Map.of("email", "test2@dwfe.ru"), 200, "email-present-in-database"),
+          AuthtionTestChecker.of(false, Map.of("email", Account2_Email), 200, "email-present-in-database"),
           AuthtionTestChecker.of(true, Map.of("email", Account3_Email), 200)
   );
 
@@ -52,14 +57,16 @@ public class AuthtionTestVariablesForAccountPasswordTests
             AuthtionTestChecker.of(false, Map.of("email", "ogygyg_bnmkkskslwlwllogygyg_bnmkkskslwlwll@gmail.com"), 200, "exceeded-max50-email-length"),
             AuthtionTestChecker.of(false, Map.of("email", "user"), 200, "invalid-email"),
             AuthtionTestChecker.of(false, Map.of("email", "@puqu@mail.ru"), 200, "invalid-email"),
-            AuthtionTestChecker.of(false, Map.of("email", "test1@dwfe.ru"), 200, "email-present-in-database")
+            AuthtionTestChecker.of(false, Map.of("email", Account1_Email), 200, "email-present-in-database")
     ));
     list.addAll(List.of(
             AuthtionTestChecker.of(true, Map.of("email", Account4_Email, "firstName", "ozon"), 200),
+
             AuthtionTestChecker.of(false, Map.of("email", Account4_Email), 200, "email-present-in-database"),
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", ""), 200, "empty-password"),
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", "54321"), 200, "exceeded-min6-or-max55-password-length"),
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "exceeded-min6-or-max55-password-length"),
+
             AuthtionTestChecker.of(true, Map.of("email", Account3_Email, "password", Account3_Pass, "nickName", "nobody", "lastName", "sunshine"), 200),
             AuthtionTestChecker.of(true, Map.of("email", Account5_Email, "password", Account5_Pass_Encoded, "nickName", "hello world"), 200)
     ));

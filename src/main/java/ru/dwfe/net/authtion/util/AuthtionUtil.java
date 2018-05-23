@@ -14,6 +14,7 @@ import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -67,44 +68,52 @@ public class AuthtionUtil
     ArrayList<String> list = new ArrayList<>();
     LocalDateTime updatedOn = consumer.getUpdatedOn().isBefore(user.getUpdatedOn()) ? consumer.getUpdatedOn() : user.getUpdatedOn();
 
-    list.add("\"id\": " + consumer.getId());
+    String id = "\"id\": " + consumer.getId();
+    String email = "\"email\": \"" + consumer.getEmail() + "\"";
+    String nickName = "\"nickName\": \"" + user.getNickName() + "\"";
+    String firstName = "\"firstName\": \"" + user.getFirstName() + "\"";
+    String middleName = "\"middleName\": \"" + user.getMiddleName() + "\"";
+    String lastName = "\"lastName\": \"" + user.getLastName() + "\"";
+    String gender = "\"gender\": " + user.getGender();
+    String dateOfBirth = "\"dateOfBirth\": " + user.getDateOfBirth();
 
+    list.add(id);
     if (onPublic)
     {
       if (!consumer.isEmailNonPublic())
-        list.add("\"email\": \"" + consumer.getEmail() + "\"");
+        list.add(email);
       if (!user.isNickNameNonPublic())
-        list.add("\"nickName\": \"" + user.getNickName() + "\"");
+        list.add(nickName);
       if (!user.isFirstNameNonPublic())
-        list.add("\"firstName\": \"" + user.getFirstName() + "\"");
+        list.add(firstName);
       if (!user.isMiddleNameNonPublic())
-        list.add("\"middleName\": \"" + user.getMiddleName() + "\"");
+        list.add(middleName);
       if (!user.isLastNameNonPublic())
-        list.add("\"lastName\": \"" + user.getLastName() + "\"");
+        list.add(lastName);
       if (!user.isGenderNonPublic())
-        list.add("\"gender\": \"" + user.getGender() + "\"");
+        list.add(gender);
       if (!user.isDateOfBirthNonPublic())
-        list.add("\"dateOfBirth\": \"" + user.getDateOfBirth() + "\"");
+        list.add(dateOfBirth);
     }
     else
     {
       list.add("\"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(consumer.getCreatedOn()) + "\"");
       list.add("\"updatedOn\": " + "\"" + formatDateTime(updatedOn) + "\"");
       list.add("\"authorities\": " + consumer.getAuthorities());
-      list.add("\"email\": \"" + consumer.getEmail() + "\"");
+      list.add(email);
       list.add("\"emailConfirmed\": " + consumer.isEmailConfirmed());
       list.add("\"emailNonPublic\": " + consumer.isEmailNonPublic());
-      list.add("\"nickName\": \"" + user.getNickName() + "\"");
+      list.add(nickName);
       list.add("\"nickNameNonPublic\": \"" + user.isNickNameNonPublic() + "\"");
-      list.add("\"firstName\": \"" + user.getFirstName() + "\"");
+      list.add(firstName);
       list.add("\"firstNameNonPublic\": \"" + user.isFirstNameNonPublic() + "\"");
-      list.add("\"middleName\": \"" + user.getMiddleName() + "\"");
+      list.add(middleName);
       list.add("\"middleNameNonPublic\": \"" + user.isMiddleNameNonPublic() + "\"");
-      list.add("\"lastName\": \"" + user.getLastName() + "\"");
+      list.add(lastName);
       list.add("\"lastNameNonPublic\": \"" + user.isLastNameNonPublic() + "\"");
-      list.add("\"gender\": \"" + user.getGender() + "\"");
+      list.add(gender);
       list.add("\"genderNonPublic\": \"" + user.isGenderNonPublic() + "\"");
-      list.add("\"dateOfBirth\": \"" + user.getDateOfBirth() + "\"");
+      list.add(dateOfBirth);
       list.add("\"dateOfBirthNonPublic\": \"" + user.isDateOfBirthNonPublic() + "\"");
     }
 
@@ -176,6 +185,377 @@ public class AuthtionUtil
     return result;
   }
 
+  public static class ReqCreateAccount
+  {
+    public String email;
+    public String password;
+
+    public String nickName;
+    public String firstName;
+    public String middleName;
+    public String lastName;
+
+    public Integer gender;
+    public LocalDate dateOfBirth;
+
+    public String getEmail()
+    {
+      return email;
+    }
+
+    public void setEmail(String email)
+    {
+      this.email = email;
+    }
+
+    public String getPassword()
+    {
+      return password;
+    }
+
+    public void setPassword(String password)
+    {
+      this.password = password;
+    }
+
+    public String getNickName()
+    {
+      return nickName;
+    }
+
+    public void setNickName(String nickName)
+    {
+      this.nickName = nickName;
+    }
+
+    public String getFirstName()
+    {
+      return firstName;
+    }
+
+    public void setFirstName(String firstName)
+    {
+      this.firstName = firstName;
+    }
+
+    public String getMiddleName()
+    {
+      return middleName;
+    }
+
+    public void setMiddleName(String middleName)
+    {
+      this.middleName = middleName;
+    }
+
+    public String getLastName()
+    {
+      return lastName;
+    }
+
+    public void setLastName(String lastName)
+    {
+      this.lastName = lastName;
+    }
+
+    public Integer getGender()
+    {
+      return gender;
+    }
+
+    public void setGender(Integer gender)
+    {
+      this.gender = gender;
+    }
+
+    public LocalDate getDateOfBirth()
+    {
+      return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth)
+    {
+      this.dateOfBirth = dateOfBirth;
+    }
+  }
+
+  public static class ReqCheckEmail
+  {
+    public String email;
+
+    public String getEmail()
+    {
+      return email;
+    }
+
+    public void setEmail(String email)
+    {
+      this.email = email;
+    }
+  }
+
+  public static class ReqCheckPass
+  {
+    public String password;
+
+    public String getPassword()
+    {
+      return password;
+    }
+
+    public void setPassword(String password)
+    {
+      this.password = password;
+    }
+  }
+
+  public static class ReqGoogleCaptchaValidate
+  {
+    public String googleResponse;
+
+    public String getGoogleResponse()
+    {
+      return googleResponse;
+    }
+
+    public void setGoogleResponse(String googleResponse)
+    {
+      this.googleResponse = googleResponse;
+    }
+  }
+
+  public static class ReqUpdateAccount
+  {
+    public String email;
+    public Boolean emailNonPublic;
+
+    public String nickName;
+    public Boolean nickNameNonPublic;
+
+    public String firstName;
+    public Boolean firstNameNonPublic;
+
+    public String middleName;
+    public Boolean middleNameNonPublic;
+
+    public String lastName;
+    public Boolean lastNameNonPublic;
+
+    public Integer gender;
+    public Boolean genderNonPublic;
+
+    public LocalDate dateOfBirth;
+    public Boolean dateOfBirthNonPublic;
+
+    public String getEmail()
+    {
+      return email;
+    }
+
+    public void setEmail(String email)
+    {
+      this.email = email;
+    }
+
+    public Boolean getEmailNonPublic()
+    {
+      return emailNonPublic;
+    }
+
+    public void setEmailNonPublic(Boolean emailNonPublic)
+    {
+      this.emailNonPublic = emailNonPublic;
+    }
+
+    public String getNickName()
+    {
+      return nickName;
+    }
+
+    public void setNickName(String nickName)
+    {
+      this.nickName = nickName;
+    }
+
+    public Boolean getNickNameNonPublic()
+    {
+      return nickNameNonPublic;
+    }
+
+    public void setNickNameNonPublic(Boolean nickNameNonPublic)
+    {
+      this.nickNameNonPublic = nickNameNonPublic;
+    }
+
+    public String getFirstName()
+    {
+      return firstName;
+    }
+
+    public void setFirstName(String firstName)
+    {
+      this.firstName = firstName;
+    }
+
+    public Boolean getFirstNameNonPublic()
+    {
+      return firstNameNonPublic;
+    }
+
+    public void setFirstNameNonPublic(Boolean firstNameNonPublic)
+    {
+      this.firstNameNonPublic = firstNameNonPublic;
+    }
+
+    public String getMiddleName()
+    {
+      return middleName;
+    }
+
+    public void setMiddleName(String middleName)
+    {
+      this.middleName = middleName;
+    }
+
+    public Boolean getMiddleNameNonPublic()
+    {
+      return middleNameNonPublic;
+    }
+
+    public void setMiddleNameNonPublic(Boolean middleNameNonPublic)
+    {
+      this.middleNameNonPublic = middleNameNonPublic;
+    }
+
+    public String getLastName()
+    {
+      return lastName;
+    }
+
+    public void setLastName(String lastName)
+    {
+      this.lastName = lastName;
+    }
+
+    public Boolean getLastNameNonPublic()
+    {
+      return lastNameNonPublic;
+    }
+
+    public void setLastNameNonPublic(Boolean lastNameNonPublic)
+    {
+      this.lastNameNonPublic = lastNameNonPublic;
+    }
+
+    public Integer getGender()
+    {
+      return gender;
+    }
+
+    public void setGender(Integer gender)
+    {
+      this.gender = gender;
+    }
+
+    public Boolean getGenderNonPublic()
+    {
+      return genderNonPublic;
+    }
+
+    public void setGenderNonPublic(Boolean genderNonPublic)
+    {
+      this.genderNonPublic = genderNonPublic;
+    }
+
+    public LocalDate getDateOfBirth()
+    {
+      return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth)
+    {
+      this.dateOfBirth = dateOfBirth;
+    }
+
+    public Boolean getDateOfBirthNonPublic()
+    {
+      return dateOfBirthNonPublic;
+    }
+
+    public void setDateOfBirthNonPublic(Boolean dateOfBirthNonPublic)
+    {
+      this.dateOfBirthNonPublic = dateOfBirthNonPublic;
+    }
+  }
+
+  public static class ReqChangePass
+  {
+    public String oldpass;
+    public String newpass;
+
+    public String oldpassField = "oldpass";
+    public String newpassField = "newpass";
+
+    public String getOldpass()
+    {
+      return oldpass;
+    }
+
+    public void setOldpass(String oldpass)
+    {
+      this.oldpass = oldpass;
+    }
+
+    public String getNewpass()
+    {
+      return newpass;
+    }
+
+    public void setNewpass(String newpass)
+    {
+      this.newpass = newpass;
+    }
+  }
+
+  public static class ReqRestorePass
+  {
+    public String email;
+    public String key;
+    public String newpass;
+
+    public String keyFieldFullName = "confirm-key";
+    public String newpassField = "newpass";
+
+    public String getEmail()
+    {
+      return email;
+    }
+
+    public void setEmail(String email)
+    {
+      this.email = email;
+    }
+
+    public String getKey()
+    {
+      return key;
+    }
+
+    public void setKey(String key)
+    {
+      this.key = key;
+    }
+
+    public String getNewpass()
+    {
+      return newpass;
+    }
+
+    public void setNewpass(String newpass)
+    {
+      this.newpass = newpass;
+    }
+  }
 
   //
   // JSON

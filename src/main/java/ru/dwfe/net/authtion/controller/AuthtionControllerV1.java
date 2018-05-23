@@ -108,12 +108,13 @@ public class AuthtionControllerV1
   public String createAccount(@RequestBody ReqCreateAccount req)
   {
     List<String> errorCodes = new ArrayList<>();
-    String data = "";
 
+    String email = req.email;
     String password = req.password;
     String automaticallyGeneratedPassword = "";
+    String data = "";
 
-    if (canUseEmail(req.email, consumerService, errorCodes))
+    if (canUseEmail(email, consumerService, errorCodes))
       if (password == null)
       { // if password wasn't passed
         automaticallyGeneratedPassword = getUniqStrBase64(15);
@@ -126,22 +127,16 @@ public class AuthtionControllerV1
     {
       // consumer
       AuthtionConsumer consumer = new AuthtionConsumer();
-      consumer.setEmail(req.email);
-      consumer.setEmailConfirmed(!automaticallyGeneratedPassword.isEmpty());
+      consumer.setEmail(email);
       consumer.setNewPassword(password);
+      consumer.setEmailConfirmed(!automaticallyGeneratedPassword.isEmpty());
       prepareNewConsumer(consumer);
       consumerService.save(consumer);
       consumer = consumerService.findByEmail(consumer.getEmail()).get();
 
       // user
       AuthtionUser user = new AuthtionUser();
-      user.setNickName(req.nickName);
-      user.setFirstName(req.firstName);
-      user.setMiddleName(req.middleName);
-      user.setLastName(req.lastName);
-      user.setGender(req.gender == null ? 0 : Integer.parseInt(req.gender));
-      user.setDateOfBirth(req.dateOfBirth);
-      prepareNewUser(user, consumer);
+      prepareNewUser(user, consumer, req);
       userRepository.save(user);
       user = userRepository.findById(consumer.getId()).get();
 
@@ -181,87 +176,108 @@ public class AuthtionControllerV1
     boolean consumerWasModified = false;
     boolean userWasModified = false;
 
-    if (req.email != null && !consumer.getEmail().equals(req.email))
+    String newEmail = req.email;
+    Boolean newEmailNonPublic = req.emailNonPublic;
+
+    String newNickName = req.nickName;
+    Boolean newNickNameNonPublic = req.nickNameNonPublic;
+
+    String newFirstName = req.firstName;
+    Boolean newFirstNameNonPublic = req.firstNameNonPublic;
+
+    String newMiddleName = req.middleName;
+    Boolean newMiddleNameNonPublic = req.middleNameNonPublic;
+
+    String newLastName = req.lastName;
+    Boolean newLastNameNonPublic = req.lastNameNonPublic;
+
+    Integer newGender = req.gender;
+    Boolean newGenderNonPublic = req.genderNonPublic;
+
+    LocalDate newDateOfBirth = req.dateOfBirth;
+    Boolean newDateOfBirthNonPublic = req.dateOfBirthNonPublic;
+
+    if (newEmail != null && !newEmail.equals(consumer.getEmail()))
     {
-      consumer.setEmail(req.email);
+      consumer.setEmail(newEmail);
       consumerWasModified = true;
     }
 
-    if (req.emailNonPublic != null && !req.emailNonPublic.equals(String.valueOf(consumer.isEmailNonPublic())))
+    if (newEmailNonPublic != null && !newEmailNonPublic.equals(consumer.isEmailNonPublic()))
     {
-      consumer.setEmailNonPublic(!"false".equals(req.emailNonPublic));
+      consumer.setEmailNonPublic(newEmailNonPublic);
       consumerWasModified = true;
     }
 
-    if (req.nickName != null && !user.getNickName().equals(req.nickName))
+    if (newNickName != null && !newNickName.equals(user.getNickName()))
     {
-      user.setNickName(req.nickName);
+      user.setNickName(newNickName);
       userWasModified = true;
     }
 
-    if (req.nickNameNonPublic != null && !req.nickNameNonPublic.equals(String.valueOf(user.isNickNameNonPublic())))
+    if (newNickNameNonPublic != null && !newNickNameNonPublic.equals(user.isNickNameNonPublic()))
     {
-      user.setNickNameNonPublic(!"false".equals(req.nickNameNonPublic));
+      user.setNickNameNonPublic(newNickNameNonPublic);
       userWasModified = true;
     }
 
-    if (req.firstName != null && !user.getFirstName().equals(req.firstName))
+    if (newFirstName != null && !newFirstName.equals(user.getFirstName()))
     {
-      user.setFirstName(req.firstName);
+      user.setFirstName(newFirstName);
       userWasModified = true;
     }
 
-    if (req.firstNameNonPublic != null && !req.firstNameNonPublic.equals(String.valueOf(user.isFirstNameNonPublic())))
+    if (newFirstNameNonPublic != null && !newFirstNameNonPublic.equals(user.isFirstNameNonPublic()))
     {
-      user.setFirstNameNonPublic(!"false".equals(req.firstNameNonPublic));
+      user.setFirstNameNonPublic(newFirstNameNonPublic);
       userWasModified = true;
     }
 
-    if (req.middleName != null && !user.getMiddleName().equals(req.middleName))
+    if (newMiddleName != null && !newMiddleName.equals(user.getMiddleName()))
     {
-      user.setMiddleName(req.middleName);
+      user.setMiddleName(newMiddleName);
       userWasModified = true;
     }
 
-    if (req.middleNameNonPublic != null && !req.middleNameNonPublic.equals(String.valueOf(user.isMiddleNameNonPublic())))
+    if (newMiddleNameNonPublic != null && !newMiddleNameNonPublic.equals(user.isMiddleNameNonPublic()))
     {
-      user.setMiddleNameNonPublic(!"false".equals(req.middleNameNonPublic));
+      user.setMiddleNameNonPublic(newMiddleNameNonPublic);
       userWasModified = true;
     }
 
-    if (req.lastName != null && !user.getLastName().equals(req.lastName))
+    if (newLastName != null && !newLastName.equals(user.getLastName()))
     {
-      user.setLastName(req.lastName);
+      user.setLastName(newLastName);
       userWasModified = true;
     }
 
-    if (req.lastNameNonPublic != null && !req.lastNameNonPublic.equals(String.valueOf(user.isLastNameNonPublic())))
+    if (newLastNameNonPublic != null && !newLastNameNonPublic.equals(user.isLastNameNonPublic()))
     {
-      user.setLastNameNonPublic(!"false".equals(req.lastNameNonPublic));
+      user.setLastNameNonPublic(newLastNameNonPublic);
       userWasModified = true;
     }
 
-    if (req.gender != null && !req.gender.equals(String.valueOf(user.getGender())))
+    if (newGender != null && !newGender.equals(user.getGender()))
     {
-      user.setGender(Integer.parseInt(req.gender));
+      user.setGender(newGender);
       userWasModified = true;
     }
 
-    if (req.genderNonPublic != null && !req.genderNonPublic.equals(String.valueOf(user.isGenderNonPublic())))
+    if (newGenderNonPublic != null && !newGenderNonPublic.equals(user.isGenderNonPublic()))
     {
-      user.setGenderNonPublic(!"false".equals(req.genderNonPublic));
+      user.setGenderNonPublic(newGenderNonPublic);
       userWasModified = true;
     }
 
-    if (req.dateOfBirth != null && !user.getDateOfBirth().equals(req.dateOfBirth))
+    if (newDateOfBirth != null && !newDateOfBirth.equals(user.getDateOfBirth()))
     {
-      user.setDateOfBirth(req.dateOfBirth);
+      user.setDateOfBirth(newDateOfBirth);
       userWasModified = true;
     }
 
-    if (req.dateOfBirthNonPublic != null && !req.dateOfBirthNonPublic.equals(String.valueOf(user.isDateOfBirthNonPublic())))
+    if (newDateOfBirthNonPublic != null && !newDateOfBirthNonPublic.equals(user.isDateOfBirthNonPublic()))
     {
-      user.setDateOfBirthNonPublic(!"false".equals(req.dateOfBirthNonPublic));
+      user.setDateOfBirthNonPublic(newDateOfBirthNonPublic);
       userWasModified = true;
     }
 
@@ -473,374 +489,3 @@ public class AuthtionControllerV1
 // Util classes for handling requests
 //
 
-class ReqCheckEmail
-{
-  String email;
-
-  public String getEmail()
-  {
-    return email;
-  }
-
-  public void setEmail(String email)
-  {
-    this.email = email;
-  }
-}
-
-class ReqCheckPass
-{
-  String password;
-
-  public String getPassword()
-  {
-    return password;
-  }
-
-  public void setPassword(String password)
-  {
-    this.password = password;
-  }
-}
-
-class ReqGoogleCaptchaValidate
-{
-  String googleResponse;
-
-  public String getGoogleResponse()
-  {
-    return googleResponse;
-  }
-
-  public void setGoogleResponse(String googleResponse)
-  {
-    this.googleResponse = googleResponse;
-  }
-}
-
-class ReqCreateAccount
-{
-  String email;
-  String password;
-
-  String nickName;
-  String firstName;
-  String middleName;
-  String lastName;
-
-  String gender;
-  LocalDate dateOfBirth;
-
-  public String getEmail()
-  {
-    return email;
-  }
-
-  public void setEmail(String email)
-  {
-    this.email = email;
-  }
-
-  public String getPassword()
-  {
-    return password;
-  }
-
-  public void setPassword(String password)
-  {
-    this.password = password;
-  }
-
-  public String getNickName()
-  {
-    return nickName;
-  }
-
-  public void setNickName(String nickName)
-  {
-    this.nickName = nickName;
-  }
-
-  public String getFirstName()
-  {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName)
-  {
-    this.firstName = firstName;
-  }
-
-  public String getMiddleName()
-  {
-    return middleName;
-  }
-
-  public void setMiddleName(String middleName)
-  {
-    this.middleName = middleName;
-  }
-
-  public String getLastName()
-  {
-    return lastName;
-  }
-
-  public void setLastName(String lastName)
-  {
-    this.lastName = lastName;
-  }
-
-  public String getGender()
-  {
-    return gender;
-  }
-
-  public void setGender(String gender)
-  {
-    this.gender = gender;
-  }
-
-  public LocalDate getDateOfBirth()
-  {
-    return dateOfBirth;
-  }
-
-  public void setDateOfBirth(LocalDate dateOfBirth)
-  {
-    this.dateOfBirth = dateOfBirth;
-  }
-}
-
-class ReqUpdateAccount
-{
-  String email;
-  String emailNonPublic;
-
-  String nickName;
-  String nickNameNonPublic;
-
-  String firstName;
-  String firstNameNonPublic;
-
-  String middleName;
-  String middleNameNonPublic;
-
-  String lastName;
-  String lastNameNonPublic;
-
-  String gender;
-  String genderNonPublic;
-
-  LocalDate dateOfBirth;
-  String dateOfBirthNonPublic;
-
-  public String getEmail()
-  {
-    return email;
-  }
-
-  public void setEmail(String email)
-  {
-    this.email = email;
-  }
-
-  public String getEmailNonPublic()
-  {
-    return emailNonPublic;
-  }
-
-  public void setEmailNonPublic(String emailNonPublic)
-  {
-    this.emailNonPublic = emailNonPublic;
-  }
-
-  public String getNickName()
-  {
-    return nickName;
-  }
-
-  public void setNickName(String nickName)
-  {
-    this.nickName = nickName;
-  }
-
-  public String getNickNameNonPublic()
-  {
-    return nickNameNonPublic;
-  }
-
-  public void setNickNameNonPublic(String nickNameNonPublic)
-  {
-    this.nickNameNonPublic = nickNameNonPublic;
-  }
-
-  public String getFirstName()
-  {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName)
-  {
-    this.firstName = firstName;
-  }
-
-  public String getFirstNameNonPublic()
-  {
-    return firstNameNonPublic;
-  }
-
-  public void setFirstNameNonPublic(String firstNameNonPublic)
-  {
-    this.firstNameNonPublic = firstNameNonPublic;
-  }
-
-  public String getMiddleName()
-  {
-    return middleName;
-  }
-
-  public void setMiddleName(String middleName)
-  {
-    this.middleName = middleName;
-  }
-
-  public String getMiddleNameNonPublic()
-  {
-    return middleNameNonPublic;
-  }
-
-  public void setMiddleNameNonPublic(String middleNameNonPublic)
-  {
-    this.middleNameNonPublic = middleNameNonPublic;
-  }
-
-  public String getLastName()
-  {
-    return lastName;
-  }
-
-  public void setLastName(String lastName)
-  {
-    this.lastName = lastName;
-  }
-
-  public String getLastNameNonPublic()
-  {
-    return lastNameNonPublic;
-  }
-
-  public void setLastNameNonPublic(String lastNameNonPublic)
-  {
-    this.lastNameNonPublic = lastNameNonPublic;
-  }
-
-  public String getGender()
-  {
-    return gender;
-  }
-
-  public void setGender(String gender)
-  {
-    this.gender = gender;
-  }
-
-  public String getGenderNonPublic()
-  {
-    return genderNonPublic;
-  }
-
-  public void setGenderNonPublic(String genderNonPublic)
-  {
-    this.genderNonPublic = genderNonPublic;
-  }
-
-  public LocalDate getDateOfBirth()
-  {
-    return dateOfBirth;
-  }
-
-  public void setDateOfBirth(LocalDate dateOfBirth)
-  {
-    this.dateOfBirth = dateOfBirth;
-  }
-
-  public String getDateOfBirthNonPublic()
-  {
-    return dateOfBirthNonPublic;
-  }
-
-  public void setDateOfBirthNonPublic(String dateOfBirthNonPublic)
-  {
-    this.dateOfBirthNonPublic = dateOfBirthNonPublic;
-  }
-}
-
-class ReqChangePass
-{
-  String oldpass;
-  String newpass;
-
-  String oldpassField = "oldpass";
-  String newpassField = "newpass";
-
-  public String getOldpass()
-  {
-    return oldpass;
-  }
-
-  public void setOldpass(String oldpass)
-  {
-    this.oldpass = oldpass;
-  }
-
-  public String getNewpass()
-  {
-    return newpass;
-  }
-
-  public void setNewpass(String newpass)
-  {
-    this.newpass = newpass;
-  }
-}
-
-class ReqRestorePass
-{
-  String email;
-  String key;
-  String newpass;
-
-  String keyFieldFullName = "confirm-key";
-  String newpassField = "newpass";
-
-  public String getEmail()
-  {
-    return email;
-  }
-
-  public void setEmail(String email)
-  {
-    this.email = email;
-  }
-
-  public String getKey()
-  {
-    return key;
-  }
-
-  public void setKey(String key)
-  {
-    this.key = key;
-  }
-
-  public String getNewpass()
-  {
-    return newpass;
-  }
-
-  public void setNewpass(String newpass)
-  {
-    this.newpass = newpass;
-  }
-}
