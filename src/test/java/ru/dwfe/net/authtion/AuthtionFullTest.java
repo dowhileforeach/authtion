@@ -134,6 +134,7 @@ public class AuthtionFullTest
     //  - Account3_Email - password was passed
     //  - Account4_Email - password was not passed
     //  - Account5_Email - already encoded password was passed
+    //  - Account6_Email - only email was passed
 
 
     // Account3_Email
@@ -181,10 +182,27 @@ public class AuthtionFullTest
     List<AuthtionMailing> mailing_consumer3 = mailingRepository.findByTypeAndEmail(1, consumer3.getEmail());
     assertEquals(1, mailing_consumer3.size());
 
+    // Account6_Email
+    AuthtionConsumer consumer4 = checkConsumerAfterCreate(Account6_Email);
+    assertTrue(consumer4.isEmailConfirmed());
+    AuthtionUser user4 = checkUser_ExactMatch(consumer4.getId(), AuthtionUser.of(
+            getNickNameFromEmail(Account6_Email), true,
+            "", true,
+            "", true,
+            "", true,
+            0, true,
+            null, true)
+    );
+    List<AuthtionMailing> mailing_consumer4 = mailingRepository.findByTypeAndEmail(2, consumer4.getEmail());
+    assertEquals(1, mailing_consumer4.size());
+    String mailing_password_consumer4 = mailing_consumer4.get(0).getData();
+    assertTrue(mailing_password_consumer4.length() >= 9);
+
     // Perform full auth test for New AuthtionConsumer
     fullAuthTest(testConsumer.of(USER, consumer1.getEmail(), Account3_Pass, testClient.getClientTrusted(), 200));
     fullAuthTest(testConsumer.of(USER, consumer2.getEmail(), mailing_password_consumer2, testClient.getClientTrusted(), 200));
     fullAuthTest(testConsumer.of(USER, consumer3.getEmail(), Account5_Pass_Decoded, testClient.getClientTrusted(), 200));
+    fullAuthTest(testConsumer.of(USER, consumer4.getEmail(), mailing_password_consumer4, testClient.getClientTrusted(), 200));
   }
 
   // @Test

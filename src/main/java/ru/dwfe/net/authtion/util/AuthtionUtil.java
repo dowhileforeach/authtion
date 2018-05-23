@@ -68,14 +68,16 @@ public class AuthtionUtil
     ArrayList<String> list = new ArrayList<>();
     LocalDateTime updatedOn = consumer.getUpdatedOn().isBefore(user.getUpdatedOn()) ? consumer.getUpdatedOn() : user.getUpdatedOn();
 
-    String id = "\"id\": " + consumer.getId();
-    String email = "\"email\": \"" + consumer.getEmail() + "\"";
-    String nickName = "\"nickName\": \"" + user.getNickName() + "\"";
-    String firstName = "\"firstName\": \"" + user.getFirstName() + "\"";
-    String middleName = "\"middleName\": \"" + user.getMiddleName() + "\"";
-    String lastName = "\"lastName\": \"" + user.getLastName() + "\"";
-    String gender = "\"gender\": " + user.getGender();
-    String dateOfBirth = "\"dateOfBirth\": \"" + user.getDateOfBirth() + "\"";
+    String id = "\"id\":" + consumer.getId();
+    String email = "\"email\":\"" + consumer.getEmail() + "\"";
+    String nickName = "\"nickName\":\"" + user.getNickName() + "\"";
+    String firstName = "\"firstName\":\"" + user.getFirstName() + "\"";
+    String middleName = "\"middleName\":\"" + user.getMiddleName() + "\"";
+    String lastName = "\"lastName\":\"" + user.getLastName() + "\"";
+    String gender = "\"gender\":" + user.getGender();
+    String dateOfBirth = user.getDateOfBirth() == null
+            ? "\"dateOfBirth\":" + null
+            : "\"dateOfBirth\":\"" + user.getDateOfBirth() + "\"";
 
     list.add(id);
     if (onPublic)
@@ -97,24 +99,24 @@ public class AuthtionUtil
     }
     else
     {
-      list.add("\"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(consumer.getCreatedOn()) + "\"");
-      list.add("\"updatedOn\": " + "\"" + formatDateTime(updatedOn) + "\"");
-      list.add("\"authorities\": " + consumer.getAuthorities());
+      list.add("\"createdOn\":" + "\"" + AuthtionUtil.formatDateTime(consumer.getCreatedOn()) + "\"");
+      list.add("\"updatedOn\":" + "\"" + formatDateTime(updatedOn) + "\"");
+      list.add("\"authorities\":" + consumer.getAuthorities());
       list.add(email);
-      list.add("\"emailConfirmed\": " + consumer.isEmailConfirmed());
-      list.add("\"emailNonPublic\": " + consumer.isEmailNonPublic());
+      list.add("\"emailConfirmed\":" + consumer.isEmailConfirmed());
+      list.add("\"emailNonPublic\":" + consumer.isEmailNonPublic());
       list.add(nickName);
-      list.add("\"nickNameNonPublic\": " + user.getNickNameNonPublic());
+      list.add("\"nickNameNonPublic\":" + user.getNickNameNonPublic());
       list.add(firstName);
-      list.add("\"firstNameNonPublic\": " + user.getFirstNameNonPublic());
+      list.add("\"firstNameNonPublic\":" + user.getFirstNameNonPublic());
       list.add(middleName);
-      list.add("\"middleNameNonPublic\": " + user.getMiddleNameNonPublic());
+      list.add("\"middleNameNonPublic\":" + user.getMiddleNameNonPublic());
       list.add(lastName);
-      list.add("\"lastNameNonPublic\": " + user.getLastNameNonPublic());
+      list.add("\"lastNameNonPublic\":" + user.getLastNameNonPublic());
       list.add(gender);
-      list.add("\"genderNonPublic\": " + user.getGenderNonPublic());
+      list.add("\"genderNonPublic\":" + user.getGenderNonPublic());
       list.add(dateOfBirth);
-      list.add("\"dateOfBirthNonPublic\": " + user.getDateOfBirthNonPublic());
+      list.add("\"dateOfBirthNonPublic\":" + user.getDateOfBirthNonPublic());
     }
 
     return "{" + list.stream().collect(Collectors.joining(",")) + "}";

@@ -26,6 +26,8 @@ public class AuthtionTestVariablesForAccountPasswordTests
   public static final String Account5_NewPass_Decoded = "56789900aloha";
   public static final String Account5_NewPass_Encoded = "$2a$10$EGQlh6wWYUFrVbnZJzMvwOnGSxlS65Oap.6l92nA3PLskkipat7Di"; //56789900aloha
 
+  public static final String Account6_Email = "test6@dwfe.ru";
+
 
 
   /* BODIES */
@@ -68,7 +70,8 @@ public class AuthtionTestVariablesForAccountPasswordTests
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "exceeded-min6-or-max55-password-length"),
 
             AuthtionTestChecker.of(true, Map.of("email", Account3_Email, "password", Account3_Pass, "nickName", "nobody", "lastName", "sunshine"), 200),
-            AuthtionTestChecker.of(true, Map.of("email", Account5_Email, "password", Account5_Pass_Encoded, "nickName", "hello world", "middleName", "john", "gender", 2), 200)
+            AuthtionTestChecker.of(true, Map.of("email", Account5_Email, "password", Account5_Pass_Encoded, "nickName", "hello world", "middleName", "john", "gender", 2), 200),
+            AuthtionTestChecker.of(true, Map.of("email", Account6_Email), 200)
     ));
     return list;
   }
