@@ -166,6 +166,7 @@ public class AuthtionFullTest
     List<AuthtionMailing> mailing_consumer2 = mailingRepository.findByTypeAndEmail(2, consumer2.getEmail());
     assertEquals(1, mailing_consumer2.size());
     String mailing_password_consumer2 = mailing_consumer2.get(0).getData();
+    Account4_Pass = mailing_password_consumer2; //for next tests
     assertTrue(mailing_password_consumer2.length() >= 9);
 
 
@@ -210,58 +211,118 @@ public class AuthtionFullTest
   }
 
 
-  //  @Test
+  //@Test
   public void _008_account_getAccount()
   {
     logHead("Get Account");
     util.check_send_data(GET, prop.getResource().getGetAccount(),
-            testConsumer.getUSER_accessToken(), checkers_for_getAccount);
+            testConsumer.getUSER_accessToken(), checkers_for_getAccount2);
   }
 
 
-  // @Test
-  public void _009_account_updateAccount()
+  @Test
+  public void _010_account_updateAccount()
   {
     logHead("Update Account");
 
-    AuthtionTestConsumer USER = testConsumer.getUSER();
+    AuthtionTestConsumer tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
+    String access_token = tConsumer.access_token;
 
-//TODO
-//    AuthtionConsumer consumer = getConsumerByEmail(USER.username);
-//    assertEquals("test2", consumer.getNickName());
-//    assertEquals("", consumer.getFirstName());
-//    assertEquals("", consumer.getLastName());
+    AuthtionConsumer consumer = getConsumerByEmail(Account4_Email);
+    assertEquals(Long.valueOf(1002), consumer.getId());
+    assertTrue(consumer.isEmailConfirmed());
+    assertTrue(consumer.isEmailNonPublic());
+    AuthtionUser user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+            getNickNameFromEmail(Account4_Email), true,
+            "ozon", true,
+            "", true,
+            "", true,
+            0, true,
+            LocalDate.parse("1980-11-27"), true)
+    );
+
+    // (1) empty request
+    util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount1);
+    consumer = getConsumerByEmail(Account4_Email);
+    assertEquals(Long.valueOf(1002), consumer.getId());
+    assertTrue(consumer.isEmailConfirmed());
+    assertTrue(consumer.isEmailNonPublic());
+    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+            getNickNameFromEmail(Account4_Email), true,
+            "ozon", true,
+            "", true,
+            "", true,
+            0, true,
+            LocalDate.parse("1980-11-27"), true)
+    );
+
+    // (2) change Email
+    String newEmail = "helloworld@oo.com";
+    consumerNotPresent(newEmail);
+    util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount2);
+    consumerNotPresent(Account4_Email);
+    consumer = getConsumerByEmail(newEmail);
+    assertEquals(Long.valueOf(1002), consumer.getId());
+    assertFalse(consumer.isEmailConfirmed());
+    assertTrue(consumer.isEmailNonPublic());
+    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+            getNickNameFromEmail(Account4_Email), true,
+            "ozon", true,
+            "", true,
+            "", true,
+            0, true,
+            LocalDate.parse("1980-11-27"), true)
+    );
+
+
+    // (3) since I changed email, I need to make sure that account is still functional.
+    //     After change email /sign-out will be forced
+    // sign-in again
+    tConsumer = testConsumer.of(USER, newEmail, Account4_Pass, testClient.getClientTrusted(), 200);
+    fullAuthTest(tConsumer);
+    // sign-in again, becouse during fullAuthTest was perform sign-out
+    tConsumer = testConsumer.of(USER, newEmail, Account4_Pass, testClient.getClientTrusted(), 200);
+    access_token = tConsumer.access_token;
+
+
+    // (4) change Email to original AND change emailNonPublic to false
+    util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount3);
+    consumerNotPresent(newEmail);
+    consumer = getConsumerByEmail(Account4_Email);
+    assertEquals(Long.valueOf(1002), consumer.getId());
+    assertFalse(consumer.isEmailConfirmed());
+    assertFalse(consumer.isEmailNonPublic());
+    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+            getNickNameFromEmail(Account4_Email), true,
+            "ozon", true,
+            "", true,
+            "", true,
+            0, true,
+            LocalDate.parse("1980-11-27"), true)
+    );
+    tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
+    access_token = tConsumer.access_token;
+
 //
-//    util.check_send_data(POST, prop.getResource().getUpdateUser(), USER.access_token, checkers_for_updateAccount1);
-//    consumer = getConsumerByEmail(USER.username);
-//    assertEquals("test2", consumer.getNickName());
-//    assertEquals("", consumer.getFirstName());
-//    assertEquals("", consumer.getLastName());
-//
-//    util.check_send_data(POST, prop.getResource().getUpdateUser(), USER.access_token, checkers_for_updateAccount5);
-//    consumer = getConsumerByEmail(USER.username);
-//    assertEquals("good", consumer.getNickName());
-//    assertEquals("alto", consumer.getFirstName());
-//    assertEquals("smith", consumer.getLastName());
-//
-//    util.check_send_data(POST, prop.getResource().getUpdateUser(), USER.access_token, checkers_for_updateAccount3);
+//    util.check_send_data(POST, prop.getResource().getUpdateAccount(), USER.access_token, checkers_for_updateAccount3);
 //    consumer = getConsumerByEmail(USER.username);
 //    assertEquals("hello", consumer.getNickName());
 //    assertEquals("1", consumer.getFirstName());
 //    assertEquals("smith", consumer.getLastName());
 //
-//    util.check_send_data(POST, prop.getResource().getUpdateUser(), USER.access_token, checkers_for_updateAccount4);
+//    util.check_send_data(POST, prop.getResource().getUpdateAccount(), USER.access_token, checkers_for_updateAccount4);
 //    consumer = getConsumerByEmail(USER.username);
 //    assertEquals("hello", consumer.getNickName());
 //    assertEquals("1", consumer.getFirstName());
 //    assertEquals("2", consumer.getLastName());
 //
-//    util.check_send_data(POST, prop.getResource().getUpdateUser(), USER.access_token, checkers_for_updateAccount2);
+//    util.check_send_data(POST, prop.getResource().getUpdateAccount(), USER.access_token, checkers_for_updateAccount2);
 //    consumer = getConsumerByEmail(USER.username);
 //    assertEquals("user", consumer.getNickName());
 //    assertEquals("", consumer.getFirstName());
 //    assertEquals("", consumer.getLastName());
   }
+
 
   // @Test
   public void _010_account_publicAccount()
@@ -272,7 +333,6 @@ public class AuthtionFullTest
     String USER_accessToken = testConsumer.getUSER_accessToken();
     String ADMIN_accessToken = testConsumer.getADMIN_accessToken();
 
-//TODO
 //    util.check_send_data(GET, prop.getResource().getPublicUser() + "/9", ANY_accessToken, checkers_for_publicAccount_9);
 //    util.check_send_data(GET, prop.getResource().getPublicUser() + "/9", USER_accessToken, checkers_for_publicAccount_9);
 //    util.check_send_data(GET, prop.getResource().getPublicUser() + "/9", ADMIN_accessToken, checkers_for_publicAccount_9);
@@ -280,6 +340,7 @@ public class AuthtionFullTest
 //    util.check_send_data(GET, prop.getResource().getPublicUser() + "/1000", USER_accessToken, checkers_for_publicAccount_1000);
 //    util.check_send_data(GET, prop.getResource().getPublicUser() + "/1000", ADMIN_accessToken, checkers_for_publicAccount_1000);
   }
+
 
   //  @Test
   public void _011_account_reqConfirmEmail()
@@ -530,6 +591,12 @@ public class AuthtionFullTest
     Optional<AuthtionConsumer> consumerFromDBOpt = consumerService.findByEmail(email);
     assertTrue(consumerFromDBOpt.isPresent());
     return consumerFromDBOpt.get();
+  }
+
+  private void consumerNotPresent(String email)
+  {
+    Optional<AuthtionConsumer> consumerFromDBOpt = consumerService.findByEmail(email);
+    assertFalse(consumerFromDBOpt.isPresent());
   }
 
   private AuthtionUser getUserById(Long id)

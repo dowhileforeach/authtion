@@ -165,6 +165,25 @@ public class AuthtionControllerV1
     return getResponse(errorCodes, data);
   }
 
+  @GetMapping("#{authtionConfigProperties.resource.publicAccount}" + "/{id}")
+  public String publicAccount(@PathVariable Long id)
+  {
+    List<String> errorCodes = new ArrayList<>();
+    String data = "";
+
+    Optional<AuthtionConsumer> consumerById = consumerService.findById(id);
+    if (consumerById.isPresent())
+    {
+      AuthtionConsumer consumer = consumerById.get();
+      AuthtionUser user = userRepository.findById(id).get();
+      data = prepareAccountInfo(consumer, user, true);
+    }
+    else errorCodes.add("id-not-exist");
+
+    return getResponse(errorCodes, data);
+  }
+
+
   @PostMapping("#{authtionConfigProperties.resource.updateAccount}")
   @PreAuthorize("hasAuthority('USER')")
   public String updateAccount(@RequestBody ReqUpdateAccount req, OAuth2Authentication authentication)
@@ -172,6 +191,8 @@ public class AuthtionControllerV1
     List<String> errorCodes = new ArrayList<>();
     boolean consumerWasModified = false;
     boolean userWasModified = false;
+    boolean emailWasChanged = false;
+    String data = "";
 
     Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
     AuthtionConsumer consumer = consumerService.findById(id).get();
@@ -198,122 +219,113 @@ public class AuthtionControllerV1
     LocalDate newDateOfBirth = req.dateOfBirth;
     Boolean newDateOfBirthNonPublic = req.dateOfBirthNonPublic;
 
-    if (newEmail != null && !newEmail.equals(consumer.getEmail()))
+    if (errorCodes.size() == 0 && newEmail != null && !newEmail.equals(consumer.getEmail()))
     {
-      consumer.setEmail(newEmail);
-      consumerWasModified = true;
+      if (canUseEmail(newEmail, consumerService, errorCodes))
+      {
+        consumer.setEmail(newEmail);
+        consumer.setEmailConfirmed(false);
+        consumerWasModified = true;
+        emailWasChanged = true;
+      }
     }
 
-    if (newEmailNonPublic != null && !newEmailNonPublic.equals(consumer.isEmailNonPublic()))
+    if (errorCodes.size() == 0 && newEmailNonPublic != null && !newEmailNonPublic.equals(consumer.isEmailNonPublic()))
     {
       consumer.setEmailNonPublic(newEmailNonPublic);
       consumerWasModified = true;
     }
 
-    if (newNickName != null && !newNickName.equals(user.getNickName()))
+    if (errorCodes.size() == 0 && newNickName != null && !newNickName.equals(user.getNickName()))
     {
       user.setNickName(newNickName);
       userWasModified = true;
     }
 
-    if (newNickNameNonPublic != null && !newNickNameNonPublic.equals(user.getNickNameNonPublic()))
+    if (errorCodes.size() == 0 && newNickNameNonPublic != null && !newNickNameNonPublic.equals(user.getNickNameNonPublic()))
     {
       user.setNickNameNonPublic(newNickNameNonPublic);
       userWasModified = true;
     }
 
-    if (newFirstName != null && !newFirstName.equals(user.getFirstName()))
+    if (errorCodes.size() == 0 && newFirstName != null && !newFirstName.equals(user.getFirstName()))
     {
       user.setFirstName(newFirstName);
       userWasModified = true;
     }
 
-    if (newFirstNameNonPublic != null && !newFirstNameNonPublic.equals(user.getFirstNameNonPublic()))
+    if (errorCodes.size() == 0 && newFirstNameNonPublic != null && !newFirstNameNonPublic.equals(user.getFirstNameNonPublic()))
     {
       user.setFirstNameNonPublic(newFirstNameNonPublic);
       userWasModified = true;
     }
 
-    if (newMiddleName != null && !newMiddleName.equals(user.getMiddleName()))
+    if (errorCodes.size() == 0 && newMiddleName != null && !newMiddleName.equals(user.getMiddleName()))
     {
       user.setMiddleName(newMiddleName);
       userWasModified = true;
     }
 
-    if (newMiddleNameNonPublic != null && !newMiddleNameNonPublic.equals(user.getMiddleNameNonPublic()))
+    if (errorCodes.size() == 0 && newMiddleNameNonPublic != null && !newMiddleNameNonPublic.equals(user.getMiddleNameNonPublic()))
     {
       user.setMiddleNameNonPublic(newMiddleNameNonPublic);
       userWasModified = true;
     }
 
-    if (newLastName != null && !newLastName.equals(user.getLastName()))
+    if (errorCodes.size() == 0 && newLastName != null && !newLastName.equals(user.getLastName()))
     {
       user.setLastName(newLastName);
       userWasModified = true;
     }
 
-    if (newLastNameNonPublic != null && !newLastNameNonPublic.equals(user.getLastNameNonPublic()))
+    if (errorCodes.size() == 0 && newLastNameNonPublic != null && !newLastNameNonPublic.equals(user.getLastNameNonPublic()))
     {
       user.setLastNameNonPublic(newLastNameNonPublic);
       userWasModified = true;
     }
 
-    if (newGender != null && !newGender.equals(user.getGender()))
+    if (errorCodes.size() == 0 && newGender != null && !newGender.equals(user.getGender()))
     {
       user.setGender(newGender);
       userWasModified = true;
     }
 
-    if (newGenderNonPublic != null && !newGenderNonPublic.equals(user.getGenderNonPublic()))
+    if (errorCodes.size() == 0 && newGenderNonPublic != null && !newGenderNonPublic.equals(user.getGenderNonPublic()))
     {
       user.setGenderNonPublic(newGenderNonPublic);
       userWasModified = true;
     }
 
-    if (newDateOfBirth != null && !newDateOfBirth.equals(user.getDateOfBirth()))
+    if (errorCodes.size() == 0 && newDateOfBirth != null && !newDateOfBirth.equals(user.getDateOfBirth()))
     {
       user.setDateOfBirth(newDateOfBirth);
       userWasModified = true;
     }
 
-    if (newDateOfBirthNonPublic != null && !newDateOfBirthNonPublic.equals(user.getDateOfBirthNonPublic()))
+    if (errorCodes.size() == 0 && newDateOfBirthNonPublic != null && !newDateOfBirthNonPublic.equals(user.getDateOfBirthNonPublic()))
     {
       user.setDateOfBirthNonPublic(newDateOfBirthNonPublic);
       userWasModified = true;
     }
 
-    if (consumerWasModified)
+    if (errorCodes.size() == 0)
     {
-      consumerService.save(consumer);
-      consumer = consumerService.findById(id).get();
+      if (consumerWasModified)
+      {
+        consumerService.save(consumer);
+        consumer = consumerService.findById(id).get();
+        if (emailWasChanged)
+        {
+          signOut(authentication);
+        }
+      }
+      if (userWasModified)
+      {
+        userRepository.save(user);
+        user = userRepository.findById(id).get();
+      }
+      data = prepareAccountInfo(consumer, user, false);
     }
-
-    if (userWasModified)
-    {
-      userRepository.save(user);
-      user = userRepository.findById(id).get();
-    }
-
-    String data = prepareAccountInfo(consumer, user, false);
-
-    return getResponse(errorCodes, data);
-  }
-
-  @GetMapping("#{authtionConfigProperties.resource.publicAccount}" + "/{id}")
-  public String publicAccount(@PathVariable Long id)
-  {
-    List<String> errorCodes = new ArrayList<>();
-    String data = "";
-
-    Optional<AuthtionConsumer> consumerById = consumerService.findById(id);
-    if (consumerById.isPresent())
-    {
-      AuthtionConsumer consumer = consumerById.get();
-      AuthtionUser user = userRepository.findById(id).get();
-      data = prepareAccountInfo(consumer, user, true);
-    }
-    else errorCodes.add("id-not-exist");
-
     return getResponse(errorCodes, data);
   }
 

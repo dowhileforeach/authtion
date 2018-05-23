@@ -19,6 +19,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
   public static final String Account3_NewPass = "1234567890";
 
   public static final String Account4_Email = "test4@dwfe.ru";
+  public static String Account4_Pass; //will be set during the testing process
 
   public static final String Account5_Email = "test5@dwfe.ru";
   public static final String Account5_Pass_Decoded = "hello123world";
@@ -77,42 +78,32 @@ public class AuthtionTestVariablesForAccountPasswordTests
   }
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount1 = List.of(
-          AuthtionTestChecker.of(true, Map.of(), 200)
+          AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap("{\"id\":1002,\"createdOn\":\"date\",\"updatedOn\":\"date\",\"authorities\":[\"USER\"],\"email\":\"test4@dwfe.ru\",\"emailConfirmed\":true,\"emailNonPublic\":true,\"nickName\":\"test4\",\"nickNameNonPublic\":true,\"firstName\":\"ozon\",\"firstNameNonPublic\":true,\"middleName\":\"\",\"middleNameNonPublic\":true,\"lastName\":\"\",\"lastNameNonPublic\":true,\"gender\":0,\"genderNonPublic\":true,\"dateOfBirth\":\"1980-11-27\",\"dateOfBirthNonPublic\":true}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount2 = List.of(
-          AuthtionTestChecker.of(true, Map.of("nickName", "user", "firstName", "", "lastName", ""), 200)
+          AuthtionTestChecker.of(false, Map.of("email", ""), 200, "empty-email"),
+          AuthtionTestChecker.of(false, Map.of("email", "ocycybbbnmkkskslwlwllogygyg_bnmkkskslwlwdd@gmail.com"), 200, "exceeded-max50-email-length"),
+          AuthtionTestChecker.of(false, Map.of("email", "hello"), 200, "invalid-email"),
+          AuthtionTestChecker.of(false, Map.of("email", "@@mail.ru"), 200, "invalid-email"),
+          AuthtionTestChecker.of(false, Map.of("email", Account2_Email), 200, "email-present-in-database"),
+          AuthtionTestChecker.of(true, Map.of("email", "helloworld@oo.com"), 200, JsonParserFactory.getJsonParser().parseMap("{\"id\":1002,\"createdOn\":\"date\",\"updatedOn\":\"date\",\"authorities\":[\"USER\"],\"email\":\"helloworld@oo.com\",\"emailConfirmed\":false,\"emailNonPublic\":true,\"nickName\":\"test4\",\"nickNameNonPublic\":true,\"firstName\":\"ozon\",\"firstNameNonPublic\":true,\"middleName\":\"\",\"middleNameNonPublic\":true,\"lastName\":\"\",\"lastNameNonPublic\":true,\"gender\":0,\"genderNonPublic\":true,\"dateOfBirth\":\"1980-11-27\",\"dateOfBirthNonPublic\":true}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount3 = List.of(
-          AuthtionTestChecker.of(true, Map.of("nickName", "hello", "firstName", "1"), 200)
+          AuthtionTestChecker.of(true, Map.of("email", Account4_Email, "emailNonPublic", false), 200, JsonParserFactory.getJsonParser().parseMap("{\"id\":1002,\"createdOn\":\"date\",\"updatedOn\":\"date\",\"authorities\":[\"USER\"],\"email\":\"test4@dwfe.ru\",\"emailConfirmed\":false,\"emailNonPublic\":false,\"nickName\":\"test4\",\"nickNameNonPublic\":true,\"firstName\":\"ozon\",\"firstNameNonPublic\":true,\"middleName\":\"\",\"middleNameNonPublic\":true,\"lastName\":\"\",\"lastNameNonPublic\":true,\"gender\":0,\"genderNonPublic\":true,\"dateOfBirth\":\"1980-11-27\",\"dateOfBirthNonPublic\":true}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount4 = List.of(
-          AuthtionTestChecker.of(true, Map.of("lastName", "2"), 200)
+          AuthtionTestChecker.of(true, Map.of(), 200)
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount5 = List.of(
-          AuthtionTestChecker.of(true, Map.of("nickName", "good", "firstName", "alto", "lastName", "smith"), 200)
+          AuthtionTestChecker.of(true, Map.of(), 200)
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_getAccount = List.of(
-          AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap("{\n" +
-                  " \"id\": 1001,\n" +
-                  " \"email\": \"test2@dwfe.ru\",\n" +
-                  " \"password\": \"****\",\n" +
-                  " \"authorities\": [\"USER\"],\n" +
-                  " \"nickName\": \"user\",\n" +
-                  " \"firstName\": \"\",\n" +
-                  " \"lastName\": \"\",\n" +
-                  " \"accountNonExpired\": true,\n" +
-                  " \"credentialsNonExpired\": true,\n" +
-                  " \"accountNonLocked\": true,\n" +
-                  " \"enabled\": true,\n" +
-                  " \"emailConfirmed\": true,\n" +
-                  " \"createdOn\": " + "\"date\",\n" +
-                  " \"updatedOn\": " + "\"date\"\n" +
-                  "}"))
+  public static final List<AuthtionTestChecker> checkers_for_getAccount2 = List.of(
+          AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap("{\"id\":1001,\"createdOn\":\"date\",\"updatedOn\":\"date\",\"authorities\":[\"USER\"],\"email\":\"test2@dwfe.ru\",\"emailConfirmed\":true,\"emailNonPublic\":true,\"nickName\":\"test2\",\"nickNameNonPublic\":true,\"firstName\":\"\",\"firstNameNonPublic\":true,\"middleName\":\"\",\"middleNameNonPublic\":true,\"lastName\":\"\",\"lastNameNonPublic\":true,\"gender\":0,\"genderNonPublic\":true,\"dateOfBirth\":null,\"dateOfBirthNonPublic\":true}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_publicAccount_9 = List.of(
