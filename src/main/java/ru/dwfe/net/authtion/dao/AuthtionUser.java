@@ -17,22 +17,22 @@ public class AuthtionUser
   private Long consumerId;
 
   private String nickName;
-  private boolean nickNameNonPublic;
+  private Boolean nickNameNonPublic;
 
   private String firstName;
-  private boolean firstNameNonPublic;
+  private Boolean firstNameNonPublic;
 
   private String middleName;
-  private boolean middleNameNonPublic;
+  private Boolean middleNameNonPublic;
 
   private String lastName;
-  private boolean lastNameNonPublic;
+  private Boolean lastNameNonPublic;
 
   private Integer gender;
-  private boolean genderNonPublic;
+  private Boolean genderNonPublic;
 
   private LocalDate dateOfBirth;
-  private boolean dateOfBirthNonPublic;
+  private Boolean dateOfBirthNonPublic;
 
   @Column(updatable = false, insertable = false)
   private LocalDateTime updatedOn;
@@ -41,7 +41,6 @@ public class AuthtionUser
   //
   //  GETTERs and SETTERs
   //
-
 
   public Long getConsumerId()
   {
@@ -63,12 +62,12 @@ public class AuthtionUser
     this.nickName = nickName;
   }
 
-  public boolean isNickNameNonPublic()
+  public Boolean getNickNameNonPublic()
   {
     return nickNameNonPublic;
   }
 
-  public void setNickNameNonPublic(boolean nickNameNonPublic)
+  public void setNickNameNonPublic(Boolean nickNameNonPublic)
   {
     this.nickNameNonPublic = nickNameNonPublic;
   }
@@ -83,12 +82,12 @@ public class AuthtionUser
     this.firstName = firstName;
   }
 
-  public boolean isFirstNameNonPublic()
+  public Boolean getFirstNameNonPublic()
   {
     return firstNameNonPublic;
   }
 
-  public void setFirstNameNonPublic(boolean firstNameNonPublic)
+  public void setFirstNameNonPublic(Boolean firstNameNonPublic)
   {
     this.firstNameNonPublic = firstNameNonPublic;
   }
@@ -103,12 +102,12 @@ public class AuthtionUser
     this.middleName = middleName;
   }
 
-  public boolean isMiddleNameNonPublic()
+  public Boolean getMiddleNameNonPublic()
   {
     return middleNameNonPublic;
   }
 
-  public void setMiddleNameNonPublic(boolean middleNameNonPublic)
+  public void setMiddleNameNonPublic(Boolean middleNameNonPublic)
   {
     this.middleNameNonPublic = middleNameNonPublic;
   }
@@ -123,12 +122,12 @@ public class AuthtionUser
     this.lastName = lastName;
   }
 
-  public boolean isLastNameNonPublic()
+  public Boolean getLastNameNonPublic()
   {
     return lastNameNonPublic;
   }
 
-  public void setLastNameNonPublic(boolean lastNameNonPublic)
+  public void setLastNameNonPublic(Boolean lastNameNonPublic)
   {
     this.lastNameNonPublic = lastNameNonPublic;
   }
@@ -143,12 +142,12 @@ public class AuthtionUser
     this.gender = gender;
   }
 
-  public boolean isGenderNonPublic()
+  public Boolean getGenderNonPublic()
   {
     return genderNonPublic;
   }
 
-  public void setGenderNonPublic(boolean genderNonPublic)
+  public void setGenderNonPublic(Boolean genderNonPublic)
   {
     this.genderNonPublic = genderNonPublic;
   }
@@ -163,12 +162,12 @@ public class AuthtionUser
     this.dateOfBirth = dateOfBirth;
   }
 
-  public boolean isDateOfBirthNonPublic()
+  public Boolean getDateOfBirthNonPublic()
   {
     return dateOfBirthNonPublic;
   }
 
-  public void setDateOfBirthNonPublic(boolean dateOfBirthNonPublic)
+  public void setDateOfBirthNonPublic(Boolean dateOfBirthNonPublic)
   {
     this.dateOfBirthNonPublic = dateOfBirthNonPublic;
   }
@@ -176,6 +175,11 @@ public class AuthtionUser
   public LocalDateTime getUpdatedOn()
   {
     return updatedOn;
+  }
+
+  public void setUpdatedOn(LocalDateTime updatedOn)
+  {
+    this.updatedOn = updatedOn;
   }
 
 
@@ -205,6 +209,32 @@ public class AuthtionUser
   //  UTILs
   //
 
+  public static AuthtionUser of(String nickName, boolean nickNameNonPublic,
+                                String firstName, boolean firstNameNonPublic,
+                                String middleName, boolean middleNameNonPublic,
+                                String lastName, boolean lastNameNonPublic,
+                                Integer gender, boolean genderNonPublic,
+                                LocalDate dateOfBirth, boolean dateOfBirthNonPublic)
+  {
+    AuthtionUser user = new AuthtionUser();
+
+    user.nickName = nickName;
+    user.nickNameNonPublic = nickNameNonPublic;
+    user.firstName = firstName;
+    user.firstNameNonPublic = firstNameNonPublic;
+    user.middleName = middleName;
+    user.middleNameNonPublic = middleNameNonPublic;
+    user.lastName = lastName;
+    user.lastNameNonPublic = lastNameNonPublic;
+    user.gender = gender;
+    user.genderNonPublic = genderNonPublic;
+    user.dateOfBirth = dateOfBirth;
+    user.dateOfBirthNonPublic = dateOfBirthNonPublic;
+    user.updatedOn = LocalDateTime.now();
+
+    return user;
+  }
+
   public static void prepareNewUser(AuthtionUser user, AuthtionConsumer consumer, ReqCreateAccount req)
   {
     user.setConsumerId(consumer.getId());
@@ -224,15 +254,14 @@ public class AuthtionUser
     user.setLastName(prepareStringField(req.lastName, 20));
     user.setLastNameNonPublic(true);
 
-    if (req.gender == null)
-      user.setGender(0);
+    user.setGender(req.gender == null ? 0 : req.gender);
     user.setGenderNonPublic(true);
 
     user.setDateOfBirth(req.dateOfBirth);
     user.setDateOfBirthNonPublic(true);
   }
 
-  private static String getNickNameFromEmail(String email)
+  public static String getNickNameFromEmail(String email)
   {
     return email.substring(0, email.indexOf('@'));
   }

@@ -23,7 +23,6 @@ import ru.dwfe.net.authtion.test.AuthtionTestConsumer;
 import ru.dwfe.net.authtion.test.AuthtionTestUtil;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -31,6 +30,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static ru.dwfe.net.authtion.dao.AuthtionUser.getNickNameFromEmail;
 import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.USER;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.USUAL;
 import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAccountPasswordTests.*;
@@ -66,7 +66,7 @@ public class AuthtionFullTest
   @Autowired
   private AuthtionMailingRepository mailingRepository;
 
-  @Test
+  //@Test
   public void _001_auth_USER()
   {
     logHead("USER");
@@ -77,7 +77,7 @@ public class AuthtionFullTest
     fullAuthTest(consumer);
   }
 
-  @Test
+  // @Test
   public void _002_auth_ADMIN()
   {
     logHead("ADMIN");
@@ -88,7 +88,7 @@ public class AuthtionFullTest
     fullAuthTest(consumer);
   }
 
-  @Test
+  // @Test
   public void _003_auth_ANY()
   {
     logHead("ANY");
@@ -97,7 +97,7 @@ public class AuthtionFullTest
     util.performResourceAccessing(consumer.access_token, consumer.level, USUAL);
   }
 
-  @Test
+  // @Test
   public void _004_auth_different_access_tokens()
   {
     logHead("list of Access Tokens");
@@ -106,7 +106,7 @@ public class AuthtionFullTest
     assertEquals(TOTAL_ACCESS_TOKEN_COUNT, auth_test_access_tokens.size());
   }
 
-  @Test
+  // @Test
   public void _005_account_checkEmail()
   {
     logHead("Check Email");
@@ -114,7 +114,7 @@ public class AuthtionFullTest
             testConsumer.getAnonymous_accessToken(), checkers_for_checkEmail);
   }
 
-  @Test
+  // @Test
   public void _006_account_checkPass()
   {
     logHead("Check Pass");
@@ -127,8 +127,6 @@ public class AuthtionFullTest
   {
     logHead("Create Account");
 
-    LocalDateTime dateFromPast = LocalDateTime.now();
-
     util.check_send_data(POST, prop.getResource().getCreateAccount(),
             testConsumer.getAnonymous_accessToken(), checkers_for_createAccount());
     //
@@ -139,63 +137,47 @@ public class AuthtionFullTest
 
 
     // Account3_Email
-    AuthtionConsumer consumer1 = checkConsumerAfterCreate(Account3_Email, dateFromPast);
-    AuthtionUser user1 = checkUser(consumer1.getId(), dateFromPast, Map.of());
-
-
-// TODO
-//    assertEquals("nobody", consumer1.getNickName());
-//    assertTrue(consumer1.getFirstName().isEmpty());
-//    assertEquals("sunshine", consumer1.getLastName());
-
-
+    AuthtionConsumer consumer1 = checkConsumerAfterCreate(Account3_Email);
+    assertFalse(consumer1.isEmailConfirmed());
+    AuthtionUser user1 = checkUser_ExactMatch(consumer1.getId(), AuthtionUser.of(
+            "nobody", true,
+            "", true,
+            "", true,
+            "sunshine", true,
+            0, true,
+            null, true)
+    );
     List<AuthtionMailing> mailing_consumer1 = mailingRepository.findByTypeAndEmail(1, consumer1.getEmail());
     assertEquals(1, mailing_consumer1.size());
 
     // Account4_Email
-    AuthtionConsumer consumer2 = getConsumerByEmail(Account4_Email);
-    assertTrue(consumer2.getId() > 999);
-
-    Collection<? extends GrantedAuthority> authorities_consumer2 = consumer2.getAuthorities();
-    assertEquals(1, authorities_consumer2.size());
-    assertEquals("USER", authorities_consumer2.iterator().next().getAuthority());
-
-//TODO
-//    assertEquals(AuthtionConsumer.prepareStringField(AuthtionConsumer.getNickNameFromEmail(consumer2.getEmail()), 20), consumer2.getNickName());
-//    assertEquals("ozon", consumer2.getFirstName());
-//    assertTrue(consumer2.getLastName().isEmpty());
-    assertTrue(consumer2.isAccountNonExpired());
-    assertTrue(consumer2.isAccountNonLocked());
-    assertTrue(consumer2.isCredentialsNonExpired());
-    assertTrue(consumer2.isEnabled());
+    AuthtionConsumer consumer2 = checkConsumerAfterCreate(Account4_Email);
     assertTrue(consumer2.isEmailConfirmed());
-
+    AuthtionUser user2 = checkUser_ExactMatch(consumer2.getId(), AuthtionUser.of(
+            getNickNameFromEmail(Account4_Email), true,
+            "ozon", true,
+            "", true,
+            "", true,
+            0, true,
+            LocalDate.parse("1980-11-27"), true)
+    );
     List<AuthtionMailing> mailing_consumer2 = mailingRepository.findByTypeAndEmail(2, consumer2.getEmail());
     assertEquals(1, mailing_consumer2.size());
-
     String mailing_password_consumer2 = mailing_consumer2.get(0).getData();
     assertTrue(mailing_password_consumer2.length() >= 9);
 
-
     // Account5_Email
-    AuthtionConsumer consumer3 = getConsumerByEmail(Account5_Email);
-    assertTrue(consumer3.getId() > 999);
-    assertEquals(consumer3.getPassword(), "{bcrypt}" + Account5_Pass_Encoded);
-
-    Collection<? extends GrantedAuthority> authorities_consumer3 = consumer3.getAuthorities();
-    assertEquals(1, authorities_consumer3.size());
-    assertEquals("USER", authorities_consumer3.iterator().next().getAuthority());
-
-//TODO
-//    assertEquals("hello world", consumer3.getNickName());
-//    assertTrue(consumer3.getFirstName().isEmpty());
-//    assertTrue(consumer3.getLastName().isEmpty());
-    assertTrue(consumer3.isAccountNonExpired());
-    assertTrue(consumer3.isAccountNonLocked());
-    assertTrue(consumer3.isCredentialsNonExpired());
-    assertTrue(consumer3.isEnabled());
+    AuthtionConsumer consumer3 = checkConsumerAfterCreate(Account5_Email);
     assertFalse(consumer3.isEmailConfirmed());
-
+    assertEquals(consumer3.getPassword(), "{bcrypt}" + Account5_Pass_Encoded);
+    AuthtionUser user3 = checkUser_ExactMatch(consumer3.getId(), AuthtionUser.of(
+            "hello world", true,
+            "", true,
+            "john", true,
+            "", true,
+            2, true,
+            null, true)
+    );
     List<AuthtionMailing> mailing_consumer3 = mailingRepository.findByTypeAndEmail(1, consumer3.getEmail());
     assertEquals(1, mailing_consumer3.size());
 
@@ -533,19 +515,18 @@ public class AuthtionFullTest
     return userByIdOpt.get();
   }
 
-  private AuthtionConsumer checkConsumerAfterCreate(String email, LocalDateTime dateFromPast)
+  private AuthtionConsumer checkConsumerAfterCreate(String email)
   {
     AuthtionConsumer consumer = getConsumerByEmail(email);
 
     assertTrue(consumer.getId() > 999);
-    assertTrue(consumer.getCreatedOn().isBefore(dateFromPast));
-    assertTrue(consumer.getUpdatedOn().isBefore(dateFromPast));
+    assertNotEquals(null, consumer.getCreatedOn());
+    assertNotEquals(null, consumer.getUpdatedOn());
 
     Collection<? extends GrantedAuthority> authorities_consumer1 = consumer.getAuthorities();
     assertEquals(1, authorities_consumer1.size());
     assertEquals("USER", authorities_consumer1.iterator().next().getAuthority());
 
-    assertFalse(consumer.isEmailConfirmed());
     assertTrue(consumer.isEmailNonPublic());
 
     assertTrue(consumer.isAccountNonExpired());
@@ -556,58 +537,102 @@ public class AuthtionFullTest
     return consumer;
   }
 
-  private AuthtionUser checkUser(Long id, LocalDateTime dateFromPast, Map<String, Object> map)
+  private AuthtionUser checkUser_NotNullFields(Long id, AuthtionUser tUser)
   {
     AuthtionUser user = getUserById(id);
-    assertTrue(user.getUpdatedOn().isBefore(dateFromPast));
+    assertNotEquals(null, user.getUpdatedOn());
 
-    String tNickName = (String) map.get("nickName");
-    Boolean tNickNameNonPublic = (Boolean) map.get("nickNameNonPublic");
+    String tNickName = tUser.getNickName();
+    Boolean tNickNameNonPublic = tUser.getNickNameNonPublic();
 
-    String tFirstName = (String) map.get("firstName");
-    Boolean tFirstNameNonPublic = (Boolean) map.get("firstNameNonPublic");
+    String tFirstName = tUser.getFirstName();
+    Boolean tFirstNameNonPublic = tUser.getFirstNameNonPublic();
 
-    String tMiddleName = (String) map.get("middleName");
-    Boolean tMiddleNameNonPublic = (Boolean) map.get("middleNameNonPublic");
+    String tMiddleName = tUser.getMiddleName();
+    Boolean tMiddleNameNonPublic = tUser.getMiddleNameNonPublic();
 
-    String tLastName = (String) map.get("lastName");
-    Boolean tLastNameNonPublic = (Boolean) map.get("lastNameNonPublic");
+    String tLastName = tUser.getLastName();
+    Boolean tLastNameNonPublic = tUser.getLastNameNonPublic();
 
-    Integer tGender = (Integer) map.get("gender");
-    Boolean tGenderNonPublic = (Boolean) map.get("genderNonPublic");
+    Integer tGender = tUser.getGender();
+    Boolean tGenderNonPublic = tUser.getGenderNonPublic();
 
-    LocalDate tDateOfBirth = (LocalDate) map.get("dateOfBirth");
-    Boolean tDateOfBirthNonPublic = (Boolean) map.get("dateOfBirthNonPublic");
+    LocalDate tDateOfBirth = tUser.getDateOfBirth();
+    Boolean tDateOfBirthNonPublic = tUser.getDateOfBirthNonPublic();
 
     if (tNickName != null)
       assertEquals(tNickName, user.getNickName());
     if (tNickNameNonPublic != null)
-      assertEquals(tNickNameNonPublic, user.isNickNameNonPublic());
+      assertEquals(tNickNameNonPublic, user.getNickNameNonPublic());
 
     if (tFirstName != null)
       assertEquals(tFirstName, user.getFirstName());
     if (tFirstNameNonPublic != null)
-      assertEquals(tFirstNameNonPublic, user.isFirstNameNonPublic());
+      assertEquals(tFirstNameNonPublic, user.getFirstNameNonPublic());
 
     if (tMiddleName != null)
       assertEquals(tMiddleName, user.getMiddleName());
     if (tMiddleNameNonPublic != null)
-      assertEquals(tMiddleNameNonPublic, user.isMiddleNameNonPublic());
+      assertEquals(tMiddleNameNonPublic, user.getMiddleNameNonPublic());
 
     if (tLastName != null)
       assertEquals(tLastName, user.getLastName());
     if (tLastNameNonPublic != null)
-      assertEquals(tLastNameNonPublic, user.isLastNameNonPublic());
+      assertEquals(tLastNameNonPublic, user.getLastNameNonPublic());
 
     if (tGender != null)
-      assertEquals(tGender, Integer.valueOf(user.getGender()));
+      assertEquals(tGender, user.getGender());
     if (tGenderNonPublic != null)
-      assertEquals(tGenderNonPublic, user.isGenderNonPublic());
+      assertEquals(tGenderNonPublic, user.getGenderNonPublic());
 
     if (tDateOfBirth != null)
       assertEquals(tDateOfBirth, user.getDateOfBirth());
     if (tDateOfBirthNonPublic != null)
-      assertEquals(tDateOfBirthNonPublic, user.isDateOfBirthNonPublic());
+      assertEquals(tDateOfBirthNonPublic, user.getDateOfBirthNonPublic());
+
+    return user;
+  }
+
+  private AuthtionUser checkUser_ExactMatch(Long id, AuthtionUser tUser)
+  {
+    AuthtionUser user = getUserById(id);
+    assertNotEquals(null, user.getUpdatedOn());
+
+    String tNickName = tUser.getNickName();
+    Boolean tNickNameNonPublic = tUser.getNickNameNonPublic();
+
+    String tFirstName = tUser.getFirstName();
+    Boolean tFirstNameNonPublic = tUser.getFirstNameNonPublic();
+
+    String tMiddleName = tUser.getMiddleName();
+    Boolean tMiddleNameNonPublic = tUser.getMiddleNameNonPublic();
+
+    String tLastName = tUser.getLastName();
+    Boolean tLastNameNonPublic = tUser.getLastNameNonPublic();
+
+    Integer tGender = tUser.getGender();
+    Boolean tGenderNonPublic = tUser.getGenderNonPublic();
+
+    LocalDate tDateOfBirth = tUser.getDateOfBirth();
+    Boolean tDateOfBirthNonPublic = tUser.getDateOfBirthNonPublic();
+
+    assertEquals(tNickName, user.getNickName());
+    assertEquals(tNickNameNonPublic, user.getNickNameNonPublic());
+
+    assertEquals(tFirstName, user.getFirstName());
+    assertEquals(tFirstNameNonPublic, user.getFirstNameNonPublic());
+
+    assertEquals(tMiddleName, user.getMiddleName());
+    assertEquals(tMiddleNameNonPublic, user.getMiddleNameNonPublic());
+
+    assertEquals(tLastName, user.getLastName());
+    assertEquals(tLastNameNonPublic, user.getLastNameNonPublic());
+
+    assertEquals(tGender, user.getGender());
+    assertEquals(tGenderNonPublic, user.getGenderNonPublic());
+
+    assertEquals(tDateOfBirth, user.getDateOfBirth());
+    assertEquals(tDateOfBirthNonPublic, user.getDateOfBirthNonPublic());
 
     return user;
   }

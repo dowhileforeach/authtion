@@ -36,7 +36,7 @@ public class AuthtionControllerV1
   private final AuthtionMailingRepository mailingRepository;
   private final ConsumerTokenServices tokenServices;
   private final RestTemplate restTemplate;
-  private final AuthtionUtil authtionUtil;
+  private final AuthtionUtil util;
 
   @Autowired
   public AuthtionControllerV1(AuthtionConsumerService consumerService, AuthtionUserRepository userRepository, AuthtionMailingRepository mailingRepository, ConsumerTokenServices tokenServices, RestTemplate restTemplate, AuthtionUtil authtionUtil)
@@ -46,7 +46,7 @@ public class AuthtionControllerV1
     this.mailingRepository = mailingRepository;
     this.tokenServices = tokenServices;
     this.restTemplate = restTemplate;
-    this.authtionUtil = authtionUtil;
+    this.util = authtionUtil;
   }
 
 
@@ -55,7 +55,7 @@ public class AuthtionControllerV1
   //
 
   @PostMapping("#{authtionConfigProperties.resource.checkEmail}")
-  public String checkConsumerEmail(@RequestBody ReqCheckEmail req)
+  public String checkConsumerEmail(@RequestBody ReqEmail req)
   {
     List<String> errorCodes = new ArrayList<>();
     canUseEmail(req.email, consumerService, errorCodes);
@@ -63,7 +63,7 @@ public class AuthtionControllerV1
   }
 
   @PostMapping("#{authtionConfigProperties.resource.checkPass}")
-  public String checkConsumerPass(@RequestBody ReqCheckPass req)
+  public String checkConsumerPass(@RequestBody ReqPassword req)
   {
     List<String> errorCodes = new ArrayList<>();
     canUsePassword(req.password, "password", errorCodes);
@@ -71,14 +71,14 @@ public class AuthtionControllerV1
   }
 
   @PostMapping("#{authtionConfigProperties.resource.googleCaptchaValidate}")
-  public String googleCaptchaValidate(@RequestBody ReqGoogleCaptchaValidate req)
+  public String googleCaptchaValidate(@RequestBody ReqGoogleCaptchaResponse req)
   {
     List<String> errorCodes = new ArrayList<>();
 
     if (isDefaultCheckOK(req.googleResponse, "google-response", errorCodes))
     {
-      String url = String.format(authtionUtil.getGoogleCaptchaSiteVerifyUrl(),
-              authtionUtil.getGoogleCaptchaSecretKey(), req.googleResponse);
+      String url = String.format(util.getGoogleCaptchaSiteVerifyUrl(),
+              util.getGoogleCaptchaSecretKey(), req.googleResponse);
 
       FutureTask<ResponseEntity<String>> exchange =
               new FutureTask<>(() -> restTemplate.exchange(url, HttpMethod.POST, null, String.class));
@@ -170,11 +170,12 @@ public class AuthtionControllerV1
   public String updateAccount(@RequestBody ReqUpdateAccount req, OAuth2Authentication authentication)
   {
     List<String> errorCodes = new ArrayList<>();
+    boolean consumerWasModified = false;
+    boolean userWasModified = false;
+
     Long id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
     AuthtionConsumer consumer = consumerService.findById(id).get();
     AuthtionUser user = userRepository.findById(id).get();
-    boolean consumerWasModified = false;
-    boolean userWasModified = false;
 
     String newEmail = req.email;
     Boolean newEmailNonPublic = req.emailNonPublic;
@@ -215,7 +216,7 @@ public class AuthtionControllerV1
       userWasModified = true;
     }
 
-    if (newNickNameNonPublic != null && !newNickNameNonPublic.equals(user.isNickNameNonPublic()))
+    if (newNickNameNonPublic != null && !newNickNameNonPublic.equals(user.getNickNameNonPublic()))
     {
       user.setNickNameNonPublic(newNickNameNonPublic);
       userWasModified = true;
@@ -227,7 +228,7 @@ public class AuthtionControllerV1
       userWasModified = true;
     }
 
-    if (newFirstNameNonPublic != null && !newFirstNameNonPublic.equals(user.isFirstNameNonPublic()))
+    if (newFirstNameNonPublic != null && !newFirstNameNonPublic.equals(user.getFirstNameNonPublic()))
     {
       user.setFirstNameNonPublic(newFirstNameNonPublic);
       userWasModified = true;
@@ -239,7 +240,7 @@ public class AuthtionControllerV1
       userWasModified = true;
     }
 
-    if (newMiddleNameNonPublic != null && !newMiddleNameNonPublic.equals(user.isMiddleNameNonPublic()))
+    if (newMiddleNameNonPublic != null && !newMiddleNameNonPublic.equals(user.getMiddleNameNonPublic()))
     {
       user.setMiddleNameNonPublic(newMiddleNameNonPublic);
       userWasModified = true;
@@ -251,7 +252,7 @@ public class AuthtionControllerV1
       userWasModified = true;
     }
 
-    if (newLastNameNonPublic != null && !newLastNameNonPublic.equals(user.isLastNameNonPublic()))
+    if (newLastNameNonPublic != null && !newLastNameNonPublic.equals(user.getLastNameNonPublic()))
     {
       user.setLastNameNonPublic(newLastNameNonPublic);
       userWasModified = true;
@@ -263,7 +264,7 @@ public class AuthtionControllerV1
       userWasModified = true;
     }
 
-    if (newGenderNonPublic != null && !newGenderNonPublic.equals(user.isGenderNonPublic()))
+    if (newGenderNonPublic != null && !newGenderNonPublic.equals(user.getGenderNonPublic()))
     {
       user.setGenderNonPublic(newGenderNonPublic);
       userWasModified = true;
@@ -275,7 +276,7 @@ public class AuthtionControllerV1
       userWasModified = true;
     }
 
-    if (newDateOfBirthNonPublic != null && !newDateOfBirthNonPublic.equals(user.isDateOfBirthNonPublic()))
+    if (newDateOfBirthNonPublic != null && !newDateOfBirthNonPublic.equals(user.getDateOfBirthNonPublic()))
     {
       user.setDateOfBirthNonPublic(newDateOfBirthNonPublic);
       userWasModified = true;
@@ -331,7 +332,7 @@ public class AuthtionControllerV1
     {
       errorCodes.add("email-is-already-confirmed");
     }
-    else if (authtionUtil.isAllowedNewRequestForMailing(type, email, errorCodes))
+    else if (util.isAllowedNewRequestForMailing(type, email, errorCodes))
     {
       mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase36(40)));
     }
@@ -394,7 +395,7 @@ public class AuthtionControllerV1
   }
 
   @PostMapping("#{authtionConfigProperties.resource.reqRestorePass}")
-  public String reqRestorePass(@RequestBody ReqCheckEmail req)
+  public String reqRestorePass(@RequestBody ReqEmail req)
   {
     List<String> errorCodes = new ArrayList<>();
 
@@ -402,7 +403,7 @@ public class AuthtionControllerV1
     int type = 5;
 
     if (isEmailCheckOK(email, errorCodes)
-            && authtionUtil.isAllowedNewRequestForMailing(type, email, errorCodes))
+            && util.isAllowedNewRequestForMailing(type, email, errorCodes))
     {
       if (consumerService.existsByEmail(email))
       {

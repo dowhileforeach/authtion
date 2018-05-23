@@ -60,7 +60,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
             AuthtionTestChecker.of(false, Map.of("email", Account1_Email), 200, "email-present-in-database")
     ));
     list.addAll(List.of(
-            AuthtionTestChecker.of(true, Map.of("email", Account4_Email, "firstName", "ozon"), 200),
+            AuthtionTestChecker.of(true, Map.of("email", Account4_Email, "firstName", "ozon", "dateOfBirth", "1980-11-27"), 200),
 
             AuthtionTestChecker.of(false, Map.of("email", Account4_Email), 200, "email-present-in-database"),
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", ""), 200, "empty-password"),
@@ -68,7 +68,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", "ex24g23grvtbm56m567nc445xv34ecq3z34vwxtn6n364nb345b4554b"), 200, "exceeded-min6-or-max55-password-length"),
 
             AuthtionTestChecker.of(true, Map.of("email", Account3_Email, "password", Account3_Pass, "nickName", "nobody", "lastName", "sunshine"), 200),
-            AuthtionTestChecker.of(true, Map.of("email", Account5_Email, "password", Account5_Pass_Encoded, "nickName", "hello world"), 200)
+            AuthtionTestChecker.of(true, Map.of("email", Account5_Email, "password", Account5_Pass_Encoded, "nickName", "hello world", "middleName", "john", "gender", 2), 200)
     ));
     return list;
   }

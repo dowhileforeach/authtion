@@ -75,24 +75,24 @@ public class AuthtionUtil
     String middleName = "\"middleName\": \"" + user.getMiddleName() + "\"";
     String lastName = "\"lastName\": \"" + user.getLastName() + "\"";
     String gender = "\"gender\": " + user.getGender();
-    String dateOfBirth = "\"dateOfBirth\": " + user.getDateOfBirth();
+    String dateOfBirth = "\"dateOfBirth\": \"" + user.getDateOfBirth() + "\"";
 
     list.add(id);
     if (onPublic)
     {
       if (!consumer.isEmailNonPublic())
         list.add(email);
-      if (!user.isNickNameNonPublic())
+      if (!user.getNickNameNonPublic())
         list.add(nickName);
-      if (!user.isFirstNameNonPublic())
+      if (!user.getFirstNameNonPublic())
         list.add(firstName);
-      if (!user.isMiddleNameNonPublic())
+      if (!user.getMiddleNameNonPublic())
         list.add(middleName);
-      if (!user.isLastNameNonPublic())
+      if (!user.getLastNameNonPublic())
         list.add(lastName);
-      if (!user.isGenderNonPublic())
+      if (!user.getGenderNonPublic())
         list.add(gender);
-      if (!user.isDateOfBirthNonPublic())
+      if (!user.getDateOfBirthNonPublic())
         list.add(dateOfBirth);
     }
     else
@@ -104,17 +104,17 @@ public class AuthtionUtil
       list.add("\"emailConfirmed\": " + consumer.isEmailConfirmed());
       list.add("\"emailNonPublic\": " + consumer.isEmailNonPublic());
       list.add(nickName);
-      list.add("\"nickNameNonPublic\": \"" + user.isNickNameNonPublic() + "\"");
+      list.add("\"nickNameNonPublic\": " + user.getNickNameNonPublic());
       list.add(firstName);
-      list.add("\"firstNameNonPublic\": \"" + user.isFirstNameNonPublic() + "\"");
+      list.add("\"firstNameNonPublic\": " + user.getFirstNameNonPublic());
       list.add(middleName);
-      list.add("\"middleNameNonPublic\": \"" + user.isMiddleNameNonPublic() + "\"");
+      list.add("\"middleNameNonPublic\": " + user.getMiddleNameNonPublic());
       list.add(lastName);
-      list.add("\"lastNameNonPublic\": \"" + user.isLastNameNonPublic() + "\"");
+      list.add("\"lastNameNonPublic\": " + user.getLastNameNonPublic());
       list.add(gender);
-      list.add("\"genderNonPublic\": \"" + user.isGenderNonPublic() + "\"");
+      list.add("\"genderNonPublic\": " + user.getGenderNonPublic());
       list.add(dateOfBirth);
-      list.add("\"dateOfBirthNonPublic\": \"" + user.isDateOfBirthNonPublic() + "\"");
+      list.add("\"dateOfBirthNonPublic\": " + user.getDateOfBirthNonPublic());
     }
 
     return "{" + list.stream().collect(Collectors.joining(",")) + "}";
@@ -279,7 +279,7 @@ public class AuthtionUtil
     }
   }
 
-  public static class ReqCheckEmail
+  public static class ReqEmail
   {
     public String email;
 
@@ -294,7 +294,7 @@ public class AuthtionUtil
     }
   }
 
-  public static class ReqCheckPass
+  public static class ReqPassword
   {
     public String password;
 
@@ -309,7 +309,7 @@ public class AuthtionUtil
     }
   }
 
-  public static class ReqGoogleCaptchaValidate
+  public static class ReqGoogleCaptchaResponse
   {
     public String googleResponse;
 
