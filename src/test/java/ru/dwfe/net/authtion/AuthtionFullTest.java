@@ -211,7 +211,7 @@ public class AuthtionFullTest
   }
 
 
-  //@Test
+  @Test
   public void _008_account_getAccount()
   {
     logHead("Get Account");
@@ -228,6 +228,7 @@ public class AuthtionFullTest
     AuthtionTestConsumer tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
     String access_token = tConsumer.access_token;
 
+    // init check
     AuthtionConsumer consumer = getConsumerByEmail(Account4_Email);
     assertEquals(Long.valueOf(1002), consumer.getId());
     assertTrue(consumer.isEmailConfirmed());
@@ -240,6 +241,7 @@ public class AuthtionFullTest
             0, true,
             LocalDate.parse("1980-11-27"), true)
     );
+
 
     // (1) empty request
     util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount1);
@@ -255,6 +257,7 @@ public class AuthtionFullTest
             0, true,
             LocalDate.parse("1980-11-27"), true)
     );
+
 
     // (2) change Email
     String newEmail = "helloworld@oo.com";
@@ -276,7 +279,8 @@ public class AuthtionFullTest
 
 
     // (3) since I changed email, I need to make sure that account is still functional.
-    //     After change email /sign-out will be forced
+    //
+    // After change email /sign-out will be forced
     // sign-in again
     tConsumer = testConsumer.of(USER, newEmail, Account4_Pass, testClient.getClientTrusted(), 200);
     fullAuthTest(tConsumer);
@@ -285,7 +289,7 @@ public class AuthtionFullTest
     access_token = tConsumer.access_token;
 
 
-    // (4) change Email to original AND change emailNonPublic to false
+    // (4) change Email to original AND change: emailNonPublic, nickName, nickNameNonPublic
     util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount3);
     consumerNotPresent(newEmail);
     consumer = getConsumerByEmail(Account4_Email);
@@ -293,7 +297,7 @@ public class AuthtionFullTest
     assertFalse(consumer.isEmailConfirmed());
     assertFalse(consumer.isEmailNonPublic());
     user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
-            getNickNameFromEmail(Account4_Email), true,
+            "storm", false,
             "ozon", true,
             "", true,
             "", true,
@@ -303,24 +307,21 @@ public class AuthtionFullTest
     tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
     access_token = tConsumer.access_token;
 
-//
-//    util.check_send_data(POST, prop.getResource().getUpdateAccount(), USER.access_token, checkers_for_updateAccount3);
-//    consumer = getConsumerByEmail(USER.username);
-//    assertEquals("hello", consumer.getNickName());
-//    assertEquals("1", consumer.getFirstName());
-//    assertEquals("smith", consumer.getLastName());
-//
-//    util.check_send_data(POST, prop.getResource().getUpdateAccount(), USER.access_token, checkers_for_updateAccount4);
-//    consumer = getConsumerByEmail(USER.username);
-//    assertEquals("hello", consumer.getNickName());
-//    assertEquals("1", consumer.getFirstName());
-//    assertEquals("2", consumer.getLastName());
-//
-//    util.check_send_data(POST, prop.getResource().getUpdateAccount(), USER.access_token, checkers_for_updateAccount2);
-//    consumer = getConsumerByEmail(USER.username);
-//    assertEquals("user", consumer.getNickName());
-//    assertEquals("", consumer.getFirstName());
-//    assertEquals("", consumer.getLastName());
+
+    // (5) change all other fields
+    util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount4);
+    consumer = getConsumerByEmail(Account4_Email);
+    assertEquals(Long.valueOf(1002), consumer.getId());
+    assertFalse(consumer.isEmailConfirmed());
+    assertFalse(consumer.isEmailNonPublic());
+    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+            "storm", false,
+            "adam", false,
+            "newton", false,
+            "dragon", false,
+            1, false,
+            LocalDate.parse("1990-05-01"), false)
+    );
   }
 
 

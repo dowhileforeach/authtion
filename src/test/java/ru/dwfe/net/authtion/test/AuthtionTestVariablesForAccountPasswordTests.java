@@ -91,11 +91,25 @@ public class AuthtionTestVariablesForAccountPasswordTests
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount3 = List.of(
-          AuthtionTestChecker.of(true, Map.of("email", Account4_Email, "emailNonPublic", false), 200, JsonParserFactory.getJsonParser().parseMap("{\"id\":1002,\"createdOn\":\"date\",\"updatedOn\":\"date\",\"authorities\":[\"USER\"],\"email\":\"test4@dwfe.ru\",\"emailConfirmed\":false,\"emailNonPublic\":false,\"nickName\":\"test4\",\"nickNameNonPublic\":true,\"firstName\":\"ozon\",\"firstNameNonPublic\":true,\"middleName\":\"\",\"middleNameNonPublic\":true,\"lastName\":\"\",\"lastNameNonPublic\":true,\"gender\":0,\"genderNonPublic\":true,\"dateOfBirth\":\"1980-11-27\",\"dateOfBirthNonPublic\":true}"))
+          AuthtionTestChecker.of(true, Map.of(
+                  "email", Account4_Email,
+                  "emailNonPublic", false,
+                  "nickName", "storm",
+                  "nickNameNonPublic", false), 200, JsonParserFactory.getJsonParser().parseMap("{\"id\":1002,\"createdOn\":\"date\",\"updatedOn\":\"date\",\"authorities\":[\"USER\"],\"email\":\"test4@dwfe.ru\",\"emailConfirmed\":false,\"emailNonPublic\":false,\"nickName\":\"storm\",\"nickNameNonPublic\":false,\"firstName\":\"ozon\",\"firstNameNonPublic\":true,\"middleName\":\"\",\"middleNameNonPublic\":true,\"lastName\":\"\",\"lastNameNonPublic\":true,\"gender\":0,\"genderNonPublic\":true,\"dateOfBirth\":\"1980-11-27\",\"dateOfBirthNonPublic\":true}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount4 = List.of(
-          AuthtionTestChecker.of(true, Map.of(), 200)
+          AuthtionTestChecker.of(true, Map.of(
+                  "firstName", "adam",
+                  "firstNameNonPublic", false,
+                  "middleName", "newton",
+                  "middleNameNonPublic", false,
+                  "lastName", "dragon",
+                  "lastNameNonPublic", false,
+                  "gender", 1,
+                  "genderNonPublic", false,
+                  "dateOfBirth", "1990-05-01",
+                  "dateOfBirthNonPublic", false), 200, JsonParserFactory.getJsonParser().parseMap("{\"id\":1002,\"createdOn\":\"date\",\"updatedOn\":\"date\",\"authorities\":[\"USER\"],\"email\":\"test4@dwfe.ru\",\"emailConfirmed\":false,\"emailNonPublic\":false,\"nickName\":\"storm\",\"nickNameNonPublic\":false,\"firstName\":\"adam\",\"firstNameNonPublic\":false,\"middleName\":\"newton\",\"middleNameNonPublic\":false,\"lastName\":\"dragon\",\"lastNameNonPublic\":false,\"gender\":1,\"genderNonPublic\":false,\"dateOfBirth\":\"1990-05-01\",\"dateOfBirthNonPublic\":false}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount5 = List.of(
