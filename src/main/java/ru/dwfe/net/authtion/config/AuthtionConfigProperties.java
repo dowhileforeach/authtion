@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import static ru.dwfe.net.authtion.util.AuthtionUtil.formatMilliseconds;
+import static ru.dwfe.net.authtion.util.AuthtionUtil.formatMillisecondsToReadableString;
 
 @Validated
 @Configuration
@@ -490,11 +490,11 @@ public class AuthtionConfigProperties implements InitializingBean
                     "|      %-44s  |%n" +
                     "|____________________________________________________|%n",
             api,
-            formatMilliseconds(scheduledTaskMailing.initialDelay),
-            formatMilliseconds(scheduledTaskMailing.collectFromDbInterval),
-            formatMilliseconds(scheduledTaskMailing.sendInterval),
+            formatMillisecondsToReadableString(scheduledTaskMailing.initialDelay),
+            formatMillisecondsToReadableString(scheduledTaskMailing.collectFromDbInterval),
+            formatMillisecondsToReadableString(scheduledTaskMailing.sendInterval),
             scheduledTaskMailing.maxAttemptsToSendIfError,
-            formatMilliseconds(scheduledTaskMailing.timeoutForDuplicateRequest),
+            formatMillisecondsToReadableString(scheduledTaskMailing.timeoutForDuplicateRequest),
             resource.signIn,
             resource.signOut,
             resource.checkEmail,

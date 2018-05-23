@@ -1,11 +1,11 @@
 package ru.dwfe.net.authtion.dao;
 
-import ru.dwfe.net.authtion.util.AuthtionUtil;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static ru.dwfe.net.authtion.util.AuthtionUtil.formatDateTimeToUTCstring;
 
 @Entity
 @IdClass(AuthtionMailing.AuthtionMailingId.class)
@@ -182,7 +182,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
   public String toString()
   {
     return "{\n" +
-            " \"createdOn\": " + "\"" + AuthtionUtil.formatDateTime(createdOn) + "\",\n" +
+            " \"createdOn\": " + "\"" + formatDateTimeToUTCstring(createdOn) + "\",\n" +
             " \"type\": " + type + ",\n" +
             " \"email\": " + email + ",\n" +
             " \"data\": \"****\",\n" +
@@ -190,7 +190,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
             " \"maxAttemptsReached\": " + maxAttemptsReached + ",\n" +
             " \"causeOfLastFailure\": \"" + causeOfLastFailure + "\",\n" +
             " \"attempt\": " + attempt + ",\n" +
-            " \"updatedOn\": " + "\"" + AuthtionUtil.formatDateTime(updatedOn) + "\"\n" +
+            " \"updatedOn\": " + "\"" + formatDateTimeToUTCstring(updatedOn) + "\"\n" +
             "}";
   }
 

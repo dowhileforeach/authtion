@@ -99,8 +99,8 @@ public class AuthtionUtil
     }
     else
     {
-      list.add("\"createdOn\":" + "\"" + AuthtionUtil.formatDateTime(consumer.getCreatedOn()) + "\"");
-      list.add("\"updatedOn\":" + "\"" + formatDateTime(updatedOn) + "\"");
+      list.add("\"createdOn\":" + "\"" + formatDateTimeToUTCstring(consumer.getCreatedOn()) + "\"");
+      list.add("\"updatedOn\":" + "\"" + formatDateTimeToUTCstring(updatedOn) + "\"");
       list.add("\"authorities\":" + consumer.getAuthorities());
       list.add(email);
       list.add("\"emailConfirmed\":" + consumer.isEmailConfirmed());
@@ -559,6 +559,7 @@ public class AuthtionUtil
     }
   }
 
+
   //
   // JSON
   //
@@ -625,7 +626,7 @@ public class AuthtionUtil
     return result.replaceAll("[^a-zA-Z0-9]", ""); // becouse oauth2 incorrect work with some symbols, e.g.: "+fAhjktzuw", "6k+xfc6ZRw"
   }
 
-  public static String formatDateTime(LocalDateTime localDateTime)
+  public static String formatDateTimeToUTCstring(LocalDateTime localDateTime)
   {
     // ISO dates can be written with added hours, minutes, and seconds (YYYY-MM-DDTHH:MM:SSZ):
     //   "2015-03-25T12:00:00Z"
@@ -633,7 +634,7 @@ public class AuthtionUtil
     // UTC time is defined with a capital letter Z.
     //
     // https://docs.oracle.com/javase/10/docs/api/java/time/format/DateTimeFormatter.html#predefined
-    // I can't use ISO_INSTANT formmatter becouse LocalDateTime not contains info about time zone.
+    // I can't use ISO_INSTANT formmatter becouse LocalDateTime not contains info about time zone, for this reason:
     return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z";
 
     // If you want to modify the time relative to UTC, remove the Z and add +HH:MM or -HH:MM instead:
@@ -643,7 +644,7 @@ public class AuthtionUtil
     // and don't forget about the time zone of MySQL
   }
 
-  public static String formatMilliseconds(long millis)
+  public static String formatMillisecondsToReadableString(long millis)
   { // ==https://stackoverflow.com/questions/625433/how-to-convert-milliseconds-to-x-mins-x-seconds-in-java#625624
     return String.format("%02d min, %02d sec",
             TimeUnit.MILLISECONDS.toMinutes(millis),
