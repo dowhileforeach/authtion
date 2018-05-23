@@ -130,7 +130,7 @@ public class AuthtionFullTest
     util.check_send_data(POST, prop.getResource().getCreateAccount(),
             testConsumer.getAnonymous_accessToken(), checkers_for_createAccount());
     //
-    // Was created 3 new accounts:
+    // Was created 4 new accounts:
     //  - Account3_Email - password was passed
     //  - Account4_Email - password was not passed
     //  - Account5_Email - already encoded password was passed
@@ -151,6 +151,7 @@ public class AuthtionFullTest
     List<AuthtionMailing> mailing_consumer1 = mailingRepository.findByTypeAndEmail(1, consumer1.getEmail());
     assertEquals(1, mailing_consumer1.size());
 
+
     // Account4_Email
     AuthtionConsumer consumer2 = checkConsumerAfterCreate(Account4_Email);
     assertTrue(consumer2.isEmailConfirmed());
@@ -167,6 +168,7 @@ public class AuthtionFullTest
     String mailing_password_consumer2 = mailing_consumer2.get(0).getData();
     assertTrue(mailing_password_consumer2.length() >= 9);
 
+
     // Account5_Email
     AuthtionConsumer consumer3 = checkConsumerAfterCreate(Account5_Email);
     assertFalse(consumer3.isEmailConfirmed());
@@ -181,6 +183,7 @@ public class AuthtionFullTest
     );
     List<AuthtionMailing> mailing_consumer3 = mailingRepository.findByTypeAndEmail(1, consumer3.getEmail());
     assertEquals(1, mailing_consumer3.size());
+
 
     // Account6_Email
     AuthtionConsumer consumer4 = checkConsumerAfterCreate(Account6_Email);
@@ -198,6 +201,7 @@ public class AuthtionFullTest
     String mailing_password_consumer4 = mailing_consumer4.get(0).getData();
     assertTrue(mailing_password_consumer4.length() >= 9);
 
+
     // Perform full auth test for New AuthtionConsumer
     fullAuthTest(testConsumer.of(USER, consumer1.getEmail(), Account3_Pass, testClient.getClientTrusted(), 200));
     fullAuthTest(testConsumer.of(USER, consumer2.getEmail(), mailing_password_consumer2, testClient.getClientTrusted(), 200));
@@ -205,8 +209,18 @@ public class AuthtionFullTest
     fullAuthTest(testConsumer.of(USER, consumer4.getEmail(), mailing_password_consumer4, testClient.getClientTrusted(), 200));
   }
 
+
+  //  @Test
+  public void _008_account_getAccount()
+  {
+    logHead("Get Account");
+    util.check_send_data(GET, prop.getResource().getGetAccount(),
+            testConsumer.getUSER_accessToken(), checkers_for_getAccount);
+  }
+
+
   // @Test
-  public void _008_account_updateAccount()
+  public void _009_account_updateAccount()
   {
     logHead("Update Account");
 
@@ -247,14 +261,6 @@ public class AuthtionFullTest
 //    assertEquals("user", consumer.getNickName());
 //    assertEquals("", consumer.getFirstName());
 //    assertEquals("", consumer.getLastName());
-  }
-
-  //  @Test
-  public void _009_account_getAccount()
-  {
-    logHead("Get Account");
-    util.check_send_data(GET, prop.getResource().getGetAccount(),
-            testConsumer.getUSER_accessToken(), checkers_for_getAccount);
   }
 
   // @Test
