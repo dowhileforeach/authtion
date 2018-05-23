@@ -66,7 +66,7 @@ public class AuthtionFullTest
   @Autowired
   private AuthtionMailingRepository mailingRepository;
 
-  //@Test
+  @Test
   public void _001_auth_USER()
   {
     logHead("USER");
@@ -77,7 +77,7 @@ public class AuthtionFullTest
     fullAuthTest(consumer);
   }
 
-  // @Test
+  @Test
   public void _002_auth_ADMIN()
   {
     logHead("ADMIN");
@@ -88,7 +88,7 @@ public class AuthtionFullTest
     fullAuthTest(consumer);
   }
 
-  // @Test
+  @Test
   public void _003_auth_ANY()
   {
     logHead("ANY");
@@ -97,7 +97,7 @@ public class AuthtionFullTest
     util.performResourceAccessing(consumer.access_token, consumer.level, USUAL);
   }
 
-  // @Test
+  @Test
   public void _004_auth_different_access_tokens()
   {
     logHead("list of Access Tokens");
@@ -106,7 +106,7 @@ public class AuthtionFullTest
     assertEquals(TOTAL_ACCESS_TOKEN_COUNT, auth_test_access_tokens.size());
   }
 
-  // @Test
+  @Test
   public void _005_account_checkEmail()
   {
     logHead("Check Email");
@@ -114,7 +114,7 @@ public class AuthtionFullTest
             testConsumer.getAnonymous_accessToken(), checkers_for_checkEmail);
   }
 
-  // @Test
+  @Test
   public void _006_account_checkPass()
   {
     logHead("Check Pass");
@@ -216,12 +216,12 @@ public class AuthtionFullTest
   {
     logHead("Get Account");
     util.check_send_data(GET, prop.getResource().getGetAccount(),
-            testConsumer.getUSER_accessToken(), checkers_for_getAccount2);
+            testConsumer.getUSER_accessToken(), checkers_for_getAccount);
   }
 
 
   @Test
-  public void _010_account_updateAccount()
+  public void _009_account_updateAccount()
   {
     logHead("Update Account");
 
@@ -325,7 +325,7 @@ public class AuthtionFullTest
   }
 
 
-  // @Test
+  @Test
   public void _010_account_publicAccount()
   {
     logHead("Public Account");
@@ -334,27 +334,31 @@ public class AuthtionFullTest
     String USER_accessToken = testConsumer.getUSER_accessToken();
     String ADMIN_accessToken = testConsumer.getADMIN_accessToken();
 
-//    util.check_send_data(GET, prop.getResource().getPublicUser() + "/9", ANY_accessToken, checkers_for_publicAccount_9);
-//    util.check_send_data(GET, prop.getResource().getPublicUser() + "/9", USER_accessToken, checkers_for_publicAccount_9);
-//    util.check_send_data(GET, prop.getResource().getPublicUser() + "/9", ADMIN_accessToken, checkers_for_publicAccount_9);
-//    util.check_send_data(GET, prop.getResource().getPublicUser() + "/1000", ANY_accessToken, checkers_for_publicAccount_1000);
-//    util.check_send_data(GET, prop.getResource().getPublicUser() + "/1000", USER_accessToken, checkers_for_publicAccount_1000);
-//    util.check_send_data(GET, prop.getResource().getPublicUser() + "/1000", ADMIN_accessToken, checkers_for_publicAccount_1000);
+    util.check_send_data(GET, prop.getResource().getPublicAccount() + "/9", ANY_accessToken, checkers_for_publicAccount_9);
+    util.check_send_data(GET, prop.getResource().getPublicAccount() + "/9", USER_accessToken, checkers_for_publicAccount_9);
+    util.check_send_data(GET, prop.getResource().getPublicAccount() + "/9", ADMIN_accessToken, checkers_for_publicAccount_9);
+    util.check_send_data(GET, prop.getResource().getPublicAccount() + "/1000", ANY_accessToken, checkers_for_publicAccount_1000);
+    util.check_send_data(GET, prop.getResource().getPublicAccount() + "/1000", USER_accessToken, checkers_for_publicAccount_1000);
+    util.check_send_data(GET, prop.getResource().getPublicAccount() + "/1000", ADMIN_accessToken, checkers_for_publicAccount_1000);
+    util.check_send_data(GET, prop.getResource().getPublicAccount() + "/1002", ANY_accessToken, checkers_for_publicAccount_1002);
+    util.check_send_data(GET, prop.getResource().getPublicAccount() + "/1002", USER_accessToken, checkers_for_publicAccount_1002);
+    util.check_send_data(GET, prop.getResource().getPublicAccount() + "/1002", ADMIN_accessToken, checkers_for_publicAccount_1002);
   }
 
 
-  //  @Test
+  @Test
   public void _011_account_reqConfirmEmail()
   {
     logHead("Request Confirm Email");
 
-    String USER_accessToken = testConsumer.getUSER_accessToken();
+    AuthtionTestConsumer USER_test = testConsumer.getUSER();
+    String USER_accessToken = USER_test.access_token;
     int type = 3;
 
     mailingRepository.deleteAll();
 
     // сheck for 'email-is-already-confirmed' error
-    AuthtionConsumer consumerFromDB = getConsumerByEmail(USER_accessToken);
+    AuthtionConsumer consumerFromDB = getConsumerByEmail(USER_test.username);
     assertTrue(consumerFromDB.isEmailConfirmed());
     util.check_send_data(GET, prop.getResource().getReqConfirmEmail(),
             USER_accessToken, checkers_for_reqConfirmEmail_isConfirmed);
@@ -422,7 +426,7 @@ public class AuthtionFullTest
     assertFalse(consumerFromDB.isEmailConfirmed());
   }
 
-  //  @Test
+  @Test
   public void _012_account_confirmEmail()
   {
     logHead("Confirm Email");
@@ -442,7 +446,7 @@ public class AuthtionFullTest
     assertTrue(getConsumerByEmail(Account3_Email).isEmailConfirmed());
   }
 
-  // @Test
+  @Test
   public void _013_password_changePass()
   {
     logHead("Change Password");
@@ -473,7 +477,7 @@ public class AuthtionFullTest
     fullAuthTest(consumerTest);
   }
 
-  // @Test
+  @Test
   public void _014_password_restorePass()
   {
     logHead("Restore Password");
