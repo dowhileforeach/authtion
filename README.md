@@ -25,23 +25,23 @@ When you interact with the Authtion server, you may encounter the following type
 <br>
 **II** OAuth2 server error, which look like this:<br>
 ![OAuth2 server error example](./assets/img/oauth2-server-error-example.png)<br>
-The list of OAuth2 server error-codes and their mapping is [here](./assets/oauth2-server-errors-mapping.js) (may not include unknown errors to me).
+The list of OAuth2 server error-codes and their mapping see [here](./assets/oauth2-server-errors-mapping.js) (may not include unknown errors to me).
 <br>
 Also you should know that under one error-code, there may be several different error_description.
 <br>
 For example `invalid_grant` error-code can be returned with the following error_descriptions:<br>
    * *Bad credentials* - if login or/and password is incorrect
-   * *User is disabled* - if enabled is false
-   * *User account is locked* - if account_non_locked is false
-   * *User credentials have expired* - if credentials_non_expired is false
-   * *User account has expired* - if account_non_expired is false
+   * *User is disabled* - if enabled field set to false
+   * *User account is locked* - if account_non_locked field set to false
+   * *User credentials have expired* - if credentials_non_expired field set to false
+   * *User account has expired* - if account_non_expired field set to false
 
 In this regard, it may be worthwhile instead of mapping error-codes to output error_description.
 <br><br>
 **III** Authtion server error, which look like this:
 <br>
 ![Authtion server error example](./assets/img/authtion-server-error-example.png)<br>
-The list of all Authtion server error-codes and their mapping is [here](./assets/authtion-server-errors-mapping.js).
+The list of all Authtion server error-codes and their mapping see [here](./assets/authtion-server-errors-mapping.js).
 
 # Date and Time
 The Authtion server is set to time zone UTC.<br>
