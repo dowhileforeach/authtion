@@ -7,9 +7,9 @@ Java10, Spring-Boot2, OAuth2, RESTful, MySQL
 <br><br>
 
   * [Errors](#errors)
-    * [Spring server error](#)
-    * [OAuth2 server error](#)
-    * [Authtion server error](#)
+    * [Spring server error](#spring-server-error)
+    * [OAuth2 server error](#oauth2-server-error)
+    * [Authtion server error](#authtion-server-error)
   * [Date and Time](#date-and-time)
   * [Email alerts](#email-alerts)
   * [API](#api)
@@ -21,11 +21,11 @@ Java10, Spring-Boot2, OAuth2, RESTful, MySQL
 # Errors
 When you interact with the Authtion server, you may encounter the following types of errors:<br>
 
-##### Spring server error
+#### Spring server error
 which look like this:
 <br>
 ![Spring server error example](./assets/img/spring-server-error-example.png)<br>
-##### OAuth2 server error
+#### OAuth2 server error
 which look like this:
 <br>
 ![OAuth2 server error example](./assets/img/oauth2-server-error-example.png)<br>
@@ -42,7 +42,7 @@ For example `invalid_grant` error-code can be returned with the following error_
 
 In this regard, it may be worthwhile instead of mapping error-codes to output error_description.
 
-##### Authtion server error
+#### Authtion server error
 which look like this:
 <br>
 ![Authtion server error example](./assets/img/authtion-server-error-example.png)<br>
