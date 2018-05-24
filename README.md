@@ -27,13 +27,6 @@ See `test\java\ru.dwfe.authtion` classes.<br>
 The tests cover all API, except for the cases, when the test write is simply impossible. For example, automatic test of `/google-captcha-validate` is not possible without human intervention.
 
 ## Overview
-1. Sign In as: `test1@dwfe.ru`, `test2@dwfe.ru`, and `some more`
-2. Try to access as `test1@dwfe.ru`, `test2@dwfe.ru`, `not logged user` and `some more` to resources:
-   * `/create-account`
-   * `/get-account`
-   * `/public/account/{id}`
-   * etc.
-
 ![AuthTest_pic](./assets/img/AuthTest_pic.png)<br>
 <br>
 ![AuthTest_RespReq](./assets/img/AuthTest_RespReq.png)
