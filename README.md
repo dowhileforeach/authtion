@@ -69,12 +69,11 @@ See `test\java\ru.dwfe.authtion` classes.<br>
 The tests cover all API, except for the cases, when the test write is simply impossible. For example, automatic test of `/google-captcha-validate` is not possible without human intervention.
 
 ## Auth
-1. Sign In as: `test2@dwfe.ru`, `test1@dwfe.ru`, and `some more`
-2. Try to access as `test2@dwfe.ru`, `test1@dwfe.ru`, `not logged user` and `some more` to resources:
-   * `/public/consumer/{id}`
-   * `/get-consumer-data`
-   * `/list-of-consumers`
-   * `/create-consumer`
+1. Sign In as: `test1@dwfe.ru`, `test2@dwfe.ru`, and `some more`
+2. Try to access as `test1@dwfe.ru`, `test2@dwfe.ru`, `not logged user` and `some more` to resources:
+   * `/create-account`
+   * `/get-account`
+   * `/public/account/{id}`
    * etc.
 
 ![AuthTest_pic](./assets/img/AuthTest_pic.png)<br>
@@ -83,23 +82,23 @@ The tests cover all API, except for the cases, when the test write is simply imp
 <br>
 
 #### For Manual tests
-Sign In as `test2@dwfe.ru`:
-```
-curl Trusted:YWPVYGiGLW4Whnr3Q5vuzd8i@localhost:8080/v1/sign-in -d grant_type=password -d username=test2@dwfe.ru -d password=test22
-```
-
 Sign In as `test1@dwfe.ru`:
 ```
 curl Untrusted:4rZi5yEhcv5Jb3jSzGPfFFDK@localhost:8080/v1/sign-in -d grant_type=password -d username=test1@dwfe.ru -d password=test11
 ```
 
-Templates for accessing to resources:
+Sign In as `test2@dwfe.ru`:
 ```
-curl http://localhost:8080/v1/public/consumer/1
-curl http://localhost:8080/v1/get-consumer-data -H "Authorization: Bearer ACCESS_TOKEN"
-curl http://localhost:8080/v1/list-of-consumers -H "Authorization: Bearer ACCESS_TOKEN"
-curl http://localhost:8080/v1/check-consumer-email -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"email": "some@email.com"}'
-curl http://localhost:8080/v1/create-consumer -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"email": "some@email.com", "password": "somepass"}'
+curl Trusted:YWPVYGiGLW4Whnr3Q5vuzd8i@localhost:8080/v1/sign-in -d grant_type=password -d username=test2@dwfe.ru -d password=test22
+```
+
+Templates for manual accessing to resources:
+```
+curl http://localhost:8080/v1/check-email -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"email": "some@email.com"}'
+curl http://localhost:8080/v1/create-account -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"email": "some@email.com"}'
+curl http://localhost:8080/v1/get-account -H "Authorization: Bearer ACCESS_TOKEN"
+curl http://localhost:8080/v1/public/account/1001
+curl http://localhost:8080/v1/update-account -H "Authorization: Bearer ACCESS_TOKEN" -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"emailNonPublic": false, "gender": 1}'
 ...
 ```
 
