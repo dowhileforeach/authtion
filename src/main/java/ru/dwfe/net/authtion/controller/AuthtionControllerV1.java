@@ -112,7 +112,6 @@ public class AuthtionControllerV1
     String email = req.email;
     String password = req.password;
     String automaticallyGeneratedPassword = "";
-    String data = "";
 
     if (canUseEmail(email, consumerService, errorCodes))
       if (password == null)
@@ -144,11 +143,8 @@ public class AuthtionControllerV1
       mailingRepository.save(automaticallyGeneratedPassword.isEmpty()
               ? AuthtionMailing.of(1, consumer.getEmail())
               : AuthtionMailing.of(2, consumer.getEmail(), automaticallyGeneratedPassword));
-
-      // data for response
-      data = prepareAccountInfo(consumer, user, false);
     }
-    return getResponse(errorCodes, data);
+    return getResponse(errorCodes);
   }
 
   @GetMapping("#{authtionConfigProperties.resource.getAccount}")

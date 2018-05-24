@@ -353,6 +353,7 @@ public class AuthtionFullTest
 
     AuthtionTestConsumer USER_test = testConsumer.getUSER();
     String USER_accessToken = USER_test.access_token;
+    long timeToWait = TimeUnit.MILLISECONDS.toSeconds(prop.getScheduledTaskMailing().getCollectFromDbInterval()) * 2;
     int type = 3;
 
     mailingRepository.deleteAll();
@@ -384,15 +385,15 @@ public class AuthtionFullTest
     util.check_send_data(GET, prop.getResource().getReqConfirmEmail(),
             consumer.access_token, checkers_for_reqConfirmEmail_duplicateDelay);
 
+
     try
     {
-      log.info("Please wait 9 seconds...");
-      TimeUnit.SECONDS.sleep(9);
+      log.info("Please wait {} seconds...", timeToWait);
+      TimeUnit.SECONDS.sleep(timeToWait);
     }
     catch (InterruptedException ignored)
     {
     }
-
     Optional<AuthtionMailing> confirmByEmailOpt = mailingRepository.findLastSentNotEmptyData(type, consumer.username);
     assertTrue(confirmByEmailOpt.isPresent()); // new key was success added and sent
     mailing = confirmByEmailOpt.get();
@@ -409,8 +410,8 @@ public class AuthtionFullTest
 
     try
     {
-      log.info("Please wait 8 seconds...");
-      TimeUnit.SECONDS.sleep(8);
+      log.info("Please wait {} seconds...", timeToWait);
+      TimeUnit.SECONDS.sleep(timeToWait);
     }
     catch (InterruptedException ignored)
     {
@@ -499,6 +500,7 @@ public class AuthtionFullTest
     logHead("Request Restore Password = " + email);
 
     String ANY_accessToken = testConsumer.getAnonymous_accessToken();
+    long timeToWait = TimeUnit.MILLISECONDS.toSeconds(prop.getScheduledTaskMailing().getCollectFromDbInterval()) * 2;
     int type = 5;
 
     assertEquals(0, mailingRepository.findByTypeAndEmail(type, email).size());
@@ -511,13 +513,12 @@ public class AuthtionFullTest
 
     try
     {
-      log.info("Please wait 8 seconds...");
-      TimeUnit.SECONDS.sleep(8);
+      log.info("Please wait {} seconds...", timeToWait);
+      TimeUnit.SECONDS.sleep(timeToWait);
     }
     catch (InterruptedException ignored)
     {
     }
-
     List<AuthtionMailing> confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(1, confirmByEmail.size());
     assertFalse(confirmByEmail.get(0).isMaxAttemptsReached());
@@ -528,13 +529,12 @@ public class AuthtionFullTest
 
     try
     {
-      log.info("Please wait 8 seconds...");
-      TimeUnit.SECONDS.sleep(8);
+      log.info("Please wait {} seconds...", timeToWait);
+      TimeUnit.SECONDS.sleep(timeToWait);
     }
     catch (InterruptedException ignored)
     {
     }
-
     confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(2, confirmByEmail.size());
   }

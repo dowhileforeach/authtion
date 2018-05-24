@@ -92,9 +92,7 @@ CREATE TABLE authtion_mailing (
   data                  VARCHAR(1000) NOT NULL               DEFAULT '',
   cause_of_last_failure VARCHAR(1000) NOT NULL               DEFAULT '',
   updated_on            DATETIME ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (created_on, `type`, email),
-  CONSTRAINT authtion_mailing_id_fk FOREIGN KEY (email) REFERENCES authtion_consumers (email)
-    ON DELETE CASCADE
+  PRIMARY KEY (created_on, `type`, email)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

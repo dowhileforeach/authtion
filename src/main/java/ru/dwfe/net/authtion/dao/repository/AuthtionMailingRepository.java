@@ -34,5 +34,4 @@ public interface AuthtionMailingRepository extends CrudRepository<AuthtionMailin
   @Query(nativeQuery = true,
           value = "SELECT * FROM authtion_mailing WHERE type=:type AND email=:email AND sent=true AND data<>''")
   List<AuthtionMailing> findSentNotEmptyData(@Param("type") int type, @Param("email") String email);
-
 }
