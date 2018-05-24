@@ -7,7 +7,7 @@ Java10, Spring-Boot2, OAuth2, RESTful, MySQL
 <br><br>
 
   * [API](#api)
-    * [Auth](#auth)
+    * [Overview](#overview)
     * [Account](#account)
       * [Create, Read, Update](#create-read-update)
       * [Password management](#password-management)
