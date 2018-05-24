@@ -65,7 +65,6 @@ curl http://localhost:8080/v1/create-account -H "Content-Type: application/json;
 curl http://localhost:8080/v1/get-account -H "Authorization: Bearer ACCESS_TOKEN"
 curl http://localhost:8080/v1/public/account/1001
 curl http://localhost:8080/v1/update-account -H "Authorization: Bearer ACCESS_TOKEN" -H "Content-Type: application/json; charset=utf-8" -X POST -d '{"emailNonPublic": false, "gender": 1}'
-...
 ```
 
 ![ConsumerPassword_CRU_Test_Consumer_error-codes](./assets/img/ConsumerPassword_CRU_Test_Consumer_error-codes.png)<br>
