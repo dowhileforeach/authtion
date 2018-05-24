@@ -7,23 +7,27 @@ Java10, Spring-Boot2, OAuth2, RESTful, MySQL
 <br><br>
 
   * [Errors](#errors)
+    * [Spring server error](#)
+    * [OAuth2 server error](#)
+    * [Authtion server error](#)
   * [Date and Time](#date-and-time)
   * [Email alerts](#email-alerts)
   * [API](#api)
     * [Auth](#auth)
     * [Account](#account)
-      + [Create, Read, Update](#create-read-update)
-      + [Password management](#password-management)
-
+      * [Create, Read, Update](#create-read-update)
+      * [Password management](#password-management)
 
 # Errors
 When you interact with the Authtion server, you may encounter the following types of errors:<br>
-<br>
-**I** Spring server error, which look like this:
+
+##### Spring server error
+which look like this:
 <br>
 ![Spring server error example](./assets/img/spring-server-error-example.png)<br>
+##### OAuth2 server error
+which look like this:
 <br>
-**II** OAuth2 server error, which look like this:<br>
 ![OAuth2 server error example](./assets/img/oauth2-server-error-example.png)<br>
 The list of OAuth2 server error-codes and their mapping see [here](./assets/oauth2-server-errors-mapping.js) (may not include unknown errors to me).
 <br>
@@ -37,8 +41,9 @@ For example `invalid_grant` error-code can be returned with the following error_
    * *User account has expired* - if account_non_expired field set to false
 
 In this regard, it may be worthwhile instead of mapping error-codes to output error_description.
-<br><br>
-**III** Authtion server error, which look like this:
+
+##### Authtion server error
+which look like this:
 <br>
 ![Authtion server error example](./assets/img/authtion-server-error-example.png)<br>
 The list of all Authtion server error-codes and their mapping see [here](./assets/authtion-server-errors-mapping.js).
