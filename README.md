@@ -11,17 +11,36 @@ Java10, Spring-Boot2, OAuth2, RESTful, MySQL
   * [Email alerts](#email-alerts)
   * [API](#api)
     * [Auth](#auth)
-    * [Consumer](#consumer)
+    * [Account](#account)
       + [Create, Read, Update](#create-read-update)
       + [Password management](#password-management)
 
+
 # Errors
 When you interact with the Authtion server, you may encounter the following types of errors:<br>
-1. OAuth2 server error, which look like this:<br>
+<br>
+**(1)** Spring server error, which look like this:
+<br>
+![Spring server error example](./assets/img/spring-server-error-example.png)<br>
+<br>
+**(2)** OAuth2 server error, which look like this:<br>
 ![OAuth2 server error example](./assets/img/oauth2-server-error-example.png)<br>
 The list of OAuth2 server errors and their mapping is [here](./assets/oauth2-server-errors-mapping.js) (may not include unknown errors to me).
-2. Authtion server error, which look like this:<br>
-![Authtion server error example](./assets/img/authtion-server-error-example.png)<br>
+<br>
+Also you should know that under one error-code, there may be several different error_description.
+<br>
+For example `invalid_grant` error-code can be returned with the following error_description:<br>
+   * "Bad credentials" - if login or/and password is incorrect
+   * "User is disabled" - if enabled is false
+   * "User account is locked" - if account_non_locked is false
+   * "User credentials have expired" - if credentials_non_expired is false
+   * "User account has expired" - if account_non_expired is false
+
+In this regard, it may be worthwhile instead of mapping codes to output error_description.
+<br><br>
+**(3)** Authtion server error, which look like this:
+<br>
+--![Authtion server error example](./assets/img/authtion-server-error-example.png)<br>
 The list of all Authtion server errors and their mapping is [here](./assets/authtion-server-errors-mapping.js).
 
 # Date and Time
@@ -79,7 +98,7 @@ curl http://localhost:8080/v1/create-consumer -H "Content-Type: application/json
 ...
 ```
 
-## Consumer
+## Account
 
 ### Create, Read, Update
 ![ConsumerPassword_CRU_Test_Consumer](./assets/img/ConsumerPassword_CRU_Test_Consumer.png)<br><br><br>
