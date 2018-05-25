@@ -131,9 +131,9 @@ public class AuthtionControllerV1
         canUsePassword(password, "password", errorCodes);
 
     if (errorCodes.size() == 0)
-      canUseCountry(req.country, countryRepository, errorCodes);
-    if (errorCodes.size() == 0)
       canUseGender(req.gender, genderRepository, errorCodes);
+    if (errorCodes.size() == 0)
+      canUseCountry(req.country, countryRepository, errorCodes);
 
     if (errorCodes.size() == 0)
     {
