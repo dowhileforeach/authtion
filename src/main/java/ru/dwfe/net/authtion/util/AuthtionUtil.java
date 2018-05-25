@@ -71,13 +71,12 @@ public class AuthtionUtil
     String id = "\"id\":" + consumer.getId();
     String email = "\"email\":\"" + consumer.getEmail() + "\"";
     String nickName = "\"nickName\":\"" + user.getNickName() + "\"";
-    String firstName = "\"firstName\":\"" + user.getFirstName() + "\"";
-    String middleName = "\"middleName\":\"" + user.getMiddleName() + "\"";
-    String lastName = "\"lastName\":\"" + user.getLastName() + "\"";
-    String gender = "\"gender\":" + user.getGender();
-    String dateOfBirth = user.getDateOfBirth() == null
-            ? "\"dateOfBirth\":" + null
-            : "\"dateOfBirth\":\"" + user.getDateOfBirth() + "\"";
+    String firstName = nullableValueToresp("firstName", user.getFirstName());
+    String middleName = nullableValueToresp("middleName", user.getMiddleName());
+    String lastName = nullableValueToresp("lastName", user.getLastName());
+    String gender = nullableValueToresp("gender", user.getGender());
+    String dateOfBirth = nullableValueToresp("dateOfBirth", user.getDateOfBirth());
+    String country = nullableValueToresp("country", user.getCountry());
 
     list.add(id);
     if (onPublic)
@@ -96,6 +95,8 @@ public class AuthtionUtil
         list.add(gender);
       if (!user.getDateOfBirthNonPublic())
         list.add(dateOfBirth);
+      if (!user.getCountryNonPublic())
+        list.add(country);
     }
     else
     {
@@ -117,9 +118,19 @@ public class AuthtionUtil
       list.add("\"genderNonPublic\":" + user.getGenderNonPublic());
       list.add(dateOfBirth);
       list.add("\"dateOfBirthNonPublic\":" + user.getDateOfBirthNonPublic());
+      list.add(country);
+      list.add("\"countryNonPublic\":" + user.getCountryNonPublic());
+
     }
 
     return "{" + list.stream().collect(Collectors.joining(",")) + "}";
+  }
+
+  private static String nullableValueToresp(String field, Object value)
+  {
+    return value == null
+            ? "\"" + field + "\":" + null
+            : "\"" + field + "\":\"" + value + "\"";
   }
 
   public static String getResponse(List<String> errorCodes)
@@ -197,8 +208,10 @@ public class AuthtionUtil
     public String middleName;
     public String lastName;
 
-    public Integer gender;
+    public String gender;
     public LocalDate dateOfBirth;
+
+    public String country;
 
     public String getEmail()
     {
@@ -260,14 +273,14 @@ public class AuthtionUtil
       this.lastName = lastName;
     }
 
-    public Integer getGender()
+    public String getGender()
     {
       return gender;
     }
 
-    public void setGender(Integer gender)
+    public void setGender(String gender)
     {
-      this.gender = gender;
+      this.gender = gender.toUpperCase();
     }
 
     public LocalDate getDateOfBirth()
@@ -278,6 +291,16 @@ public class AuthtionUtil
     public void setDateOfBirth(LocalDate dateOfBirth)
     {
       this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getCountry()
+    {
+      return country;
+    }
+
+    public void setCountry(String country)
+    {
+      this.country = country.toUpperCase();
     }
   }
 
@@ -343,11 +366,14 @@ public class AuthtionUtil
     public String lastName;
     public Boolean lastNameNonPublic;
 
-    public Integer gender;
+    public String gender;
     public Boolean genderNonPublic;
 
     public LocalDate dateOfBirth;
     public Boolean dateOfBirthNonPublic;
+
+    public String country;
+    public Boolean countryNonPublic;
 
     public String getEmail()
     {
@@ -449,14 +475,14 @@ public class AuthtionUtil
       this.lastNameNonPublic = lastNameNonPublic;
     }
 
-    public Integer getGender()
+    public String getGender()
     {
       return gender;
     }
 
-    public void setGender(Integer gender)
+    public void setGender(String gender)
     {
-      this.gender = gender;
+      this.gender = gender.toUpperCase();
     }
 
     public Boolean getGenderNonPublic()
@@ -487,6 +513,26 @@ public class AuthtionUtil
     public void setDateOfBirthNonPublic(Boolean dateOfBirthNonPublic)
     {
       this.dateOfBirthNonPublic = dateOfBirthNonPublic;
+    }
+
+    public String getCountry()
+    {
+      return country;
+    }
+
+    public void setCountry(String country)
+    {
+      this.country = country.toUpperCase();
+    }
+
+    public Boolean getCountryNonPublic()
+    {
+      return countryNonPublic;
+    }
+
+    public void setCountryNonPublic(Boolean countryNonPublic)
+    {
+      this.countryNonPublic = countryNonPublic;
     }
   }
 
@@ -598,6 +644,20 @@ public class AuthtionUtil
   //
   // COMMON
   //
+
+  public static String prepareStringField(String field, int maxLength)
+  {
+    String result;
+
+    if (field == null)
+      return field;
+    else if (field.length() > maxLength)
+      result = field.substring(0, maxLength);
+    else
+      result = field;
+
+    return result;
+  }
 
   public static String getUniqStrBase36(int requiredLength)
   {

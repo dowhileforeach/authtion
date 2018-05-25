@@ -13,6 +13,8 @@ import org.springframework.web.client.RestTemplate;
 import ru.dwfe.net.authtion.dao.AuthtionConsumer;
 import ru.dwfe.net.authtion.dao.AuthtionMailing;
 import ru.dwfe.net.authtion.dao.AuthtionUser;
+import ru.dwfe.net.authtion.dao.repository.AuthtionCountryRepository;
+import ru.dwfe.net.authtion.dao.repository.AuthtionGenderRepository;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 import ru.dwfe.net.authtion.dao.repository.AuthtionUserRepository;
 import ru.dwfe.net.authtion.service.AuthtionConsumerService;
@@ -24,6 +26,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
 import static ru.dwfe.net.authtion.dao.AuthtionConsumer.*;
+import static ru.dwfe.net.authtion.dao.AuthtionCountry.canUseCountry;
+import static ru.dwfe.net.authtion.dao.AuthtionGender.canUseGender;
 import static ru.dwfe.net.authtion.dao.AuthtionUser.prepareNewUser;
 import static ru.dwfe.net.authtion.util.AuthtionUtil.*;
 
@@ -33,16 +37,20 @@ public class AuthtionControllerV1
 {
   private final AuthtionConsumerService consumerService;
   private final AuthtionUserRepository userRepository;
+  private final AuthtionCountryRepository countryRepository;
+  private final AuthtionGenderRepository genderRepository;
   private final AuthtionMailingRepository mailingRepository;
   private final ConsumerTokenServices tokenServices;
   private final RestTemplate restTemplate;
   private final AuthtionUtil util;
 
   @Autowired
-  public AuthtionControllerV1(AuthtionConsumerService consumerService, AuthtionUserRepository userRepository, AuthtionMailingRepository mailingRepository, ConsumerTokenServices tokenServices, RestTemplate restTemplate, AuthtionUtil authtionUtil)
+  public AuthtionControllerV1(AuthtionConsumerService consumerService, AuthtionUserRepository userRepository, AuthtionCountryRepository countryRepository, AuthtionGenderRepository genderRepository, AuthtionMailingRepository mailingRepository, ConsumerTokenServices tokenServices, RestTemplate restTemplate, AuthtionUtil authtionUtil)
   {
     this.consumerService = consumerService;
     this.userRepository = userRepository;
+    this.countryRepository = countryRepository;
+    this.genderRepository = genderRepository;
     this.mailingRepository = mailingRepository;
     this.tokenServices = tokenServices;
     this.restTemplate = restTemplate;
@@ -123,6 +131,11 @@ public class AuthtionControllerV1
         canUsePassword(password, "password", errorCodes);
 
     if (errorCodes.size() == 0)
+      canUseCountry(req.country, countryRepository, errorCodes);
+    if (errorCodes.size() == 0)
+      canUseGender(req.gender, genderRepository, errorCodes);
+
+    if (errorCodes.size() == 0)
     {
       // consumer
       AuthtionConsumer consumer = new AuthtionConsumer();
@@ -197,23 +210,26 @@ public class AuthtionControllerV1
     String newEmail = req.email;
     Boolean newEmailNonPublic = req.emailNonPublic;
 
-    String newNickName = req.nickName;
+    String newNickName = prepareStringField(req.nickName, 20);
     Boolean newNickNameNonPublic = req.nickNameNonPublic;
 
-    String newFirstName = req.firstName;
+    String newFirstName = prepareStringField(req.firstName, 20);
     Boolean newFirstNameNonPublic = req.firstNameNonPublic;
 
-    String newMiddleName = req.middleName;
+    String newMiddleName = prepareStringField(req.middleName, 20);
     Boolean newMiddleNameNonPublic = req.middleNameNonPublic;
 
-    String newLastName = req.lastName;
+    String newLastName = prepareStringField(req.lastName, 20);
     Boolean newLastNameNonPublic = req.lastNameNonPublic;
 
-    Integer newGender = req.gender;
+    String newGender = req.gender;
     Boolean newGenderNonPublic = req.genderNonPublic;
 
     LocalDate newDateOfBirth = req.dateOfBirth;
     Boolean newDateOfBirthNonPublic = req.dateOfBirthNonPublic;
+
+    String newCountry = req.country;
+    Boolean newCountryNonPublic = req.countryNonPublic;
 
     if (newEmail != null && !newEmail.equals(consumer.getEmail()))
     {
@@ -280,10 +296,15 @@ public class AuthtionControllerV1
       userWasModified = true;
     }
 
-    if (newGender != null && !newGender.equals(user.getGender()))
+    if (errorCodes.size() == 0)
     {
-      user.setGender(newGender);
-      userWasModified = true;
+      if (newGender != null
+              && !newGender.equals(user.getGender())
+              && canUseGender(newGender, genderRepository, errorCodes))
+      {
+        user.setGender(newGender);
+        userWasModified = true;
+      }
     }
 
     if (newGenderNonPublic != null && !newGenderNonPublic.equals(user.getGenderNonPublic()))
@@ -301,6 +322,23 @@ public class AuthtionControllerV1
     if (newDateOfBirthNonPublic != null && !newDateOfBirthNonPublic.equals(user.getDateOfBirthNonPublic()))
     {
       user.setDateOfBirthNonPublic(newDateOfBirthNonPublic);
+      userWasModified = true;
+    }
+
+    if (errorCodes.size() == 0)
+    {
+      if (newCountry != null
+              && !newCountry.equals(user.getCountry())
+              && canUseCountry(newCountry, countryRepository, errorCodes))
+      {
+        user.setCountry(newCountry);
+        userWasModified = true;
+      }
+    }
+
+    if (newCountryNonPublic != null && !newCountryNonPublic.equals(user.getCountryNonPublic()))
+    {
+      user.setCountryNonPublic(newCountryNonPublic);
       userWasModified = true;
     }
 

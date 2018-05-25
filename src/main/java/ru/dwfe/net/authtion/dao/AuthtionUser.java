@@ -9,6 +9,8 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static ru.dwfe.net.authtion.util.AuthtionUtil.prepareStringField;
+
 @Entity
 @Table(name = "authtion_users")
 public class AuthtionUser
@@ -28,11 +30,14 @@ public class AuthtionUser
   private String lastName;
   private Boolean lastNameNonPublic;
 
-  private Integer gender;
+  private String gender;
   private Boolean genderNonPublic;
 
   private LocalDate dateOfBirth;
   private Boolean dateOfBirthNonPublic;
+
+  private String country;
+  private Boolean countryNonPublic;
 
   @Column(updatable = false, insertable = false)
   private LocalDateTime updatedOn;
@@ -132,12 +137,12 @@ public class AuthtionUser
     this.lastNameNonPublic = lastNameNonPublic;
   }
 
-  public Integer getGender()
+  public String getGender()
   {
     return gender;
   }
 
-  public void setGender(Integer gender)
+  public void setGender(String gender)
   {
     this.gender = gender;
   }
@@ -172,14 +177,29 @@ public class AuthtionUser
     this.dateOfBirthNonPublic = dateOfBirthNonPublic;
   }
 
+  public String getCountry()
+  {
+    return country;
+  }
+
+  public void setCountry(String country)
+  {
+    this.country = country;
+  }
+
+  public Boolean getCountryNonPublic()
+  {
+    return countryNonPublic;
+  }
+
+  public void setCountryNonPublic(Boolean countryNonPublic)
+  {
+    this.countryNonPublic = countryNonPublic;
+  }
+
   public LocalDateTime getUpdatedOn()
   {
     return updatedOn;
-  }
-
-  public void setUpdatedOn(LocalDateTime updatedOn)
-  {
-    this.updatedOn = updatedOn;
   }
 
 
@@ -213,8 +233,9 @@ public class AuthtionUser
                                 String firstName, boolean firstNameNonPublic,
                                 String middleName, boolean middleNameNonPublic,
                                 String lastName, boolean lastNameNonPublic,
-                                Integer gender, boolean genderNonPublic,
-                                LocalDate dateOfBirth, boolean dateOfBirthNonPublic)
+                                String gender, boolean genderNonPublic,
+                                LocalDate dateOfBirth, boolean dateOfBirthNonPublic,
+                                String country, boolean countryNonPublic)
   {
     AuthtionUser user = new AuthtionUser();
 
@@ -230,6 +251,8 @@ public class AuthtionUser
     user.genderNonPublic = genderNonPublic;
     user.dateOfBirth = dateOfBirth;
     user.dateOfBirthNonPublic = dateOfBirthNonPublic;
+    user.country = country;
+    user.countryNonPublic = countryNonPublic;
     user.updatedOn = LocalDateTime.now();
 
     return user;
@@ -254,29 +277,18 @@ public class AuthtionUser
     user.setLastName(prepareStringField(req.lastName, 20));
     user.setLastNameNonPublic(true);
 
-    user.setGender(req.gender == null ? 0 : req.gender);
+    user.setGender(req.gender);
     user.setGenderNonPublic(true);
 
     user.setDateOfBirth(req.dateOfBirth);
     user.setDateOfBirthNonPublic(true);
+
+    user.setCountry(req.country);
+    user.setCountryNonPublic(true);
   }
 
   public static String getNickNameFromEmail(String email)
   {
     return email.substring(0, email.indexOf('@'));
-  }
-
-  private static String prepareStringField(String field, int maxLength)
-  {
-    String result;
-
-    if (field == null)
-      result = "";
-    else if (field.length() > maxLength)
-      result = field.substring(0, maxLength - 1);
-    else
-      result = field;
-
-    return result;
   }
 }

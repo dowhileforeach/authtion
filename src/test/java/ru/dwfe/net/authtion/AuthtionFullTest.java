@@ -135,6 +135,7 @@ public class AuthtionFullTest
     //  - Account4_Email - password was not passed
     //  - Account5_Email - already encoded password was passed
     //  - Account6_Email - only email was passed
+    //  - Account7_Email - values for check restrictions
 
 
     // Account3_Email
@@ -142,11 +143,12 @@ public class AuthtionFullTest
     assertFalse(consumer1.isEmailConfirmed());
     AuthtionUser user1 = checkUser_ExactMatch(consumer1.getId(), AuthtionUser.of(
             "nobody", true,
-            "", true,
-            "", true,
+            null, true,
+            null, true,
             "sunshine", true,
-            0, true,
-            null, true)
+            null, true,
+            null, true,
+            "US", true)
     );
     List<AuthtionMailing> mailing_consumer1 = mailingRepository.findByTypeAndEmail(1, consumer1.getEmail());
     assertEquals(1, mailing_consumer1.size());
@@ -158,10 +160,11 @@ public class AuthtionFullTest
     AuthtionUser user2 = checkUser_ExactMatch(consumer2.getId(), AuthtionUser.of(
             getNickNameFromEmail(Account4_Email), true,
             "ozon", true,
-            "", true,
-            "", true,
-            0, true,
-            LocalDate.parse("1980-11-27"), true)
+            null, true,
+            null, true,
+            "M", true,
+            LocalDate.parse("1980-11-27"), true,
+            null, true)
     );
     List<AuthtionMailing> mailing_consumer2 = mailingRepository.findByTypeAndEmail(2, consumer2.getEmail());
     assertEquals(1, mailing_consumer2.size());
@@ -176,11 +179,12 @@ public class AuthtionFullTest
     assertEquals(consumer3.getPassword(), "{bcrypt}" + Account5_Pass_Encoded);
     AuthtionUser user3 = checkUser_ExactMatch(consumer3.getId(), AuthtionUser.of(
             "hello world", true,
-            "", true,
+            null, true,
             "john", true,
-            "", true,
-            2, true,
-            null, true)
+            null, true,
+            "F", true,
+            null, true,
+            "DE", true)
     );
     List<AuthtionMailing> mailing_consumer3 = mailingRepository.findByTypeAndEmail(1, consumer3.getEmail());
     assertEquals(1, mailing_consumer3.size());
@@ -191,10 +195,11 @@ public class AuthtionFullTest
     assertTrue(consumer4.isEmailConfirmed());
     AuthtionUser user4 = checkUser_ExactMatch(consumer4.getId(), AuthtionUser.of(
             getNickNameFromEmail(Account6_Email), true,
-            "", true,
-            "", true,
-            "", true,
-            0, true,
+            null, true,
+            null, true,
+            null, true,
+            null, true,
+            null, true,
             null, true)
     );
     List<AuthtionMailing> mailing_consumer4 = mailingRepository.findByTypeAndEmail(2, consumer4.getEmail());
@@ -202,26 +207,36 @@ public class AuthtionFullTest
     String mailing_password_consumer4 = mailing_consumer4.get(0).getData();
     assertTrue(mailing_password_consumer4.length() >= 9);
 
+    // Account7_Email
+    AuthtionConsumer consumer5 = checkConsumerAfterCreate(Account7_Email);
+    assertTrue(consumer5.isEmailConfirmed());
+    AuthtionUser user5 = checkUser_ExactMatch(consumer5.getId(), AuthtionUser.of(
+            "12345678901234567890", true,
+            "12345678901234567890", true,
+            "12345678901234567890", true,
+            "12345678901234567890", true,
+            null, true,
+            null, true,
+            null, true)
+    );
+    List<AuthtionMailing> mailing_consumer5 = mailingRepository.findByTypeAndEmail(2, consumer5.getEmail());
+    assertEquals(1, mailing_consumer5.size());
+    String mailing_password_consumer5 = mailing_consumer5.get(0).getData();
+    assertTrue(mailing_password_consumer5.length() >= 9);
+    Account7_Pass = mailing_password_consumer5;
+
 
     // Perform full auth test for New AuthtionConsumer
     fullAuthTest(testConsumer.of(USER, consumer1.getEmail(), Account3_Pass, testClient.getClientTrusted(), 200));
-    fullAuthTest(testConsumer.of(USER, consumer2.getEmail(), mailing_password_consumer2, testClient.getClientTrusted(), 200));
+    fullAuthTest(testConsumer.of(USER, consumer2.getEmail(), Account4_Pass, testClient.getClientTrusted(), 200));
     fullAuthTest(testConsumer.of(USER, consumer3.getEmail(), Account5_Pass_Decoded, testClient.getClientTrusted(), 200));
     fullAuthTest(testConsumer.of(USER, consumer4.getEmail(), mailing_password_consumer4, testClient.getClientTrusted(), 200));
+    fullAuthTest(testConsumer.of(USER, consumer5.getEmail(), Account7_Pass, testClient.getClientTrusted(), 200));
   }
 
 
   @Test
-  public void _008_account_getAccount()
-  {
-    logHead("Get Account");
-    util.check_send_data(GET, prop.getResource().getGetAccount(),
-            testConsumer.getUSER_accessToken(), checkers_for_getAccount);
-  }
-
-
-  @Test
-  public void _009_account_updateAccount()
+  public void _008_account_updateAccount()
   {
     logHead("Update Account");
 
@@ -236,10 +251,11 @@ public class AuthtionFullTest
     AuthtionUser user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
             getNickNameFromEmail(Account4_Email), true,
             "ozon", true,
-            "", true,
-            "", true,
-            0, true,
-            LocalDate.parse("1980-11-27"), true)
+            null, true,
+            null, true,
+            "M", true,
+            LocalDate.parse("1980-11-27"), true,
+            null, true)
     );
 
 
@@ -252,10 +268,11 @@ public class AuthtionFullTest
     user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
             getNickNameFromEmail(Account4_Email), true,
             "ozon", true,
-            "", true,
-            "", true,
-            0, true,
-            LocalDate.parse("1980-11-27"), true)
+            null, true,
+            null, true,
+            "M", true,
+            LocalDate.parse("1980-11-27"), true,
+            null, true)
     );
 
 
@@ -271,10 +288,11 @@ public class AuthtionFullTest
     user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
             getNickNameFromEmail(Account4_Email), true,
             "ozon", true,
-            "", true,
-            "", true,
-            0, true,
-            LocalDate.parse("1980-11-27"), true)
+            null, true,
+            null, true,
+            "M", true,
+            LocalDate.parse("1980-11-27"), true,
+            null, true)
     );
 
 
@@ -299,10 +317,11 @@ public class AuthtionFullTest
     user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
             "storm", false,
             "ozon", true,
-            "", true,
-            "", true,
-            0, true,
-            LocalDate.parse("1980-11-27"), true)
+            null, true,
+            null, true,
+            "M", true,
+            LocalDate.parse("1980-11-27"), true,
+            null, true)
     );
     tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
     access_token = tConsumer.access_token;
@@ -319,9 +338,42 @@ public class AuthtionFullTest
             "adam", false,
             "newton", false,
             "dragon", false,
-            1, false,
-            LocalDate.parse("1990-05-01"), false)
+            "F", false,
+            LocalDate.parse("1990-05-01"), false,
+            "GB", false)
     );
+
+
+    // Test restrictions
+    tConsumer = testConsumer.of(USER, Account7_Email, Account7_Pass, testClient.getClientTrusted(), 200);
+    util.check_send_data(POST, prop.getResource().getUpdateAccount(), tConsumer.access_token, checkers_for_updateAccount5);
+    consumer = getConsumerByEmail(Account7_Email);
+    assertEquals(Long.valueOf(1006), consumer.getId());
+    assertTrue(consumer.isEmailConfirmed());
+    assertTrue(consumer.isEmailNonPublic());
+    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+            "09876543210987654321", true,
+            "09876543210987654321", true,
+            "09876543210987654321", true,
+            "09876543210987654321", true,
+            null, true,
+            null, true,
+            null, true)
+    );
+  }
+
+
+  @Test
+  public void _009_account_getAccount()
+  {
+    logHead("Get Account");
+
+    util.check_send_data(GET, prop.getResource().getGetAccount(),
+            testConsumer.getUSER_accessToken(), checkers_for_getAccount1);
+
+    AuthtionTestConsumer tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
+    util.check_send_data(GET, prop.getResource().getGetAccount(),
+            tConsumer.access_token, checkers_for_getAccount2);
   }
 
 
@@ -633,62 +685,6 @@ public class AuthtionFullTest
     return consumer;
   }
 
-  private AuthtionUser checkUser_NotNullFields(Long id, AuthtionUser tUser)
-  {
-    AuthtionUser user = getUserById(id);
-    assertNotEquals(null, user.getUpdatedOn());
-
-    String tNickName = tUser.getNickName();
-    Boolean tNickNameNonPublic = tUser.getNickNameNonPublic();
-
-    String tFirstName = tUser.getFirstName();
-    Boolean tFirstNameNonPublic = tUser.getFirstNameNonPublic();
-
-    String tMiddleName = tUser.getMiddleName();
-    Boolean tMiddleNameNonPublic = tUser.getMiddleNameNonPublic();
-
-    String tLastName = tUser.getLastName();
-    Boolean tLastNameNonPublic = tUser.getLastNameNonPublic();
-
-    Integer tGender = tUser.getGender();
-    Boolean tGenderNonPublic = tUser.getGenderNonPublic();
-
-    LocalDate tDateOfBirth = tUser.getDateOfBirth();
-    Boolean tDateOfBirthNonPublic = tUser.getDateOfBirthNonPublic();
-
-    if (tNickName != null)
-      assertEquals(tNickName, user.getNickName());
-    if (tNickNameNonPublic != null)
-      assertEquals(tNickNameNonPublic, user.getNickNameNonPublic());
-
-    if (tFirstName != null)
-      assertEquals(tFirstName, user.getFirstName());
-    if (tFirstNameNonPublic != null)
-      assertEquals(tFirstNameNonPublic, user.getFirstNameNonPublic());
-
-    if (tMiddleName != null)
-      assertEquals(tMiddleName, user.getMiddleName());
-    if (tMiddleNameNonPublic != null)
-      assertEquals(tMiddleNameNonPublic, user.getMiddleNameNonPublic());
-
-    if (tLastName != null)
-      assertEquals(tLastName, user.getLastName());
-    if (tLastNameNonPublic != null)
-      assertEquals(tLastNameNonPublic, user.getLastNameNonPublic());
-
-    if (tGender != null)
-      assertEquals(tGender, user.getGender());
-    if (tGenderNonPublic != null)
-      assertEquals(tGenderNonPublic, user.getGenderNonPublic());
-
-    if (tDateOfBirth != null)
-      assertEquals(tDateOfBirth, user.getDateOfBirth());
-    if (tDateOfBirthNonPublic != null)
-      assertEquals(tDateOfBirthNonPublic, user.getDateOfBirthNonPublic());
-
-    return user;
-  }
-
   private AuthtionUser checkUser_ExactMatch(Long id, AuthtionUser tUser)
   {
     AuthtionUser user = getUserById(id);
@@ -706,11 +702,14 @@ public class AuthtionFullTest
     String tLastName = tUser.getLastName();
     Boolean tLastNameNonPublic = tUser.getLastNameNonPublic();
 
-    Integer tGender = tUser.getGender();
+    String tGender = tUser.getGender();
     Boolean tGenderNonPublic = tUser.getGenderNonPublic();
 
     LocalDate tDateOfBirth = tUser.getDateOfBirth();
     Boolean tDateOfBirthNonPublic = tUser.getDateOfBirthNonPublic();
+
+    String tCountry = tUser.getCountry();
+    Boolean tCountryNonPublic = tUser.getCountryNonPublic();
 
     assertEquals(tNickName, user.getNickName());
     assertEquals(tNickNameNonPublic, user.getNickNameNonPublic());
@@ -729,6 +728,9 @@ public class AuthtionFullTest
 
     assertEquals(tDateOfBirth, user.getDateOfBirth());
     assertEquals(tDateOfBirthNonPublic, user.getDateOfBirthNonPublic());
+
+    assertEquals(tCountry, user.getCountry());
+    assertEquals(tCountryNonPublic, user.getCountryNonPublic());
 
     return user;
   }
