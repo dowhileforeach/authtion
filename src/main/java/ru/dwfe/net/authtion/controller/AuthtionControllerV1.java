@@ -163,8 +163,8 @@ public class AuthtionControllerV1
   public String getAccount(OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
+    var id = getId(authentication);
 
-    var id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
     var consumer = consumerService.findById(id).get();
     var user = userRepository.findById(id).get();
     var data = prepareAccountInfo(consumer, user, false);
@@ -196,12 +196,12 @@ public class AuthtionControllerV1
   public String updateAccount(@RequestBody ReqUpdateAccount req, OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
+    var id = getId(authentication);
     var consumerWasModified = false;
     var userWasModified = false;
     var emailWasChanged = false;
     var data = "";
 
-    var id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
     var consumer = consumerService.findById(id).get();
     var user = userRepository.findById(id).get();
 
@@ -366,8 +366,8 @@ public class AuthtionControllerV1
   public String reqConfirmEmail(OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
+    var id = getId(authentication);
 
-    var id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
     var consumer = consumerService.findById(id).get();
     var email = consumer.getEmail();
     var type = 3;
@@ -420,17 +420,16 @@ public class AuthtionControllerV1
   public String changePass(@RequestBody ReqChangePass req, OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
+    var id = getId(authentication);
 
     if (isDefaultCheckOK(req.oldpass, req.oldpassField, errorCodes)
             && canUsePassword(req.newpass, req.newpassField, errorCodes))
     {
-      var id = ((AuthtionConsumer) authentication.getPrincipal()).getId();
       var consumer = consumerService.findById(id).get();
       if (matchPassword(req.oldpass, consumer.getPassword()))
       {
         consumer.setNewPassword(req.newpass);
         consumerService.save(consumer);
-
         mailingRepository.save(AuthtionMailing.of(4, consumer.getEmail()));
       }
       else errorCodes.add("wrong-" + req.oldpassField);

@@ -29,6 +29,9 @@ public class AuthtionConfigProperties implements InitializingBean
   private GoogleCaptcha googleCaptcha;
 
   @NotNull
+  private Frontend frontend = new Frontend();
+
+  @NotNull
   private ScheduledTaskMailing scheduledTaskMailing;
 
   @NotNull
@@ -247,6 +250,43 @@ public class AuthtionConfigProperties implements InitializingBean
     }
   }
 
+  public static class Frontend
+  {
+    private String host = "http://localhost";
+    private String resourceConfirmEmail = "/confirm-email";
+    private String resourceConfirmRestorePass = "/confirm-restore-pass";
+
+    public String getHost()
+    {
+      return host;
+    }
+
+    public void setHost(String host)
+    {
+      this.host = host;
+    }
+
+    public String getResourceConfirmEmail()
+    {
+      return resourceConfirmEmail;
+    }
+
+    public void setResourceConfirmEmail(String resourceConfirmEmail)
+    {
+      this.resourceConfirmEmail = resourceConfirmEmail;
+    }
+
+    public String getResourceConfirmRestorePass()
+    {
+      return resourceConfirmRestorePass;
+    }
+
+    public void setResourceConfirmRestorePass(String resourceConfirmRestorePass)
+    {
+      this.resourceConfirmRestorePass = resourceConfirmRestorePass;
+    }
+  }
+
   public static class ScheduledTaskMailing
   {
     private int initialDelay = 0;
@@ -422,6 +462,21 @@ public class AuthtionConfigProperties implements InitializingBean
     this.googleCaptcha = googleCaptcha;
   }
 
+  public static Logger getLog()
+  {
+    return log;
+  }
+
+  public Frontend getFrontend()
+  {
+    return frontend;
+  }
+
+  public void setFrontend(Frontend frontend)
+  {
+    this.frontend = frontend;
+  }
+
   public ScheduledTaskMailing getScheduledTaskMailing()
   {
     return scheduledTaskMailing;
@@ -460,35 +515,41 @@ public class AuthtionConfigProperties implements InitializingBean
                     "-====================================================-%n" +
                     "|            ::[Authtion server]::                   |%n" +
                     "|----------------------------------------------------|%n" +
-                    "| API                               %-17s|%n" +
-                    "|                                                    |%n" +
-                    "| Scheduled Task - Mailing:                          |%n" +
-                    "|    initial delay                  %-17s|%n" +
-                    "|    collect from DB interval       %-17s|%n" +
-                    "|    send interval                  %-17s|%n" +
-                    "|    max attempts to send if error  %-17s|%n" +
-                    "|    timeout for duplicate request  %-17s|%n" +
-                    "|                                                    |%n" +
-                    "| Resources                                          |%n" +
-                    "|   Auth:                                            |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|   Account:                                         |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|   Password management:                             |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|      %-44s  |%n" +
-                    "|____________________________________________________|%n",
+                    "| API                               %s%n" +
+                    "|                                                     %n" +
+                    "| Scheduled Task - Mailing:                           %n" +
+                    "|    initial delay                  %s%n" +
+                    "|    collect from DB interval       %s%n" +
+                    "|    send interval                  %s%n" +
+                    "|    max attempts to send if error  %s%n" +
+                    "|    timeout for duplicate request  %s%n" +
+                    "|                                                     %n" +
+                    "| Resources                                           %n" +
+                    "|   Auth:                                             %n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|   Account:                                          %n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|   Password management:                              %n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|      %s%n" +
+                    "|                                                     %n" +
+                    "| Frontend                                            %n" +
+                    "|    host                     %s%n" +
+                    "|    resources for:                                   %n" +
+                    "|      /confirm-email         %s%n" +
+                    "|      /confirm-restore-pass  %s%n" +
+                    "|_____________________________________________________%n",
             api,
             formatMillisecondsToReadableString(scheduledTaskMailing.initialDelay),
             formatMillisecondsToReadableString(scheduledTaskMailing.collectFromDbInterval),
@@ -509,6 +570,9 @@ public class AuthtionConfigProperties implements InitializingBean
             resource.changePass,
             resource.reqRestorePass,
             resource.confirmRestorePass,
-            resource.restorePass);
+            resource.restorePass,
+            frontend.host,
+            frontend.resourceConfirmEmail,
+            frontend.resourceConfirmRestorePass);
   }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import ru.dwfe.net.authtion.dao.AuthtionConsumer;
@@ -133,6 +134,11 @@ public class AuthtionUtil
     return value == null
             ? "\"" + field + "\":" + null
             : "\"" + field + "\":\"" + value + "\"";
+  }
+
+  public static Long getId(OAuth2Authentication authentication)
+  {
+    return ((AuthtionConsumer) authentication.getPrincipal()).getId();
   }
 
   public static String getResponse(List<String> errorCodes)

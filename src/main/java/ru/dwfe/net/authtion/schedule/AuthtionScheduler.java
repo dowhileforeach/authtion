@@ -29,6 +29,7 @@ public class AuthtionScheduler
 
   private final JavaMailSender mailSender;
   private final AuthtionMailingRepository mailingRepository;
+  private final AuthtionConfigProperties authtionConfigProperties;
 
   private static final ConcurrentSkipListSet<AuthtionMailing> MAILING_POOL = new ConcurrentSkipListSet<>();
   private final int maxAttemptsMailingIfError;
@@ -40,6 +41,7 @@ public class AuthtionScheduler
   {
     this.mailSender = mailSender;
     this.mailingRepository = mailingRepository;
+    this.authtionConfigProperties = authtionConfigProperties;
 
     this.maxAttemptsMailingIfError = authtionConfigProperties.getScheduledTaskMailing().getMaxAttemptsToSendIfError();
     this.sendFrom = env.getProperty("spring.mail.username");
@@ -119,6 +121,9 @@ public class AuthtionScheduler
     var messageKey = "message";
     var dataKey = "data";
     var context = new Context();
+    var frontendHost = authtionConfigProperties.getFrontend().getHost();
+    var resourceConfirmEmail = authtionConfigProperties.getFrontend().getResourceConfirmEmail();
+    var resourceConfirmRestorePass = authtionConfigProperties.getFrontend().getResourceConfirmRestorePass();
 
     if (type == 1)
     {
@@ -131,8 +136,9 @@ public class AuthtionScheduler
     }
     else if (type == 3)
     {
+
       result.put(subjKey, "Confirm email");
-      context.setVariable(dataKey, "http://localhost:8080/v1/confirm-email?key=" + data);
+      context.setVariable(dataKey, frontendHost + resourceConfirmEmail + "?key=" + data);
     }
     else if (type == 4)
     {
@@ -141,7 +147,7 @@ public class AuthtionScheduler
     else if (type == 5)
     {
       result.put(subjKey, "Confirm restore password");
-      context.setVariable(dataKey, "http://localhost:8080/v1/confirm-restore-pass?key=" + data);
+      context.setVariable(dataKey, frontendHost + resourceConfirmRestorePass + "?key=" + data);
     }
     result.put(messageKey, templateEngine.process("mailing" + type, context));
     return result;
