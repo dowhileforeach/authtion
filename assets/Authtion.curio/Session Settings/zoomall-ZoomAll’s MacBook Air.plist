@@ -2205,7 +2205,7 @@
 	<key>C84BAFCC-F04A-41F0-ADF0-D29C5059420D</key>
 	<dict>
 		<key>Visible Rect</key>
-		<string>{{0, 0}, {1100, 662}}</string>
+		<string>{{0, 6}, {1100, 662}}</string>
 		<key>Zoom Factor</key>
 		<real>1</real>
 	</dict>
@@ -2534,7 +2534,7 @@
 	<key>E4F6789C-1F83-41F4-AB18-95C8C7801797</key>
 	<dict>
 		<key>Visible Rect</key>
-		<string>{{0, 5946}, {1100, 662}}</string>
+		<string>{{0, 5407}, {1100, 662}}</string>
 		<key>Zoom Factor</key>
 		<real>1</real>
 	</dict>
