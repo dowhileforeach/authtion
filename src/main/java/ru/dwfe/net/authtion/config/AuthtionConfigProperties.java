@@ -40,9 +40,9 @@ public class AuthtionConfigProperties implements InitializingBean
   @Override
   public void afterPropertiesSet() throws Exception
   {
-    scheduledTaskMailing.setTimeoutForDuplicateRequest(
-            scheduledTaskMailing.getSendInterval() * scheduledTaskMailing.getMaxAttemptsToSendIfError()
-    );
+    if (scheduledTaskMailing.getTimeoutForDuplicateRequest() <= 0)
+      scheduledTaskMailing.setTimeoutForDuplicateRequest(
+              scheduledTaskMailing.getSendInterval() * scheduledTaskMailing.getMaxAttemptsToSendIfError());
 
     log.info(toString());
   }
