@@ -224,7 +224,7 @@ public class AuthtionConfigProperties implements InitializingBean
     private String secretKey;
 
     @NotBlank
-    private String siteVerifyUrl;
+    private String siteVerifyUrlTemplate;
 
     public String getSecretKey()
     {
@@ -236,14 +236,14 @@ public class AuthtionConfigProperties implements InitializingBean
       this.secretKey = secretKey;
     }
 
-    public String getSiteVerifyUrl()
+    public String getSiteVerifyUrlTemplate()
     {
-      return siteVerifyUrl;
+      return siteVerifyUrlTemplate;
     }
 
-    public void setSiteVerifyUrl(String siteVerifyUrl)
+    public void setSiteVerifyUrlTemplate(String siteVerifyUrlTemplate)
     {
-      this.siteVerifyUrl = siteVerifyUrl;
+      this.siteVerifyUrlTemplate = siteVerifyUrlTemplate;
     }
   }
 

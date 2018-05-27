@@ -73,7 +73,7 @@ public class AuthtionCountry
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    AuthtionCountry that = (AuthtionCountry) o;
+    var that = (AuthtionCountry) o;
 
     return alpha2.equals(that.alpha2);
   }

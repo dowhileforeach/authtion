@@ -14,7 +14,7 @@ public class AuthtionTestChecker
 
   public void responseHandler(Map<String, Object> map)
   {
-    Map<String, Object> details = (Map<String, Object>) AuthtionTestUtil.getValueFromResponse(map, "data");
+    var details = (Map<String, Object>) AuthtionTestUtil.getValueFromResponse(map, "data");
     if (details.containsKey("createdOn"))
       details.put("createdOn", "date");
     if (details.containsKey("updatedOn"))
@@ -28,7 +28,7 @@ public class AuthtionTestChecker
                                        int expectedStatus,
                                        String expectedError)
   {
-    AuthtionTestChecker checker = new AuthtionTestChecker();
+    var checker = new AuthtionTestChecker();
     checker.expectedResult = expectedResult;
     checker.req = req;
     checker.expectedStatus = expectedStatus;
@@ -41,7 +41,7 @@ public class AuthtionTestChecker
                                        Map<String, Object> req,
                                        int expectedStatus)
   {
-    AuthtionTestChecker checker = new AuthtionTestChecker();
+    var checker = new AuthtionTestChecker();
     checker.expectedResult = expectedResult;
     checker.req = req;
     checker.expectedStatus = expectedStatus;
@@ -54,7 +54,7 @@ public class AuthtionTestChecker
                                        int expectedStatus,
                                        Map<String, Object> expectedResponseMap)
   {
-    AuthtionTestChecker checker = new AuthtionTestChecker();
+    var checker = new AuthtionTestChecker();
     checker.expectedResult = expectedResult;
     checker.req = req;
     checker.expectedStatus = expectedStatus;

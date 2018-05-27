@@ -29,7 +29,7 @@ public class AuthtionTestConsumer
 
   public AuthtionTestConsumer of(AuthtionTestAuthorityLevel level, String username, String password, AuthtionTestClient client, int signInExpectedStatus)
   {
-    AuthtionTestConsumer testConsumer = new AuthtionTestConsumer();
+    var testConsumer = new AuthtionTestConsumer();
     testConsumer.level = level;
     testConsumer.username = username;
     testConsumer.password = password;
@@ -42,7 +42,7 @@ public class AuthtionTestConsumer
 
   public AuthtionTestConsumer getAnonymous()
   {
-    AuthtionTestConsumer testConsumer = new AuthtionTestConsumer();
+    var testConsumer = new AuthtionTestConsumer();
     testConsumer.level = AuthtionTestAuthorityLevel.ANY;
     return testConsumer;
   }

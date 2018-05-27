@@ -57,6 +57,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
     data = "";
   }
 
+
   //
   //  GETTERs and SETTERs
   //
@@ -152,7 +153,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    AuthtionMailing mailing = (AuthtionMailing) o;
+    var mailing = (AuthtionMailing) o;
 
     if (type != mailing.type) return false;
     if (!createdOn.equals(mailing.createdOn)) return false;
@@ -162,7 +163,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
   @Override
   public int hashCode()
   {
-    int result = createdOn.hashCode();
+    var result = createdOn.hashCode();
     result = 31 * result + type;
     result = 31 * result + email.hashCode();
     return result;
@@ -171,7 +172,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
   @Override
   public int compareTo(AuthtionMailing o)
   {
-    int result;
+    var result = 0;
     if ((result = createdOn.compareTo(o.createdOn)) == 0)
       if ((result = Integer.compare(type, o.type)) == 0)
         result = email.compareTo(o.email);
@@ -194,6 +195,11 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
             "}";
   }
 
+
+  //
+  // UTILs
+  //
+
   public static class AuthtionMailingId implements Serializable
   {
     private LocalDateTime createdOn;
@@ -206,7 +212,7 @@ public class AuthtionMailing implements Comparable<AuthtionMailing>
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
 
-      AuthtionMailingId mailingId = (AuthtionMailingId) o;
+      var mailingId = (AuthtionMailingId) o;
 
       if (type != mailingId.type) return false;
       if (!createdOn.equals(mailingId.createdOn)) return false;

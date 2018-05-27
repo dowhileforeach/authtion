@@ -213,7 +213,7 @@ public class AuthtionUser
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    AuthtionUser that = (AuthtionUser) o;
+    var that = (AuthtionUser) o;
 
     return consumerId.equals(that.consumerId);
   }
@@ -237,7 +237,7 @@ public class AuthtionUser
                                 LocalDate dateOfBirth, boolean dateOfBirthNonPublic,
                                 String country, boolean countryNonPublic)
   {
-    AuthtionUser user = new AuthtionUser();
+    var user = new AuthtionUser();
 
     user.nickName = nickName;
     user.nickNameNonPublic = nickNameNonPublic;
@@ -262,7 +262,7 @@ public class AuthtionUser
   {
     user.setConsumerId(consumer.getId());
 
-    String nickName = req.nickName;
+    var nickName = req.nickName;
     if (nickName == null)
       nickName = getNickNameFromEmail(consumer.getEmail());
     user.setNickName(prepareStringField(nickName, 20));

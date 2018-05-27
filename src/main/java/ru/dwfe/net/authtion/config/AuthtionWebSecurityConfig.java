@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -47,8 +46,8 @@ public class AuthtionWebSecurityConfig extends WebSecurityConfigurerAdapter
 
   private DelegatingPasswordEncoder bcrypt()
   {
-    Map<String, PasswordEncoder> encoders = new HashMap<>();
-    String idForEncode = "bcrypt";
+    var encoders = new HashMap<String, PasswordEncoder>();
+    var idForEncode = "bcrypt";
     encoders.put("bcrypt", new BCryptPasswordEncoder(10));
 
     return new DelegatingPasswordEncoder(idForEncode, encoders);

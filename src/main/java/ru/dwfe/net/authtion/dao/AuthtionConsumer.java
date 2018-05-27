@@ -207,6 +207,7 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     return updatedOn;
   }
 
+
   //
   //  equals, hashCode
   //
@@ -217,7 +218,7 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    AuthtionConsumer consumer = (AuthtionConsumer) o;
+    var consumer = (AuthtionConsumer) o;
 
     return id.equals(consumer.id);
   }
@@ -235,7 +236,7 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
 
   public static boolean canUseEmail(String email, AuthtionConsumerService consumerService, List<String> errorCodes)
   {
-    boolean result = false;
+    var result = false;
 
     if (isEmailCheckOK(email, errorCodes))
     {
@@ -250,8 +251,8 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
 
   public static boolean isEmailCheckOK(String email, List<String> errorCodes)
   {
-    boolean result = false;
-    int maxLength = 50;
+    var maxLength = 50;
+    var result = false;
 
     if (isDefaultCheckOK(email, "email", errorCodes))
     {
@@ -275,9 +276,9 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
 
   public static boolean canUsePassword(String password, String fieldName, List<String> errorCodes)
   {
-    boolean result = false;
-    int minLenght = 6;
-    int maxLenght = 55;
+    var minLenght = 6;
+    var maxLenght = 55;
+    var result = false;
 
     if (isDefaultCheckOK(password, fieldName, errorCodes))
     {
@@ -301,7 +302,7 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
 
   public static boolean matchPassword(String rawPassword, String rawEncodedPassword)
   {
-    String encodedPassword = rawEncodedPassword.replace("{bcrypt}", "");
+    var encodedPassword = rawEncodedPassword.replace("{bcrypt}", "");
     return BCrypt.checkpw(rawPassword, encodedPassword);
   }
 

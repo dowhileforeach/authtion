@@ -109,20 +109,20 @@ public class AuthtionEventLogger
 
   private Map<String, String> parseFailureAuthentication(AbstractAuthenticationFailureEvent event) throws Exception
   {
-    Map<String, String> map = commonParse(new String[]{"timestamp", "source", "principal", "authorities", "details"}, event);
+    var map = commonParse(new String[]{"timestamp", "source", "principal", "authorities", "details"}, event);
     addException(map, event.getException());
     return map;
   }
 
   private void authenticationSuccessEvent(AbstractAuthenticationEvent event, String eventStr) throws Exception
   {
-    Map<String, String> map = parseSuccessAuthentication(event);
+    var map = parseSuccessAuthentication(event);
     log(map, eventStr, true);
   }
 
   private void authenticationFailureEvent(AbstractAuthenticationFailureEvent event, String eventStr) throws Exception
   {
-    Map<String, String> map = parseFailureAuthentication(event);
+    var map = parseFailureAuthentication(event);
     log(map, eventStr, false);
   }
 
@@ -134,7 +134,7 @@ public class AuthtionEventLogger
   @EventListener
   public void access1(AuthenticationCredentialsNotFoundEvent event) throws Exception
   {
-    Map<String, String> map = commonParse(new String[]{"timestamp", "source", "configAttributes"}, event);
+    var map = commonParse(new String[]{"timestamp", "source", "configAttributes"}, event);
     addException(map, event.getCredentialsNotFoundException());
     log(map, "CredentialsNotFound", false);
   }
@@ -142,7 +142,7 @@ public class AuthtionEventLogger
   @EventListener
   public void access2(AuthorizationFailureEvent event) throws Exception
   {
-    Map<String, String> map = commonParse(new String[]{"timestamp", "source", "configAttributes", "principal", "authorities", "details"}, event);
+    var map = commonParse(new String[]{"timestamp", "source", "configAttributes", "principal", "authorities", "details"}, event);
     addException(map, event.getAccessDeniedException());
     log(map, "AuthorizationFailure", false);
   }
@@ -150,14 +150,14 @@ public class AuthtionEventLogger
   @EventListener
   public void access3(AuthorizedEvent event) throws Exception
   {
-    Map<String, String> map = commonParse(new String[]{"timestamp", "source", "configAttributes", "principal", "authorities", "details"}, event);
+    var map = commonParse(new String[]{"timestamp", "source", "configAttributes", "principal", "authorities", "details"}, event);
     log(map, "Authorized", true);
   }
 
   @EventListener
   public void access4(PublicInvocationEvent event) throws Exception
   {
-    Map<String, String> map = commonParse(new String[]{"timestamp", "source"}, event);
+    var map = commonParse(new String[]{"timestamp", "source"}, event);
     log(map, "PublicInvocation", true);
   }
 
@@ -170,11 +170,11 @@ public class AuthtionEventLogger
 
   private void log(Map<String, String> map, String event, boolean success)
   {
-    String result = map.entrySet().stream()
+    var result = map.entrySet().stream()
             .map(e -> e.getKey() + " = " + e.getValue())
             .collect(Collectors.joining("\r\n"));
 
-    String str = "{}\n{}\n";
+    var str = "{}\n{}\n";
 
     if (success)
       log.info(str, event, result);
@@ -184,7 +184,7 @@ public class AuthtionEventLogger
 
   private Map<String, String> commonParse(String[] arr, ApplicationEvent event) throws Exception
   {
-    Map<String, String> map = new HashMap<>();
+    var map = new HashMap<String, String>();
     Authentication authentication = null;
 
     for (String next : arr)
@@ -199,7 +199,7 @@ public class AuthtionEventLogger
       }
       else if ("configAttributes".equals(next))
       {
-        String configAttributes = event.getClass().getMethod("getConfigAttributes").invoke(event).toString();
+        var configAttributes = event.getClass().getMethod("getConfigAttributes").invoke(event).toString();
         map.put("configAttributes", configAttributes);
       }
       else if ("principal".equals(next))
@@ -251,7 +251,7 @@ public class AuthtionEventLogger
 
   private String getDateTimeStr(long timestamp)
   {
-    LocalDateTime triggerTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), zoneId);
+    var triggerTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), zoneId);
     return triggerTime.format(dateTimeFormatter);
   }
 }

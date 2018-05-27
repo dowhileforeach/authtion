@@ -26,7 +26,7 @@ public class AuthtionApplication
   @PostConstruct
   void started()
   {
-    String time_zone = env.getProperty("spring.jpa.properties.hibernate.jdbc.time_zone");
+    var time_zone = env.getProperty("spring.jpa.properties.hibernate.jdbc.time_zone");
     TimeZone.setDefault(TimeZone.getTimeZone(time_zone));
   }
 

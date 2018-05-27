@@ -51,7 +51,7 @@ public class AuthtionGender
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    AuthtionGender that = (AuthtionGender) o;
+    var that = (AuthtionGender) o;
 
     return gender.equals(that.gender);
   }

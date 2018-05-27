@@ -57,7 +57,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
 
   public static List<AuthtionTestChecker> checkers_for_createAccount()
   {
-    List<AuthtionTestChecker> list = new ArrayList<>(List.of(
+    var list = new ArrayList<AuthtionTestChecker>(List.of(
             AuthtionTestChecker.of(false, Map.of(), 200, "missing-email"),
             AuthtionTestChecker.of(false, Map.of("email", ""), 200, "empty-email"),
             AuthtionTestChecker.of(false, Map.of("email", "ogygyg_bnmkkskslwlwllogygyg_bnmkkskslwlwll@gmail.com"), 200, "exceeded-max50-email-length"),
@@ -219,7 +219,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
 
   public static List<AuthtionTestChecker> checkers_for_restorePass(String email, String newpass, String existedKey)
   {
-    List<AuthtionTestChecker> list = new ArrayList<>(List.of(
+    var list = new ArrayList<AuthtionTestChecker>(List.of(
             AuthtionTestChecker.of(false, Map.of(), 200, "missing-newpass"),
             AuthtionTestChecker.of(false, Map.of("newpass", ""), 200, "empty-newpass")
     ));

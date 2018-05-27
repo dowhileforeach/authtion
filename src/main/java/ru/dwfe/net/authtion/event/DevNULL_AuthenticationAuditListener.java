@@ -10,6 +10,5 @@ public class DevNULL_AuthenticationAuditListener extends AbstractAuthenticationA
   @Override
   public void onApplicationEvent(AbstractAuthenticationEvent event)
   {
-
   }
 }

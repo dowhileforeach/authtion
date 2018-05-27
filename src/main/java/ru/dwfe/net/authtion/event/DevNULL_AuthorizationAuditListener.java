@@ -10,6 +10,5 @@ public class DevNULL_AuthorizationAuditListener extends AbstractAuthorizationAud
   @Override
   public void onApplicationEvent(AbstractAuthorizationEvent event)
   {
-
   }
 }

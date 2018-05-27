@@ -8,11 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import ru.dwfe.net.authtion.dao.AuthtionConsumer;
-import ru.dwfe.net.authtion.dao.AuthtionMailing;
 import ru.dwfe.net.authtion.dao.AuthtionUser;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 import ru.dwfe.net.authtion.dao.repository.AuthtionUserRepository;
@@ -23,7 +21,9 @@ import ru.dwfe.net.authtion.test.AuthtionTestConsumer;
 import ru.dwfe.net.authtion.test.AuthtionTestUtil;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -71,7 +71,7 @@ public class AuthtionFullTest
   {
     logHead("USER");
 
-    AuthtionTestConsumer consumer = testConsumer.getUSER();
+    var consumer = testConsumer.getUSER();
     auth_test_access_tokens.add(consumer.access_token);
 
     fullAuthTest(consumer);
@@ -82,7 +82,7 @@ public class AuthtionFullTest
   {
     logHead("ADMIN");
 
-    AuthtionTestConsumer consumer = testConsumer.getADMIN();
+    var consumer = testConsumer.getADMIN();
     auth_test_access_tokens.add(consumer.access_token);
 
     fullAuthTest(consumer);
@@ -93,7 +93,7 @@ public class AuthtionFullTest
   {
     logHead("ANY");
 
-    AuthtionTestConsumer consumer = testConsumer.getAnonymous();
+    var consumer = testConsumer.getAnonymous();
     util.performResourceAccessing(consumer.access_token, consumer.level, USUAL);
   }
 
@@ -139,9 +139,9 @@ public class AuthtionFullTest
 
 
     // Account3_Email
-    AuthtionConsumer consumer1 = checkConsumerAfterCreate(Account3_Email);
+    var consumer1 = checkConsumerAfterCreate(Account3_Email);
     assertFalse(consumer1.isEmailConfirmed());
-    AuthtionUser user1 = checkUser_ExactMatch(consumer1.getId(), AuthtionUser.of(
+    var user1 = checkUser_ExactMatch(consumer1.getId(), AuthtionUser.of(
             "nobody", true,
             null, true,
             null, true,
@@ -150,14 +150,14 @@ public class AuthtionFullTest
             null, true,
             "US", true)
     );
-    List<AuthtionMailing> mailing_consumer1 = mailingRepository.findByTypeAndEmail(1, consumer1.getEmail());
+    var mailing_consumer1 = mailingRepository.findByTypeAndEmail(1, consumer1.getEmail());
     assertEquals(1, mailing_consumer1.size());
 
 
     // Account4_Email
-    AuthtionConsumer consumer2 = checkConsumerAfterCreate(Account4_Email);
+    var consumer2 = checkConsumerAfterCreate(Account4_Email);
     assertTrue(consumer2.isEmailConfirmed());
-    AuthtionUser user2 = checkUser_ExactMatch(consumer2.getId(), AuthtionUser.of(
+    var user2 = checkUser_ExactMatch(consumer2.getId(), AuthtionUser.of(
             getNickNameFromEmail(Account4_Email), true,
             "ozon", true,
             null, true,
@@ -166,18 +166,18 @@ public class AuthtionFullTest
             LocalDate.parse("1980-11-27"), true,
             null, true)
     );
-    List<AuthtionMailing> mailing_consumer2 = mailingRepository.findByTypeAndEmail(2, consumer2.getEmail());
+    var mailing_consumer2 = mailingRepository.findByTypeAndEmail(2, consumer2.getEmail());
     assertEquals(1, mailing_consumer2.size());
-    String mailing_password_consumer2 = mailing_consumer2.get(0).getData();
+    var mailing_password_consumer2 = mailing_consumer2.get(0).getData();
     Account4_Pass = mailing_password_consumer2; //for next tests
     assertTrue(mailing_password_consumer2.length() >= 9);
 
 
     // Account5_Email
-    AuthtionConsumer consumer3 = checkConsumerAfterCreate(Account5_Email);
+    var consumer3 = checkConsumerAfterCreate(Account5_Email);
     assertFalse(consumer3.isEmailConfirmed());
     assertEquals(consumer3.getPassword(), "{bcrypt}" + Account5_Pass_Encoded);
-    AuthtionUser user3 = checkUser_ExactMatch(consumer3.getId(), AuthtionUser.of(
+    var user3 = checkUser_ExactMatch(consumer3.getId(), AuthtionUser.of(
             "hello world", true,
             null, true,
             "john", true,
@@ -186,14 +186,14 @@ public class AuthtionFullTest
             null, true,
             "DE", true)
     );
-    List<AuthtionMailing> mailing_consumer3 = mailingRepository.findByTypeAndEmail(1, consumer3.getEmail());
+    var mailing_consumer3 = mailingRepository.findByTypeAndEmail(1, consumer3.getEmail());
     assertEquals(1, mailing_consumer3.size());
 
 
     // Account6_Email
-    AuthtionConsumer consumer4 = checkConsumerAfterCreate(Account6_Email);
+    var consumer4 = checkConsumerAfterCreate(Account6_Email);
     assertTrue(consumer4.isEmailConfirmed());
-    AuthtionUser user4 = checkUser_ExactMatch(consumer4.getId(), AuthtionUser.of(
+    var user4 = checkUser_ExactMatch(consumer4.getId(), AuthtionUser.of(
             getNickNameFromEmail(Account6_Email), true,
             null, true,
             null, true,
@@ -202,15 +202,15 @@ public class AuthtionFullTest
             null, true,
             null, true)
     );
-    List<AuthtionMailing> mailing_consumer4 = mailingRepository.findByTypeAndEmail(2, consumer4.getEmail());
+    var mailing_consumer4 = mailingRepository.findByTypeAndEmail(2, consumer4.getEmail());
     assertEquals(1, mailing_consumer4.size());
-    String mailing_password_consumer4 = mailing_consumer4.get(0).getData();
+    var mailing_password_consumer4 = mailing_consumer4.get(0).getData();
     assertTrue(mailing_password_consumer4.length() >= 9);
 
     // Account7_Email
-    AuthtionConsumer consumer5 = checkConsumerAfterCreate(Account7_Email);
+    var consumer5 = checkConsumerAfterCreate(Account7_Email);
     assertTrue(consumer5.isEmailConfirmed());
-    AuthtionUser user5 = checkUser_ExactMatch(consumer5.getId(), AuthtionUser.of(
+    var user5 = checkUser_ExactMatch(consumer5.getId(), AuthtionUser.of(
             "12345678901234567890", true,
             "12345678901234567890", true,
             "12345678901234567890", true,
@@ -219,9 +219,9 @@ public class AuthtionFullTest
             null, true,
             null, true)
     );
-    List<AuthtionMailing> mailing_consumer5 = mailingRepository.findByTypeAndEmail(2, consumer5.getEmail());
+    var mailing_consumer5 = mailingRepository.findByTypeAndEmail(2, consumer5.getEmail());
     assertEquals(1, mailing_consumer5.size());
-    String mailing_password_consumer5 = mailing_consumer5.get(0).getData();
+    var mailing_password_consumer5 = mailing_consumer5.get(0).getData();
     assertTrue(mailing_password_consumer5.length() >= 9);
     Account7_Pass = mailing_password_consumer5;
 
@@ -240,15 +240,15 @@ public class AuthtionFullTest
   {
     logHead("Update Account");
 
-    AuthtionTestConsumer tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
-    String access_token = tConsumer.access_token;
+    var tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
+    var access_token = tConsumer.access_token;
 
     // init check
-    AuthtionConsumer consumer = getConsumerByEmail(Account4_Email);
+    var consumer = getConsumerByEmail(Account4_Email);
     assertEquals(Long.valueOf(1002), consumer.getId());
     assertTrue(consumer.isEmailConfirmed());
     assertTrue(consumer.isEmailNonPublic());
-    AuthtionUser user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+    var user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
             getNickNameFromEmail(Account4_Email), true,
             "ozon", true,
             null, true,
@@ -277,7 +277,7 @@ public class AuthtionFullTest
 
 
     // (2) change Email
-    String newEmail = "helloworld@oo.com";
+    var newEmail = "helloworld@oo.com";
     consumerNotPresent(newEmail);
     util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount2);
     consumerNotPresent(Account4_Email);
@@ -371,7 +371,7 @@ public class AuthtionFullTest
     util.check_send_data(GET, prop.getResource().getGetAccount(),
             testConsumer.getUSER_accessToken(), checkers_for_getAccount1);
 
-    AuthtionTestConsumer tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
+    var tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
     util.check_send_data(GET, prop.getResource().getGetAccount(),
             tConsumer.access_token, checkers_for_getAccount2);
   }
@@ -382,9 +382,9 @@ public class AuthtionFullTest
   {
     logHead("Public Account");
 
-    String ANY_accessToken = testConsumer.getAnonymous_accessToken();
-    String USER_accessToken = testConsumer.getUSER_accessToken();
-    String ADMIN_accessToken = testConsumer.getADMIN_accessToken();
+    var ANY_accessToken = testConsumer.getAnonymous_accessToken();
+    var USER_accessToken = testConsumer.getUSER_accessToken();
+    var ADMIN_accessToken = testConsumer.getADMIN_accessToken();
 
     util.check_send_data(GET, prop.getResource().getPublicAccount() + "/9", ANY_accessToken, checkers_for_publicAccount_9);
     util.check_send_data(GET, prop.getResource().getPublicAccount() + "/9", USER_accessToken, checkers_for_publicAccount_9);
@@ -403,22 +403,22 @@ public class AuthtionFullTest
   {
     logHead("Request Confirm Email");
 
-    AuthtionTestConsumer USER_test = testConsumer.getUSER();
-    String USER_accessToken = USER_test.access_token;
-    long timeToWait = TimeUnit.MILLISECONDS.toSeconds(prop.getScheduledTaskMailing().getCollectFromDbInterval()) * 2;
-    int type = 3;
+    var USER_test = testConsumer.getUSER();
+    var USER_accessToken = USER_test.access_token;
+    var timeToWait = TimeUnit.MILLISECONDS.toSeconds(prop.getScheduledTaskMailing().getCollectFromDbInterval()) * 2;
+    var type = 3;
 
     mailingRepository.deleteAll();
 
     // сheck for 'email-is-already-confirmed' error
-    AuthtionConsumer consumerFromDB = getConsumerByEmail(USER_test.username);
+    var consumerFromDB = getConsumerByEmail(USER_test.username);
     assertTrue(consumerFromDB.isEmailConfirmed());
     util.check_send_data(GET, prop.getResource().getReqConfirmEmail(),
             USER_accessToken, checkers_for_reqConfirmEmail_isConfirmed);
 
     // add new request
-    AuthtionTestConsumer consumer = testConsumer.of(USER, Account3_Email, Account3_Pass, testClient.getClientTrusted(), 200);
-    List<AuthtionMailing> confirmByEmail = mailingRepository.findByTypeAndEmail(type, consumer.username);
+    var consumer = testConsumer.of(USER, Account3_Email, Account3_Pass, testClient.getClientTrusted(), 200);
+    var confirmByEmail = mailingRepository.findByTypeAndEmail(type, consumer.username);
     assertEquals(0, confirmByEmail.size());
     util.check_send_data(GET, prop.getResource().getReqConfirmEmail(),
             consumer.access_token, checkers_for_reqConfirmEmail);
@@ -427,7 +427,7 @@ public class AuthtionFullTest
     confirmByEmail = mailingRepository.findByTypeAndEmail(type, consumer.username);
     assertEquals(1, confirmByEmail.size());
 
-    AuthtionMailing mailing = confirmByEmail.get(0);
+    var mailing = confirmByEmail.get(0);
     assertFalse(mailing.isSent());
     assertFalse(mailing.isMaxAttemptsReached());
     assertTrue(mailing.getData().length() >= 28);
@@ -446,11 +446,11 @@ public class AuthtionFullTest
     catch (InterruptedException ignored)
     {
     }
-    Optional<AuthtionMailing> confirmByEmailOpt = mailingRepository.findLastSentNotEmptyData(type, consumer.username);
+    var confirmByEmailOpt = mailingRepository.findLastSentNotEmptyData(type, consumer.username);
     assertTrue(confirmByEmailOpt.isPresent()); // new key was success added and sent
     mailing = confirmByEmailOpt.get();
     assertFalse(mailing.isMaxAttemptsReached());
-    String alreadySentKeyOld = mailing.getData();
+    var alreadySentKeyOld = mailing.getData();
 
     // At the moment we have a key that has already been sent and is waiting for confirmation
     // Try to add one more key, because duplicate delay should already expire
@@ -468,7 +468,6 @@ public class AuthtionFullTest
     catch (InterruptedException ignored)
     {
     }
-
     confirmByEmailOpt = mailingRepository.findLastSentNotEmptyData(type, consumer.username);
     assertTrue(confirmByEmailOpt.isPresent());
     mailing = confirmByEmailOpt.get();
@@ -484,13 +483,13 @@ public class AuthtionFullTest
   {
     logHead("Confirm Email");
 
-    int type = 3;
+    var type = 3;
 
     assertFalse(getConsumerByEmail(Account3_Email).isEmailConfirmed());
 
-    List<AuthtionMailing> confirmList = mailingRepository.findSentNotEmptyData(type, Account3_Email);
+    var confirmList = mailingRepository.findSentNotEmptyData(type, Account3_Email);
     assertEquals(2, confirmList.size());
-    String confirmKey = confirmList.get(0).getData();
+    var confirmKey = confirmList.get(0).getData();
     util.check_send_data(GET, prop.getResource().getConfirmEmail(),
             null, checkers_for_confirmEmail(confirmKey));
 
@@ -505,7 +504,6 @@ public class AuthtionFullTest
     logHead("Change Password");
 
     performChangePass(Account3_Email, Account3_Pass, Account3_NewPass, checkers_for_changePass);
-
     performChangePass(Account5_Email, Account5_Pass_Decoded, Account5_NewPass_Decoded, checkers_for_changePass_2);
   }
 
@@ -517,7 +515,7 @@ public class AuthtionFullTest
     //AuthtionTestConsumer.of(USER, email, newpass, testClient.getOauth2ClientTrusted(), 400);
 
     //oldpass
-    AuthtionTestConsumer consumerTest = testConsumer.of(USER, email, oldpass, testClient.getClientTrusted(), 200);
+    var consumerTest = testConsumer.of(USER, email, oldpass, testClient.getClientTrusted(), 200);
 
     //change oldpass
     util.check_send_data(POST, prop.getResource().getChangePass(), consumerTest.access_token, checkers);
@@ -536,7 +534,6 @@ public class AuthtionFullTest
     logHead("Restore Password");
 
     performRestorePass(Account3_Email, Account3_NewPass, Account3_Pass, Account3_Pass);
-
     performRestorePass(Account5_Email, Account5_NewPass_Decoded, Account5_Pass_Decoded, Account5_Pass_Encoded);
   }
 
@@ -551,9 +548,9 @@ public class AuthtionFullTest
   {
     logHead("Request Restore Password = " + email);
 
-    String ANY_accessToken = testConsumer.getAnonymous_accessToken();
-    long timeToWait = TimeUnit.MILLISECONDS.toSeconds(prop.getScheduledTaskMailing().getCollectFromDbInterval()) * 2;
-    int type = 5;
+    var ANY_accessToken = testConsumer.getAnonymous_accessToken();
+    var timeToWait = TimeUnit.MILLISECONDS.toSeconds(prop.getScheduledTaskMailing().getCollectFromDbInterval()) * 2;
+    var type = 5;
 
     assertEquals(0, mailingRepository.findByTypeAndEmail(type, email).size());
 
@@ -571,7 +568,7 @@ public class AuthtionFullTest
     catch (InterruptedException ignored)
     {
     }
-    List<AuthtionMailing> confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
+    var confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(1, confirmByEmail.size());
     assertFalse(confirmByEmail.get(0).isMaxAttemptsReached());
     assertTrue(confirmByEmail.get(0).getData().length() >= 28);
@@ -595,10 +592,10 @@ public class AuthtionFullTest
   {
     logHead("Confirm Restore Password = " + email);
 
-    String ANY_accessToken = testConsumer.getAnonymous_accessToken();
-    int type = 5;
+    var ANY_accessToken = testConsumer.getAnonymous_accessToken();
+    var type = 5;
 
-    List<AuthtionMailing> confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
+    var confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(2, confirmByEmail.size());
 
     util.check_send_data(GET, prop.getResource().getConfirmRestorePass(),
@@ -612,10 +609,10 @@ public class AuthtionFullTest
   {
     logHead("Restore Password = " + email);
 
-    String ANY_accessToken = testConsumer.getAnonymous_accessToken();
-    int type = 5;
+    var ANY_accessToken = testConsumer.getAnonymous_accessToken();
+    var type = 5;
 
-    List<AuthtionMailing> confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
+    var confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(2, confirmByEmail.size());
 
     //oldpass
@@ -633,7 +630,7 @@ public class AuthtionFullTest
     //AuthtionTestConsumer.of(USER, email, oldpassDecoded, testClient.getOauth2ClientTrusted(), 400);
 
     //newpass
-    AuthtionTestConsumer consumerTest = testConsumer.of(USER, email, newpassDecoded, testClient.getClientTrusted(), 200);
+    var consumerTest = testConsumer.of(USER, email, newpassDecoded, testClient.getClientTrusted(), 200);
     fullAuthTest(consumerTest);
   }
 
@@ -645,33 +642,33 @@ public class AuthtionFullTest
 
   private AuthtionConsumer getConsumerByEmail(String email)
   {
-    Optional<AuthtionConsumer> consumerFromDBOpt = consumerService.findByEmail(email);
+    var consumerFromDBOpt = consumerService.findByEmail(email);
     assertTrue(consumerFromDBOpt.isPresent());
     return consumerFromDBOpt.get();
   }
 
   private void consumerNotPresent(String email)
   {
-    Optional<AuthtionConsumer> consumerFromDBOpt = consumerService.findByEmail(email);
+    var consumerFromDBOpt = consumerService.findByEmail(email);
     assertFalse(consumerFromDBOpt.isPresent());
   }
 
   private AuthtionUser getUserById(Long id)
   {
-    Optional<AuthtionUser> userByIdOpt = userRepository.findById(id);
+    var userByIdOpt = userRepository.findById(id);
     assertTrue(userByIdOpt.isPresent());
     return userByIdOpt.get();
   }
 
   private AuthtionConsumer checkConsumerAfterCreate(String email)
   {
-    AuthtionConsumer consumer = getConsumerByEmail(email);
+    var consumer = getConsumerByEmail(email);
 
     assertTrue(consumer.getId() > 999);
     assertNotEquals(null, consumer.getCreatedOn());
     assertNotEquals(null, consumer.getUpdatedOn());
 
-    Collection<? extends GrantedAuthority> authorities_consumer1 = consumer.getAuthorities();
+    var authorities_consumer1 = consumer.getAuthorities();
     assertEquals(1, authorities_consumer1.size());
     assertEquals("USER", authorities_consumer1.iterator().next().getAuthority());
 
@@ -687,29 +684,29 @@ public class AuthtionFullTest
 
   private AuthtionUser checkUser_ExactMatch(Long id, AuthtionUser tUser)
   {
-    AuthtionUser user = getUserById(id);
+    var user = getUserById(id);
     assertNotEquals(null, user.getUpdatedOn());
 
-    String tNickName = tUser.getNickName();
-    Boolean tNickNameNonPublic = tUser.getNickNameNonPublic();
+    var tNickName = tUser.getNickName();
+    var tNickNameNonPublic = tUser.getNickNameNonPublic();
 
-    String tFirstName = tUser.getFirstName();
-    Boolean tFirstNameNonPublic = tUser.getFirstNameNonPublic();
+    var tFirstName = tUser.getFirstName();
+    var tFirstNameNonPublic = tUser.getFirstNameNonPublic();
 
-    String tMiddleName = tUser.getMiddleName();
-    Boolean tMiddleNameNonPublic = tUser.getMiddleNameNonPublic();
+    var tMiddleName = tUser.getMiddleName();
+    var tMiddleNameNonPublic = tUser.getMiddleNameNonPublic();
 
-    String tLastName = tUser.getLastName();
-    Boolean tLastNameNonPublic = tUser.getLastNameNonPublic();
+    var tLastName = tUser.getLastName();
+    var tLastNameNonPublic = tUser.getLastNameNonPublic();
 
-    String tGender = tUser.getGender();
-    Boolean tGenderNonPublic = tUser.getGenderNonPublic();
+    var tGender = tUser.getGender();
+    var tGenderNonPublic = tUser.getGenderNonPublic();
 
-    LocalDate tDateOfBirth = tUser.getDateOfBirth();
-    Boolean tDateOfBirthNonPublic = tUser.getDateOfBirthNonPublic();
+    var tDateOfBirth = tUser.getDateOfBirth();
+    var tDateOfBirthNonPublic = tUser.getDateOfBirthNonPublic();
 
-    String tCountry = tUser.getCountry();
-    Boolean tCountryNonPublic = tUser.getCountryNonPublic();
+    var tCountry = tUser.getCountry();
+    var tCountryNonPublic = tUser.getCountryNonPublic();
 
     assertEquals(tNickName, user.getNickName());
     assertEquals(tNickNameNonPublic, user.getNickNameNonPublic());

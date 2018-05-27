@@ -8,7 +8,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import ru.dwfe.net.authtion.dao.AuthtionConsumer;
-import ru.dwfe.net.authtion.dao.AuthtionMailing;
 import ru.dwfe.net.authtion.dao.AuthtionUser;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 
@@ -18,7 +17,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -43,7 +45,7 @@ public class AuthtionUtil
 
   public static boolean isDefaultCheckOK(String value, String fieldName, List<String> errorCodes)
   {
-    boolean result = false;
+    var result = false;
 
     if (value != null)
     {
@@ -65,18 +67,18 @@ public class AuthtionUtil
 
   public static String prepareAccountInfo(AuthtionConsumer consumer, AuthtionUser user, boolean onPublic)
   {
-    ArrayList<String> list = new ArrayList<>();
-    LocalDateTime updatedOn = consumer.getUpdatedOn().isBefore(user.getUpdatedOn()) ? consumer.getUpdatedOn() : user.getUpdatedOn();
+    var list = new ArrayList<String>();
+    var updatedOn = consumer.getUpdatedOn().isBefore(user.getUpdatedOn()) ? consumer.getUpdatedOn() : user.getUpdatedOn();
 
-    String id = "\"id\":" + consumer.getId();
-    String email = "\"email\":\"" + consumer.getEmail() + "\"";
-    String nickName = "\"nickName\":\"" + user.getNickName() + "\"";
-    String firstName = nullableValueToresp("firstName", user.getFirstName());
-    String middleName = nullableValueToresp("middleName", user.getMiddleName());
-    String lastName = nullableValueToresp("lastName", user.getLastName());
-    String gender = nullableValueToresp("gender", user.getGender());
-    String dateOfBirth = nullableValueToresp("dateOfBirth", user.getDateOfBirth());
-    String country = nullableValueToresp("country", user.getCountry());
+    var id = "\"id\":" + consumer.getId();
+    var email = "\"email\":\"" + consumer.getEmail() + "\"";
+    var nickName = "\"nickName\":\"" + user.getNickName() + "\"";
+    var firstName = nullableValueToresp("firstName", user.getFirstName());
+    var middleName = nullableValueToresp("middleName", user.getMiddleName());
+    var lastName = nullableValueToresp("lastName", user.getLastName());
+    var gender = nullableValueToresp("gender", user.getGender());
+    var dateOfBirth = nullableValueToresp("dateOfBirth", user.getDateOfBirth());
+    var country = nullableValueToresp("country", user.getCountry());
 
     list.add(id);
     if (onPublic)
@@ -172,19 +174,18 @@ public class AuthtionUtil
     return authtionConfigProperties.getGoogleCaptcha().getSecretKey();
   }
 
-  public String getGoogleCaptchaSiteVerifyUrl()
+  public String getGoogleCaptchaSiteVerifyUrlTemplate()
   {
-    return authtionConfigProperties.getGoogleCaptcha().getSiteVerifyUrl();
+    return authtionConfigProperties.getGoogleCaptcha().getSiteVerifyUrlTemplate();
   }
 
   public boolean isAllowedNewRequestForMailing(int type, String email, List<String> errorCodes)
   {
-    boolean result = true;
-
-    Optional<AuthtionMailing> lastPending = mailingRepository.findLastNotEmptyData(type, email);
+    var result = true;
+    var lastPending = mailingRepository.findLastNotEmptyData(type, email);
     if (lastPending.isPresent())
     {
-      LocalDateTime whenNewIsAllowed = lastPending.get()
+      var whenNewIsAllowed = lastPending.get()
               .getCreatedOn()
               .plus(authtionConfigProperties.getScheduledTaskMailing().getTimeoutForDuplicateRequest(),
                       ChronoUnit.MILLIS);
@@ -627,8 +628,8 @@ public class AuthtionUtil
 
   public static String getJSONfromObject(Object value)
   {
-    String result = "{}";
-    ObjectMapper mapper = new ObjectMapper();
+    var result = "{}";
+    var mapper = new ObjectMapper();
     try
     {
       result = mapper.writeValueAsString(value);
@@ -647,16 +648,12 @@ public class AuthtionUtil
 
   public static String prepareStringField(String field, int maxLength)
   {
-    String result;
-
     if (field == null)
-      return field;
+      return null;
     else if (field.length() > maxLength)
-      result = field.substring(0, maxLength);
+      return field.substring(0, maxLength);
     else
-      result = field;
-
-    return result;
+      return field;
   }
 
   public static String getUniqStrBase36(int requiredLength)
@@ -681,8 +678,8 @@ public class AuthtionUtil
     // SUMMARY:
     // X requiredLength ==
 
-    byte[] bytes = new BigInteger((requiredLength + 2) * 5, new SecureRandom()).toByteArray();
-    String result = new String(Base64.getEncoder().encode(bytes), 1, requiredLength);
+    var bytes = new BigInteger((requiredLength + 2) * 5, new SecureRandom()).toByteArray();
+    var result = new String(Base64.getEncoder().encode(bytes), 1, requiredLength);
     return result.replaceAll("[^a-zA-Z0-9]", ""); // becouse oauth2 incorrect work with some symbols, e.g.: "+fAhjktzuw", "6k+xfc6ZRw"
   }
 

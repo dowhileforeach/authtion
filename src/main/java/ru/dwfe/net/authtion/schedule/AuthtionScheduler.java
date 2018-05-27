@@ -18,7 +18,6 @@ import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -62,16 +61,16 @@ public class AuthtionScheduler
   public void sendingMail()
   {
     log.debug("mailing - attempt to send[{}]", MAILING_POOL.size());
-    final List<AuthtionMailing> toDataBase = new ArrayList<>();
+    final var toDataBase = new ArrayList<AuthtionMailing>();
     MAILING_POOL.forEach(next -> {
-      int type = next.getType();
-      String email = next.getEmail();
-      String data = next.getData();
+      var type = next.getType();
+      var email = next.getEmail();
+      var data = next.getData();
+      var subjectMessage = getSubjectMessage(type, data);
       try
       {
-        Map<String, String> subjectMessage = getSubjectMessage(type, data);
         MimeMessagePreparator preparator = mimeMessage -> {
-          MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_NO);
+          var helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_NO);
           helper.setFrom(sendFrom);
           helper.setTo(email);
           helper.setSubject(subjectMessage.get("subject"));
@@ -115,11 +114,11 @@ public class AuthtionScheduler
 
   private Map<String, String> getSubjectMessage(int type, String data)
   {
-    Map<String, String> result = new HashMap<>();
-    String subjKey = "subject";
-    String messageKey = "message";
-    String dataKey = "data";
-    Context context = new Context();
+    var result = new HashMap<String, String>();
+    var subjKey = "subject";
+    var messageKey = "message";
+    var dataKey = "data";
+    var context = new Context();
 
     if (type == 1)
     {
@@ -133,7 +132,7 @@ public class AuthtionScheduler
     else if (type == 3)
     {
       result.put(subjKey, "Confirm email");
-      context.setVariable(dataKey, "http://localhost:8080/v1/confirm-consumer-email?key=" + data);
+      context.setVariable(dataKey, "http://localhost:8080/v1/confirm-email?key=" + data);
     }
     else if (type == 4)
     {
@@ -142,7 +141,7 @@ public class AuthtionScheduler
     else if (type == 5)
     {
       result.put(subjKey, "Confirm restore password");
-      context.setVariable(dataKey, "http://localhost:8080/v1/confirm-restore-consumer-pass?key=" + data);
+      context.setVariable(dataKey, "http://localhost:8080/v1/confirm-restore-pass?key=" + data);
     }
     result.put(messageKey, templateEngine.process("mailing" + type, context));
     return result;

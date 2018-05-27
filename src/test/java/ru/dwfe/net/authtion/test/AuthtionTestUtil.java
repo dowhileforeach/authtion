@@ -44,7 +44,7 @@ public class AuthtionTestUtil
 
   void setNewTokens(AuthtionTestConsumer testConsumer, int signInExpectedStatus, AuthtionTestSignInType signInType)
   {
-    AuthtionTestClient client = testConsumer.client;
+    var client = testConsumer.client;
     Request req;
 
     if (Refresh == signInType)
@@ -52,14 +52,14 @@ public class AuthtionTestUtil
     else
       req = auth_signIn_POST_Request(client.clientname, client.clientpass, testConsumer.username, testConsumer.password);
 
-    String body = performSignIn(req, signInExpectedStatus);
+    var body = performSignIn(req, signInExpectedStatus);
 
     String access_token;
     String refresh_token;
 
     if (signInExpectedStatus == 200)
     {
-      Map<String, Object> map = parse(body);
+      var map = parse(body);
 
       access_token = (String) getValueFromResponse(map, "access_token");
       assertThat(access_token.length(), greaterThan(0));
@@ -77,7 +77,7 @@ public class AuthtionTestUtil
 
   private Request auth_signIn_POST_Request(String clientname, String clientpass, String username, String userpass)
   {
-    String url = String.format(ALL_BEFORE_RESOURCE + authtionConfigProperties.getResource().getSignIn()
+    var url = String.format(ALL_BEFORE_RESOURCE + authtionConfigProperties.getResource().getSignIn()
                     + "?grant_type=password&username=%s&password=%s",
             username, userpass);
 
@@ -93,7 +93,7 @@ public class AuthtionTestUtil
 
   private Request auth_refresh_POST_Request(String clientname, String clientpass, String refresh_token)
   {
-    String url = String.format(ALL_BEFORE_RESOURCE + authtionConfigProperties.getResource().getSignIn()
+    var url = String.format(ALL_BEFORE_RESOURCE + authtionConfigProperties.getResource().getSignIn()
             + "?grant_type=refresh_token&refresh_token=%s", refresh_token);
 
     log.info("AuthtionTestClient's credentials - {}:{}", clientname, clientpass);
@@ -112,7 +112,7 @@ public class AuthtionTestUtil
     log.info("-> Authorization: {}", req.header("Authorization"));
     log.info("-> " + req.url().toString());
 
-    String body = performSign(req, expectedStatus);
+    var body = performSign(req, expectedStatus);
 
     log.info("<- tokens\n{}\n", body);
     return body;
@@ -122,16 +122,16 @@ public class AuthtionTestUtil
   {
     log.info("Sign Out");
 
-    Request req = GET_request(ALL_BEFORE_RESOURCE + authtionConfigProperties.getResource().getSignOut(), testConsumer.access_token, Map.of());
+    var req = GET_request(ALL_BEFORE_RESOURCE + authtionConfigProperties.getResource().getSignOut(), testConsumer.access_token, Map.of());
 
     log.info("-> Authorization: {}", req.header("Authorization"));
     log.info("-> " + req.url().toString());
 
-    String body = performSign(req, expectedStatus);
+    var body = performSign(req, expectedStatus);
 
     if (expectedStatus == 200)
     {
-      Map<String, Object> map = parse(body);
+      var map = parse(body);
       assertEquals(true, getValueFromResponse(map, "success"));
     }
 
@@ -141,8 +141,8 @@ public class AuthtionTestUtil
 
   private static String performSign(Request req, int expectedStatus)
   {
-    String body = "";
-    OkHttpClient client = getHttpClient();
+    var body = "";
+    var client = getHttpClient();
     try (Response response = client.newCall(req).execute())
     {
       assertNotEquals(null, response.body());
@@ -169,7 +169,7 @@ public class AuthtionTestUtil
     if (queries.size() > 0)
       for (Map.Entry<String, Object> next : queries.entrySet())
       {
-        HttpUrl newUrl = request.url().newBuilder()
+        var newUrl = request.url().newBuilder()
                 .addQueryParameter(next.getKey(), (String) next.getValue())
                 .build();
         request = request.newBuilder()
@@ -181,8 +181,7 @@ public class AuthtionTestUtil
 
   private static Request POST_request(String url, String access_token, Map<String, Object> prorepty_value)
   {
-    RequestBody body = getRequestBody(prorepty_value);
-
+    var body = getRequestBody(prorepty_value);
     Request.Builder req = new Request.Builder().url(url);
 
     if (access_token != null)
@@ -201,8 +200,8 @@ public class AuthtionTestUtil
     log.info("-> " + req.url().encodedPath());
 
     String body = null;
-    int actualStatusCode = -1;
-    OkHttpClient client = getHttpClient();
+    var actualStatusCode = -1;
+    var client = getHttpClient();
     try (Response resp = client.newCall(req).execute())
     {
       assertNotEquals(null, resp.body());
@@ -230,7 +229,7 @@ public class AuthtionTestUtil
 
   private String getResponseAfterPOSTrequest(String access_token, String resource, Map<String, Object> prorepty_value, int expectedStatus)
   {
-    Request req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, prorepty_value);
+    var req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, prorepty_value);
 
     log.info("-> {}", prorepty_value.toString());
 
@@ -239,9 +238,9 @@ public class AuthtionTestUtil
 
   private String getResponseAfterGETrequest(String access_token, String resource, Map<String, Object> queries, int expectedStatus)
   {
-    Request req = GET_request(ALL_BEFORE_RESOURCE + resource, access_token, queries);
+    var req = GET_request(ALL_BEFORE_RESOURCE + resource, access_token, queries);
 
-    String query = queries.entrySet().stream()
+    var query = queries.entrySet().stream()
             .map(e -> e.getKey() + "=" + e.getValue())
             .collect(Collectors.joining("&"));
     log.info("-> {}", query);
@@ -255,8 +254,8 @@ public class AuthtionTestUtil
     performResourceAccessing(testConsumer.access_token, testConsumer.level, USUAL);
 
     //2. Change Token
-    String old_access_token = testConsumer.access_token;
-    String old_refresh_token = testConsumer.refresh_token;
+    var old_access_token = testConsumer.access_token;
+    var old_refresh_token = testConsumer.refresh_token;
     setNewTokens(testConsumer, 200, Refresh);
     assertNotEquals(old_access_token, testConsumer.access_token);
     assertEquals(old_refresh_token, testConsumer.refresh_token);
@@ -300,12 +299,12 @@ public class AuthtionTestUtil
       {
       }
 
-      Map.Entry<AuthtionTestAuthorityLevel, Map<RequestMethod, Map<String, Object>>> next1 = next.entrySet().iterator().next();
-      Map.Entry<RequestMethod, Map<String, Object>> next2 = next1.getValue().entrySet().iterator().next();
+      var next1 = next.entrySet().iterator().next();
+      var next2 = next1.getValue().entrySet().iterator().next();
 
-      AuthtionTestAuthorityLevel level = next1.getKey();
-      RequestMethod method = next2.getKey();
-      Map<String, Object> reqData = next2.getValue();
+      var level = next1.getKey();
+      var method = next2.getKey();
+      var reqData = next2.getValue();
 
       Request req;
       if (GET == method)
@@ -313,7 +312,7 @@ public class AuthtionTestUtil
       else
         req = POST_request(ALL_BEFORE_RESOURCE + resource, access_token, reqData);
 
-      Map<AuthtionTestAuthorityLevel, Integer> statusList = statusMap.get(consumerLevel);
+      var statusList = statusMap.get(consumerLevel);
 
       performRequest(req, statusList.get(level));
     });
@@ -329,7 +328,7 @@ public class AuthtionTestUtil
       else
         body = getResponseAfterPOSTrequest(access_token, resource, checker.req, checker.expectedStatus);
 
-      Map<String, Object> map = parse(body);
+      var map = parse(body);
 
       assertEquals(checker.expectedResult, getValueFromResponse(map, "success"));
 
@@ -372,7 +371,7 @@ public class AuthtionTestUtil
 
   private static Object getErrorFromResponse(Map<String, Object> map)
   {
-    List<String> next = (List<String>) getValueFromResponse(map, "error-codes");
+    var next = (List<String>) getValueFromResponse(map, "error-codes");
     return next.get(0);
   }
 

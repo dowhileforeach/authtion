@@ -17,7 +17,7 @@ public class AuthtionTestClient
 
   public AuthtionTestClient of(String clientname, String clientpass, int maxTokenExpirationTime, int minTokenExpirationTime)
   {
-    AuthtionTestClient client = new AuthtionTestClient();
+    var client = new AuthtionTestClient();
     client.clientname = clientname;
     client.clientpass = clientpass;
     client.maxTokenExpirationTime = maxTokenExpirationTime;

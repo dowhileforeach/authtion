@@ -26,6 +26,11 @@ public class AuthtionAuthority implements GrantedAuthority
     return authority;
   }
 
+
+  //
+  //  GETTERs and SETTERs
+  //
+
   @Override
   public String getAuthority()
   {
@@ -47,13 +52,18 @@ public class AuthtionAuthority implements GrantedAuthority
     this.description = description;
   }
 
+
+  //
+  //  equals, hashCode, toString
+  //
+
   @Override
   public boolean equals(Object o)
   {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    AuthtionAuthority authority = (AuthtionAuthority) o;
+    var authority = (AuthtionAuthority) o;
 
     return this.authority.equals(authority.authority);
   }
