@@ -384,11 +384,12 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @GetMapping("#{authtionConfigProperties.resource.confirmEmail}")
-  public String confirmEmail(@RequestParam(required = false) String key)
+  @PostMapping("#{authtionConfigProperties.resource.confirmEmail}")
+  public String confirmEmail(@RequestBody ReqConfirm req)
   {
     var errorCodes = new ArrayList<String>();
     var fieldName = "confirm-key";
+    var key = req.key;
 
     if (isDefaultCheckOK(key, fieldName, errorCodes))
     {
@@ -456,12 +457,13 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @GetMapping("#{authtionConfigProperties.resource.confirmRestorePass}")
-  public String confirmRestorePass(@RequestParam(required = false) String key)
+  @PostMapping("#{authtionConfigProperties.resource.confirmRestorePass}")
+  public String confirmRestorePass(@RequestBody ReqConfirm req)
   {
     var errorCodes = new ArrayList<String>();
-    var fieldName = "confirm-key";
     var data = new HashMap<String, Object>();
+    var fieldName = "confirm-key";
+    var key = req.key;
     var type = 5;
 
     if (isDefaultCheckOK(key, fieldName, errorCodes))

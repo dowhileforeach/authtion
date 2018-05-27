@@ -543,6 +543,21 @@ public class AuthtionUtil
     }
   }
 
+  public static class ReqConfirm
+  {
+    public String key;
+
+    public String getKey()
+    {
+      return key;
+    }
+
+    public void setKey(String key)
+    {
+      this.key = key;
+    }
+  }
+
   public static class ReqChangePass
   {
     public String oldpass;

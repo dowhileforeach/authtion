@@ -490,7 +490,7 @@ public class AuthtionFullTest
     var confirmList = mailingRepository.findSentNotEmptyData(type, Account3_Email);
     assertEquals(2, confirmList.size());
     var confirmKey = confirmList.get(0).getData();
-    util.check_send_data(GET, prop.getResource().getConfirmEmail(),
+    util.check_send_data(POST, prop.getResource().getConfirmEmail(),
             null, checkers_for_confirmEmail(confirmKey));
 
     confirmList = mailingRepository.findSentNotEmptyData(type, Account3_Email);
@@ -598,7 +598,7 @@ public class AuthtionFullTest
     var confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(2, confirmByEmail.size());
 
-    util.check_send_data(GET, prop.getResource().getConfirmRestorePass(),
+    util.check_send_data(POST, prop.getResource().getConfirmRestorePass(),
             ANY_accessToken, checkers_for_confirmRestorePass(email, confirmByEmail.get(0).getData()));
 
     confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
