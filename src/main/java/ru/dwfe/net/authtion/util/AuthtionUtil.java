@@ -188,7 +188,7 @@ public class AuthtionUtil
   public boolean isAllowedNewRequestForMailing(int type, String email, List<String> errorCodes)
   {
     var result = true;
-    var lastPending = mailingRepository.findLastNotEmptyData(type, email);
+    var lastPending = mailingRepository.findLastByTypeAndEmail(type, email);
     if (lastPending.isPresent())
     {
       var whenNewIsAllowed = lastPending.get()

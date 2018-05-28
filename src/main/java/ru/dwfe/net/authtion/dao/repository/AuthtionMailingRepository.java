@@ -24,8 +24,8 @@ public interface AuthtionMailingRepository extends CrudRepository<AuthtionMailin
   Optional<AuthtionMailing> findByTypeAndData(int type, String data);
 
   @Query(nativeQuery = true,
-          value = "SELECT * FROM authtion_mailing WHERE type=:type AND email=:email AND data<>'' ORDER BY created_on DESC LIMIT 1")
-  Optional<AuthtionMailing> findLastNotEmptyData(@Param("type") int type, @Param("email") String email);
+          value = "SELECT * FROM authtion_mailing WHERE type=:type AND email=:email ORDER BY created_on DESC LIMIT 1")
+  Optional<AuthtionMailing> findLastByTypeAndEmail(@Param("type") int type, @Param("email") String email);
 
   @Query(nativeQuery = true,
           value = "SELECT * FROM authtion_mailing WHERE type=:type AND email=:email AND sent=true AND data<>'' ORDER BY created_on DESC LIMIT 1")

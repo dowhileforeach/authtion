@@ -83,7 +83,7 @@ public class AuthtionScheduler
         mailSender.send(preparator);
 
         next.setSent(true);
-        if (type != 3 && type != 5)
+        if (type != 3 && type != 5) // if not confirmation
           next.clear();
 
         toDataBase.add(next);
@@ -93,7 +93,9 @@ public class AuthtionScheduler
       {
         if (next.getAttempt().incrementAndGet() > maxAttemptsMailingIfError)
         {
-          next.clear();
+          if (type != 3 && type != 5) // if not confirmation
+            next.clear();             // but all of a sudden the letter was sent
+
           next.setMaxAttemptsReached(true);
           next.setCauseOfLastFailure(e.toString());
 
