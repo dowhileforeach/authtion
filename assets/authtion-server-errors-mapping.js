@@ -1,6 +1,6 @@
 authtionServerErrorCodesMap = {
     'confirm-key-not-exist': 'Confirm key does not exist',
-    'delay-between-duplicate-requests': 'You\'ve already sent a request. Check email box',
+    'delay-between-duplicate-requests': 'You\'ve already sent a request. Please check your email box or try again later',
     'email-is-already-confirmed': 'Email is already confirmed',
     'email-not-exist': 'Not found in database',
     'email-present-in-database': 'Email is present in database',
