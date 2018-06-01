@@ -54,7 +54,7 @@ public class AuthtionScheduler
   public void collectMailingTasksFromDatabase()
   {
     MAILING_POOL.addAll(mailingRepository.getNewJob());
-    log.debug("mailing - [{}] collected from DB", MAILING_POOL.size());
+    log.debug("mailing[{}] collected from DB", MAILING_POOL.size());
   }
 
   @Scheduled(
@@ -62,7 +62,7 @@ public class AuthtionScheduler
           fixedDelayString = "#{authtionConfigProperties.scheduledTaskMailing.sendInterval}")
   public void sendingMail()
   {
-    log.debug("mailing - [{}] before sending", MAILING_POOL.size());
+    log.debug("mailing[{}] before sending", MAILING_POOL.size());
     final var toDataBase = new ArrayList<AuthtionMailing>();
     MAILING_POOL.forEach(next -> {
       var type = next.getType();
@@ -87,7 +87,7 @@ public class AuthtionScheduler
           next.clear();
 
         toDataBase.add(next);
-        log.debug("mailing - {}, successfully sent", email);
+        log.debug("mailing[{}] successfully sent", email);
       }
       catch (Throwable e)
       {
@@ -100,10 +100,10 @@ public class AuthtionScheduler
           next.setCauseOfLastFailure(e.toString());
 
           toDataBase.add(next);
-          log.debug("mailing - {}, last fail sending", email);
+          log.debug("mailing[{}] last fail sending", email);
         }
         else
-          log.debug("mailing - {}, go to attempt[{}] after fail", email, next.getAttempt().get());
+          log.debug("mailing[{}] go to attempt[{}] after fail", email, next.getAttempt().get());
       }
     });
 
@@ -111,7 +111,7 @@ public class AuthtionScheduler
     {
       mailingRepository.saveAll(toDataBase);
       MAILING_POOL.removeAll(toDataBase);
-      log.debug("mailing - [{}] store to DB", toDataBase.size());
+      log.debug("mailing[{}] store to DB", toDataBase.size());
       toDataBase.clear();
     }
   }
