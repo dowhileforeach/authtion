@@ -358,7 +358,6 @@ public class AuthtionUtil
 
   public static class ReqUpdateAccount
   {
-    public String email;
     public Boolean emailNonPublic;
 
     public String nickName;
@@ -381,16 +380,6 @@ public class AuthtionUtil
 
     public String country;
     public Boolean countryNonPublic;
-
-    public String getEmail()
-    {
-      return email;
-    }
-
-    public void setEmail(String email)
-    {
-      this.email = email;
-    }
 
     public Boolean getEmailNonPublic()
     {

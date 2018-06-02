@@ -276,62 +276,11 @@ public class AuthtionFullTest
     );
 
 
-    // (2) change Email
-    var newEmail = "helloworld@oo.com";
-    consumerNotPresent(newEmail);
+    // (2) change all fields
     util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount2);
-    consumerNotPresent(Account4_Email);
-    consumer = getConsumerByEmail(newEmail);
-    assertEquals(Long.valueOf(1002), consumer.getId());
-    assertFalse(consumer.isEmailConfirmed());
-    assertTrue(consumer.isEmailNonPublic());
-    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
-            getNickNameFromEmail(Account4_Email), true,
-            "ozon", true,
-            null, true,
-            null, true,
-            "M", true,
-            LocalDate.parse("1980-11-27"), true,
-            null, true)
-    );
-
-
-    // (3) since I changed email, I need to make sure that account is still functional.
-    //
-    // After change email /sign-out will be forced
-    // sign-in again
-    tConsumer = testConsumer.of(USER, newEmail, Account4_Pass, testClient.getClientTrusted(), 200);
-    fullAuthTest(tConsumer);
-    // sign-in again, becouse during fullAuthTest was perform sign-out
-    tConsumer = testConsumer.of(USER, newEmail, Account4_Pass, testClient.getClientTrusted(), 200);
-    access_token = tConsumer.access_token;
-
-
-    // (4) change Email to original AND change: emailNonPublic, nickName, nickNameNonPublic
-    util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount3);
-    consumerNotPresent(newEmail);
     consumer = getConsumerByEmail(Account4_Email);
     assertEquals(Long.valueOf(1002), consumer.getId());
-    assertFalse(consumer.isEmailConfirmed());
-    assertFalse(consumer.isEmailNonPublic());
-    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
-            "storm", false,
-            "ozon", true,
-            null, true,
-            null, true,
-            "M", true,
-            LocalDate.parse("1980-11-27"), true,
-            null, true)
-    );
-    tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
-    access_token = tConsumer.access_token;
-
-
-    // (5) change all other fields
-    util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount4);
-    consumer = getConsumerByEmail(Account4_Email);
-    assertEquals(Long.valueOf(1002), consumer.getId());
-    assertFalse(consumer.isEmailConfirmed());
+    assertTrue(consumer.isEmailConfirmed());
     assertFalse(consumer.isEmailNonPublic());
     user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
             "storm", false,
@@ -344,9 +293,9 @@ public class AuthtionFullTest
     );
 
 
-    // Test restrictions
+    // (3) test restrictions
     tConsumer = testConsumer.of(USER, Account7_Email, Account7_Pass, testClient.getClientTrusted(), 200);
-    util.check_send_data(POST, prop.getResource().getUpdateAccount(), tConsumer.access_token, checkers_for_updateAccount5);
+    util.check_send_data(POST, prop.getResource().getUpdateAccount(), tConsumer.access_token, checkers_for_updateAccount3);
     consumer = getConsumerByEmail(Account7_Email);
     assertEquals(Long.valueOf(1006), consumer.getId());
     assertTrue(consumer.isEmailConfirmed());

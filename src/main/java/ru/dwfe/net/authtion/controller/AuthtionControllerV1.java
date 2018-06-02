@@ -158,8 +158,8 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @GetMapping("#{authtionConfigProperties.resource.getAccount}")
   @PreAuthorize("hasAuthority('USER')")
+  @GetMapping("#{authtionConfigProperties.resource.getAccount}")
   public String getAccount(OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
@@ -191,21 +191,19 @@ public class AuthtionControllerV1
   }
 
 
-  @PostMapping("#{authtionConfigProperties.resource.updateAccount}")
   @PreAuthorize("hasAuthority('USER')")
+  @PostMapping("#{authtionConfigProperties.resource.updateAccount}")
   public String updateAccount(@RequestBody ReqUpdateAccount req, OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
     var id = getId(authentication);
     var consumerWasModified = false;
     var userWasModified = false;
-    var emailWasChanged = false;
     var data = "";
 
     var consumer = consumerService.findById(id).get();
     var user = userRepository.findById(id).get();
 
-    var newEmail = req.email;
     var newEmailNonPublic = req.emailNonPublic;
 
     var newNickName = prepareStringField(req.nickName, 20);
@@ -228,17 +226,6 @@ public class AuthtionControllerV1
 
     var newCountry = req.country;
     var newCountryNonPublic = req.countryNonPublic;
-
-    if (newEmail != null && !newEmail.equals(consumer.getEmail()))
-    {
-      if (canUseEmail(newEmail, consumerService, errorCodes))
-      {
-        consumer.setEmail(newEmail);
-        consumer.setEmailConfirmed(false);
-        consumerWasModified = true;
-        emailWasChanged = true;
-      }
-    }
 
     if (newEmailNonPublic != null && !newEmailNonPublic.equals(consumer.isEmailNonPublic()))
     {
@@ -346,10 +333,6 @@ public class AuthtionControllerV1
       {
         consumerService.save(consumer);
         consumer = consumerService.findById(id).get();
-        if (emailWasChanged)
-        {
-          signOut(authentication);
-        }
       }
       if (userWasModified)
       {
@@ -361,8 +344,8 @@ public class AuthtionControllerV1
     return getResponse(errorCodes, data);
   }
 
-  @GetMapping("#{authtionConfigProperties.resource.reqConfirmEmail}")
   @PreAuthorize("hasAuthority('USER')")
+  @GetMapping("#{authtionConfigProperties.resource.reqConfirmEmail}")
   public String reqConfirmEmail(OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
@@ -416,8 +399,8 @@ public class AuthtionControllerV1
   // Password management
   //
 
-  @PostMapping("#{authtionConfigProperties.resource.changePass}")
   @PreAuthorize("hasAuthority('USER')")
+  @PostMapping("#{authtionConfigProperties.resource.changePass}")
   public String changePass(@RequestBody ReqChangePass req, OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
@@ -516,8 +499,8 @@ public class AuthtionControllerV1
   // Auth
   //
 
-  @GetMapping("#{authtionConfigProperties.resource.signOut}")
   @PreAuthorize("hasAuthority('USER')")
+  @GetMapping("#{authtionConfigProperties.resource.signOut}")
   public String signOut(OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
