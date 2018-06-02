@@ -300,7 +300,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
           AuthtionTestChecker.of(true, Map.of("oldpass", Account5_Pass_Decoded, "newpass", Account5_NewPass_Encoded), 200)
   );
 
-  public static List<AuthtionTestChecker> checkers_for_reqRestorePass(String email)
+  public static List<AuthtionTestChecker> checkers_for_reqResetPass(String email)
   {
     return List.of(
             AuthtionTestChecker.of(false, Map.of(), 200, "missing-email"),
@@ -313,14 +313,14 @@ public class AuthtionTestVariablesForAccountPasswordTests
     );
   }
 
-  public static List<AuthtionTestChecker> checkers_for_reqRestorePass_duplicateDelay(String email)
+  public static List<AuthtionTestChecker> checkers_for_reqResetPass_duplicateDelay(String email)
   {
     return List.of(
             AuthtionTestChecker.of(false, Map.of("email", email), 200, "delay-between-duplicate-requests")
     );
   }
 
-  public static List<AuthtionTestChecker> checkers_for_confirmRestorePass(String email, String existedKey)
+  public static List<AuthtionTestChecker> checkers_for_confirmResetPass(String email, String existedKey)
   {
     return List.of(
             AuthtionTestChecker.of(false, Map.of(), 200, "missing-confirm-key"),
@@ -330,7 +330,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
     );
   }
 
-  public static List<AuthtionTestChecker> checkers_for_restorePass(String email, String newpass, String existedKey)
+  public static List<AuthtionTestChecker> checkers_for_resetPass(String email, String newpass, String existedKey)
   {
     var list = new ArrayList<AuthtionTestChecker>(List.of(
             AuthtionTestChecker.of(false, Map.of(), 200, "missing-newpass"),

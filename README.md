@@ -66,7 +66,7 @@ curl http://localhost:8080/v1/update-account -H "Authorization: Bearer ACCESS_TO
 <br>
 1. Passwords in database are stored as bcrypt hashes in the following format:<br>
 ![Authtion_brypt_regexp](./assets/img/Authtion_brypt_regexp.png)
-2. For resources: `/create-account`, `/change-pass`, `/restore-pass` - password and newpass can be passed in the raw form or in the form of already encoded bcrypt hash
+2. For resources: `/create-account`, `/change-pass`, `/reset-pass` - password and newpass can be passed in the raw form or in the form of already encoded bcrypt hash
 3. For resource: `/create-account` - you may not transmit the password at all. In this case the password will be generated and sent to the user e-mail
 <br><br>
 ![ConsumerPassword_CRU_Test_Password_error-codes](./assets/img/ConsumerPassword_CRU_Test_Password_error-codes.png)

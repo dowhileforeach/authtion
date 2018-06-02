@@ -576,7 +576,7 @@ public class AuthtionUtil
     }
   }
 
-  public static class ReqRestorePass
+  public static class ReqResetPass
   {
     public String email;
     public String key;

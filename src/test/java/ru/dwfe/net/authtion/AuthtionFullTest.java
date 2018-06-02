@@ -478,24 +478,24 @@ public class AuthtionFullTest
   }
 
   @Test
-  public void _014_password_restorePass()
+  public void _014_password_resetPass()
   {
-    logHead("Restore Password");
+    logHead("Reset Password");
 
-    performRestorePass(Account3_Email, Account3_NewPass, Account3_Pass, Account3_Pass);
-    performRestorePass(Account5_Email, Account5_NewPass_Decoded, Account5_Pass_Decoded, Account5_Pass_Encoded);
+    performResetPass(Account3_Email, Account3_NewPass, Account3_Pass, Account3_Pass);
+    performResetPass(Account5_Email, Account5_NewPass_Decoded, Account5_Pass_Decoded, Account5_Pass_Encoded);
   }
 
-  private void performRestorePass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
+  private void performResetPass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
   {
-    reqRestorePass(email);
-    confirmRestorePass(email);
-    restorePass(email, oldpassDecoded, newpassDecoded, newpassForCheckers);
+    reqResetPass(email);
+    confirmResetPass(email);
+    resetPass(email, oldpassDecoded, newpassDecoded, newpassForCheckers);
   }
 
-  private void reqRestorePass(String email)
+  private void reqResetPass(String email)
   {
-    logHead("Request Restore Password = " + email);
+    logHead("Request Reset Password = " + email);
 
     var ANY_accessToken = testConsumer.getAnonymous_accessToken();
     var timeToWait = TimeUnit.MILLISECONDS.toSeconds(prop.getScheduledTaskMailing().getCollectFromDbInterval()) * 2;
@@ -503,11 +503,11 @@ public class AuthtionFullTest
 
     assertEquals(0, mailingRepository.findByTypeAndEmail(type, email).size());
 
-    util.check_send_data(POST, prop.getResource().getReqRestorePass(),
-            ANY_accessToken, checkers_for_reqRestorePass(email));
+    util.check_send_data(POST, prop.getResource().getReqResetPass(),
+            ANY_accessToken, checkers_for_reqResetPass(email));
 
-    util.check_send_data(POST, prop.getResource().getReqRestorePass(),
-            ANY_accessToken, checkers_for_reqRestorePass_duplicateDelay(email));
+    util.check_send_data(POST, prop.getResource().getReqResetPass(),
+            ANY_accessToken, checkers_for_reqResetPass_duplicateDelay(email));
 
     try
     {
@@ -522,8 +522,8 @@ public class AuthtionFullTest
     assertFalse(confirmByEmail.get(0).isMaxAttemptsReached());
     assertTrue(confirmByEmail.get(0).getData().length() >= 28);
 
-    util.check_send_data(POST, prop.getResource().getReqRestorePass(),
-            ANY_accessToken, checkers_for_reqRestorePass(email));
+    util.check_send_data(POST, prop.getResource().getReqResetPass(),
+            ANY_accessToken, checkers_for_reqResetPass(email));
 
     try
     {
@@ -537,9 +537,9 @@ public class AuthtionFullTest
     assertEquals(2, confirmByEmail.size());
   }
 
-  private void confirmRestorePass(String email)
+  private void confirmResetPass(String email)
   {
-    logHead("Confirm Restore Password = " + email);
+    logHead("Confirm Reset Password = " + email);
 
     var ANY_accessToken = testConsumer.getAnonymous_accessToken();
     var type = 5;
@@ -547,16 +547,16 @@ public class AuthtionFullTest
     var confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(2, confirmByEmail.size());
 
-    util.check_send_data(POST, prop.getResource().getConfirmRestorePass(),
-            ANY_accessToken, checkers_for_confirmRestorePass(email, confirmByEmail.get(0).getData()));
+    util.check_send_data(POST, prop.getResource().getConfirmResetPass(),
+            ANY_accessToken, checkers_for_confirmResetPass(email, confirmByEmail.get(0).getData()));
 
     confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(2, confirmByEmail.size());
   }
 
-  private void restorePass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
+  private void resetPass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
   {
-    logHead("Restore Password = " + email);
+    logHead("Reset Password = " + email);
 
     var ANY_accessToken = testConsumer.getAnonymous_accessToken();
     var type = 5;
@@ -570,8 +570,8 @@ public class AuthtionFullTest
     //AuthtionTestConsumer.of(USER, email, newpassDecoded, testClient.getOauth2ClientTrusted(), 400);
 
     //change password
-    util.check_send_data(POST, prop.getResource().getRestorePass(), ANY_accessToken,
-            checkers_for_restorePass(email, newpassForCheckers, confirmByEmail.get(0).getData()));
+    util.check_send_data(POST, prop.getResource().getResetPass(), ANY_accessToken,
+            checkers_for_resetPass(email, newpassForCheckers, confirmByEmail.get(0).getData()));
 
     assertEquals(1, mailingRepository.findSentNotEmptyData(type, email).size());
 

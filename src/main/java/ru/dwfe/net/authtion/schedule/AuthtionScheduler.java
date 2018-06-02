@@ -126,7 +126,7 @@ public class AuthtionScheduler
     var context = new Context();
     var frontendHost = authtionConfigProperties.getFrontend().getHost();
     var resourceConfirmEmail = authtionConfigProperties.getFrontend().getResourceConfirmEmail();
-    var resourceConfirmRestorePass = authtionConfigProperties.getFrontend().getResourceConfirmRestorePass();
+    var resourceConfirmResetPass = authtionConfigProperties.getFrontend().getResourceConfirmResetPass();
 
     if (type == 1)
     {
@@ -145,12 +145,12 @@ public class AuthtionScheduler
     }
     else if (type == 4)
     {
-      result.put(subjKey, "Password was changed");
+      result.put(subjKey, "Password has been changed");
     }
     else if (type == 5)
     {
-      result.put(subjKey, "Restore password");
-      context.setVariable(dataKey, frontendHost + resourceConfirmRestorePass + "?key=" + data);
+      result.put(subjKey, "Reset password");
+      context.setVariable(dataKey, frontendHost + resourceConfirmResetPass + "?key=" + data);
     }
     result.put(messageKey, templateEngine.process("mailing" + type, context));
     return result;

@@ -66,9 +66,9 @@ public class AuthtionConfigProperties implements InitializingBean
     private String confirmEmail = "/confirm-email";
 
     private String changePass = "/change-pass";
-    private String reqRestorePass = "/req-restore-pass";
-    private String confirmRestorePass = "/confirm-restore-pass";
-    private String restorePass = "/restore-pass";
+    private String reqResetPass = "/req-reset-pass";
+    private String confirmResetPass = "/confirm-reset-pass";
+    private String resetPass = "/reset-pass";
 
     public String getSignIn()
     {
@@ -190,34 +190,34 @@ public class AuthtionConfigProperties implements InitializingBean
       this.changePass = changePass;
     }
 
-    public String getReqRestorePass()
+    public String getReqResetPass()
     {
-      return reqRestorePass;
+      return reqResetPass;
     }
 
-    public void setReqRestorePass(String reqRestorePass)
+    public void setReqResetPass(String reqResetPass)
     {
-      this.reqRestorePass = reqRestorePass;
+      this.reqResetPass = reqResetPass;
     }
 
-    public String getConfirmRestorePass()
+    public String getConfirmResetPass()
     {
-      return confirmRestorePass;
+      return confirmResetPass;
     }
 
-    public void setConfirmRestorePass(String confirmRestorePass)
+    public void setConfirmResetPass(String confirmResetPass)
     {
-      this.confirmRestorePass = confirmRestorePass;
+      this.confirmResetPass = confirmResetPass;
     }
 
-    public String getRestorePass()
+    public String getResetPass()
     {
-      return restorePass;
+      return resetPass;
     }
 
-    public void setRestorePass(String restorePass)
+    public void setResetPass(String resetPass)
     {
-      this.restorePass = restorePass;
+      this.resetPass = resetPass;
     }
   }
 
@@ -254,7 +254,7 @@ public class AuthtionConfigProperties implements InitializingBean
   {
     private String host = "http://localhost";
     private String resourceConfirmEmail = "/confirm-email";
-    private String resourceConfirmRestorePass = "/confirm-restore-pass";
+    private String resourceConfirmResetPass = "/reset-pass";
 
     public String getHost()
     {
@@ -276,14 +276,14 @@ public class AuthtionConfigProperties implements InitializingBean
       this.resourceConfirmEmail = resourceConfirmEmail;
     }
 
-    public String getResourceConfirmRestorePass()
+    public String getResourceConfirmResetPass()
     {
-      return resourceConfirmRestorePass;
+      return resourceConfirmResetPass;
     }
 
-    public void setResourceConfirmRestorePass(String resourceConfirmRestorePass)
+    public void setResourceConfirmResetPass(String resourceConfirmResetPass)
     {
-      this.resourceConfirmRestorePass = resourceConfirmRestorePass;
+      this.resourceConfirmResetPass = resourceConfirmResetPass;
     }
   }
 
@@ -545,10 +545,10 @@ public class AuthtionConfigProperties implements InitializingBean
                     "|      %s%n" +
                     "|                                                     %n" +
                     "| Frontend                                            %n" +
-                    "|    host                     %s%n" +
+                    "|    host                   %s%n" +
                     "|    resources for:                                   %n" +
-                    "|      /confirm-email         %s%n" +
-                    "|      /confirm-restore-pass  %s%n" +
+                    "|      /confirm-email       %s%n" +
+                    "|      /confirm-reset-pass  %s%n" +
                     "|_____________________________________________________%n",
             api,
             formatMillisecondsToReadableString(scheduledTaskMailing.initialDelay),
@@ -568,11 +568,11 @@ public class AuthtionConfigProperties implements InitializingBean
             resource.reqConfirmEmail,
             resource.confirmEmail,
             resource.changePass,
-            resource.reqRestorePass,
-            resource.confirmRestorePass,
-            resource.restorePass,
+            resource.reqResetPass,
+            resource.confirmResetPass,
+            resource.resetPass,
             frontend.host,
             frontend.resourceConfirmEmail,
-            frontend.resourceConfirmRestorePass);
+            frontend.resourceConfirmResetPass);
   }
 }

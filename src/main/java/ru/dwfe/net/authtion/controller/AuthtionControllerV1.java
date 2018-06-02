@@ -421,8 +421,8 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping("#{authtionConfigProperties.resource.reqRestorePass}")
-  public String reqRestorePass(@RequestBody ReqEmail req)
+  @PostMapping("#{authtionConfigProperties.resource.reqResetPass}")
+  public String reqResetPass(@RequestBody ReqEmail req)
   {
     var errorCodes = new ArrayList<String>();
     var email = req.email;
@@ -440,8 +440,8 @@ public class AuthtionControllerV1
     return getResponse(errorCodes);
   }
 
-  @PostMapping("#{authtionConfigProperties.resource.confirmRestorePass}")
-  public String confirmRestorePass(@RequestBody ReqConfirm req)
+  @PostMapping("#{authtionConfigProperties.resource.confirmResetPass}")
+  public String confirmResetPass(@RequestBody ReqConfirm req)
   {
     var errorCodes = new ArrayList<String>();
     var data = new HashMap<String, Object>();
@@ -466,8 +466,8 @@ public class AuthtionControllerV1
     return getResponse(errorCodes, data);
   }
 
-  @PostMapping("#{authtionConfigProperties.resource.restorePass}")
-  public String restorePass(@RequestBody ReqRestorePass req)
+  @PostMapping("#{authtionConfigProperties.resource.resetPass}")
+  public String resetPass(@RequestBody ReqResetPass req)
   {
     var errorCodes = new ArrayList<String>();
     var type = 5;

@@ -34,9 +34,9 @@ public class AuthtionTestVariablesForAuthTests
     result.put(authtionConfigProperties.getResource().getReqConfirmEmail(), Map.of(USER, Map.of(GET, Map.of())));
     result.put(authtionConfigProperties.getResource().getConfirmEmail(), Map.of(ANY, Map.of(POST, Map.of("key", "AnyString"))));
     result.put(authtionConfigProperties.getResource().getChangePass(), Map.of(USER, Map.of(POST, Map.of())));
-    result.put(authtionConfigProperties.getResource().getReqRestorePass(), Map.of(ANY, Map.of(POST, Map.of())));
-    result.put(authtionConfigProperties.getResource().getConfirmRestorePass(), Map.of(ANY, Map.of(POST, Map.of("key", "AnyString"))));
-    result.put(authtionConfigProperties.getResource().getRestorePass(), Map.of(ANY, Map.of(POST, Map.of())));
+    result.put(authtionConfigProperties.getResource().getReqResetPass(), Map.of(ANY, Map.of(POST, Map.of())));
+    result.put(authtionConfigProperties.getResource().getConfirmResetPass(), Map.of(ANY, Map.of(POST, Map.of("key", "AnyString"))));
+    result.put(authtionConfigProperties.getResource().getResetPass(), Map.of(ANY, Map.of(POST, Map.of())));
 
     return result;
   }
