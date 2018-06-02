@@ -91,13 +91,14 @@ public class AuthtionScheduler
       }
       catch (Throwable e)
       {
+        next.setCauseOfLastFailure(e.toString());
+
         if (next.getAttempt().incrementAndGet() > maxAttemptsMailingIfError)
         {
           if (type != 3 && type != 5) // if not confirmation
             next.clear();             // but all of a sudden the letter was sent
 
           next.setMaxAttemptsReached(true);
-          next.setCauseOfLastFailure(e.toString());
 
           toDataBase.add(next);
           log.debug("mailing <{}> last fail sending", email);
@@ -148,7 +149,7 @@ public class AuthtionScheduler
     }
     else if (type == 5)
     {
-      result.put(subjKey, "Confirm restore password");
+      result.put(subjKey, "Restore password");
       context.setVariable(dataKey, frontendHost + resourceConfirmRestorePass + "?key=" + data);
     }
     result.put(messageKey, templateEngine.process("mailing" + type, context));

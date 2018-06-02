@@ -12,8 +12,8 @@ public class AuthtionCustomConfig
   public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder)
   {
     return restTemplateBuilder
-            .setConnectTimeout(5000)
-            .setReadTimeout(5000)
+            .setConnectTimeout(10000)
+            .setReadTimeout(10000)
             .build();
   }
 }
