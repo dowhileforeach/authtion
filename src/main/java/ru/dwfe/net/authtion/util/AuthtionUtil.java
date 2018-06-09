@@ -689,10 +689,14 @@ public class AuthtionUtil
     // X requiredLength ==
 
     var target = new BigInteger((requiredLength + 2) * 5, new SecureRandom()).toString();
-    var realLength = target.length(); // becouse real length can be less than requiredLength
+
+    // becouse target length can be less than requiredLength
+    var realLength = target.length() > requiredLength ? requiredLength : target.length();
+
     var bytes = target.getBytes();
     var result = new String(Base64.getEncoder().encode(bytes), 1, realLength);
-    return result.replaceAll("[^a-zA-Z0-9]", ""); // becouse oauth2 incorrect work with some symbols, e.g.: "+fAhjktzuw", "6k+xfc6ZRw"
+    result = result.replaceAll("[^a-zA-Z0-9]", ""); // becouse oauth2 incorrect work with some symbols, e.g.: "+fAhjktzuw", "6k+xfc6ZRw"
+    return result;
   }
 
   public static String formatDateTimeToUTCstring(LocalDateTime localDateTime)
