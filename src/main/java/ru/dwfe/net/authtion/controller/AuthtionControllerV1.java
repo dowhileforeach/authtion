@@ -361,7 +361,7 @@ public class AuthtionControllerV1
     }
     else if (util.isAllowedNewRequestForMailing(type, email, errorCodes))
     {
-      mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase36(40)));
+      mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase64(40)));
     }
 
     return getResponse(errorCodes);
@@ -433,7 +433,7 @@ public class AuthtionControllerV1
     {
       if (consumerService.existsByEmail(email))
       {
-        mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase36(40)));
+        mailingRepository.save(AuthtionMailing.of(type, email, getUniqStrBase64(40)));
       }
       else errorCodes.add("email-not-exist");
     }

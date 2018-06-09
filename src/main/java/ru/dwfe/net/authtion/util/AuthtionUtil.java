@@ -688,8 +688,10 @@ public class AuthtionUtil
     // SUMMARY:
     // X requiredLength ==
 
-    var bytes = new BigInteger((requiredLength + 2) * 5, new SecureRandom()).toByteArray();
-    var result = new String(Base64.getEncoder().encode(bytes), 1, requiredLength);
+    var target = new BigInteger((requiredLength + 2) * 5, new SecureRandom()).toString();
+    var realLength = target.length(); // becouse real length can be less than requiredLength
+    var bytes = target.getBytes();
+    var result = new String(Base64.getEncoder().encode(bytes), 1, realLength);
     return result.replaceAll("[^a-zA-Z0-9]", ""); // becouse oauth2 incorrect work with some symbols, e.g.: "+fAhjktzuw", "6k+xfc6ZRw"
   }
 
