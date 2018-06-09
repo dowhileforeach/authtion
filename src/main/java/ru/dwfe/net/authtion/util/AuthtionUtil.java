@@ -549,20 +549,20 @@ public class AuthtionUtil
 
   public static class ReqChangePass
   {
-    public String oldpass;
+    public String curpass;
     public String newpass;
 
-    public String oldpassField = "oldpass";
+    public String curpassField = "curpass";
     public String newpassField = "newpass";
 
-    public String getOldpass()
+    public String getCurpass()
     {
-      return oldpass;
+      return curpass;
     }
 
-    public void setOldpass(String oldpass)
+    public void setCurpass(String curpass)
     {
-      this.oldpass = oldpass;
+      this.curpass = curpass;
     }
 
     public String getNewpass()

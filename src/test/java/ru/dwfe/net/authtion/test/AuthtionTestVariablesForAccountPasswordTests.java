@@ -281,23 +281,23 @@ public class AuthtionTestVariablesForAccountPasswordTests
   }
 
   public static final List<AuthtionTestChecker> checkers_for_changePass = List.of(
-          AuthtionTestChecker.of(false, Map.of(), 200, "missing-oldpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", ""), 200, "empty-oldpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", Account3_Pass), 200, "missing-newpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", Account3_Pass, "newpass", ""), 200, "empty-newpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", Account3_Pass, "newpass", "12345"), 200, "exceeded-min6-or-max55-newpass-length"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", Account3_Pass, "newpass", "12345678901234567890123456789012345678901234567890123456"), 200, "exceeded-min6-or-max55-newpass-length"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", Account3_Pass + "1", "newpass", "1234567"), 200, "wrong-oldpass"),
-          AuthtionTestChecker.of(true, Map.of("oldpass", Account3_Pass, "newpass", Account3_NewPass), 200)
+          AuthtionTestChecker.of(false, Map.of(), 200, "missing-curpass"),
+          AuthtionTestChecker.of(false, Map.of("curpass", ""), 200, "empty-curpass"),
+          AuthtionTestChecker.of(false, Map.of("curpass", Account3_Pass), 200, "missing-newpass"),
+          AuthtionTestChecker.of(false, Map.of("curpass", Account3_Pass, "newpass", ""), 200, "empty-newpass"),
+          AuthtionTestChecker.of(false, Map.of("curpass", Account3_Pass, "newpass", "12345"), 200, "exceeded-min6-or-max55-newpass-length"),
+          AuthtionTestChecker.of(false, Map.of("curpass", Account3_Pass, "newpass", "12345678901234567890123456789012345678901234567890123456"), 200, "exceeded-min6-or-max55-newpass-length"),
+          AuthtionTestChecker.of(false, Map.of("curpass", Account3_Pass + "1", "newpass", "1234567"), 200, "wrong-curpass"),
+          AuthtionTestChecker.of(true, Map.of("curpass", Account3_Pass, "newpass", Account3_NewPass), 200)
   );
 
   public static final List<AuthtionTestChecker> checkers_for_changePass_2 = List.of(
-          AuthtionTestChecker.of(false, Map.of(), 200, "missing-oldpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", ""), 200, "empty-oldpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", Account5_Pass_Decoded), 200, "missing-newpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", Account5_Pass_Decoded, "newpass", ""), 200, "empty-newpass"),
-          AuthtionTestChecker.of(false, Map.of("oldpass", Account5_Pass_Decoded + "1", "newpass", "1234567"), 200, "wrong-oldpass"),
-          AuthtionTestChecker.of(true, Map.of("oldpass", Account5_Pass_Decoded, "newpass", Account5_NewPass_Encoded), 200)
+          AuthtionTestChecker.of(false, Map.of(), 200, "missing-curpass"),
+          AuthtionTestChecker.of(false, Map.of("curpass", ""), 200, "empty-curpass"),
+          AuthtionTestChecker.of(false, Map.of("curpass", Account5_Pass_Decoded), 200, "missing-newpass"),
+          AuthtionTestChecker.of(false, Map.of("curpass", Account5_Pass_Decoded, "newpass", ""), 200, "empty-newpass"),
+          AuthtionTestChecker.of(false, Map.of("curpass", Account5_Pass_Decoded + "1", "newpass", "1234567"), 200, "wrong-curpass"),
+          AuthtionTestChecker.of(true, Map.of("curpass", Account5_Pass_Decoded, "newpass", Account5_NewPass_Encoded), 200)
   );
 
   public static List<AuthtionTestChecker> checkers_for_reqResetPass(String email)

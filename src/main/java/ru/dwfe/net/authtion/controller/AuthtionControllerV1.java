@@ -406,17 +406,17 @@ public class AuthtionControllerV1
     var errorCodes = new ArrayList<String>();
     var id = getId(authentication);
 
-    if (isDefaultCheckOK(req.oldpass, req.oldpassField, errorCodes)
+    if (isDefaultCheckOK(req.curpass, req.curpassField, errorCodes)
             && canUsePassword(req.newpass, req.newpassField, errorCodes))
     {
       var consumer = consumerService.findById(id).get();
-      if (matchPassword(req.oldpass, consumer.getPassword()))
+      if (matchPassword(req.curpass, consumer.getPassword()))
       {
         consumer.setNewPassword(req.newpass);
         consumerService.save(consumer);
         mailingRepository.save(AuthtionMailing.of(4, consumer.getEmail()));
       }
-      else errorCodes.add("wrong-" + req.oldpassField);
+      else errorCodes.add("wrong-" + req.curpassField);
     }
     return getResponse(errorCodes);
   }

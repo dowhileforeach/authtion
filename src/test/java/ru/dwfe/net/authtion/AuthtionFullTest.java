@@ -456,21 +456,21 @@ public class AuthtionFullTest
     performChangePass(Account5_Email, Account5_Pass_Decoded, Account5_NewPass_Decoded, checkers_for_changePass_2);
   }
 
-  private void performChangePass(String email, String oldpass, String newpass, List<AuthtionTestChecker> checkers)
+  private void performChangePass(String email, String curpass, String newpass, List<AuthtionTestChecker> checkers)
   {
     logHead("Change Password = " + email);
 
     //newpass
     //AuthtionTestConsumer.of(USER, email, newpass, testClient.getOauth2ClientTrusted(), 400);
 
-    //oldpass
-    var consumerTest = testConsumer.of(USER, email, oldpass, testClient.getClientTrusted(), 200);
+    //curpass
+    var consumerTest = testConsumer.of(USER, email, curpass, testClient.getClientTrusted(), 200);
 
-    //change oldpass
+    //change curpass
     util.check_send_data(POST, prop.getResource().getChangePass(), consumerTest.access_token, checkers);
 
-    //oldpass
-    //AuthtionTestConsumer.of(USER, email, oldpass, testClient.getOauth2ClientTrusted(), 400);
+    //curpass
+    //AuthtionTestConsumer.of(USER, email, curpass, testClient.getOauth2ClientTrusted(), 400);
 
     //newpass
     consumerTest = testConsumer.of(USER, email, newpass, testClient.getClientTrusted(), 200);
@@ -486,11 +486,11 @@ public class AuthtionFullTest
     performResetPass(Account5_Email, Account5_NewPass_Decoded, Account5_Pass_Decoded, Account5_Pass_Encoded);
   }
 
-  private void performResetPass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
+  private void performResetPass(String email, String curpassDecoded, String newpassDecoded, String newpassForCheckers)
   {
     reqResetPass(email);
     confirmResetPass(email);
-    resetPass(email, oldpassDecoded, newpassDecoded, newpassForCheckers);
+    resetPass(email, curpassDecoded, newpassDecoded, newpassForCheckers);
   }
 
   private void reqResetPass(String email)
@@ -554,7 +554,7 @@ public class AuthtionFullTest
     assertEquals(2, confirmByEmail.size());
   }
 
-  private void resetPass(String email, String oldpassDecoded, String newpassDecoded, String newpassForCheckers)
+  private void resetPass(String email, String curpassDecoded, String newpassDecoded, String newpassForCheckers)
   {
     logHead("Reset Password = " + email);
 
@@ -564,8 +564,8 @@ public class AuthtionFullTest
     var confirmByEmail = mailingRepository.findSentNotEmptyData(type, email);
     assertEquals(2, confirmByEmail.size());
 
-    //oldpass
-    //AuthtionTestConsumer.of(USER, email, oldpassDecoded, testClient.getOauth2ClientTrusted(), 200);
+    //curpass
+    //AuthtionTestConsumer.of(USER, email, curpassDecoded, testClient.getOauth2ClientTrusted(), 200);
     //newpass
     //AuthtionTestConsumer.of(USER, email, newpassDecoded, testClient.getOauth2ClientTrusted(), 400);
 
@@ -575,8 +575,8 @@ public class AuthtionFullTest
 
     assertEquals(1, mailingRepository.findSentNotEmptyData(type, email).size());
 
-    //oldpass
-    //AuthtionTestConsumer.of(USER, email, oldpassDecoded, testClient.getOauth2ClientTrusted(), 400);
+    //curpass
+    //AuthtionTestConsumer.of(USER, email, curpassDecoded, testClient.getOauth2ClientTrusted(), 400);
 
     //newpass
     var consumerTest = testConsumer.of(USER, email, newpassDecoded, testClient.getClientTrusted(), 200);

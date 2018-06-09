@@ -7,8 +7,8 @@ authtionServerErrorCodesMap = {
     'empty-confirm-key': 'Confirm key is empty',
     'empty-email': 'Email is empty',
     'empty-google-response': 'Google response is empty. Try again',
-    'empty-newpass': 'New password is empty',
-    'empty-oldpass': 'Old password is empty',
+    'empty-curpass': 'Current Password is empty',
+    'empty-newpass': 'New Password is empty',
     'empty-password': 'Password is empty',
     'error-google-captcha-gateway': 'Captcha-check gateway error. Try again later',
     'exceeded-max50-email-length': 'Email length must be <= 50',
@@ -23,8 +23,8 @@ authtionServerErrorCodesMap = {
     'missing-email': 'Email required',
     'missing-google-response': 'Google response required',
     'missing-newpass': 'New password required',
-    'missing-oldpass': 'Old password required',
+    'missing-curpass': 'Current Password required',
     'missing-password': 'Password required',
     'timeout-google-captcha-gateway': 'Captcha-check gateway timeout. Try again later',
-    'wrong-oldpass': 'Current Password is wrong'
+    'wrong-curpass': 'Current Password is wrong'
 };
