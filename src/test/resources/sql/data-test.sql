@@ -23,8 +23,8 @@ INSERT INTO authtion_genders VALUES
   ('M', 'Male'),
   ('F', 'Female');
 INSERT INTO authtion_users VALUES
-  (1000, 'test1', 1, null, 1, null, 1, null, 1, null, 1, null, 1, 'RU', 1, '2017-07-07 07:07:07'),
-  (1001, 'test2', 1, null, 1, null, 1, null, 1, null, 1, null, 1, 'JP', 1, '2017-07-07 07:07:07');
+  (1000, 'test1', 1, null, 1, null, 1, null, 1, null, 1, null, 1, 'RU', 1, 'Moscow', 1, 'pzn', 1, '2017-07-07 07:07:07'),
+  (1001, 'test2', 1, null, 1, null, 1, null, 1, null, 1, null, 1, 'JP', 1, 'Tokyo', 1, null, 1, '2017-07-07 07:07:07');
 INSERT INTO authtion_authorities VALUES
   ('ADMIN', 'Administrator'),
   ('USER', 'Standard consumer');

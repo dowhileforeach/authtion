@@ -66,7 +66,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
             AuthtionTestChecker.of(false, Map.of("email", Account1_Email), 200, "email-present-in-database")
     ));
     list.addAll(List.of(
-            AuthtionTestChecker.of(true, Map.of("email", Account4_Email, "firstName", "ozon", "dateOfBirth", "1980-11-27", "gender", "m"), 200),
+            AuthtionTestChecker.of(true, Map.of("email", Account4_Email, "firstName", "ozon", "dateOfBirth", "1980-11-27", "gender", "m", "company", "Home Ltd."), 200),
 
             AuthtionTestChecker.of(false, Map.of("email", Account4_Email), 200, "email-present-in-database"),
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", ""), 200, "empty-password"),
@@ -77,10 +77,10 @@ public class AuthtionTestVariablesForAccountPasswordTests
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", Account3_Pass, "country", ""), 200, "invalid-country"),
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", Account3_Pass, "country", "x"), 200, "invalid-country"),
 
-            AuthtionTestChecker.of(true, Map.of("email", Account3_Email, "password", Account3_Pass, "nickName", "nobody", "lastName", "sunshine", "country", "uS"), 200),
+            AuthtionTestChecker.of(true, Map.of("email", Account3_Email, "password", Account3_Pass, "nickName", "nobody", "lastName", "sunshine", "country", "uS", "city", "Dallas"), 200),
             AuthtionTestChecker.of(true, Map.of("email", Account5_Email, "password", Account5_Pass_Encoded, "nickName", "hello world", "middleName", "john", "gender", "F", "country", "de"), 200),
             AuthtionTestChecker.of(true, Map.of("email", Account6_Email), 200),
-            AuthtionTestChecker.of(true, Map.of("email", Account7_Email, "nickName", "12345678901234567890777777", "firstName", "12345678901234567890777777", "middleName", "12345678901234567890777777", "lastName", "12345678901234567890777777"), 200)
+            AuthtionTestChecker.of(true, Map.of("email", Account7_Email, "nickName", "12345678901234567890777777", "firstName", "12345678901234567890777777", "middleName", "12345678901234567890777777", "lastName", "12345678901234567890777777", "city", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123", "company", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123"), 200)
 
     ));
     return list;
@@ -108,7 +108,12 @@ public class AuthtionTestVariablesForAccountPasswordTests
                           "\"dateOfBirth\":\"1980-11-27\"," +
                           "\"dateOfBirthNonPublic\":true," +
                           "\"country\":null," +
-                          "\"countryNonPublic\":true}"))
+                          "\"countryNonPublic\":true," +
+                          "\"city\":null," +
+                          "\"cityNonPublic\":true," +
+                          "\"company\":\"Home Ltd.\"," +
+                          "\"companyNonPublic\":true" +
+                          "}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount2 = List.of(
@@ -131,7 +136,12 @@ public class AuthtionTestVariablesForAccountPasswordTests
                           "\"dateOfBirth\":\"1990-05-01\"," +
                           "\"dateOfBirthNonPublic\":false," +
                           "\"country\": \"GB\"," +
-                          "\"countryNonPublic\":false}"),
+                          "\"countryNonPublic\":false," +
+                          "\"city\":\"London\"," +
+                          "\"cityNonPublic\":false," +
+                          "\"company\":\"Company\"," +
+                          "\"companyNonPublic\":false" +
+                          "}"),
                   200,
                   JsonParserFactory.getJsonParser().parseMap(
                           "{\"id\":1002," +
@@ -154,7 +164,12 @@ public class AuthtionTestVariablesForAccountPasswordTests
                                   "\"dateOfBirth\":\"1990-05-01\"," +
                                   "\"dateOfBirthNonPublic\":false," +
                                   "\"country\": \"GB\"," +
-                                  "\"countryNonPublic\":false}"))
+                                  "\"countryNonPublic\":false," +
+                                  "\"city\":\"London\"," +
+                                  "\"cityNonPublic\":false," +
+                                  "\"company\":\"Company\"," +
+                                  "\"companyNonPublic\":false" +
+                                  "}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount3 = List.of(
@@ -162,7 +177,9 @@ public class AuthtionTestVariablesForAccountPasswordTests
                   "nickName", "09876543210987654321777777",
                   "firstName", "09876543210987654321777777",
                   "middleName", "09876543210987654321777777",
-                  "lastName", "09876543210987654321777777"),
+                  "lastName", "09876543210987654321777777",
+                  "company", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123",
+                  "city", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123"),
                   200,
                   JsonParserFactory.getJsonParser().parseMap(
                           "{\"id\":1006," +
@@ -185,7 +202,12 @@ public class AuthtionTestVariablesForAccountPasswordTests
                                   "\"dateOfBirth\":null," +
                                   "\"dateOfBirthNonPublic\":true," +
                                   "\"country\":null," +
-                                  "\"countryNonPublic\":true}"))
+                                  "\"countryNonPublic\":true," +
+                                  "\"city\":\"1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\"," +
+                                  "\"cityNonPublic\":true," +
+                                  "\"company\":\"1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\"," +
+                                  "\"companyNonPublic\":true" +
+                                  "}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_getAccount1 = List.of(
@@ -210,7 +232,12 @@ public class AuthtionTestVariablesForAccountPasswordTests
                           "\"dateOfBirth\":null," +
                           "\"dateOfBirthNonPublic\":true," +
                           "\"country\":\"JP\"," +
-                          "\"countryNonPublic\":true}"))
+                          "\"countryNonPublic\":true," +
+                          "\"city\":\"Tokyo\"," +
+                          "\"cityNonPublic\":true," +
+                          "\"company\":null," +
+                          "\"companyNonPublic\":true" +
+                          "}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_getAccount2 = List.of(
@@ -235,7 +262,12 @@ public class AuthtionTestVariablesForAccountPasswordTests
                           "\"dateOfBirth\":\"1990-05-01\"," +
                           "\"dateOfBirthNonPublic\":false," +
                           "\"country\": \"GB\"," +
-                          "\"countryNonPublic\":false}"))
+                          "\"countryNonPublic\":false," +
+                          "\"city\":\"London\"," +
+                          "\"cityNonPublic\":false," +
+                          "\"company\":\"Company\"," +
+                          "\"companyNonPublic\":false" +
+                          "}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_publicAccount_9 = List.of(
@@ -255,7 +287,10 @@ public class AuthtionTestVariablesForAccountPasswordTests
                           "\"lastName\":\"dragon\"," +
                           "\"gender\":\"F\"," +
                           "\"dateOfBirth\":\"1990-05-01\"," +
-                          "\"country\": \"GB\"}"))
+                          "\"country\": \"GB\"," +
+                          "\"city\":\"London\"," +
+                          "\"company\":\"Company\"" +
+                          "}"))
   );
 
   public static final List<AuthtionTestChecker> checkers_for_reqConfirmEmail = List.of(

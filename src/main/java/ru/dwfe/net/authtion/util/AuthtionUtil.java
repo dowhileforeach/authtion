@@ -80,6 +80,8 @@ public class AuthtionUtil
     var gender = nullableValueToresp("gender", user.getGender());
     var dateOfBirth = nullableValueToresp("dateOfBirth", user.getDateOfBirth());
     var country = nullableValueToresp("country", user.getCountry());
+    var city = nullableValueToresp("city", user.getCity());
+    var company = nullableValueToresp("company", user.getCompany());
 
     list.add(id);
     if (onPublic)
@@ -100,6 +102,10 @@ public class AuthtionUtil
         list.add(dateOfBirth);
       if (!user.getCountryNonPublic())
         list.add(country);
+      if (!user.getCityNonPublic())
+        list.add(city);
+      if (!user.getCompanyNonPublic())
+        list.add(company);
     }
     else
     {
@@ -123,7 +129,10 @@ public class AuthtionUtil
       list.add("\"dateOfBirthNonPublic\":" + user.getDateOfBirthNonPublic());
       list.add(country);
       list.add("\"countryNonPublic\":" + user.getCountryNonPublic());
-
+      list.add(city);
+      list.add("\"cityNonPublic\":" + user.getCityNonPublic());
+      list.add(company);
+      list.add("\"companyNonPublic\":" + user.getCompanyNonPublic());
     }
 
     return "{" + list.stream().collect(Collectors.joining(",")) + "}";
@@ -219,6 +228,8 @@ public class AuthtionUtil
     public LocalDate dateOfBirth;
 
     public String country;
+    public String city;
+    public String company;
 
     public String getEmail()
     {
@@ -309,6 +320,26 @@ public class AuthtionUtil
     {
       this.country = country.toUpperCase();
     }
+
+    public String getCity()
+    {
+      return city;
+    }
+
+    public void setCity(String city)
+    {
+      this.city = city;
+    }
+
+    public String getCompany()
+    {
+      return company;
+    }
+
+    public void setCompany(String company)
+    {
+      this.company = company;
+    }
   }
 
   public static class ReqEmail
@@ -380,6 +411,12 @@ public class AuthtionUtil
 
     public String country;
     public Boolean countryNonPublic;
+
+    public String city;
+    public Boolean cityNonPublic;
+
+    public String company;
+    public Boolean companyNonPublic;
 
     public Boolean getEmailNonPublic()
     {
@@ -529,6 +566,46 @@ public class AuthtionUtil
     public void setCountryNonPublic(Boolean countryNonPublic)
     {
       this.countryNonPublic = countryNonPublic;
+    }
+
+    public String getCity()
+    {
+      return city;
+    }
+
+    public void setCity(String city)
+    {
+      this.city = city;
+    }
+
+    public Boolean getCityNonPublic()
+    {
+      return cityNonPublic;
+    }
+
+    public void setCityNonPublic(Boolean cityNonPublic)
+    {
+      this.cityNonPublic = cityNonPublic;
+    }
+
+    public String getCompany()
+    {
+      return company;
+    }
+
+    public void setCompany(String company)
+    {
+      this.company = company;
+    }
+
+    public Boolean getCompanyNonPublic()
+    {
+      return companyNonPublic;
+    }
+
+    public void setCompanyNonPublic(Boolean companyNonPublic)
+    {
+      this.companyNonPublic = companyNonPublic;
     }
   }
 

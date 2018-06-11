@@ -227,6 +227,12 @@ public class AuthtionControllerV1
     var newCountry = req.country;
     var newCountryNonPublic = req.countryNonPublic;
 
+    var newCity = prepareStringField(req.city, 100);
+    var newCityNonPublic = req.cityNonPublic;
+
+    var newCompany = prepareStringField(req.company, 100);
+    var newCompanyNonPublic = req.companyNonPublic;
+
     if (newEmailNonPublic != null && !newEmailNonPublic.equals(consumer.isEmailNonPublic()))
     {
       consumer.setEmailNonPublic(newEmailNonPublic);
@@ -324,6 +330,30 @@ public class AuthtionControllerV1
     if (newCountryNonPublic != null && !newCountryNonPublic.equals(user.getCountryNonPublic()))
     {
       user.setCountryNonPublic(newCountryNonPublic);
+      userWasModified = true;
+    }
+
+    if (newCity != null && !newCity.equals(user.getCity()))
+    {
+      user.setCity(newCity);
+      userWasModified = true;
+    }
+
+    if (newCityNonPublic != null && !newCityNonPublic.equals(user.getCityNonPublic()))
+    {
+      user.setCityNonPublic(newCityNonPublic);
+      userWasModified = true;
+    }
+
+    if (newCompany != null && !newCompany.equals(user.getCompany()))
+    {
+      user.setCompany(newCompany);
+      userWasModified = true;
+    }
+
+    if (newCompanyNonPublic != null && !newCompanyNonPublic.equals(user.getCompanyNonPublic()))
+    {
+      user.setCompanyNonPublic(newCompanyNonPublic);
       userWasModified = true;
     }
 

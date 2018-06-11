@@ -73,6 +73,10 @@ CREATE TABLE authtion_users (
   date_of_birth_non_public TINYINT(1)                           NOT NULL   DEFAULT '1',
   country                  VARCHAR(2),
   country_non_public       TINYINT(1)                           NOT NULL   DEFAULT '1',
+  city                     VARCHAR(100),
+  city_non_public          TINYINT(1)                           NOT NULL   DEFAULT '1',
+  company                  VARCHAR(100),
+  company_non_public       TINYINT(1)                           NOT NULL   DEFAULT '1',
   updated_on               DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP,
   KEY authtion_users_consumers_id_fk (consumer_id),
   CONSTRAINT authtion_users_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)

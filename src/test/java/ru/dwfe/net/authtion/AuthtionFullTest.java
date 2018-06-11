@@ -148,7 +148,9 @@ public class AuthtionFullTest
             "sunshine", true,
             null, true,
             null, true,
-            "US", true)
+            "US", true,
+            "Dallas", true,
+            null, true)
     );
     var mailing_consumer1 = mailingRepository.findByTypeAndEmail(1, consumer1.getEmail());
     assertEquals(1, mailing_consumer1.size());
@@ -164,7 +166,9 @@ public class AuthtionFullTest
             null, true,
             "M", true,
             LocalDate.parse("1980-11-27"), true,
-            null, true)
+            null, true,
+            null, true,
+            "Home Ltd.", true)
     );
     var mailing_consumer2 = mailingRepository.findByTypeAndEmail(2, consumer2.getEmail());
     assertEquals(1, mailing_consumer2.size());
@@ -184,7 +188,9 @@ public class AuthtionFullTest
             null, true,
             "F", true,
             null, true,
-            "DE", true)
+            "DE", true,
+            null, true,
+            null, true)
     );
     var mailing_consumer3 = mailingRepository.findByTypeAndEmail(1, consumer3.getEmail());
     assertEquals(1, mailing_consumer3.size());
@@ -195,6 +201,8 @@ public class AuthtionFullTest
     assertTrue(consumer4.isEmailConfirmed());
     var user4 = checkUser_ExactMatch(consumer4.getId(), AuthtionUser.of(
             getNickNameFromEmail(Account6_Email), true,
+            null, true,
+            null, true,
             null, true,
             null, true,
             null, true,
@@ -217,7 +225,9 @@ public class AuthtionFullTest
             "12345678901234567890", true,
             null, true,
             null, true,
-            null, true)
+            null, true,
+            "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", true,
+            "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", true)
     );
     var mailing_consumer5 = mailingRepository.findByTypeAndEmail(2, consumer5.getEmail());
     assertEquals(1, mailing_consumer5.size());
@@ -255,7 +265,9 @@ public class AuthtionFullTest
             null, true,
             "M", true,
             LocalDate.parse("1980-11-27"), true,
-            null, true)
+            null, true,
+            null, true,
+            "Home Ltd.", true)
     );
 
 
@@ -272,7 +284,9 @@ public class AuthtionFullTest
             null, true,
             "M", true,
             LocalDate.parse("1980-11-27"), true,
-            null, true)
+            null, true,
+            null, true,
+            "Home Ltd.", true)
     );
 
 
@@ -289,7 +303,9 @@ public class AuthtionFullTest
             "dragon", false,
             "F", false,
             LocalDate.parse("1990-05-01"), false,
-            "GB", false)
+            "GB", false,
+            "London", false,
+            "Company", false)
     );
 
 
@@ -307,7 +323,9 @@ public class AuthtionFullTest
             "09876543210987654321", true,
             null, true,
             null, true,
-            null, true)
+            null, true,
+            "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", true,
+            "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", true)
     );
   }
 
@@ -657,6 +675,12 @@ public class AuthtionFullTest
     var tCountry = tUser.getCountry();
     var tCountryNonPublic = tUser.getCountryNonPublic();
 
+    var tCity = tUser.getCity();
+    var tCityNonPublic = tUser.getCityNonPublic();
+
+    var tCompany = tUser.getCompany();
+    var tCompanyNonPublic = tUser.getCompanyNonPublic();
+
     assertEquals(tNickName, user.getNickName());
     assertEquals(tNickNameNonPublic, user.getNickNameNonPublic());
 
@@ -677,6 +701,12 @@ public class AuthtionFullTest
 
     assertEquals(tCountry, user.getCountry());
     assertEquals(tCountryNonPublic, user.getCountryNonPublic());
+
+    assertEquals(tCity, user.getCity());
+    assertEquals(tCityNonPublic, user.getCityNonPublic());
+
+    assertEquals(tCompany, user.getCompany());
+    assertEquals(tCompanyNonPublic, user.getCompanyNonPublic());
 
     return user;
   }

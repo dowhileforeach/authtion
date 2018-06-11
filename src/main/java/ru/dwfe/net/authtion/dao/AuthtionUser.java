@@ -39,6 +39,12 @@ public class AuthtionUser
   private String country;
   private Boolean countryNonPublic;
 
+  private String city;
+  private Boolean cityNonPublic;
+
+  private String company;
+  private Boolean companyNonPublic;
+
   @Column(updatable = false, insertable = false)
   private LocalDateTime updatedOn;
 
@@ -197,6 +203,46 @@ public class AuthtionUser
     this.countryNonPublic = countryNonPublic;
   }
 
+  public String getCity()
+  {
+    return city;
+  }
+
+  public void setCity(String city)
+  {
+    this.city = city;
+  }
+
+  public Boolean getCityNonPublic()
+  {
+    return cityNonPublic;
+  }
+
+  public void setCityNonPublic(Boolean cityNonPublic)
+  {
+    this.cityNonPublic = cityNonPublic;
+  }
+
+  public String getCompany()
+  {
+    return company;
+  }
+
+  public void setCompany(String company)
+  {
+    this.company = company;
+  }
+
+  public Boolean getCompanyNonPublic()
+  {
+    return companyNonPublic;
+  }
+
+  public void setCompanyNonPublic(Boolean companyNonPublic)
+  {
+    this.companyNonPublic = companyNonPublic;
+  }
+
   public LocalDateTime getUpdatedOn()
   {
     return updatedOn;
@@ -235,7 +281,9 @@ public class AuthtionUser
                                 String lastName, boolean lastNameNonPublic,
                                 String gender, boolean genderNonPublic,
                                 LocalDate dateOfBirth, boolean dateOfBirthNonPublic,
-                                String country, boolean countryNonPublic)
+                                String country, boolean countryNonPublic,
+                                String city, boolean cityNonPublic,
+                                String company, boolean companyNonPublic)
   {
     var user = new AuthtionUser();
 
@@ -253,6 +301,10 @@ public class AuthtionUser
     user.dateOfBirthNonPublic = dateOfBirthNonPublic;
     user.country = country;
     user.countryNonPublic = countryNonPublic;
+    user.city = city;
+    user.cityNonPublic = cityNonPublic;
+    user.company = company;
+    user.companyNonPublic = companyNonPublic;
     user.updatedOn = LocalDateTime.now();
 
     return user;
@@ -285,6 +337,12 @@ public class AuthtionUser
 
     user.setCountry(req.country);
     user.setCountryNonPublic(true);
+
+    user.setCity(prepareStringField(req.city, 100));
+    user.setCityNonPublic(true);
+
+    user.setCompany(prepareStringField(req.company, 100));
+    user.setCompanyNonPublic(true);
   }
 
   public static String getNickNameFromEmail(String email)
