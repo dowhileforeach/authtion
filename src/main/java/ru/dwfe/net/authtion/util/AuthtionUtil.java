@@ -73,7 +73,7 @@ public class AuthtionUtil
 
     var id = "\"id\":" + consumer.getId();
     var email = "\"email\":\"" + consumer.getEmail() + "\"";
-    var nickName = "\"nickName\":\"" + user.getNickName() + "\"";
+    var nickName = nullableValueToresp("nickName", user.getNickName());
     var firstName = nullableValueToresp("firstName", user.getFirstName());
     var middleName = nullableValueToresp("middleName", user.getMiddleName());
     var lastName = nullableValueToresp("lastName", user.getLastName());
@@ -141,7 +141,7 @@ public class AuthtionUtil
   private static String nullableValueToresp(String field, Object value)
   {
     return value == null
-            ? "\"" + field + "\":" + null
+            ? "\"" + field + "\":null"
             : "\"" + field + "\":\"" + value + "\"";
   }
 
@@ -741,6 +741,22 @@ public class AuthtionUtil
       return field.substring(0, maxLength);
     else
       return field;
+  }
+
+  public static boolean isObjEquals(Object o1, Object o2)
+  {
+    if (o1 == null && o2 == null) // (null,null)
+    {
+      return true;
+    }
+    else if (o1 == null || o2 == null) // (null,obj)  OR  (obj,null)
+    {
+      return false;
+    }
+    else // (obj,obj)
+    {
+      return o1.equals(o2);
+    }
   }
 
   public static String getUniqStrBase36(int requiredLength)

@@ -66,7 +66,12 @@ public class AuthtionTestVariablesForAccountPasswordTests
             AuthtionTestChecker.of(false, Map.of("email", Account1_Email), 200, "email-present-in-database")
     ));
     list.addAll(List.of(
-            AuthtionTestChecker.of(true, Map.of("email", Account4_Email, "firstName", "ozon", "dateOfBirth", "1980-11-27", "gender", "m", "company", "Home Ltd."), 200),
+            AuthtionTestChecker.of(true, Map.of(
+                    "email", Account4_Email,
+                    "firstName", "ozon",
+                    "dateOfBirth", "1980-11-27",
+                    "gender", "m",
+                    "company", "Home Ltd."), 200),
 
             AuthtionTestChecker.of(false, Map.of("email", Account4_Email), 200, "email-present-in-database"),
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", ""), 200, "empty-password"),
@@ -77,16 +82,42 @@ public class AuthtionTestVariablesForAccountPasswordTests
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", Account3_Pass, "country", ""), 200, "invalid-country"),
             AuthtionTestChecker.of(false, Map.of("email", Account3_Email, "password", Account3_Pass, "country", "x"), 200, "invalid-country"),
 
-            AuthtionTestChecker.of(true, Map.of("email", Account3_Email, "password", Account3_Pass, "nickName", "nobody", "lastName", "sunshine", "country", "uS", "city", "Dallas"), 200),
-            AuthtionTestChecker.of(true, Map.of("email", Account5_Email, "password", Account5_Pass_Encoded, "nickName", "hello world", "middleName", "john", "gender", "F", "country", "de"), 200),
+            AuthtionTestChecker.of(true, Map.of(
+                    "email", Account3_Email,
+                    "password", Account3_Pass,
+                    "nickName", "nobody",
+                    "lastName", "sunshine",
+                    "country", "uS",
+                    "city", "Dallas"), 200),
+            AuthtionTestChecker.of(true, Map.of(
+                    "email", Account5_Email,
+                    "password", Account5_Pass_Encoded,
+                    "nickName", "hello world",
+                    "middleName", "john",
+                    "gender", "F",
+                    "country", "de"), 200),
             AuthtionTestChecker.of(true, Map.of("email", Account6_Email), 200),
-            AuthtionTestChecker.of(true, Map.of("email", Account7_Email, "nickName", "12345678901234567890777777", "firstName", "12345678901234567890777777", "middleName", "12345678901234567890777777", "lastName", "12345678901234567890777777", "city", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123", "company", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123"), 200)
+            AuthtionTestChecker.of(true, Map.of(
+                    "email", Account7_Email,
+                    "nickName", "12345678901234567890777777",
+                    "firstName", "12345678901234567890777777",
+                    "middleName", "12345678901234567890777777",
+                    "lastName", "12345678901234567890777777",
+                    "city", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123",
+                    "company", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123",
+                    "gender", "M",
+                    "dateOfBirth", "1999-11-22",
+                    "country", "US"), 200)
 
     ));
     return list;
   }
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount1 = List.of(
+          AuthtionTestChecker.of(false, Map.of("gender", ""), 200, "invalid-gender"),
+          AuthtionTestChecker.of(false, Map.of("gender", "z"), 200, "invalid-gender"),
+          AuthtionTestChecker.of(false, Map.of("country", ""), 200, "invalid-country"),
+          AuthtionTestChecker.of(false, Map.of("country", "gopl"), 200, "invalid-country"),
           AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap(
                   "{\"id\":1002," +
                           "\"createdOn\":\"date\"," +
@@ -117,10 +148,6 @@ public class AuthtionTestVariablesForAccountPasswordTests
   );
 
   public static final List<AuthtionTestChecker> checkers_for_updateAccount2 = List.of(
-          AuthtionTestChecker.of(false, Map.of("gender", ""), 200, "invalid-gender"),
-          AuthtionTestChecker.of(false, Map.of("gender", "z"), 200, "invalid-gender"),
-          AuthtionTestChecker.of(false, Map.of("country", ""), 200, "invalid-country"),
-          AuthtionTestChecker.of(false, Map.of("country", "gopl"), 200, "invalid-country"),
           AuthtionTestChecker.of(true, JsonParserFactory.getJsonParser().parseMap(
                   "{\"emailNonPublic\":false," +
                           "\"nickName\":\"storm\"," +
@@ -178,8 +205,8 @@ public class AuthtionTestVariablesForAccountPasswordTests
                   "firstName", "09876543210987654321777777",
                   "middleName", "09876543210987654321777777",
                   "lastName", "09876543210987654321777777",
-                  "company", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123",
-                  "city", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123"),
+                  "company", "09876543210987654321098765432109876543210987654321098765432109876543210987654321098765432109876543211111111",
+                  "city", "09876543210987654321098765432109876543210987654321098765432109876543210987654321098765432109876543216666666666"),
                   200,
                   JsonParserFactory.getJsonParser().parseMap(
                           "{\"id\":1006," +
@@ -197,15 +224,67 @@ public class AuthtionTestVariablesForAccountPasswordTests
                                   "\"middleNameNonPublic\":true," +
                                   "\"lastName\":\"09876543210987654321\"," +
                                   "\"lastNameNonPublic\":true," +
+                                  "\"gender\":\"M\"," +
+                                  "\"genderNonPublic\":true," +
+                                  "\"dateOfBirth\":\"1999-11-22\"," +
+                                  "\"dateOfBirthNonPublic\":true," +
+                                  "\"country\":\"US\"," +
+                                  "\"countryNonPublic\":true," +
+                                  "\"city\":\"0987654321098765432109876543210987654321098765432109876543210987654321098765432109876543210987654321\"," +
+                                  "\"cityNonPublic\":true," +
+                                  "\"company\":\"0987654321098765432109876543210987654321098765432109876543210987654321098765432109876543210987654321\"," +
+                                  "\"companyNonPublic\":true" +
+                                  "}"))
+  );
+
+  public static final List<AuthtionTestChecker> checkers_for_updateAccount4 = List.of(
+          AuthtionTestChecker.of(true, JsonParserFactory.getJsonParser().parseMap(
+                  "{\"emailNonPublic\":null," +
+                          "\"nickName\":null," +
+                          "\"nickNameNonPublic\":null," +
+                          "\"firstName\":null," +
+                          "\"firstNameNonPublic\":null," +
+                          "\"middleName\":null," +
+                          "\"middleNameNonPublic\":null," +
+                          "\"lastName\":null," +
+                          "\"lastNameNonPublic\":null," +
+                          "\"gender\":null," +
+                          "\"genderNonPublic\":null," +
+                          "\"dateOfBirth\":null," +
+                          "\"dateOfBirthNonPublic\":null," +
+                          "\"country\":null," +
+                          "\"countryNonPublic\":null," +
+                          "\"city\":null," +
+                          "\"cityNonPublic\":null," +
+                          "\"company\":null," +
+                          "\"companyNonPublic\":null" +
+                          "}"),
+                  200,
+                  JsonParserFactory.getJsonParser().parseMap(
+                          "{\"id\":1006," +
+                                  "\"createdOn\":\"date\"," +
+                                  "\"updatedOn\":\"date\"," +
+                                  "\"authorities\":[\"USER\"]," +
+                                  "\"email\":\"test7@dwfe.ru\"," +
+                                  "\"emailConfirmed\":true," +
+                                  "\"emailNonPublic\":true," +
+                                  "\"nickName\":null," +
+                                  "\"nickNameNonPublic\":true," +
+                                  "\"firstName\":null," +
+                                  "\"firstNameNonPublic\":true," +
+                                  "\"middleName\":null," +
+                                  "\"middleNameNonPublic\":true," +
+                                  "\"lastName\":null," +
+                                  "\"lastNameNonPublic\":true," +
                                   "\"gender\":null," +
                                   "\"genderNonPublic\":true," +
                                   "\"dateOfBirth\":null," +
                                   "\"dateOfBirthNonPublic\":true," +
                                   "\"country\":null," +
                                   "\"countryNonPublic\":true," +
-                                  "\"city\":\"1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\"," +
+                                  "\"city\":null," +
                                   "\"cityNonPublic\":true," +
-                                  "\"company\":\"1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\"," +
+                                  "\"company\":null," +
                                   "\"companyNonPublic\":true" +
                                   "}"))
   );

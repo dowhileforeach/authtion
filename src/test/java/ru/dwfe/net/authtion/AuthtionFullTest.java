@@ -223,9 +223,9 @@ public class AuthtionFullTest
             "12345678901234567890", true,
             "12345678901234567890", true,
             "12345678901234567890", true,
-            null, true,
-            null, true,
-            null, true,
+            "M", true,
+            LocalDate.parse("1999-11-22"), true,
+            "US", true,
             "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", true,
             "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", true)
     );
@@ -321,11 +321,30 @@ public class AuthtionFullTest
             "09876543210987654321", true,
             "09876543210987654321", true,
             "09876543210987654321", true,
+            "M", true,
+            LocalDate.parse("1999-11-22"), true,
+            "US", true,
+            "0987654321098765432109876543210987654321098765432109876543210987654321098765432109876543210987654321", true,
+            "0987654321098765432109876543210987654321098765432109876543210987654321098765432109876543210987654321", true)
+    );
+
+
+    // (4) test null's
+    util.check_send_data(POST, prop.getResource().getUpdateAccount(), tConsumer.access_token, checkers_for_updateAccount4);
+    consumer = getConsumerByEmail(Account7_Email);
+    assertEquals(Long.valueOf(1006), consumer.getId());
+    assertTrue(consumer.isEmailConfirmed());
+    assertTrue(consumer.isEmailNonPublic());
+    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
             null, true,
             null, true,
             null, true,
-            "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", true,
-            "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", true)
+            null, true,
+            null, true,
+            null, true,
+            null, true,
+            null, true,
+            null, true)
     );
   }
 
