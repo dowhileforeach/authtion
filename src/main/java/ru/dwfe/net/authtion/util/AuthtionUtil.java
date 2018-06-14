@@ -69,7 +69,6 @@ public class AuthtionUtil
   public static String prepareUserPersonalInfo(AuthtionConsumer consumer, AuthtionUserPersonal user, boolean onPublic)
   {
     var list = new ArrayList<String>();
-    var updatedOn = consumer.getUpdatedOn().isBefore(user.getUpdatedOn()) ? consumer.getUpdatedOn() : user.getUpdatedOn();
 
     var id = "\"id\":" + consumer.getId();
     var email = "\"email\":\"" + consumer.getEmail() + "\"";
@@ -110,7 +109,6 @@ public class AuthtionUtil
     else
     {
       list.add("\"createdOn\":" + "\"" + formatDateTimeToUTCstring(consumer.getCreatedOn()) + "\"");
-      list.add("\"updatedOn\":" + "\"" + formatDateTimeToUTCstring(updatedOn) + "\"");
       list.add("\"authorities\":" + consumer.getAuthorities());
       list.add(email);
       list.add("\"emailConfirmed\":" + consumer.isEmailConfirmed());

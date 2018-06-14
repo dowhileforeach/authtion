@@ -121,7 +121,6 @@ public class AuthtionTestVariablesForAccountPasswordTests
           AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap(
                   "{\"id\":1002," +
                           "\"createdOn\":\"date\"," +
-                          "\"updatedOn\":\"date\"," +
                           "\"authorities\":[\"USER\"]," +
                           "\"email\":\"test4@dwfe.ru\"," +
                           "\"emailConfirmed\":true," +
@@ -173,7 +172,6 @@ public class AuthtionTestVariablesForAccountPasswordTests
                   JsonParserFactory.getJsonParser().parseMap(
                           "{\"id\":1002," +
                                   "\"createdOn\":\"date\"," +
-                                  "\"updatedOn\":\"date\"," +
                                   "\"authorities\":[\"USER\"]," +
                                   "\"email\":\"test4@dwfe.ru\"," +
                                   "\"emailConfirmed\":true," +
@@ -211,7 +209,6 @@ public class AuthtionTestVariablesForAccountPasswordTests
                   JsonParserFactory.getJsonParser().parseMap(
                           "{\"id\":1006," +
                                   "\"createdOn\":\"date\"," +
-                                  "\"updatedOn\":\"date\"," +
                                   "\"authorities\":[\"USER\"]," +
                                   "\"email\":\"test7@dwfe.ru\"," +
                                   "\"emailConfirmed\":true," +
@@ -263,7 +260,6 @@ public class AuthtionTestVariablesForAccountPasswordTests
                   JsonParserFactory.getJsonParser().parseMap(
                           "{\"id\":1006," +
                                   "\"createdOn\":\"date\"," +
-                                  "\"updatedOn\":\"date\"," +
                                   "\"authorities\":[\"USER\"]," +
                                   "\"email\":\"test7@dwfe.ru\"," +
                                   "\"emailConfirmed\":true," +
@@ -293,7 +289,6 @@ public class AuthtionTestVariablesForAccountPasswordTests
           AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap(
                   "{\"id\":1001," +
                           "\"createdOn\":\"date\"," +
-                          "\"updatedOn\":\"date\"," +
                           "\"authorities\":[\"USER\"]," +
                           "\"email\":\"test2@dwfe.ru\"," +
                           "\"emailConfirmed\":true," +
@@ -323,7 +318,6 @@ public class AuthtionTestVariablesForAccountPasswordTests
           AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap(
                   "{\"id\":1002," +
                           "\"createdOn\":\"date\"," +
-                          "\"updatedOn\":\"date\"," +
                           "\"authorities\":[\"USER\"]," +
                           "\"email\":\"test4@dwfe.ru\"," +
                           "\"emailConfirmed\":true," +
