@@ -11,9 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import ru.dwfe.net.authtion.dao.AuthtionConsumer;
-import ru.dwfe.net.authtion.dao.AuthtionUser;
+import ru.dwfe.net.authtion.dao.AuthtionUserPersonal;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
-import ru.dwfe.net.authtion.dao.repository.AuthtionUserRepository;
+import ru.dwfe.net.authtion.dao.repository.AuthtionUserPersonalRepository;
 import ru.dwfe.net.authtion.service.AuthtionConsumerService;
 import ru.dwfe.net.authtion.test.AuthtionTestChecker;
 import ru.dwfe.net.authtion.test.AuthtionTestClient;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.dwfe.net.authtion.dao.AuthtionUser.getNickNameFromEmail;
+import static ru.dwfe.net.authtion.dao.AuthtionUserPersonal.getNickNameFromEmail;
 import static ru.dwfe.net.authtion.test.AuthtionTestAuthorityLevel.USER;
 import static ru.dwfe.net.authtion.test.AuthtionTestResourceAccessingType.USUAL;
 import static ru.dwfe.net.authtion.test.AuthtionTestVariablesForAccountPasswordTests.*;
@@ -62,7 +62,7 @@ public class AuthtionFullTest
   @Autowired
   private AuthtionConsumerService consumerService;
   @Autowired
-  private AuthtionUserRepository userRepository;
+  private AuthtionUserPersonalRepository userRepository;
   @Autowired
   private AuthtionMailingRepository mailingRepository;
 
@@ -141,7 +141,7 @@ public class AuthtionFullTest
     // Account3_Email
     var consumer1 = checkConsumerAfterCreate(Account3_Email);
     assertFalse(consumer1.isEmailConfirmed());
-    var user1 = checkUser_ExactMatch(consumer1.getId(), AuthtionUser.of(
+    var userPersonal1 = checkUserPersonal_ExactMatch(consumer1.getId(), AuthtionUserPersonal.of(
             "nobody", true,
             null, true,
             null, true,
@@ -159,7 +159,7 @@ public class AuthtionFullTest
     // Account4_Email
     var consumer2 = checkConsumerAfterCreate(Account4_Email);
     assertTrue(consumer2.isEmailConfirmed());
-    var user2 = checkUser_ExactMatch(consumer2.getId(), AuthtionUser.of(
+    var userPersonal2 = checkUserPersonal_ExactMatch(consumer2.getId(), AuthtionUserPersonal.of(
             getNickNameFromEmail(Account4_Email), true,
             "ozon", true,
             null, true,
@@ -181,7 +181,7 @@ public class AuthtionFullTest
     var consumer3 = checkConsumerAfterCreate(Account5_Email);
     assertFalse(consumer3.isEmailConfirmed());
     assertEquals(consumer3.getPassword(), "{bcrypt}" + Account5_Pass_Encoded);
-    var user3 = checkUser_ExactMatch(consumer3.getId(), AuthtionUser.of(
+    var userPersonal3 = checkUserPersonal_ExactMatch(consumer3.getId(), AuthtionUserPersonal.of(
             "hello world", true,
             null, true,
             "john", true,
@@ -199,7 +199,7 @@ public class AuthtionFullTest
     // Account6_Email
     var consumer4 = checkConsumerAfterCreate(Account6_Email);
     assertTrue(consumer4.isEmailConfirmed());
-    var user4 = checkUser_ExactMatch(consumer4.getId(), AuthtionUser.of(
+    var userPersonal4 = checkUserPersonal_ExactMatch(consumer4.getId(), AuthtionUserPersonal.of(
             getNickNameFromEmail(Account6_Email), true,
             null, true,
             null, true,
@@ -218,7 +218,7 @@ public class AuthtionFullTest
     // Account7_Email
     var consumer5 = checkConsumerAfterCreate(Account7_Email);
     assertTrue(consumer5.isEmailConfirmed());
-    var user5 = checkUser_ExactMatch(consumer5.getId(), AuthtionUser.of(
+    var userPersonal5 = checkUserPersonal_ExactMatch(consumer5.getId(), AuthtionUserPersonal.of(
             "12345678901234567890", true,
             "12345678901234567890", true,
             "12345678901234567890", true,
@@ -246,9 +246,9 @@ public class AuthtionFullTest
 
 
   @Test
-  public void _008_account_updateAccount()
+  public void _008_account_updateUserPersonal()
   {
-    logHead("Update Account");
+    logHead("Update User Personal Info");
 
     var tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
     var access_token = tConsumer.access_token;
@@ -258,7 +258,7 @@ public class AuthtionFullTest
     assertEquals(Long.valueOf(1002), consumer.getId());
     assertTrue(consumer.isEmailConfirmed());
     assertTrue(consumer.isEmailNonPublic());
-    var user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+    var userPersonal = checkUserPersonal_ExactMatch(consumer.getId(), AuthtionUserPersonal.of(
             getNickNameFromEmail(Account4_Email), true,
             "ozon", true,
             null, true,
@@ -272,12 +272,12 @@ public class AuthtionFullTest
 
 
     // (1) empty request
-    util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount1);
+    util.check_send_data(POST, prop.getResource().getUpdateUserPersonal(), access_token, checkers_for_updateAccount1);
     consumer = getConsumerByEmail(Account4_Email);
     assertEquals(Long.valueOf(1002), consumer.getId());
     assertTrue(consumer.isEmailConfirmed());
     assertTrue(consumer.isEmailNonPublic());
-    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+    userPersonal = checkUserPersonal_ExactMatch(consumer.getId(), AuthtionUserPersonal.of(
             getNickNameFromEmail(Account4_Email), true,
             "ozon", true,
             null, true,
@@ -291,12 +291,12 @@ public class AuthtionFullTest
 
 
     // (2) change all fields
-    util.check_send_data(POST, prop.getResource().getUpdateAccount(), access_token, checkers_for_updateAccount2);
+    util.check_send_data(POST, prop.getResource().getUpdateUserPersonal(), access_token, checkers_for_updateAccount2);
     consumer = getConsumerByEmail(Account4_Email);
     assertEquals(Long.valueOf(1002), consumer.getId());
     assertTrue(consumer.isEmailConfirmed());
     assertFalse(consumer.isEmailNonPublic());
-    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+    userPersonal = checkUserPersonal_ExactMatch(consumer.getId(), AuthtionUserPersonal.of(
             "storm", false,
             "adam", false,
             "newton", false,
@@ -311,12 +311,12 @@ public class AuthtionFullTest
 
     // (3) test restrictions
     tConsumer = testConsumer.of(USER, Account7_Email, Account7_Pass, testClient.getClientTrusted(), 200);
-    util.check_send_data(POST, prop.getResource().getUpdateAccount(), tConsumer.access_token, checkers_for_updateAccount3);
+    util.check_send_data(POST, prop.getResource().getUpdateUserPersonal(), tConsumer.access_token, checkers_for_updateAccount3);
     consumer = getConsumerByEmail(Account7_Email);
     assertEquals(Long.valueOf(1006), consumer.getId());
     assertTrue(consumer.isEmailConfirmed());
     assertTrue(consumer.isEmailNonPublic());
-    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+    userPersonal = checkUserPersonal_ExactMatch(consumer.getId(), AuthtionUserPersonal.of(
             "09876543210987654321", true,
             "09876543210987654321", true,
             "09876543210987654321", true,
@@ -330,12 +330,12 @@ public class AuthtionFullTest
 
 
     // (4) test null's
-    util.check_send_data(POST, prop.getResource().getUpdateAccount(), tConsumer.access_token, checkers_for_updateAccount4);
+    util.check_send_data(POST, prop.getResource().getUpdateUserPersonal(), tConsumer.access_token, checkers_for_updateAccount4);
     consumer = getConsumerByEmail(Account7_Email);
     assertEquals(Long.valueOf(1006), consumer.getId());
     assertTrue(consumer.isEmailConfirmed());
     assertTrue(consumer.isEmailNonPublic());
-    user = checkUser_ExactMatch(consumer.getId(), AuthtionUser.of(
+    userPersonal = checkUserPersonal_ExactMatch(consumer.getId(), AuthtionUserPersonal.of(
             null, true,
             null, true,
             null, true,
@@ -350,16 +350,16 @@ public class AuthtionFullTest
 
 
   @Test
-  public void _009_account_getAccount()
+  public void _009_account_getUserPersonal()
   {
-    logHead("Get Account");
+    logHead("Get User Personal Info");
 
-    util.check_send_data(GET, prop.getResource().getGetAccount(),
-            testConsumer.getUSER_accessToken(), checkers_for_getAccount1);
+    util.check_send_data(GET, prop.getResource().getGetUserPersonal(),
+            testConsumer.getUSER_accessToken(), checkers_for_getPersonal1);
 
     var tConsumer = testConsumer.of(USER, Account4_Email, Account4_Pass, testClient.getClientTrusted(), 200);
-    util.check_send_data(GET, prop.getResource().getGetAccount(),
-            tConsumer.access_token, checkers_for_getAccount2);
+    util.check_send_data(GET, prop.getResource().getGetUserPersonal(),
+            tConsumer.access_token, checkers_for_getPersonal2);
   }
 
 
@@ -535,7 +535,7 @@ public class AuthtionFullTest
     logHead("Request Reset Password = " + email);
 
     var ANY_accessToken = testConsumer.getAnonymous_accessToken();
-    var timeToWait = TimeUnit.MILLISECONDS.toSeconds(prop.getScheduledTaskMailing().getCollectFromDbInterval()) * 2;
+    var timeToWait = TimeUnit.MILLISECONDS.toSeconds(prop.getScheduledTaskMailing().getCollectFromDbInterval()) * 3;
     var type = 5;
 
     assertEquals(0, mailingRepository.findByTypeAndEmail(type, email).size());
@@ -639,7 +639,7 @@ public class AuthtionFullTest
     assertFalse(consumerFromDBOpt.isPresent());
   }
 
-  private AuthtionUser getUserById(Long id)
+  private AuthtionUserPersonal getUserById(Long id)
   {
     var userByIdOpt = userRepository.findById(id);
     assertTrue(userByIdOpt.isPresent());
@@ -668,7 +668,7 @@ public class AuthtionFullTest
     return consumer;
   }
 
-  private AuthtionUser checkUser_ExactMatch(Long id, AuthtionUser tUser)
+  private AuthtionUserPersonal checkUserPersonal_ExactMatch(Long id, AuthtionUserPersonal tUser)
   {
     var user = getUserById(id);
     assertNotEquals(null, user.getUpdatedOn());

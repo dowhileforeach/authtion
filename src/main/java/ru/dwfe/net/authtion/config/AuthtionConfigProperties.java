@@ -59,8 +59,8 @@ public class AuthtionConfigProperties implements InitializingBean
     private String checkPass = "/check-pass";
     private String googleCaptchaValidate = "/google-captcha-validate";
     private String createAccount = "/create-account";
-    private String getAccount = "/get-account";
-    private String updateAccount = "/update-account";
+    private String getUserPersonal = "/get-user-personal";
+    private String updateUserPersonal = "/update-user-personal";
     private String publicAccount = "/public/account";
     private String reqConfirmEmail = "/req-confirm-email";
     private String confirmEmail = "/confirm-email";
@@ -130,24 +130,24 @@ public class AuthtionConfigProperties implements InitializingBean
       this.createAccount = createAccount;
     }
 
-    public String getGetAccount()
+    public String getGetUserPersonal()
     {
-      return getAccount;
+      return getUserPersonal;
     }
 
-    public void setGetAccount(String getAccount)
+    public void setGetUserPersonal(String getUserPersonal)
     {
-      this.getAccount = getAccount;
+      this.getUserPersonal = getUserPersonal;
     }
 
-    public String getUpdateAccount()
+    public String getUpdateUserPersonal()
     {
-      return updateAccount;
+      return updateUserPersonal;
     }
 
-    public void setUpdateAccount(String updateAccount)
+    public void setUpdateUserPersonal(String updateUserPersonal)
     {
-      this.updateAccount = updateAccount;
+      this.updateUserPersonal = updateUserPersonal;
     }
 
     public String getPublicAccount()
@@ -562,9 +562,9 @@ public class AuthtionConfigProperties implements InitializingBean
             resource.checkPass,
             resource.googleCaptchaValidate,
             resource.createAccount,
-            resource.getAccount,
+            resource.getUserPersonal,
+            resource.updateUserPersonal,
             resource.publicAccount,
-            resource.updateAccount,
             resource.reqConfirmEmail,
             resource.confirmEmail,
             resource.changePass,

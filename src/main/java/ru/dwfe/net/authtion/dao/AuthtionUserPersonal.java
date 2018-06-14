@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 import static ru.dwfe.net.authtion.util.AuthtionUtil.prepareStringField;
 
 @Entity
-@Table(name = "authtion_users")
-public class AuthtionUser
+@Table(name = "authtion_user_personal")
+public class AuthtionUserPersonal
 {
   @Id
   private Long consumerId;
@@ -259,7 +259,7 @@ public class AuthtionUser
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    var that = (AuthtionUser) o;
+    var that = (AuthtionUserPersonal) o;
 
     return consumerId.equals(that.consumerId);
   }
@@ -275,42 +275,42 @@ public class AuthtionUser
   //  UTILs
   //
 
-  public static AuthtionUser of(String nickName, boolean nickNameNonPublic,
-                                String firstName, boolean firstNameNonPublic,
-                                String middleName, boolean middleNameNonPublic,
-                                String lastName, boolean lastNameNonPublic,
-                                String gender, boolean genderNonPublic,
-                                LocalDate dateOfBirth, boolean dateOfBirthNonPublic,
-                                String country, boolean countryNonPublic,
-                                String city, boolean cityNonPublic,
-                                String company, boolean companyNonPublic)
+  public static AuthtionUserPersonal of(String nickName, boolean nickNameNonPublic,
+                                        String firstName, boolean firstNameNonPublic,
+                                        String middleName, boolean middleNameNonPublic,
+                                        String lastName, boolean lastNameNonPublic,
+                                        String gender, boolean genderNonPublic,
+                                        LocalDate dateOfBirth, boolean dateOfBirthNonPublic,
+                                        String country, boolean countryNonPublic,
+                                        String city, boolean cityNonPublic,
+                                        String company, boolean companyNonPublic)
   {
-    var user = new AuthtionUser();
+    var userPersonal = new AuthtionUserPersonal();
 
-    user.nickName = nickName;
-    user.nickNameNonPublic = nickNameNonPublic;
-    user.firstName = firstName;
-    user.firstNameNonPublic = firstNameNonPublic;
-    user.middleName = middleName;
-    user.middleNameNonPublic = middleNameNonPublic;
-    user.lastName = lastName;
-    user.lastNameNonPublic = lastNameNonPublic;
-    user.gender = gender;
-    user.genderNonPublic = genderNonPublic;
-    user.dateOfBirth = dateOfBirth;
-    user.dateOfBirthNonPublic = dateOfBirthNonPublic;
-    user.country = country;
-    user.countryNonPublic = countryNonPublic;
-    user.city = city;
-    user.cityNonPublic = cityNonPublic;
-    user.company = company;
-    user.companyNonPublic = companyNonPublic;
-    user.updatedOn = LocalDateTime.now();
+    userPersonal.nickName = nickName;
+    userPersonal.nickNameNonPublic = nickNameNonPublic;
+    userPersonal.firstName = firstName;
+    userPersonal.firstNameNonPublic = firstNameNonPublic;
+    userPersonal.middleName = middleName;
+    userPersonal.middleNameNonPublic = middleNameNonPublic;
+    userPersonal.lastName = lastName;
+    userPersonal.lastNameNonPublic = lastNameNonPublic;
+    userPersonal.gender = gender;
+    userPersonal.genderNonPublic = genderNonPublic;
+    userPersonal.dateOfBirth = dateOfBirth;
+    userPersonal.dateOfBirthNonPublic = dateOfBirthNonPublic;
+    userPersonal.country = country;
+    userPersonal.countryNonPublic = countryNonPublic;
+    userPersonal.city = city;
+    userPersonal.cityNonPublic = cityNonPublic;
+    userPersonal.company = company;
+    userPersonal.companyNonPublic = companyNonPublic;
+    userPersonal.updatedOn = LocalDateTime.now();
 
-    return user;
+    return userPersonal;
   }
 
-  public static void prepareNewUser(AuthtionUser user, AuthtionConsumer consumer, ReqCreateAccount req)
+  public static void prepareNewUserPersonal(AuthtionUserPersonal user, AuthtionConsumer consumer, ReqCreateAccount req)
   {
     user.setConsumerId(consumer.getId());
 

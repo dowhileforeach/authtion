@@ -289,7 +289,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
                                   "}"))
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_getAccount1 = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_getPersonal1 = List.of(
           AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap(
                   "{\"id\":1001," +
                           "\"createdOn\":\"date\"," +
@@ -319,7 +319,7 @@ public class AuthtionTestVariablesForAccountPasswordTests
                           "}"))
   );
 
-  public static final List<AuthtionTestChecker> checkers_for_getAccount2 = List.of(
+  public static final List<AuthtionTestChecker> checkers_for_getPersonal2 = List.of(
           AuthtionTestChecker.of(true, Map.of(), 200, JsonParserFactory.getJsonParser().parseMap(
                   "{\"id\":1002," +
                           "\"createdOn\":\"date\"," +

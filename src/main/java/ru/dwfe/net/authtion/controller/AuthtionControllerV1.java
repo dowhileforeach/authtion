@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ru.dwfe.net.authtion.dao.AuthtionConsumer;
 import ru.dwfe.net.authtion.dao.AuthtionMailing;
-import ru.dwfe.net.authtion.dao.AuthtionUser;
+import ru.dwfe.net.authtion.dao.AuthtionUserPersonal;
 import ru.dwfe.net.authtion.dao.repository.AuthtionCountryRepository;
 import ru.dwfe.net.authtion.dao.repository.AuthtionGenderRepository;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
-import ru.dwfe.net.authtion.dao.repository.AuthtionUserRepository;
+import ru.dwfe.net.authtion.dao.repository.AuthtionUserPersonalRepository;
 import ru.dwfe.net.authtion.service.AuthtionConsumerService;
 import ru.dwfe.net.authtion.util.AuthtionUtil;
 
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 import static ru.dwfe.net.authtion.dao.AuthtionConsumer.*;
 import static ru.dwfe.net.authtion.dao.AuthtionCountry.canUseCountry;
 import static ru.dwfe.net.authtion.dao.AuthtionGender.canUseGender;
-import static ru.dwfe.net.authtion.dao.AuthtionUser.prepareNewUser;
+import static ru.dwfe.net.authtion.dao.AuthtionUserPersonal.prepareNewUserPersonal;
 import static ru.dwfe.net.authtion.util.AuthtionUtil.*;
 
 @RestController
@@ -37,7 +37,7 @@ import static ru.dwfe.net.authtion.util.AuthtionUtil.*;
 public class AuthtionControllerV1
 {
   private final AuthtionConsumerService consumerService;
-  private final AuthtionUserRepository userRepository;
+  private final AuthtionUserPersonalRepository userPersonalRepository;
   private final AuthtionCountryRepository countryRepository;
   private final AuthtionGenderRepository genderRepository;
   private final AuthtionMailingRepository mailingRepository;
@@ -46,10 +46,10 @@ public class AuthtionControllerV1
   private final AuthtionUtil util;
 
   @Autowired
-  public AuthtionControllerV1(AuthtionConsumerService consumerService, AuthtionUserRepository userRepository, AuthtionCountryRepository countryRepository, AuthtionGenderRepository genderRepository, AuthtionMailingRepository mailingRepository, ConsumerTokenServices tokenServices, RestTemplate restTemplate, AuthtionUtil authtionUtil)
+  public AuthtionControllerV1(AuthtionConsumerService consumerService, AuthtionUserPersonalRepository userPersonalRepository, AuthtionCountryRepository countryRepository, AuthtionGenderRepository genderRepository, AuthtionMailingRepository mailingRepository, ConsumerTokenServices tokenServices, RestTemplate restTemplate, AuthtionUtil authtionUtil)
   {
     this.consumerService = consumerService;
-    this.userRepository = userRepository;
+    this.userPersonalRepository = userPersonalRepository;
     this.countryRepository = countryRepository;
     this.genderRepository = genderRepository;
     this.mailingRepository = mailingRepository;
@@ -137,7 +137,7 @@ public class AuthtionControllerV1
 
     if (errorCodes.size() == 0)
     {
-      // consumer
+      // TABLE consumer
       var consumer = new AuthtionConsumer();
       consumer.setEmail(email);
       consumer.setNewPassword(password);
@@ -146,11 +146,10 @@ public class AuthtionControllerV1
       consumerService.save(consumer);
       consumer = consumerService.findByEmail(consumer.getEmail()).get();
 
-      // user
-      var user = new AuthtionUser();
-      prepareNewUser(user, consumer, req);
-      userRepository.save(user);
-      user = userRepository.findById(consumer.getId()).get();
+      // TABLE user personal info
+      var userPersonal = new AuthtionUserPersonal();
+      prepareNewUserPersonal(userPersonal, consumer, req);
+      userPersonalRepository.save(userPersonal);
 
       // mailing
       mailingRepository.save(automaticallyGeneratedPassword.isEmpty()
@@ -161,41 +160,22 @@ public class AuthtionControllerV1
   }
 
   @PreAuthorize("hasAuthority('USER')")
-  @GetMapping("#{authtionConfigProperties.resource.getAccount}")
-  public String getAccount(OAuth2Authentication authentication)
+  @GetMapping("#{authtionConfigProperties.resource.getUserPersonal}")
+  public String getUserPersonal(OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
     var id = getId(authentication);
 
     var consumer = consumerService.findById(id).get();
-    var user = userRepository.findById(id).get();
-    var data = prepareAccountInfo(consumer, user, false);
+    var user = userPersonalRepository.findById(id).get();
+    var data = prepareUserPersonalInfo(consumer, user, false);
 
     return getResponse(errorCodes, data);
   }
-
-  @GetMapping("#{authtionConfigProperties.resource.publicAccount}" + "/{id}")
-  public String publicAccount(@PathVariable Long id)
-  {
-    var errorCodes = new ArrayList<String>();
-    var data = "";
-
-    var consumerById = consumerService.findById(id);
-    if (consumerById.isPresent())
-    {
-      var consumer = consumerById.get();
-      var user = userRepository.findById(id).get();
-      data = prepareAccountInfo(consumer, user, true);
-    }
-    else errorCodes.add("id-not-exist");
-
-    return getResponse(errorCodes, data);
-  }
-
 
   @PreAuthorize("hasAuthority('USER')")
-  @PostMapping("#{authtionConfigProperties.resource.updateAccount}")
-  public String updateAccount(@RequestBody Map<String, Object> req, OAuth2Authentication authentication)
+  @PostMapping("#{authtionConfigProperties.resource.updateUserPersonal}")
+  public String updateUserPersonal(@RequestBody Map<String, Object> req, OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
     var id = getId(authentication);
@@ -204,7 +184,7 @@ public class AuthtionControllerV1
     var data = "";
 
     var consumer = consumerService.findById(id).get();
-    var user = userRepository.findById(id).get();
+    var user = userPersonalRepository.findById(id).get();
 
     if (req.containsKey("emailNonPublic"))
     {
@@ -414,11 +394,29 @@ public class AuthtionControllerV1
       }
       if (userWasModified)
       {
-        userRepository.save(user);
-        user = userRepository.findById(id).get();
+        userPersonalRepository.save(user);
+        user = userPersonalRepository.findById(id).get();
       }
-      data = prepareAccountInfo(consumer, user, false);
+      data = prepareUserPersonalInfo(consumer, user, false);
     }
+    return getResponse(errorCodes, data);
+  }
+
+  @GetMapping("#{authtionConfigProperties.resource.publicAccount}" + "/{id}")
+  public String publicAccount(@PathVariable Long id)
+  {
+    var errorCodes = new ArrayList<String>();
+    var data = "";
+
+    var consumerById = consumerService.findById(id);
+    if (consumerById.isPresent())
+    {
+      var consumer = consumerById.get();
+      var user = userPersonalRepository.findById(id).get();
+      data = prepareUserPersonalInfo(consumer, user, true);
+    }
+    else errorCodes.add("id-not-exist");
+
     return getResponse(errorCodes, data);
   }
 

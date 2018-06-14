@@ -4,7 +4,7 @@ LOCK TABLES
 authtion_consumers WRITE,
 authtion_countries WRITE,
 authtion_genders WRITE,
-authtion_users WRITE,
+authtion_user_personal WRITE,
 authtion_authorities WRITE,
 authtion_consumer_authority WRITE;
 
@@ -23,7 +23,7 @@ INSERT INTO authtion_countries VALUES
 INSERT INTO authtion_genders VALUES
   ('M', 'Male'),
   ('F', 'Female');
-INSERT INTO authtion_users VALUES
+INSERT INTO authtion_user_personal VALUES
   (1000, 'test1', 1, null, 1, null, 1, null, 1, null, 1, null, 1, 'RU', 1, 'Moscow', 1, 'pzn', 1, '2017-07-07 07:07:07'),
   (1001, 'test2', 1, null, 1, null, 1, null, 1, null, 1, null, 1, 'JP', 1, 'Tokyo', 1, null, 1, '2017-07-07 07:07:07');
 INSERT INTO authtion_authorities VALUES

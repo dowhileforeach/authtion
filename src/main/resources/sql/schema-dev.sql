@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS
 authtion_consumers,
 authtion_countries,
 authtion_genders,
-authtion_users,
+authtion_user_personal,
 authtion_authorities,
 authtion_consumer_authority,
 authtion_mailing,
@@ -57,7 +57,7 @@ CREATE TABLE authtion_genders (
   COLLATE = utf8mb4_unicode_ci;
 
 
-CREATE TABLE authtion_users (
+CREATE TABLE authtion_user_personal (
   consumer_id              BIGINT(20)                           NOT NULL,
   nick_name                VARCHAR(20),
   nick_name_non_public     TINYINT(1)                           NOT NULL   DEFAULT '1',
@@ -78,12 +78,12 @@ CREATE TABLE authtion_users (
   company                  VARCHAR(100),
   company_non_public       TINYINT(1)                           NOT NULL   DEFAULT '1',
   updated_on               DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP,
-  KEY authtion_users_consumers_id_fk (consumer_id),
-  CONSTRAINT authtion_users_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)
+  KEY authtion_user_personal_consumers_id_fk (consumer_id),
+  CONSTRAINT authtion_user_personal_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)
     ON DELETE CASCADE,
-  CONSTRAINT authtion_users_genders_id_fk FOREIGN KEY (gender) REFERENCES authtion_genders (gender)
+  CONSTRAINT authtion_user_personal_genders_id_fk FOREIGN KEY (gender) REFERENCES authtion_genders (gender)
     ON DELETE CASCADE,
-  CONSTRAINT authtion_users_countries_country_fk FOREIGN KEY (country) REFERENCES authtion_countries (alpha2)
+  CONSTRAINT authtion_user_personal_countries_country_fk FOREIGN KEY (country) REFERENCES authtion_countries (alpha2)
     ON DELETE CASCADE
 )
   ENGINE = InnoDB
