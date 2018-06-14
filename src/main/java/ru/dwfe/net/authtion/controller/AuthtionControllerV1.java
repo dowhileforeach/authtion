@@ -19,8 +19,10 @@ import ru.dwfe.net.authtion.dao.repository.AuthtionUserRepository;
 import ru.dwfe.net.authtion.service.AuthtionConsumerService;
 import ru.dwfe.net.authtion.util.AuthtionUtil;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
@@ -193,7 +195,7 @@ public class AuthtionControllerV1
 
   @PreAuthorize("hasAuthority('USER')")
   @PostMapping("#{authtionConfigProperties.resource.updateAccount}")
-  public String updateAccount(@RequestBody ReqUpdateAccount req, OAuth2Authentication authentication)
+  public String updateAccount(@RequestBody Map<String, Object> req, OAuth2Authentication authentication)
   {
     var errorCodes = new ArrayList<String>();
     var id = getId(authentication);
@@ -204,93 +206,104 @@ public class AuthtionControllerV1
     var consumer = consumerService.findById(id).get();
     var user = userRepository.findById(id).get();
 
-    var newEmailNonPublic = req.emailNonPublic;
-
-    var newNickName = prepareStringField(req.nickName, 20);
-    var newNickNameNonPublic = req.nickNameNonPublic;
-
-    var newFirstName = prepareStringField(req.firstName, 20);
-    var newFirstNameNonPublic = req.firstNameNonPublic;
-
-    var newMiddleName = prepareStringField(req.middleName, 20);
-    var newMiddleNameNonPublic = req.middleNameNonPublic;
-
-    var newLastName = prepareStringField(req.lastName, 20);
-    var newLastNameNonPublic = req.lastNameNonPublic;
-
-    var newGender = req.gender;
-    var newGenderNonPublic = req.genderNonPublic;
-
-    var newDateOfBirth = req.dateOfBirth;
-    var newDateOfBirthNonPublic = req.dateOfBirthNonPublic;
-
-    var newCountry = req.country;
-    var newCountryNonPublic = req.countryNonPublic;
-
-    var newCity = prepareStringField(req.city, 100);
-    var newCityNonPublic = req.cityNonPublic;
-
-    var newCompany = prepareStringField(req.company, 100);
-    var newCompanyNonPublic = req.companyNonPublic;
-
-    if (newEmailNonPublic != null && !newEmailNonPublic.equals(consumer.isEmailNonPublic()))
+    if (req.containsKey("emailNonPublic"))
     {
-      consumer.setEmailNonPublic(newEmailNonPublic);
-      consumerWasModified = true;
+      var newEmailNonPublic = (Boolean) req.get("emailNonPublic");
+      if (newEmailNonPublic != null && !newEmailNonPublic.equals(consumer.isEmailNonPublic()))
+      {
+        consumer.setEmailNonPublic(newEmailNonPublic);
+        consumerWasModified = true;
+      }
     }
 
-    if (newNickName != null && !newNickName.equals(user.getNickName()))
+    if (req.containsKey("nickName"))
     {
-      user.setNickName(newNickName);
-      userWasModified = true;
+      var newNickName = (String) req.get("nickName");
+      newNickName = prepareStringField(newNickName, 20);
+      if (!isObjEquals(newNickName, user.getNickName()))
+      {
+        user.setNickName(newNickName);
+        userWasModified = true;
+      }
     }
 
-    if (newNickNameNonPublic != null && !newNickNameNonPublic.equals(user.getNickNameNonPublic()))
+    if (req.containsKey("nickNameNonPublic"))
     {
-      user.setNickNameNonPublic(newNickNameNonPublic);
-      userWasModified = true;
+      var newNickNameNonPublic = (Boolean) req.get("nickNameNonPublic");
+      if (newNickNameNonPublic != null && !newNickNameNonPublic.equals(user.getNickNameNonPublic()))
+      {
+        user.setNickNameNonPublic(newNickNameNonPublic);
+        userWasModified = true;
+      }
     }
 
-    if (newFirstName != null && !newFirstName.equals(user.getFirstName()))
+    if (req.containsKey("firstName"))
     {
-      user.setFirstName(newFirstName);
-      userWasModified = true;
+      var newFirstName = (String) req.get("firstName");
+      newFirstName = prepareStringField(newFirstName, 20);
+      if (!isObjEquals(newFirstName, user.getFirstName()))
+      {
+        user.setFirstName(newFirstName);
+        userWasModified = true;
+      }
     }
 
-    if (newFirstNameNonPublic != null && !newFirstNameNonPublic.equals(user.getFirstNameNonPublic()))
+    if (req.containsKey("firstNameNonPublic"))
     {
-      user.setFirstNameNonPublic(newFirstNameNonPublic);
-      userWasModified = true;
+      var newFirstNameNonPublic = (Boolean) req.get("firstNameNonPublic");
+      if (newFirstNameNonPublic != null && !newFirstNameNonPublic.equals(user.getFirstNameNonPublic()))
+      {
+        user.setFirstNameNonPublic(newFirstNameNonPublic);
+        userWasModified = true;
+      }
     }
 
-    if (newMiddleName != null && !newMiddleName.equals(user.getMiddleName()))
+    if (req.containsKey("middleName"))
     {
-      user.setMiddleName(newMiddleName);
-      userWasModified = true;
+      var newMiddleName = (String) req.get("middleName");
+      newMiddleName = prepareStringField(newMiddleName, 20);
+      if (!isObjEquals(newMiddleName, user.getMiddleName()))
+      {
+        user.setMiddleName(newMiddleName);
+        userWasModified = true;
+      }
     }
 
-    if (newMiddleNameNonPublic != null && !newMiddleNameNonPublic.equals(user.getMiddleNameNonPublic()))
+    if (req.containsKey("middleNameNonPublic"))
     {
-      user.setMiddleNameNonPublic(newMiddleNameNonPublic);
-      userWasModified = true;
+      var newMiddleNameNonPublic = (Boolean) req.get("middleNameNonPublic");
+      if (newMiddleNameNonPublic != null && !newMiddleNameNonPublic.equals(user.getMiddleNameNonPublic()))
+      {
+        user.setMiddleNameNonPublic(newMiddleNameNonPublic);
+        userWasModified = true;
+      }
     }
 
-    if (newLastName != null && !newLastName.equals(user.getLastName()))
+    if (req.containsKey("lastName"))
     {
-      user.setLastName(newLastName);
-      userWasModified = true;
+      var newLastName = (String) req.get("lastName");
+      newLastName = prepareStringField(newLastName, 20);
+      if (!isObjEquals(newLastName, user.getLastName()))
+      {
+        user.setLastName(newLastName);
+        userWasModified = true;
+      }
     }
 
-    if (newLastNameNonPublic != null && !newLastNameNonPublic.equals(user.getLastNameNonPublic()))
+    if (req.containsKey("lastNameNonPublic"))
     {
-      user.setLastNameNonPublic(newLastNameNonPublic);
-      userWasModified = true;
+      var newLastNameNonPublic = (Boolean) req.get("lastNameNonPublic");
+      if (newLastNameNonPublic != null && !newLastNameNonPublic.equals(user.getLastNameNonPublic()))
+      {
+        user.setLastNameNonPublic(newLastNameNonPublic);
+        userWasModified = true;
+      }
     }
 
-    if (errorCodes.size() == 0)
+    if (req.containsKey("gender") && errorCodes.size() == 0)
     {
-      if (newGender != null
-              && !newGender.equals(user.getGender())
+      var newGender = (String) req.get("gender");
+      if (!isObjEquals(newGender, user.getGender())
               && canUseGender(newGender, genderRepository, errorCodes))
       {
         user.setGender(newGender);
@@ -298,28 +311,41 @@ public class AuthtionControllerV1
       }
     }
 
-    if (newGenderNonPublic != null && !newGenderNonPublic.equals(user.getGenderNonPublic()))
+    if (req.containsKey("genderNonPublic"))
     {
-      user.setGenderNonPublic(newGenderNonPublic);
-      userWasModified = true;
+      var newGenderNonPublic = (Boolean) req.get("genderNonPublic");
+      if (newGenderNonPublic != null && !newGenderNonPublic.equals(user.getGenderNonPublic()))
+      {
+        user.setGenderNonPublic(newGenderNonPublic);
+        userWasModified = true;
+      }
     }
 
-    if (newDateOfBirth != null && !newDateOfBirth.equals(user.getDateOfBirth()))
+    if (req.containsKey("dateOfBirth"))
     {
-      user.setDateOfBirth(newDateOfBirth);
-      userWasModified = true;
+      var newDateOfBirthStr = (String) req.get("dateOfBirth");
+      var newDateOfBirth = newDateOfBirthStr == null ? null : LocalDate.parse(newDateOfBirthStr);
+      if (!isObjEquals(newDateOfBirth, user.getDateOfBirth()))
+      {
+        user.setDateOfBirth(newDateOfBirth);
+        userWasModified = true;
+      }
     }
 
-    if (newDateOfBirthNonPublic != null && !newDateOfBirthNonPublic.equals(user.getDateOfBirthNonPublic()))
+    if (req.containsKey("dateOfBirthNonPublic"))
     {
-      user.setDateOfBirthNonPublic(newDateOfBirthNonPublic);
-      userWasModified = true;
+      var newDateOfBirthNonPublic = (Boolean) req.get("dateOfBirthNonPublic");
+      if (newDateOfBirthNonPublic != null && !newDateOfBirthNonPublic.equals(user.getDateOfBirthNonPublic()))
+      {
+        user.setDateOfBirthNonPublic(newDateOfBirthNonPublic);
+        userWasModified = true;
+      }
     }
 
-    if (errorCodes.size() == 0)
+    if (req.containsKey("country") && errorCodes.size() == 0)
     {
-      if (newCountry != null
-              && !newCountry.equals(user.getCountry())
+      var newCountry = (String) req.get("country");
+      if (!isObjEquals(newCountry, user.getCountry())
               && canUseCountry(newCountry, countryRepository, errorCodes))
       {
         user.setCountry(newCountry);
@@ -327,34 +353,56 @@ public class AuthtionControllerV1
       }
     }
 
-    if (newCountryNonPublic != null && !newCountryNonPublic.equals(user.getCountryNonPublic()))
+    if (req.containsKey("countryNonPublic"))
     {
-      user.setCountryNonPublic(newCountryNonPublic);
-      userWasModified = true;
+      var newCountryNonPublic = (Boolean) req.get("countryNonPublic");
+      if (newCountryNonPublic != null && !newCountryNonPublic.equals(user.getCountryNonPublic()))
+      {
+        user.setCountryNonPublic(newCountryNonPublic);
+        userWasModified = true;
+      }
     }
 
-    if (newCity != null && !newCity.equals(user.getCity()))
+    if (req.containsKey("city"))
     {
-      user.setCity(newCity);
-      userWasModified = true;
+      var newCity = (String) req.get("city");
+      newCity = prepareStringField(newCity, 100);
+      if (!isObjEquals(newCity, user.getCity()))
+      {
+        user.setCity(newCity);
+        userWasModified = true;
+      }
     }
 
-    if (newCityNonPublic != null && !newCityNonPublic.equals(user.getCityNonPublic()))
+    if (req.containsKey("cityNonPublic"))
     {
-      user.setCityNonPublic(newCityNonPublic);
-      userWasModified = true;
+      var newCityNonPublic = (Boolean) req.get("cityNonPublic");
+      if (newCityNonPublic != null && !newCityNonPublic.equals(user.getCityNonPublic()))
+      {
+        user.setCityNonPublic(newCityNonPublic);
+        userWasModified = true;
+      }
     }
 
-    if (newCompany != null && !newCompany.equals(user.getCompany()))
+    if (req.containsKey("company"))
     {
-      user.setCompany(newCompany);
-      userWasModified = true;
+      var newCompany = (String) req.get("company");
+      newCompany = prepareStringField(newCompany, 100);
+      if (!isObjEquals(newCompany, user.getCompany()))
+      {
+        user.setCompany(newCompany);
+        userWasModified = true;
+      }
     }
 
-    if (newCompanyNonPublic != null && !newCompanyNonPublic.equals(user.getCompanyNonPublic()))
+    if (req.containsKey("companyNonPublic"))
     {
-      user.setCompanyNonPublic(newCompanyNonPublic);
-      userWasModified = true;
+      var newCompanyNonPublic = (Boolean) req.get("companyNonPublic");
+      if (newCompanyNonPublic != null && !newCompanyNonPublic.equals(user.getCompanyNonPublic()))
+      {
+        user.setCompanyNonPublic(newCompanyNonPublic);
+        userWasModified = true;
+      }
     }
 
     if (errorCodes.size() == 0)
