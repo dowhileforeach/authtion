@@ -26,7 +26,8 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String email;
+
+  private String username;
 
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
@@ -58,23 +59,24 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
   //  IMPLEMENTATION of interfaces
   //
 
+  @JsonIgnore
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities()
+  public String getUsername()
   {
-    return authorities;
+    return username;
   }
 
+  @JsonIgnore
   @Override
   public String getPassword()
   {
     return password;
   }
 
-  @JsonIgnore
   @Override
-  public String getUsername()
+  public Collection<? extends GrantedAuthority> getAuthorities()
   {
-    return email;
+    return authorities;
   }
 
   //
@@ -91,6 +93,12 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
   //        //   -> AbstractAuthenticationToken
   //        //   -> getName()
   //    }
+
+  @Override
+  public void eraseCredentials()
+  {
+    password = "";
+  }
 
   @Override
   public boolean isAccountNonExpired()
@@ -116,12 +124,6 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     return enabled;
   }
 
-  @Override
-  public void eraseCredentials()
-  {
-    password = "";
-  }
-
 
   //
   //  GETTERs and SETTERs
@@ -137,14 +139,9 @@ public class AuthtionConsumer implements UserDetails, CredentialsContainer
     this.id = id;
   }
 
-  public String getEmail()
+  public void setUsername(String username)
   {
-    return email;
-  }
-
-  public void setEmail(String email)
-  {
-    this.email = email;
+    this.username = username;
   }
 
   public void setPassword(String password)

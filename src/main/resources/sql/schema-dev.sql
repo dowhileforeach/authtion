@@ -3,11 +3,12 @@ USE authtion_dev;
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS
 authtion_consumers,
-authtion_countries,
-authtion_genders,
-authtion_user_personal,
 authtion_authorities,
 authtion_consumer_authority,
+authtion_emails,
+authtion_genders,
+authtion_countries,
+authtion_user_personal,
 authtion_mailing,
 oauth_access_token,
 oauth_refresh_token;
@@ -15,9 +16,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE authtion_consumers (
   id                      BIGINT(20)                           NOT NULL   AUTO_INCREMENT,
-  email                   VARCHAR(50)                          NOT NULL,
-  email_confirmed         TINYINT(1)                           NOT NULL   DEFAULT '0',
-  email_non_public        TINYINT(1)                           NOT NULL   DEFAULT '1',
+  username                VARCHAR(100)                         NOT NULL,
   password                VARCHAR(100)                         NOT NULL,
   account_non_expired     TINYINT(1)                           NOT NULL   DEFAULT '1',
   credentials_non_expired TINYINT(1)                           NOT NULL   DEFAULT '1',
@@ -27,7 +26,7 @@ CREATE TABLE authtion_consumers (
   updated_on              DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY authtion_consumers_id_uindex (id),
-  UNIQUE KEY authtion_consumers_email_uindex (email)
+  UNIQUE KEY authtion_consumers_email_uindex (username)
 )
   ENGINE = InnoDB
   AUTO_INCREMENT = 1000
@@ -35,12 +34,41 @@ CREATE TABLE authtion_consumers (
   COLLATE = utf8mb4_unicode_ci;
 
 
-CREATE TABLE authtion_countries (
-  country    VARCHAR(100) NOT NULL,
-  alpha2     VARCHAR(2)   NOT NULL,
-  alpha3     VARCHAR(3)   NOT NULL DEFAULT '',
-  phone_code VARCHAR(50),
-  PRIMARY KEY (alpha2)
+CREATE TABLE authtion_authorities (
+  authority   VARCHAR(20)  NOT NULL,
+  description VARCHAR(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (authority),
+  UNIQUE KEY authtion_authorities_authority_uindex (authority)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+
+CREATE TABLE authtion_consumer_authority (
+  consumer_id BIGINT(20)  NOT NULL,
+  authority   VARCHAR(20) NOT NULL,
+  KEY authtion_consumer_authority_consumers_id_fk (consumer_id),
+  KEY authtion_consumer_authority_authorities_authority_fk (authority),
+  CONSTRAINT authtion_consumer_authority_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)
+    ON DELETE CASCADE,
+  CONSTRAINT authtion_consumer_authority_authorities_authority_fk FOREIGN KEY (authority) REFERENCES authtion_authorities (authority)
+    ON DELETE CASCADE
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+
+CREATE TABLE authtion_emails (
+  consumer_id      BIGINT(20)                           NOT NULL,
+  email            VARCHAR(100)                         NOT NULL,
+  email_confirmed  TINYINT(1)                           NOT NULL   DEFAULT '0',
+  email_non_public TINYINT(1)                           NOT NULL   DEFAULT '1',
+  updated_on       DATETIME ON UPDATE CURRENT_TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP,
+  KEY authtion_emails_consumers_id_fk (consumer_id),
+  CONSTRAINT authtion_emails_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)
+    ON DELETE CASCADE
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -51,6 +79,18 @@ CREATE TABLE authtion_genders (
   gender      VARCHAR(1)  NOT NULL,
   description VARCHAR(20) NOT NULL DEFAULT '',
   PRIMARY KEY (gender)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+
+CREATE TABLE authtion_countries (
+  country    VARCHAR(100) NOT NULL,
+  alpha2     VARCHAR(2)   NOT NULL,
+  alpha3     VARCHAR(3)   NOT NULL DEFAULT '',
+  phone_code VARCHAR(50),
+  PRIMARY KEY (alpha2)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -84,32 +124,6 @@ CREATE TABLE authtion_user_personal (
   CONSTRAINT authtion_user_personal_genders_id_fk FOREIGN KEY (gender) REFERENCES authtion_genders (gender)
     ON DELETE CASCADE,
   CONSTRAINT authtion_user_personal_countries_country_fk FOREIGN KEY (country) REFERENCES authtion_countries (alpha2)
-    ON DELETE CASCADE
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
-
-
-CREATE TABLE authtion_authorities (
-  authority   VARCHAR(20)  NOT NULL,
-  description VARCHAR(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (authority),
-  UNIQUE KEY authtion_authorities_authority_uindex (authority)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
-
-
-CREATE TABLE authtion_consumer_authority (
-  consumer_id BIGINT(20)  NOT NULL,
-  authority   VARCHAR(20) NOT NULL,
-  KEY authtion_consumer_authority_consumers_id_fk (consumer_id),
-  KEY authtion_consumer_authority_authorities_authority_fk (authority),
-  CONSTRAINT authtion_consumer_authority_consumers_id_fk FOREIGN KEY (consumer_id) REFERENCES authtion_consumers (id)
-    ON DELETE CASCADE,
-  CONSTRAINT authtion_consumer_authority_authorities_authority_fk FOREIGN KEY (authority) REFERENCES authtion_authorities (authority)
     ON DELETE CASCADE
 )
   ENGINE = InnoDB

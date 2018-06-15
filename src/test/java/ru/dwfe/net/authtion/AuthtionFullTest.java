@@ -110,7 +110,7 @@ public class AuthtionFullTest
   public void _005_account_checkEmail()
   {
     logHead("Check Email");
-    util.check_send_data(POST, prop.getResource().getCheckEmail(),
+    util.check_send_data(POST, prop.getResource().getCheckUsername(),
             testConsumer.getAnonymous_accessToken(), checkers_for_checkEmail);
   }
 
@@ -118,7 +118,7 @@ public class AuthtionFullTest
   public void _006_account_checkPass()
   {
     logHead("Check Pass");
-    util.check_send_data(POST, prop.getResource().getCheckPass(),
+    util.check_send_data(POST, prop.getResource().getCheckPassword(),
             testConsumer.getAnonymous_accessToken(), checkers_for_checkPass);
   }
 
