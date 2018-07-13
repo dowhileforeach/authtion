@@ -25,11 +25,11 @@ public class AuthtionTestVariablesForAuthTests
   {
     Map<String, Map<AuthtionTestAuthorityLevel, Map<RequestMethod, Map<String, Object>>>> result = new HashMap<>();
 
-    result.put(authtionConfigProperties.getResource().getCheckUsername(), Map.of(ANY, Map.of(POST, Map.of("email", "user"))));
-    result.put(authtionConfigProperties.getResource().getCheckPassword(), Map.of(ANY, Map.of(POST, Map.of("password", "some password"))));
+    result.put(authtionConfigProperties.getResource().getCheckEmail(), Map.of(ANY, Map.of(POST, Map.of("email", "user"))));
+    result.put(authtionConfigProperties.getResource().getCheckPass(), Map.of(ANY, Map.of(POST, Map.of("password", "some password"))));
     result.put(authtionConfigProperties.getResource().getCreateAccount(), Map.of(ANY, Map.of(POST, Map.of("email", "user", "password", "some password", "firstName", "some first name", "lastName", ""))));
-    result.put(authtionConfigProperties.getResource().getGetUserPersonal(), Map.of(USER, Map.of(GET, Map.of())));
-    result.put(authtionConfigProperties.getResource().getUpdateUserPersonal(), Map.of(USER, Map.of(POST, Map.of())));
+    result.put(authtionConfigProperties.getResource().getGetAccount(), Map.of(USER, Map.of(GET, Map.of())));
+    result.put(authtionConfigProperties.getResource().getUpdateAccount(), Map.of(USER, Map.of(POST, Map.of())));
     result.put(authtionConfigProperties.getResource().getPublicAccount() + "/1", Map.of(ANY, Map.of(GET, Map.of())));
     result.put(authtionConfigProperties.getResource().getReqConfirmEmail(), Map.of(USER, Map.of(GET, Map.of())));
     result.put(authtionConfigProperties.getResource().getConfirmEmail(), Map.of(ANY, Map.of(POST, Map.of("key", "AnyString"))));

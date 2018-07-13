@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 import ru.dwfe.net.authtion.config.AuthtionConfigProperties;
 import ru.dwfe.net.authtion.dao.AuthtionConsumer;
-import ru.dwfe.net.authtion.dao.AuthtionUserPersonal;
+import ru.dwfe.net.authtion.dao.AuthtionUser;
 import ru.dwfe.net.authtion.dao.repository.AuthtionMailingRepository;
 
 import java.math.BigInteger;
@@ -66,13 +66,14 @@ public class AuthtionUtil
     return value != null && !value.isEmpty();
   }
 
-  public static String prepareUserPersonalInfo(AuthtionConsumer consumer, AuthtionUserPersonal user, boolean onPublic)
+  public static String prepareAccountInfo(AuthtionConsumer consumer, AuthtionUser user, boolean onPublic)
   {
     var list = new ArrayList<String>();
+    var updatedOn = consumer.getUpdatedOn().isBefore(user.getUpdatedOn()) ? consumer.getUpdatedOn() : user.getUpdatedOn();
 
     var id = "\"id\":" + consumer.getId();
     var email = "\"email\":\"" + consumer.getEmail() + "\"";
-    var nickName = nullableValueToresp("nickName", user.getNickName());
+    var nickName = "\"nickName\":\"" + user.getNickName() + "\"";
     var firstName = nullableValueToresp("firstName", user.getFirstName());
     var middleName = nullableValueToresp("middleName", user.getMiddleName());
     var lastName = nullableValueToresp("lastName", user.getLastName());
@@ -109,6 +110,7 @@ public class AuthtionUtil
     else
     {
       list.add("\"createdOn\":" + "\"" + formatDateTimeToUTCstring(consumer.getCreatedOn()) + "\"");
+      list.add("\"updatedOn\":" + "\"" + formatDateTimeToUTCstring(updatedOn) + "\"");
       list.add("\"authorities\":" + consumer.getAuthorities());
       list.add(email);
       list.add("\"emailConfirmed\":" + consumer.isEmailConfirmed());
@@ -139,7 +141,7 @@ public class AuthtionUtil
   private static String nullableValueToresp(String field, Object value)
   {
     return value == null
-            ? "\"" + field + "\":null"
+            ? "\"" + field + "\":" + null
             : "\"" + field + "\":\"" + value + "\"";
   }
 
@@ -385,6 +387,228 @@ public class AuthtionUtil
     }
   }
 
+  public static class ReqUpdateAccount
+  {
+    public Boolean emailNonPublic;
+
+    public String nickName;
+    public Boolean nickNameNonPublic;
+
+    public String firstName;
+    public Boolean firstNameNonPublic;
+
+    public String middleName;
+    public Boolean middleNameNonPublic;
+
+    public String lastName;
+    public Boolean lastNameNonPublic;
+
+    public String gender;
+    public Boolean genderNonPublic;
+
+    public LocalDate dateOfBirth;
+    public Boolean dateOfBirthNonPublic;
+
+    public String country;
+    public Boolean countryNonPublic;
+
+    public String city;
+    public Boolean cityNonPublic;
+
+    public String company;
+    public Boolean companyNonPublic;
+
+    public Boolean getEmailNonPublic()
+    {
+      return emailNonPublic;
+    }
+
+    public void setEmailNonPublic(Boolean emailNonPublic)
+    {
+      this.emailNonPublic = emailNonPublic;
+    }
+
+    public String getNickName()
+    {
+      return nickName;
+    }
+
+    public void setNickName(String nickName)
+    {
+      this.nickName = nickName;
+    }
+
+    public Boolean getNickNameNonPublic()
+    {
+      return nickNameNonPublic;
+    }
+
+    public void setNickNameNonPublic(Boolean nickNameNonPublic)
+    {
+      this.nickNameNonPublic = nickNameNonPublic;
+    }
+
+    public String getFirstName()
+    {
+      return firstName;
+    }
+
+    public void setFirstName(String firstName)
+    {
+      this.firstName = firstName;
+    }
+
+    public Boolean getFirstNameNonPublic()
+    {
+      return firstNameNonPublic;
+    }
+
+    public void setFirstNameNonPublic(Boolean firstNameNonPublic)
+    {
+      this.firstNameNonPublic = firstNameNonPublic;
+    }
+
+    public String getMiddleName()
+    {
+      return middleName;
+    }
+
+    public void setMiddleName(String middleName)
+    {
+      this.middleName = middleName;
+    }
+
+    public Boolean getMiddleNameNonPublic()
+    {
+      return middleNameNonPublic;
+    }
+
+    public void setMiddleNameNonPublic(Boolean middleNameNonPublic)
+    {
+      this.middleNameNonPublic = middleNameNonPublic;
+    }
+
+    public String getLastName()
+    {
+      return lastName;
+    }
+
+    public void setLastName(String lastName)
+    {
+      this.lastName = lastName;
+    }
+
+    public Boolean getLastNameNonPublic()
+    {
+      return lastNameNonPublic;
+    }
+
+    public void setLastNameNonPublic(Boolean lastNameNonPublic)
+    {
+      this.lastNameNonPublic = lastNameNonPublic;
+    }
+
+    public String getGender()
+    {
+      return gender;
+    }
+
+    public void setGender(String gender)
+    {
+      this.gender = gender.toUpperCase();
+    }
+
+    public Boolean getGenderNonPublic()
+    {
+      return genderNonPublic;
+    }
+
+    public void setGenderNonPublic(Boolean genderNonPublic)
+    {
+      this.genderNonPublic = genderNonPublic;
+    }
+
+    public LocalDate getDateOfBirth()
+    {
+      return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth)
+    {
+      this.dateOfBirth = dateOfBirth;
+    }
+
+    public Boolean getDateOfBirthNonPublic()
+    {
+      return dateOfBirthNonPublic;
+    }
+
+    public void setDateOfBirthNonPublic(Boolean dateOfBirthNonPublic)
+    {
+      this.dateOfBirthNonPublic = dateOfBirthNonPublic;
+    }
+
+    public String getCountry()
+    {
+      return country;
+    }
+
+    public void setCountry(String country)
+    {
+      this.country = country.toUpperCase();
+    }
+
+    public Boolean getCountryNonPublic()
+    {
+      return countryNonPublic;
+    }
+
+    public void setCountryNonPublic(Boolean countryNonPublic)
+    {
+      this.countryNonPublic = countryNonPublic;
+    }
+
+    public String getCity()
+    {
+      return city;
+    }
+
+    public void setCity(String city)
+    {
+      this.city = city;
+    }
+
+    public Boolean getCityNonPublic()
+    {
+      return cityNonPublic;
+    }
+
+    public void setCityNonPublic(Boolean cityNonPublic)
+    {
+      this.cityNonPublic = cityNonPublic;
+    }
+
+    public String getCompany()
+    {
+      return company;
+    }
+
+    public void setCompany(String company)
+    {
+      this.company = company;
+    }
+
+    public Boolean getCompanyNonPublic()
+    {
+      return companyNonPublic;
+    }
+
+    public void setCompanyNonPublic(Boolean companyNonPublic)
+    {
+      this.companyNonPublic = companyNonPublic;
+    }
+  }
+
   public static class ReqConfirm
   {
     public String key;
@@ -517,22 +741,6 @@ public class AuthtionUtil
       return field.substring(0, maxLength);
     else
       return field;
-  }
-
-  public static boolean isObjEquals(Object o1, Object o2)
-  {
-    if (o1 == null && o2 == null) // (null,null)
-    {
-      return true;
-    }
-    else if (o1 == null || o2 == null) // (null,obj)  OR  (obj,null)
-    {
-      return false;
-    }
-    else // (obj,obj)
-    {
-      return o1.equals(o2);
-    }
   }
 
   public static String getUniqStrBase36(int requiredLength)

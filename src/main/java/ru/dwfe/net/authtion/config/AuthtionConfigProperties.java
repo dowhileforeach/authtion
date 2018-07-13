@@ -55,15 +55,13 @@ public class AuthtionConfigProperties implements InitializingBean
     private String signIn = "/sign-in";
     private String signOut = "/sign-out";
 
-    private String checkUsername = "/check-username";
-    private String checkPassword = "/check-pass";
+    private String checkEmail = "/check-email";
+    private String checkPass = "/check-pass";
     private String googleCaptchaValidate = "/google-captcha-validate";
     private String createAccount = "/create-account";
+    private String getAccount = "/get-account";
+    private String updateAccount = "/update-account";
     private String publicAccount = "/public/account";
-
-    private String getUserPersonal = "/get-user-personal";
-    private String updateUserPersonal = "/update-user-personal";
-
     private String reqConfirmEmail = "/req-confirm-email";
     private String confirmEmail = "/confirm-email";
 
@@ -92,24 +90,24 @@ public class AuthtionConfigProperties implements InitializingBean
       this.signOut = signOut;
     }
 
-    public String getCheckUsername()
+    public String getCheckEmail()
     {
-      return checkUsername;
+      return checkEmail;
     }
 
-    public void setCheckUsername(String checkUsername)
+    public void setCheckEmail(String checkEmail)
     {
-      this.checkUsername = checkUsername;
+      this.checkEmail = checkEmail;
     }
 
-    public String getCheckPassword()
+    public String getCheckPass()
     {
-      return checkPassword;
+      return checkPass;
     }
 
-    public void setCheckPassword(String checkPassword)
+    public void setCheckPass(String checkPass)
     {
-      this.checkPassword = checkPassword;
+      this.checkPass = checkPass;
     }
 
     public String getGoogleCaptchaValidate()
@@ -132,24 +130,24 @@ public class AuthtionConfigProperties implements InitializingBean
       this.createAccount = createAccount;
     }
 
-    public String getGetUserPersonal()
+    public String getGetAccount()
     {
-      return getUserPersonal;
+      return getAccount;
     }
 
-    public void setGetUserPersonal(String getUserPersonal)
+    public void setGetAccount(String getAccount)
     {
-      this.getUserPersonal = getUserPersonal;
+      this.getAccount = getAccount;
     }
 
-    public String getUpdateUserPersonal()
+    public String getUpdateAccount()
     {
-      return updateUserPersonal;
+      return updateAccount;
     }
 
-    public void setUpdateUserPersonal(String updateUserPersonal)
+    public void setUpdateAccount(String updateAccount)
     {
-      this.updateUserPersonal = updateUserPersonal;
+      this.updateAccount = updateAccount;
     }
 
     public String getPublicAccount()
@@ -527,7 +525,7 @@ public class AuthtionConfigProperties implements InitializingBean
                     "|    timeout for duplicate request  %s%n" +
                     "|                                                     %n" +
                     "| Resources                                           %n" +
-                    "|   Authentication:                                   %n" +
+                    "|   Auth:                                             %n" +
                     "|      %s%n" +
                     "|      %s%n" +
                     "|   Account:                                          %n" +
@@ -558,17 +556,15 @@ public class AuthtionConfigProperties implements InitializingBean
             formatMillisecondsToReadableString(scheduledTaskMailing.sendInterval),
             scheduledTaskMailing.maxAttemptsToSendIfError,
             formatMillisecondsToReadableString(scheduledTaskMailing.timeoutForDuplicateRequest),
-
             resource.signIn,
             resource.signOut,
-
-            resource.checkUsername,
-            resource.checkPassword,
+            resource.checkEmail,
+            resource.checkPass,
             resource.googleCaptchaValidate,
             resource.createAccount,
+            resource.getAccount,
             resource.publicAccount,
-            resource.getUserPersonal,
-            resource.updateUserPersonal,
+            resource.updateAccount,
             resource.reqConfirmEmail,
             resource.confirmEmail,
             resource.changePass,
